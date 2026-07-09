@@ -101,7 +101,7 @@ pnpm build       ✓  10 routes, zero errors/warnings
 |---------|------|--------|-------|--------|
 | 0 | Bleeding fix — live site crawler 200s | (server config) | advisor | Not started |
 | 1 | Scaffold monorepo | phase-1-foundations | sonnet | ✅ Done |
-| 2 | Tokens — primitives + semantic maps + contrast tests | phase-1-foundations | sonnet | Not started |
+| 2 | Tokens — primitives + semantic maps + contrast tests | session-2-token-tests | sonnet | ✅ Done (PR pending rfqFg review) |
 | 3 | CMS schemas + Zod + JSON-LD builders | phase-1-foundations | sonnet | Partial (cms.ts done, rfq.ts stub, jsonld.ts missing) |
 | 4 | Component library part 1 — primitives (Button, form fields, SpecTable) | phase-2-components | fable | Not started |
 | 5 | Component library part 2 — composition (cards, nav, footer, hero, trust) | phase-2-components | fable | Not started |
@@ -112,25 +112,55 @@ pnpm build       ✓  10 routes, zero errors/warnings
 | 13 | Redirect map + robots + sitemaps | phase-5-launch | sonnet | Not started |
 | 14 | Launch checklist | phase-5-launch | opus/sonnet | Not started |
 
-### Immediate next: Session 2 — Tokens
+### Session 2 — Tokens (Vitest contract)
+**Status:** Complete ✅
+**Branch:** `session-2-token-tests` (PR pending — needs Swayam review of `rfqFg` token before merge)
+**Date:** 2026-07-09
 
-Key items before starting:
-- **Human must supply the flex-blue hex scale** — agent proposes values + WCAG contrast ratios, human approves before anything is written to `primitives.ts` (design-review gate per CLAUDE.md)
-- Start on `phase-1-foundations` branch (already exists, already tracking remote)
-- Session prompt is in BUILD-PLAYBOOK.md §SESSION 2
+#### What was done
 
-### Known gaps carried into Session 2
+- Added `"test": "vitest run"` to `packages/tokens/package.json`
+- Created `packages/tokens/src/tokens.test.ts` — 25 tests:
+  - 13 semantic alias resolution tests (every key semantic → primitive assertion)
+  - 12 WCAG contrast covenant tests per §4.5 (4.5:1 normal text; noted minimums)
+- Added `rfqFg` semantic token to `semanticBase`, `semanticDhruv`, `semanticPrecise`:
+  - Dhruv: `rfqFg = steel[950]` (dark text on amber, 5.79:1 ✓)
+  - Precise: `rfqFg = steel[50]` (light text on blue, ~7.1:1 ✓)
+  - Reason: WCAG test found `steel-950` on `flex-500` = 3.19:1 — WCAG fail for text
 
-- `packages/schemas/src/rfq.ts` — stub file, needs the two-step RFQ Zod schema, honeypot field, time-trap (SESSION 3)
-- `packages/schemas/src/jsonld.ts` — not yet created, typed JSON-LD builders needed (SESSION 3)
-- `packages/datum-ui/src/` — empty components directory, populated in Sessions 4–5
-- `content/redirect-map.csv` — header row only, needs legacy URL inventory (SESSION 13, you supply the crawl)
+#### Gate result
+
+```
+pnpm typecheck   ✓  4/4 packages
+pnpm lint        ✓  0 errors, 0 warnings
+pnpm test        ✓  25/25 (tokens: 25, schemas: 8)
+pnpm build       ✓  zero errors/warnings
+```
+
+#### Design-review blocker (needs Swayam before merge)
+
+`rfqFg` is a new semantic token (§26 gate). The Precise RFQ button will show **dark-blue fill + near-white label text**. Confirm this is intended, or decide to lighten flex-500 (which would re-open the hex review).
+
+---
+
+### Immediate next: Session 3 — CMS schemas + JSON-LD
+
+- `packages/schemas/src/rfq.ts` — stub, needs full two-step RFQ Zod schema, honeypot field, time-trap
+- `packages/schemas/src/jsonld.ts` — missing, needs typed JSON-LD builders for Organization, Product, FAQPage, BreadcrumbList, Article
+- Vitest: failure tests for unattributed Testimonial, numberless scope, valid round-trips, JSON-LD validity
+- After Session 3: PR `phase-1-foundations` work → `main`, then Session 4 starts on `phase-2-components`
+
+### Known gaps
+
+- `packages/datum-ui/src/` — empty, populated in Sessions 4–5
+- `content/redirect-map.csv` — header row only, needs legacy URL inventory (Session 13)
 - Session 0 (live site) is completely untouched
 
 ---
 
 ## Open design questions (needs human answer before agent can proceed)
 
-1. **Flex-blue hex values** — ✅ resolved 2026-07-09. Blue approved (Datum §5). See mistakes.md resolution entry.
-2. **Dhruv arc-amber hex values** — are the scaffolded values (`arc-500: #F0670F`) correct, or does Swayam have a brand-spec hex?
-3. **Session 0** — who is handling the live-site server config? Agent can advise; someone needs to apply it on the actual hosting.
+1. **Flex-blue hex values** — ✅ resolved 2026-07-09. Blue approved (Datum §5). See mistakes.md.
+2. **Precise rfqFg token** — ⚠️ NEEDS REVIEW. dark-blue fill + near-white label for RFQ button. Is that intended? See mistakes.md entry 2026-07-09.
+3. **Dhruv arc-amber hex values** — are the scaffolded values (`arc-500: #F0670F`) correct, or does Swayam have a brand-spec hex?
+4. **Session 0** — who is handling the live-site server config? Agent can advise; someone needs to apply it on the actual hosting.
