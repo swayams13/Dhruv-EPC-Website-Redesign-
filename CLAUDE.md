@@ -31,6 +31,32 @@ If code and spec disagree, the spec wins. If two specs disagree, stop and ask.
    `bg-[#F0670F]` has failed.
 4. **Repeat / Stop** — gap found → loop from 2. Clean → stop. No "just in
    case" polish. Done is done.
+### Loop circuit breaker
+
+The loop is not unbounded. Cap: 3 attempts at Plan/Execute → Verify for the
+same failure.
+
+- Attempt 1 fails → diagnose the actual cause, adjust, retry.
+- Attempt 2 fails on the same root cause → diagnose again, retry once more.
+- Attempt 3 fails → STOP. Do not attempt a 4th time.
+
+If attempt 2's fix is a near-identical retry of attempt 1 with no new
+diagnostic information — same change, expecting a different result — stop
+immediately rather than spending the 3rd attempt. That is a stuck loop, not
+iteration.
+
+On hitting the cap:
+1. Write one entry to docs/mistakes.md: what was tried across all attempts,
+   the exact error each time, and why it didn't resolve.
+2. Report it to the human as a named blocker in the session output. Do not
+   bury it in a wall of otherwise-successful output — lead with it.
+3. Do NOT mark the task complete. Do NOT silently skip the failing check
+   and move to the next component. A skipped check is worse than a stopped
+   session — it ships a false green.
+
+This applies per failure, not per session — three different bugs each
+resolving on the first retry is fine and expected; three attempts at the
+same bug is the trigger.
 
 ### Scope discipline
 

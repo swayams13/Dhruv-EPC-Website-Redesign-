@@ -319,3 +319,7 @@ daily synthetic RFQ cron, 6-week coverage watch.
    in the same commit.
 5. **When something goes wrong:** one entry in docs/mistakes.md before the fix.
 6. **Weekly:** re-read mistakes.md; promote recurring patterns into CLAUDE.md.
+7. **Checking in on Fable sessions:** if a session's output shows repeated
+   attempts at the same component/file, that's the circuit breaker's job to
+   catch — but check in anyway. A stuck loop reported at attempt 3 is better
+   than one reported at attempt 3 an hour later because you weren't watching.
