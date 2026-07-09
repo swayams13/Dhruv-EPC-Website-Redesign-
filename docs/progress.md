@@ -121,7 +121,6 @@ Key items before starting:
 
 ### Known gaps carried into Session 2
 
-- `packages/tokens/src/primitives.ts` — has placeholder flex hex values written without human review (see `docs/mistakes.md` entry 2026-07-09). These must be replaced with approved values in Session 2.
 - `packages/schemas/src/rfq.ts` — stub file, needs the two-step RFQ Zod schema, honeypot field, time-trap (SESSION 3)
 - `packages/schemas/src/jsonld.ts` — not yet created, typed JSON-LD builders needed (SESSION 3)
 - `packages/datum-ui/src/` — empty components directory, populated in Sessions 4–5
@@ -132,6 +131,6 @@ Key items before starting:
 
 ## Open design questions (needs human answer before agent can proceed)
 
-1. **Flex-blue hex values** — exact palette for Precise Engineers. Agent will propose + compute WCAG ratios at start of Session 2; you approve before any value lands in code.
+1. **Flex-blue hex values** — ✅ resolved 2026-07-09. Blue approved (Datum §5). See mistakes.md resolution entry.
 2. **Dhruv arc-amber hex values** — are the scaffolded values (`arc-500: #F0670F`) correct, or does Swayam have a brand-spec hex?
 3. **Session 0** — who is handling the live-site server config? Agent can advise; someone needs to apply it on the actual hosting.
