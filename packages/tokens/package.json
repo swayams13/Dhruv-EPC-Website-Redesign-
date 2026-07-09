@@ -8,7 +8,8 @@
     "./tailwind": "./src/tailwind.ts"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
   },
   "devDependencies": {
     "tailwindcss": "*",
