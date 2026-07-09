@@ -1,0 +1,7 @@
+legacy_path,destination,status
+/index.php,/,301
+/about.php,/about/,301
+/contact.php,/contact/,301
+/dhruv-epc.php,/dhruv-epc/,301
+/precise-engineers.php,/precise-engineers/,301
+/products.php,/dhruv-epc/equipment/,301

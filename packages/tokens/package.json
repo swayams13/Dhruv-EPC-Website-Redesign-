@@ -1,0 +1,16 @@
+{
+  "name": "@vedanta/tokens",
+  "version": "0.0.1",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts",
+    "./tailwind": "./src/tailwind.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "tailwindcss": "*",
+    "typescript": "*"
+  }
+}

@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main]
+
+jobs:
+  ci:
+    name: Lint · Typecheck · Accessibility · Performance
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm turbo lint
+
+      - name: Typecheck
+        run: pnpm turbo typecheck
+
+      - name: Build
+        run: pnpm turbo build
+
+      # ponytail: placeholder — wire axe-core after first deployable page exists
+      - name: Accessibility gate (axe-core CI)
+        run: |
+          echo "TODO: axe-core CI gate"
+          echo "Target: zero critical violations on every route"
+          echo "Implementation: @axe-core/playwright against Playwright-started dev server"
+          echo "Gate: exit 1 if any critical violation found"
+
+      # ponytail: placeholder — wire Lighthouse CI after first deployable page exists
+      - name: Performance budgets (Lighthouse CI)
+        run: |
+          echo "TODO: Lighthouse CI budgets"
+          echo "LCP ≤ 2.5s (p75 throttled 4G), CLS < 0.1, INP < 200ms"
+          echo "JS bundle: ≤ 120KB gz on marketing routes"
+          echo "Implementation: @lhci/cli against Vercel preview URL"
+
+      - name: Redirect map integrity
+        run: node -e "
+          const fs = require('fs');
+          const csv = fs.readFileSync('content/redirect-map.csv', 'utf8');
+          const rows = csv.trim().split('\n').slice(1);
+          const invalid = rows.filter(r => !r.match(/^\/[^,]*,\/[^,]*,(301|302)$/));
+          if (invalid.length) { console.error('Invalid rows:', invalid); process.exit(1); }
+          console.log(rows.length + ' redirect rules validated');
+        "
