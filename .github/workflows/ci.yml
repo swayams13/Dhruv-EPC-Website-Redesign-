@@ -8,7 +8,7 @@ on:
 
 jobs:
   ci:
-    name: Lint · Typecheck · Accessibility · Performance
+    name: Lint · Typecheck · Test · Accessibility · Performance
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -33,6 +33,9 @@ jobs:
 
       - name: Typecheck
         run: pnpm turbo typecheck
+
+      - name: Test
+        run: pnpm turbo test
 
       - name: Build
         run: pnpm turbo build
