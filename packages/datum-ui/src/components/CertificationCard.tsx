@@ -10,7 +10,7 @@ import { Stamp, type StampProps } from './Stamp'
 
 export interface CertificationCardProps {
   /** Credential stamp mark (§12) — omitted for credentials without a stamp */
-  stampCode?: StampProps['code']
+  stampCode?: StampProps['code'] | undefined
   /** Full credential name: "ASME U2 Certificate of Authorization" */
   name: string
   /** Plain-words scope — what this credential authorizes */
@@ -18,9 +18,9 @@ export interface CertificationCardProps {
   issuer: string
   /** ISO dates; rendered as years */
   validFrom: string
-  validTo?: string
+  validTo?: string | undefined
   /** The certificate artifact (PDF/scan) */
-  artifactUrl?: string
+  artifactUrl?: string | undefined
   className?: never
 }
 
@@ -48,13 +48,13 @@ export function CertificationCard({
       <p className="mt-3 text-sm text-steel-700">{scopeStatement}</p>
       <dl className="mt-4 space-y-1">
         <div>
-          <dt className="inline text-xs font-medium uppercase tracking-caption text-steel-500">
+          <dt className="inline text-xs font-medium uppercase tracking-caption text-steel-600">
             Issuer{' '}
           </dt>
           <dd className="inline text-sm text-steel-700">{issuer}</dd>
         </div>
         <div>
-          <dt className="inline text-xs font-medium uppercase tracking-caption text-steel-500">
+          <dt className="inline text-xs font-medium uppercase tracking-caption text-steel-600">
             Validity{' '}
           </dt>
           <dd className="inline font-mono text-helper text-steel-700">

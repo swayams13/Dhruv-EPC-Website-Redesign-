@@ -61,7 +61,8 @@ export function ProductHero({
             ))}
           </ul>
         )}
-        <div className="mt-8">
+        {/* data-rfq-anchor: header RFQ yields while this amber is in view (Datum 13, amber law) */}
+        <div data-rfq-anchor className="mt-8">
           <Button variant="rfq" href={rfq.href}>
             {rfq.label}
           </Button>

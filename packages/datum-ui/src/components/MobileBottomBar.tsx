@@ -1,10 +1,12 @@
+'use client'
 // MobileBottomBar — Datum §17.
 // On product pages (mobile) a bottom action bar persists — thumb-reachable
 // conversion for the scroll-deep spec reader: click-to-call, WhatsApp, and
-// the RFQ button. 48px targets. The page owns the amber law: when this bar
-// is on screen it carries the view's one accent-filled element.
+// the RFQ button. 48px targets. Amber law: the bar's RFQ yields while an
+// in-content amber ([data-rfq-anchor]) is in view — same rule as the Header.
 
 import { Button } from './Button'
+import { useRfqAnchorInView } from './useRfqAnchorInView'
 import { Phone, WhatsApp } from './glyphs'
 
 export interface MobileBottomBarProps {
@@ -23,6 +25,7 @@ export function MobileBottomBar({
   whatsappHref,
   rfqHref,
 }: MobileBottomBarProps): React.ReactElement {
+  const contentRfqInView = useRfqAnchorInView()
   return (
     <nav
       aria-label="Contact actions"
@@ -34,7 +37,8 @@ export function MobileBottomBar({
       <a href={whatsappHref} aria-label="Chat on WhatsApp" className={iconLink}>
         <WhatsApp />
       </a>
-      <div className="flex flex-1 flex-col">
+      {/* invisible (not unmount): bar geometry stays stable */}
+      <div className={`flex flex-1 flex-col ${contentRfqInView ? 'invisible' : ''}`}>
         <Button variant="rfq" href={rfqHref}>
           Request a quote
         </Button>

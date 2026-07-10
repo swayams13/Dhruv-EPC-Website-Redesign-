@@ -54,7 +54,8 @@ export function HomeHero({
           {headline}
         </h1>
         <p className="mt-6 max-w-content text-body-lg text-steel-400">{subhead}</p>
-        <div className="mt-8 flex flex-wrap items-center gap-4">
+        {/* data-rfq-anchor: header RFQ yields while this amber is in view (Datum 13, amber law) */}
+        <div data-rfq-anchor className="mt-8 flex flex-wrap items-center gap-4">
           <Button variant="rfq" href={rfq.href}>
             {rfq.label}
           </Button>

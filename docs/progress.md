@@ -335,6 +335,82 @@ submit honestly (no silent lead loss).
 
 ---
 
+### Session 7 — Proving pair 1: Dhruv home + Heat Exchangers
+**Status:** Complete ✅ (one flagged budget miss below)
+**Branch:** `phase-3-proving` · **Date:** 2026-07-10 · **Model:** fable
+**Governing specs:** Datum §19, §21, §16–§18, §20, plan §6/P-4
+
+#### What was done
+
+- **Seeded CMS content** `apps/web/lib/content/dhruv-epc.ts` — EntityRecord,
+  heat-exchangers Product (spec table, 6 types, MOC, codes, 5 FAQs),
+  4 Certifications, 3 TPIA Approvals, stats, equipment/menu list. All records
+  Zod-parsed at module load. Sourcing: facts quoted from vedantagroup.net
+  (fetched 2026-07-10); unsourced figures tagged **DEMO-PLACEHOLDER** per
+  Swayam's approval, each carrying "DEMO figure — engineering data pending"
+  visibly in the UI. Swap-list lives in the content file header.
+- **Amber-law resolution** (Session 5 deviation 8, deferred here): new internal
+  hook `useRfqAnchorInView` — Header and MobileBottomBar RFQ buttons render
+  `invisible` while any `[data-rfq-anchor]` (hero CTA row, RFQ band) is in the
+  viewport. Max one accent-filled element per view at every scroll position,
+  desktop and mobile, verified programmatically at 5 scroll states.
+- **Chrome:** DhruvChrome (Header + MobileDrawer wiring), RFQBand (§21.9
+  graphite closer), dhruv-epc/layout.tsx now wraps routes with chrome + Footer
+  (layout touch = human-review gate).
+- **/dhruv-epc/** per §19: graphite HomeHero (9-word H1), sourced stats band,
+  equipment card grid (no-photo variants), certifications strip, RFQ band,
+  LocalBusiness JSON-LD.
+- **/dhruv-epc/equipment/heat-exchangers/** per §21: ProductHero with mono
+  chips anchor-linked to #specifications; spec table first scroll; types cards;
+  MOC/code chips; 5-step Fab & QA strip (text variant); native-`<details>` FAQ
+  (§11 compositor law — no height animation); sticky anchor rail; RFQ band;
+  MobileBottomBar. JSON-LD: Product + FAQPage + BreadcrumbList via typed
+  builders. OG image via next/og (no new dep) using @vedanta/tokens colors.
+- **Fixes from the verify pass** (axe + vision loop):
+  - steel-500 small-text contrast class fixed in SpecTable/StatBand/
+    CertificationCard/Footer + page captions → steel-600/steel-400
+    (mistakes.md entry; §15-vs-§25.1 spec conflict resolved toward WCAG)
+  - Footer contact links py-1 (24px floor)
+  - stampsHeld → canonical §12 codes (was rendering 1 of 6 stamps;
+    mistakes.md entry)
+
+#### Gate result
+
+```
+pnpm typecheck   ✓  4/4       pnpm lint  ✓ 0 errors
+pnpm test        ✓  133/133   pnpm build ✓ both routes 93.8 kB First Load (≤120 budget)
+browser verify   ✓  25/25 (axe zero critical/serious, amber law × 5 scroll
+                     states × 2 viewports, JSON-LD parses, heading order,
+                     375px no h-scroll, FAQ, OG image)
+Lighthouse (prod, mobile throttled): home 97/100/100, LCP 2.5s CLS 0;
+                     product 96/100/100, LCP 2.7s CLS 0 TBT 100ms
+```
+
+#### Deviations / flagged
+
+1. **Product LCP 2.7s vs §P-4 2.5s** on Lighthouse simulated slow-4G — real
+   breakdown is TTFB 34ms + render delay 151ms; the simulated cost is one
+   render-blocking 6.8 kB CSS round trip. Lever if the client's p75 field data
+   agrees: critical-CSS inlining (Phase 5 launch tuning). Not silently accepted.
+2. §21.3 type cards lack "section-view icons" — no real icon artwork exists;
+   text-only cards (no invented graphics).
+3. §21.6 gallery + §21.7 related projects omitted — no real photography
+   (§P-5 shoot pending) and no Project records until Phase 4.
+4. §21.5 QA strip is text-only (photos pending the works shoot).
+5. Mega-menu/footer link to routes that 404 until Phase 4 scale-out
+   (pressure-vessels, capabilities, projects, company, contact, privacy, terms).
+6. Testimonials/ClientWall omitted — live site's quote is unattributed
+   (cannot publish per §20) and client names/permissions unverified.
+7. Some menu scopes lack figures (§16) — only sourced figures used; DEMO
+   figures were restricted to the spec table and stats band.
+
+#### Requires human review (accumulated)
+
+- `dhruv-epc/layout.tsx` change (data-company file)
+- DEMO-PLACEHOLDER figures list (content file header) before any non-demo use
+
+---
+
 ## Problems faced & how we tackled them
 
 ### 1. `pnpm install` blocked by `unrs-resolver` build
@@ -370,8 +446,8 @@ submit honestly (no silent lead loss).
 | 3 | CMS schemas + JSON-LD | session-3-schemas | sonnet | ✅ Done — PR #3 pending merge |
 | 4 | Component library part 1 — primitives | phase-2-components | **fable** | ✅ Done — PR #4 open |
 | 5 | Component library part 2 — composition | phase-2-components | **fable** | ✅ Done — PR #4 open (with Session 4) |
-| 6 | RFQ engine end-to-end | phase-3-proving | fable | 🔶 Code complete — verification pending |
-| 7 | Dhruv home + Heat Exchangers page | phase-3-proving | fable | Not started |
+| 6 | RFQ engine end-to-end | phase-3-proving | fable | ✅ Done (E2E creds gate queued) |
+| 7 | Dhruv home + Heat Exchangers page | phase-3-proving | fable | ✅ Done |
 | 8 | Precise home + Metallic Bellows + group home | phase-3-proving | fable | Not started |
 | 9–12 | Scale-out — remaining pages | phase-4-scaleout | sonnet | Not started |
 | 13 | Redirect map + robots + sitemaps | phase-5-launch | sonnet | Not started |
