@@ -389,6 +389,19 @@ Human review gates before merge:
 
 After merge: Session 6 (RFQ engine) on `phase-3-proving`
 
+### Deferred queue — ⏰ REMIND SWAYAM AFTER SESSION 10 (his instruction, 2026-07-10)
+
+1. **Session 6 human gate:** E2E RFQ with real creds — `STORAGE_*`, `RESEND_API_KEY`,
+   `RFQ_NOTIFY_*`, `NEXT_PUBLIC_CONTACT_*` in `.env.local`; real PDF from phone
+   on 4G → email within a minute (playbook gate).
+2. **PR #4 merge** (Sessions 4+5) — human review gates listed in that section.
+3. **PR #3 merge** (Session 3 schemas) — still pending merge.
+4. §23 certification strip in RFQ rail — awaits verified CMS cert records.
+5. Capability-statement PDF on thank-you — asset doesn't exist yet.
+6. SLA "one business day" — pending client commitment.
+7. Playwright E2E suite for RFQ (happy path, upload-retry, honeypot, JS-off)
+   as CI tests — browser verify was run manually this session, not committed as tests.
+
 ### Known gaps
 
 - `content/redirect-map.csv` — header row only, Session 13
