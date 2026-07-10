@@ -15,6 +15,8 @@ export interface UploadDropzoneProps {
   presign: (file: File) => Promise<{ url: string; key: string }>
   /** Fired with the keys of all successfully uploaded files, on every change */
   onChange: (keys: string[]) => void
+  /** Fired when uploads start/finish — lets the form block submit mid-upload (§T-4 upload-before-submit) */
+  onBusyChange?: (busy: boolean) => void
   /** RFQ schema caps at 5 (packages/schemas rfq.ts) */
   maxFiles?: number
   /** §14: up to 25 MB each */
@@ -56,6 +58,7 @@ function putWithProgress(url: string, file: File, onProgress: (pct: number) => v
 export function UploadDropzone({
   presign,
   onChange,
+  onBusyChange,
   maxFiles = 5,
   maxSizeBytes = 25 * 1024 * 1024,
   accept = '.pdf,.dwg,.jpg,.jpeg,.png,.webp',
@@ -71,6 +74,7 @@ export function UploadDropzone({
     setEntries(next)
     entriesRef.current = next
     onChange(next.filter((e) => e.status === 'done' && e.key).map((e) => e.key as string))
+    onBusyChange?.(next.some((e) => e.status === 'uploading'))
   }
 
   function patch(id: string, changes: Partial<FileEntry>) {

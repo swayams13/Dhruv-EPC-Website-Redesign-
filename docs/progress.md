@@ -253,6 +253,65 @@ accent-leak grep ✓  zero arc-/flex- classes in components (gate met)
 
 ---
 
+### Session 6 — RFQ Engine End-to-End (IN PROGRESS, 2026-07-10)
+
+**Branch:** `phase-3-proving` · **Governing specs:** Datum §23, plan FR-3 + §T-4
+
+**Built (code complete, verification NOT finished — see below):**
+- `packages/schemas/src/rfq.ts` — `PresignRequest` now validates by file extension
+  (PDF/DWG/STEP/JPG/PNG/WEBP; browsers report `''`/octet-stream MIME for DWG/STEP),
+  positive size ≤25MB. **Bug fixed:** `RFQStep2.company` renamed `contactCompany` —
+  it collided with `RFQStep1.company` (target-company slug) in the `RFQSubmission`
+  merge and silently dropped the slug.
+- `packages/schemas/src/rfq.test.ts` — new: honeypot, uuid idempotency key, ≤5 file
+  keys, phone country code, merge-preserves-slug, presign extension/size gates.
+- `apps/web/lib/presign.ts` — hand-rolled SigV4 query presign (node:crypto — no new
+  dependency, which would be a human-review gate). Verified against the AWS
+  documented test vector (`aeeed9bb…`) via scratchpad script — PASS.
+- `apps/web/app/api/presign/route.ts` — real presigned PUT: `uploads/<uuid>/<name>`
+  scope, 10-min expiry, sanitized names, 503 with plain message when
+  `STORAGE_ENDPOINT/BUCKET/ACCESS_KEY_ID/SECRET_ACCESS_KEY` env unset.
+- `apps/web/app/api/rfq/route.ts` — full §T-4 pipeline: rate limit (in-memory,
+  5/10min/IP — ponytail: single-instance, move to KV if scaled), server Zod
+  re-validation, time-trap (≥5s), `uploads/` key-scope check, idempotency map
+  (24h, returns original reference on retry), email via Resend REST fetch
+  (throws → 502 so the client preserves state), WhatsApp ping stubbed behind
+  `WhatsAppNotifier` interface (`lib/notify.ts`).
+- `apps/web/app/(group)/request-a-quote/` — `page.tsx` (8+4 layout, reassurance
+  rail, ?company= prefill), `RFQForm.tsx` (two-step, ChoiceCards filtered by
+  company, company selectable when neutral, UploadDropzone with per-file
+  progress/retry, upload-busy blocks continue, honeypot, stable idempotency key,
+  failure keeps all fields + retry + email/phone fallback), `thank-you/page.tsx`
+  (mono reference, restated SLA).
+- `packages/datum-ui` `UploadDropzone` — added optional `onBusyChange` prop so the
+  form can honestly block submit mid-upload.
+
+**Env contract (all optional in dev):** `STORAGE_ENDPOINT`, `STORAGE_BUCKET`,
+`STORAGE_REGION` (default `auto`), `STORAGE_ACCESS_KEY_ID`,
+`STORAGE_SECRET_ACCESS_KEY`, `RESEND_API_KEY`, `RFQ_NOTIFY_TO`, `RFQ_NOTIFY_FROM`,
+`NEXT_PUBLIC_CONTACT_EMAIL`, `NEXT_PUBLIC_CONTACT_PHONE`. In dev without Resend
+config the lead is console-logged; in production missing email config fails the
+submit honestly (no silent lead loss).
+
+**Deviations / flagged (no invented claims):**
+1. §23 certification strip in the rail — omitted, awaits verified CMS cert records.
+2. §23 capability-statement PDF on thank-you — omitted, asset doesn't exist yet.
+3. Thank-you links home, not Projects — /projects routes are Phase 4.
+4. Contact fallback via `NEXT_PUBLIC_CONTACT_*` env until EntityRecord lands in CMS.
+5. SLA "one business day" is the §23 placeholder, still pending client commitment.
+
+**VERIFICATION STATUS (honest):**
+- ✅ Vector check for SigV4 signer (scratchpad, PASS)
+- ❌ First `pnpm typecheck` failed (2 errors — exactOptionalPropertyTypes on rail
+  props, notify.ts filter type). Both fixed in code, but the re-run was NOT
+  executed — typecheck, lint, test, build, and the browser pass are ALL pending.
+- Session interrupted by user before verification loop completed. **Do not treat
+  Session 6 as done.** Next session: run `pnpm typecheck && pnpm lint && pnpm test
+  && pnpm build`, then the §23 browser verify pass (focus rings, reduced motion,
+  320px, one accent element per view), then E2E with real storage/Resend creds.
+
+---
+
 ## Problems faced & how we tackled them
 
 ### 1. `pnpm install` blocked by `unrs-resolver` build
@@ -288,7 +347,7 @@ accent-leak grep ✓  zero arc-/flex- classes in components (gate met)
 | 3 | CMS schemas + JSON-LD | session-3-schemas | sonnet | ✅ Done — PR #3 pending merge |
 | 4 | Component library part 1 — primitives | phase-2-components | **fable** | ✅ Done — PR #4 open |
 | 5 | Component library part 2 — composition | phase-2-components | **fable** | ✅ Done — PR #4 open (with Session 4) |
-| 6 | RFQ engine end-to-end | phase-3-proving | fable | Not started |
+| 6 | RFQ engine end-to-end | phase-3-proving | fable | 🔶 Code complete — verification pending |
 | 7 | Dhruv home + Heat Exchangers page | phase-3-proving | fable | Not started |
 | 8 | Precise home + Metallic Bellows + group home | phase-3-proving | fable | Not started |
 | 9–12 | Scale-out — remaining pages | phase-4-scaleout | sonnet | Not started |
