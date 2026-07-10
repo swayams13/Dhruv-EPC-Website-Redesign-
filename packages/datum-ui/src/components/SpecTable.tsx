@@ -47,7 +47,9 @@ export function SpecTable({
   density = 'default',
   caption,
 }: SpecTableProps): React.ReactElement {
-  const rowH = density === 'engineering' ? 'h-row-dense' : 'h-row'
+  // §15: 16px cell padding at default rhythm; engineering density (36px rows)
+  // steps vertical padding down one scale value so the row target holds
+  const rowH = density === 'engineering' ? 'h-row-dense py-2' : 'h-row py-4'
 
   // ── Comparative mode: pinned first column + horizontal scroll (§15) ──
   if (columns && matrixRows) {
