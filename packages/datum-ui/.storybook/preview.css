@@ -44,6 +44,18 @@
   outline-offset: 2px;
 }
 
+@supports not (backdrop-filter: blur(12px)) {
+  [data-glass] {
+    background-color: #F7F8F8;
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  [data-glass] {
+    background-color: #F7F8F8;
+    backdrop-filter: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

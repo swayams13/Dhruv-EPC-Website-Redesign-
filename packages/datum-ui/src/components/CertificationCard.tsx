@@ -44,7 +44,8 @@ export function CertificationCard({
         <h3 className="font-display text-h4 font-semibold text-steel-950">{name}</h3>
         {stampCode && <Stamp code={stampCode} />}
       </div>
-      <p className="mt-3 text-data text-steel-700">{scopeStatement}</p>
+      {/* prose voice, not the mono-reserved data step (§5.2) */}
+      <p className="mt-3 text-sm text-steel-700">{scopeStatement}</p>
       <dl className="mt-4 space-y-1">
         <div>
           <dt className="inline text-xs font-medium uppercase tracking-caption text-steel-500">

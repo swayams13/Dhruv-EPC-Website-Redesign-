@@ -49,6 +49,20 @@
 /* Schibsted Grotesk — self-hosted via next/font (no Google tracking) */
 /* Inter + IBM Plex Mono — via next/font */
 
+/* §10 glass scrim degradation: solid steel-50 where blur is unsupported
+   or prefers-reduced-transparency is set (sticky header sets data-glass) */
+@supports not (backdrop-filter: blur(12px)) {
+  [data-glass] {
+    background-color: #F7F8F8; /* steel-50 */
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  [data-glass] {
+    background-color: #F7F8F8; /* steel-50 */
+    backdrop-filter: none;
+  }
+}
+
 /* prefers-reduced-motion — first-class mode (Datum §11) */
 @media (prefers-reduced-motion: reduce) {
   *,

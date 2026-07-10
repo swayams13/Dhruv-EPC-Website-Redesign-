@@ -102,7 +102,13 @@ export function Header({
 
   return (
     <div className="relative h-header">
-      <header ref={headerRef} className={`${chrome} inset-x-0 top-0 z-40 border-b border-steel-200`}>
+      <header
+        ref={headerRef}
+        // data-glass: §10 degradation hook — global CSS renders solid steel-50
+        // where backdrop-filter is unsupported or prefers-reduced-transparency
+        data-glass={scrolled || undefined}
+        className={`${chrome} inset-x-0 top-0 z-40 border-b border-steel-200`}
+      >
         <div className="mx-auto flex h-full max-w-wide items-center justify-between gap-6 px-6">
           <a href={homeHref} className="flex items-center text-steel-950">
             {logo}
@@ -136,19 +142,20 @@ export function Header({
           </nav>
 
           <div className="hidden items-center gap-2 md:flex">
-            <a
-              href={phoneHref}
-              aria-label="Call us"
-              className="flex h-compact w-compact items-center justify-center rounded-sm text-steel-700 transition-colors duration-instant hover:bg-steel-100 hover:text-steel-950"
-            >
-              <Phone size={20} />
-            </a>
+            {/* §17 order: WhatsApp + click-to-call, then the RFQ button */}
             <a
               href={whatsappHref}
               aria-label="Chat on WhatsApp"
               className="flex h-compact w-compact items-center justify-center rounded-sm text-steel-700 transition-colors duration-instant hover:bg-steel-100 hover:text-steel-950"
             >
               <WhatsApp size={20} />
+            </a>
+            <a
+              href={phoneHref}
+              aria-label="Call us"
+              className="flex h-compact w-compact items-center justify-center rounded-sm text-steel-700 transition-colors duration-instant hover:bg-steel-100 hover:text-steel-950"
+            >
+              <Phone size={20} />
             </a>
             <Button variant="rfq" size="compact" href={rfqHref}>
               Request a quote
