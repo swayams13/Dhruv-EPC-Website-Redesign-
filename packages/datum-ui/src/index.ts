@@ -1,12 +1,56 @@
 // @vedanta/datum-ui — Datum Design System component library
 // Build order per Datum §27: stamp → datum-rule → button → form fields →
 // upload dropzone → spec table → cards → nav → footer → hero → trust
-//
-// Phase 2 deliverable — stubs exported here so apps/web can import
-// without breaking typecheck during Phase 1 scaffold.
 
-export type { ButtonProps } from './components/Button'
-export type { SpecTableProps } from './components/SpecTable'
-export type { StampProps } from './components/Stamp'
-export type { DatumRuleProps } from './components/DatumRule'
-export type { CardProps } from './components/Card'
+export { Stamp, type StampProps } from './components/Stamp'
+export { DatumRule, type DatumRuleProps } from './components/DatumRule'
+export { Button, type ButtonProps } from './components/Button'
+export { Input, type InputProps } from './components/Input'
+export { Select, type SelectProps, type SelectOption } from './components/Select'
+export { Textarea, type TextareaProps } from './components/Textarea'
+export { ChoiceCard, type ChoiceCardProps } from './components/ChoiceCard'
+export { UploadDropzone, type UploadDropzoneProps } from './components/UploadDropzone'
+export {
+  SpecTable,
+  type SpecTableProps,
+  type SpecTableRow,
+  type SpecTableMatrixRow,
+} from './components/SpecTable'
+export { ProductCard, type ProductCardProps } from './components/ProductCard'
+export { Breadcrumbs, type BreadcrumbsProps, type BreadcrumbItem } from './components/Breadcrumbs'
+export {
+  Header,
+  type HeaderProps,
+  type HeaderNavLink,
+  type MegaMenuGroup,
+  type MegaMenuItem,
+} from './components/Header'
+export {
+  MobileDrawer,
+  type MobileDrawerProps,
+  type DrawerGroup,
+  type DrawerNavLink,
+} from './components/MobileDrawer'
+export { MobileBottomBar, type MobileBottomBarProps } from './components/MobileBottomBar'
+export {
+  Footer,
+  type FooterProps,
+  type FooterColumn,
+  type FooterLink,
+} from './components/Footer'
+export { StatBand, type StatBandProps, type Stat } from './components/StatBand'
+export { HomeHero, type HomeHeroProps, type HeroCta } from './components/HomeHero'
+export { ProductHero, type ProductHeroProps } from './components/ProductHero'
+export { PageHero, type PageHeroProps } from './components/PageHero'
+export {
+  CertificationCard,
+  type CertificationCardProps,
+} from './components/CertificationCard'
+export { ApprovalsMatrix, type ApprovalsMatrixProps } from './components/ApprovalsMatrix'
+export { ClientWall, type ClientWallProps } from './components/ClientWall'
+export { Testimonial, type TestimonialProps } from './components/Testimonial'
+export {
+  ProjectCard,
+  type ProjectCardProps,
+  type ProjectMetric,
+} from './components/ProjectCard'

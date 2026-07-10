@@ -100,6 +100,9 @@ export const typeScale = {
   'body-lg': { min: 18, max: 18, lineHeight: 1.6, weight: 400 },
   body: { min: 16, max: 16, lineHeight: 1.6, weight: 400 },
   small: { min: 14, max: 14, lineHeight: 1.5, weight: 400 },
+  // §14 helper text + §15 units/notes cite 13px; absent from §5.2's table.
+  // Design-review: approved by Swayam 2026-07-10 (treat §14/§15 as authoritative).
+  helper: { min: 13, max: 13, lineHeight: 1.5, weight: 400 },
   caption: { min: 12, max: 12, lineHeight: 1.4, weight: 500, tracking: '0.06em', transform: 'uppercase' as const },
   'data-lg': { min: 24, max: 32, lineHeight: 1.2, weight: 500 },
   data: { min: 15, max: 15, lineHeight: 1.5, weight: 400 },

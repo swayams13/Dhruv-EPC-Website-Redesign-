@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Company accent scopes — mirror of apps/web/app/globals.css (§T-2).
+   Storybook-only copy: the app owns the canonical file. */
+
+:root,
+[data-company='dhruv'] {
+  --accent: #F0670F;
+  --accent-dark: #FFA45E;
+  --accent-text: #C24E05;
+  --accent-text-hover: #9A3F06;
+  --accent-focus: #F0670F;
+  --accent-hover: #C24E05;
+  --accent-pressed: #9A3F06;
+  --accent-fg: #121619;
+}
+
+[data-company='precise'] {
+  --accent: #0E6BA8;
+  --accent-dark: #5BA8D4;
+  --accent-text: #0A5589;
+  --accent-text-hover: #083F6A;
+  --accent-focus: #0E6BA8;
+  --accent-hover: #0A5589;
+  --accent-pressed: #083F6A;
+  --accent-fg: #F7F8F8;
+}
+
+[data-company='group'] {
+  --accent: #121619;
+  --accent-dark: #E1E5E7;
+  --accent-text: #3F4950;
+  --accent-text-hover: #1C2328;
+  --accent-focus: #121619;
+  --accent-hover: #2A3238;
+  --accent-pressed: #3F4950;
+  --accent-fg: #F7F8F8;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-focus, #F0670F);
+  outline-offset: 2px;
+}
+
+@supports not (backdrop-filter: blur(12px)) {
+  [data-glass] {
+    background-color: #F7F8F8;
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  [data-glass] {
+    background-color: #F7F8F8;
+    backdrop-filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

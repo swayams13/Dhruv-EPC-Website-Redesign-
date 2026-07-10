@@ -1,0 +1,13 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["tailwindcss"],
+  "settings": {
+    "tailwindcss": {
+      "callees": ["clsx", "cn"]
+    }
+  },
+  "rules": {
+    "tailwindcss/no-arbitrary-value": "error"
+  }
+}
