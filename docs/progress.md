@@ -8,9 +8,7 @@ Updated end of each session.
 ## Sessions completed
 
 ### Session 0 — Bleeding fix (live site)
-**Status:** Not started — this is server-config work on the existing hosting, not in this repo.
-**Pending:** Apply .htaccess / crawler 200 fix, delete Envato demo copy, fix audio gate, fix `user-scalable=no`, fix Dhruv Exports link.
-**Gate:** `curl -A "GPTBot" -I https://vedantagroup.net/dhruv-epc-solutions/` → 200.
+**Status:** Skipped — prototype demo build, not a live deployment.
 
 ---
 
@@ -47,74 +45,9 @@ pnpm build       ✓  10 routes, zero errors/warnings
 
 ---
 
-## Problems faced & how we tackled them
-
-### 1. `pnpm install` blocked by `unrs-resolver` build
-**Error:** `ERR_PNPM_IGNORED_BUILDS` — `unrs-resolver` requires a native build step but pnpm blocked it by default.
-**Attempted:** `pnpm approve-builds` — interactive command, not usable in a scripted session.
-**Fix:** Added `allowBuilds: unrs-resolver: true` to `pnpm-workspace.yaml`. In pnpm v9+, build approvals belong in `pnpm-workspace.yaml`, not `package.json`'s `"pnpm"` field.
-
-### 2. Turbo `Could not resolve workspace` — missing `packageManager`
-**Error:** Turbo couldn't find the workspace.
-**Fix:** Added `"packageManager": "pnpm@11.10.0"` to root `package.json`. Turbo v2 requires this field to locate the workspace manager.
-
-### 3. `packages/tokens/src/semantic.ts` typecheck failure
-**Error:** `satisfies Record<Company, typeof semanticBase>` failed — literal hex values from `as const` made `flex-500` incompatible with `arc-500`'s exact type.
-**Fix:** Removed the `satisfies` constraint, keeping only `as const`. The shapes are structurally compatible at runtime; the strict type constraint was unnecessary.
-
-### 4. `packages/tokens/src/tailwind.ts` — Cannot find module 'tailwindcss'
-**Error:** `packages/tokens` didn't declare tailwindcss as a devDependency. In pnpm strict isolation, each package can only access what it declares.
-**Fix:** Added `"tailwindcss": "*"` to `packages/tokens/package.json` devDependencies.
-
-### 5. `apps/web/tailwind.config.ts` typecheck error
-**Error:** `datumPreset as Config` failed because a Tailwind preset object lacks the `content` field required by `Config`.
-**Fix:** Double-cast: `datumPreset as unknown as Config`. Standard pattern for Tailwind preset usage.
-
-### 6. `next.config.ts` not supported by Next.js 14
-**Error:** Next.js 14 only supports `.js` or `.mjs` for the config file; `.ts` requires Next.js 15+.
-**Fix:** Renamed to `next.config.mjs` and converted TypeScript type annotations to JSDoc comments.
-
-### 7. `pnpm turbo lint` — `Could not resolve tailwindcss` (the hard one)
-**Error:** `eslint-plugin-tailwindcss` → `tailwind-api-utils` → `loadConfigV3` → `localPkg.resolveModule("tailwindcss", { paths: ["."] })` → `mlly.resolvePathSync` fails because `"."` is a relative path, not an absolute URL.
-
-**Root cause (traced through the stack):**
-- `apps/web/.eslintrc.json` had `settings.tailwindcss.config: "tailwind.config.ts"` (relative path)
-- `tailwind-api-utils` computes `pwd = path.dirname("tailwind.config.ts")` → `"."`
-- It then calls `localPkg.resolveModule("tailwindcss", { paths: ["."] })`
-- `local-pkg` uses `mlly.resolvePathSync` with `url: ["."]` — a relative value that mlly cannot resolve to a real package location
-- `resolveModule` returns `undefined` → throws `"Could not resolve tailwindcss"`
-
-**Attempted fixes that did not work:**
-- Moving `eslint-plugin-tailwindcss` from root devDeps to `apps/web` devDeps — same error
-- Adding `.npmrc` with `public-hoist-pattern[]=tailwindcss` — no effect without reinstall, and still doesn't fix the path issue
-- Adding `tailwindcss` to root `package.json` devDependencies — available in root node_modules but the relative path resolution still breaks mlly
-
-**Fix that worked:** Remove `settings.tailwindcss.config` entirely from `apps/web/.eslintrc.json`. Without that setting, the plugin falls back to `resolveDefaultConfigPath()` from `tailwindcss/lib/util/resolveConfigPath`, which searches from the linted file's directory and returns an **absolute path**. `path.dirname(absolutePath)` is an absolute directory, which `mlly.resolvePathSync` handles correctly.
-
-**Rule:** Never set `settings.tailwindcss.config` to a relative path. Either omit it (let the plugin auto-discover) or use an absolute path.
-
----
-
-## What's remaining (BUILD-PLAYBOOK.md)
-
-| Session | Goal | Branch | Model | Status |
-|---------|------|--------|-------|--------|
-| 0 | Bleeding fix — live site crawler 200s | (server config) | advisor | Not started |
-| 1 | Scaffold monorepo | phase-1-foundations | sonnet | ✅ Done |
-| 2 | Tokens — primitives + semantic maps + contrast tests | session-2-token-tests | sonnet | ✅ Done (PR pending rfqFg review) |
-| 3 | CMS schemas + Zod + JSON-LD builders | phase-1-foundations | sonnet | Partial (cms.ts done, rfq.ts stub, jsonld.ts missing) |
-| 4 | Component library part 1 — primitives (Button, form fields, SpecTable) | phase-2-components | fable | Not started |
-| 5 | Component library part 2 — composition (cards, nav, footer, hero, trust) | phase-2-components | fable | Not started |
-| 6 | RFQ engine end-to-end | phase-3-proving | fable | Not started |
-| 7 | Dhruv home + Heat Exchangers page | phase-3-proving | fable | Not started |
-| 8 | Precise home + Metallic Bellows + group home | phase-3-proving | fable | Not started |
-| 9–12 | Scale-out — all remaining product/capability/proof/case-study pages | phase-4-scaleout | sonnet | Not started |
-| 13 | Redirect map + robots + sitemaps | phase-5-launch | sonnet | Not started |
-| 14 | Launch checklist | phase-5-launch | opus/sonnet | Not started |
-
 ### Session 2 — Tokens (Vitest contract)
 **Status:** Complete ✅
-**Branch:** `session-2-token-tests` (PR pending — needs Swayam review of `rfqFg` token before merge)
+**Branch:** `session-2-token-tests` → merged to `main` (PR #2)
 **Date:** 2026-07-09
 
 #### What was done
@@ -137,30 +70,87 @@ pnpm test        ✓  25/25 (tokens: 25, schemas: 8)
 pnpm build       ✓  zero errors/warnings
 ```
 
-#### Design-review blocker (needs Swayam before merge)
+#### Design decisions (2026-07-10)
 
-`rfqFg` is a new semantic token (§26 gate). The Precise RFQ button will show **dark-blue fill + near-white label text**. Confirm this is intended, or decide to lighten flex-500 (which would re-open the hex review).
+- Brand hexes confirmed: `arc-500: #F0670F`, flex blues as scaffolded. No change.
+- rfqFg for Precise (dark-blue fill + near-white label): approved.
 
 ---
 
-### Immediate next: Session 3 — CMS schemas + JSON-LD
+### Session 3 — CMS schemas + JSON-LD
+**Status:** Complete ✅
+**Branch:** `session-3-schemas` (PR #3 pending merge)
+**Date:** 2026-07-10
 
-- `packages/schemas/src/rfq.ts` — stub, needs full two-step RFQ Zod schema, honeypot field, time-trap
-- `packages/schemas/src/jsonld.ts` — missing, needs typed JSON-LD builders for Organization, Product, FAQPage, BreadcrumbList, Article
-- Vitest: failure tests for unattributed Testimonial, numberless scope, valid round-trips, JSON-LD validity
-- After Session 3: PR `phase-1-foundations` work → `main`, then Session 4 starts on `phase-2-components`
+#### What was done
+
+- `packages/schemas/src/jsonld.ts` — 6 typed JSON-LD builders: `buildOrganization`,
+  `buildLocalBusiness`, `buildProduct`, `buildFAQPage`, `buildBreadcrumbList`, `buildArticle`.
+  Each consumes its matching CMS Zod type. Inline schema.org TS types (no new dep).
+- `packages/schemas/src/cms.ts` — added `export type ProductFAQ`
+- `packages/schemas/src/index.ts` — re-exports jsonld builders
+- `packages/schemas/src/jsonld.test.ts` — 18 tests
+
+#### Gate result
+
+```
+pnpm typecheck   ✓  4/4 packages
+pnpm lint        ✓  0 errors, 0 warnings
+pnpm test        ✓  26/26 (jsonld: 18, schemas: 8)
+pnpm build       ✓  zero errors/warnings
+```
+
+---
+
+## Problems faced & how we tackled them
+
+### 1. `pnpm install` blocked by `unrs-resolver` build
+**Fix:** `allowBuilds: unrs-resolver: true` in `pnpm-workspace.yaml`.
+
+### 2. Turbo `Could not resolve workspace`
+**Fix:** `"packageManager": "pnpm@11.10.0"` in root `package.json`.
+
+### 3. `packages/tokens/src/semantic.ts` typecheck failure
+**Fix:** Removed `satisfies` constraint, kept `as const`.
+
+### 4. `packages/tokens/src/tailwind.ts` — Cannot find module 'tailwindcss'
+**Fix:** Added `"tailwindcss": "*"` to `packages/tokens/package.json` devDependencies.
+
+### 5. `apps/web/tailwind.config.ts` typecheck error
+**Fix:** `datumPreset as unknown as Config`.
+
+### 6. `next.config.ts` not supported by Next.js 14
+**Fix:** Renamed to `next.config.mjs`.
+
+### 7. `pnpm turbo lint` — `Could not resolve tailwindcss`
+**Fix:** Remove `settings.tailwindcss.config` from `.eslintrc.json`. Never set this to a relative path.
+
+---
+
+## What's remaining
+
+| Session | Goal | Branch | Model | Status |
+|---------|------|--------|-------|--------|
+| 0 | Bleeding fix — live site | (server config) | advisor | Skipped (prototype demo) |
+| 1 | Scaffold monorepo | phase-1-foundations | sonnet | ✅ Done |
+| 2 | Tokens + contrast tests | session-2-token-tests | sonnet | ✅ Done — merged (PR #2) |
+| 3 | CMS schemas + JSON-LD | session-3-schemas | sonnet | ✅ Done — PR #3 pending merge |
+| 4 | Component library part 1 — primitives | phase-2-components | **fable** | Not started |
+| 5 | Component library part 2 — composition | phase-2-components | **fable** | Not started |
+| 6 | RFQ engine end-to-end | phase-3-proving | fable | Not started |
+| 7 | Dhruv home + Heat Exchangers page | phase-3-proving | fable | Not started |
+| 8 | Precise home + Metallic Bellows + group home | phase-3-proving | fable | Not started |
+| 9–12 | Scale-out — remaining pages | phase-4-scaleout | sonnet | Not started |
+| 13 | Redirect map + robots + sitemaps | phase-5-launch | sonnet | Not started |
+| 14 | Launch checklist | phase-5-launch | opus/sonnet | Not started |
+
+### Immediate next: merge PR #3, then Session 4
+
+1. Merge `session-3-schemas` PR #3 on GitHub
+2. Session 4: `git checkout -b phase-2-components main`, switch to **fable model** (`/model fable`),
+   paste Session 4 prompt from BUILD-PLAYBOOK.md §SESSION 4
 
 ### Known gaps
 
 - `packages/datum-ui/src/` — empty, populated in Sessions 4–5
-- `content/redirect-map.csv` — header row only, needs legacy URL inventory (Session 13)
-- Session 0 (live site) is completely untouched
-
----
-
-## Open design questions (needs human answer before agent can proceed)
-
-1. **Flex-blue hex values** — ✅ resolved 2026-07-09. Blue approved (Datum §5). See mistakes.md.
-2. **Precise rfqFg token** — ⚠️ NEEDS REVIEW. dark-blue fill + near-white label for RFQ button. Is that intended? See mistakes.md entry 2026-07-09.
-3. **Dhruv arc-amber hex values** — are the scaffolded values (`arc-500: #F0670F`) correct, or does Swayam have a brand-spec hex?
-4. **Session 0** — who is handling the live-site server config? Agent can advise; someone needs to apply it on the actual hosting.
+- `content/redirect-map.csv` — header row only, Session 13
