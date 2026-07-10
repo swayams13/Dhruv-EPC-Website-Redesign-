@@ -29,6 +29,10 @@ import * as StatBandStories from './components/StatBand.stories'
 import * as HomeHeroStories from './components/HomeHero.stories'
 import * as ProductHeroStories from './components/ProductHero.stories'
 import * as PageHeroStories from './components/PageHero.stories'
+import * as CertificationCardStories from './components/CertificationCard.stories'
+import * as ApprovalsMatrixStories from './components/ApprovalsMatrix.stories'
+import * as ClientWallStories from './components/ClientWall.stories'
+import * as TestimonialStories from './components/Testimonial.stories'
 
 const allStories = {
   Stamp: StampStories,
@@ -51,6 +55,10 @@ const allStories = {
   HomeHero: HomeHeroStories,
   ProductHero: ProductHeroStories,
   PageHero: PageHeroStories,
+  CertificationCard: CertificationCardStories,
+  ApprovalsMatrix: ApprovalsMatrixStories,
+  ClientWall: ClientWallStories,
+  Testimonial: TestimonialStories,
 }
 
 for (const [componentName, mod] of Object.entries(allStories)) {

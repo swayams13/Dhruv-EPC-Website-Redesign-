@@ -43,6 +43,13 @@ export { HomeHero, type HomeHeroProps, type HeroCta } from './components/HomeHer
 export { ProductHero, type ProductHeroProps } from './components/ProductHero'
 export { PageHero, type PageHeroProps } from './components/PageHero'
 export {
+  CertificationCard,
+  type CertificationCardProps,
+} from './components/CertificationCard'
+export { ApprovalsMatrix, type ApprovalsMatrixProps } from './components/ApprovalsMatrix'
+export { ClientWall, type ClientWallProps } from './components/ClientWall'
+export { Testimonial, type TestimonialProps } from './components/Testimonial'
+export {
   ProjectCard,
   type ProjectCardProps,
   type ProjectMetric,
