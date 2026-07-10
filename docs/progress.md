@@ -286,8 +286,8 @@ accent-leak grep ✓  zero arc-/flex- classes in components (gate met)
 | 1 | Scaffold monorepo | phase-1-foundations | sonnet | ✅ Done |
 | 2 | Tokens + contrast tests | session-2-token-tests | sonnet | ✅ Done — merged (PR #2) |
 | 3 | CMS schemas + JSON-LD | session-3-schemas | sonnet | ✅ Done — PR #3 pending merge |
-| 4 | Component library part 1 — primitives | phase-2-components | **fable** | ✅ Done — PR pending |
-| 5 | Component library part 2 — composition | phase-2-components | **fable** | ✅ Done — PR pending (with Session 4) |
+| 4 | Component library part 1 — primitives | phase-2-components | **fable** | ✅ Done — PR #4 open |
+| 5 | Component library part 2 — composition | phase-2-components | **fable** | ✅ Done — PR #4 open (with Session 4) |
 | 6 | RFQ engine end-to-end | phase-3-proving | fable | Not started |
 | 7 | Dhruv home + Heat Exchangers page | phase-3-proving | fable | Not started |
 | 8 | Precise home + Metallic Bellows + group home | phase-3-proving | fable | Not started |
@@ -295,12 +295,17 @@ accent-leak grep ✓  zero arc-/flex- classes in components (gate met)
 | 13 | Redirect map + robots + sitemaps | phase-5-launch | sonnet | Not started |
 | 14 | Launch checklist | phase-5-launch | opus/sonnet | Not started |
 
-### Immediate next: open the Sessions 4+5 PR
+### Immediate next: merge PR #4, then Session 6
 
-1. Push `phase-2-components`, open PR → `main` covering Sessions 4 and 5
-2. Human review gates: preset token additions (§26), `@vedanta/schemas`
-   dep in datum-ui, the deviations lists in both session entries
-3. After merge: Session 6 (RFQ engine) on `phase-3-proving`
+PR #4 is open: https://github.com/swayams13/Dhruv-EPC-Website-Redesign-/pull/4
+
+Human review gates before merge:
+- Preset token additions (Sessions 4 & 5) — §26 design-review
+- `@vedanta/schemas` workspace dep in datum-ui
+- Manual browser pass: focus rings, reduced-motion, 320px viewport, one accent element per view
+- Deviations lists in both session entries above
+
+After merge: Session 6 (RFQ engine) on `phase-3-proving`
 
 ### Known gaps
 
