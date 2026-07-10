@@ -167,6 +167,92 @@ accent-leak grep ✓  zero arc-/flex- classes in components
 
 ---
 
+### Session 5 — Component library part 2 (composition)
+**Status:** Complete ✅
+**Branch:** `phase-2-components` (continues Session 4; one PR for both)
+**Date:** 2026-07-10
+**Model:** fable
+
+#### What was done
+
+- **Token wiring** (design-review items per §26, all spec-cited): §5.2 fluid
+  type steps as clamp() 360→1440 (display-xl, display, h1, h3, h4, body-lg,
+  data-lg — only steps components consume); §17 heights header 72px /
+  header-scrolled 60px; §10 opacity-88 (glass scrim, verified compiling to
+  `rgb(247 248 248 / .88)`); §16 aspect-4/3
+- **Button extended (§13):** `href` renders an `<a>` (hero/nav CTAs);
+  `onDark` lands Session 4's deferred deviation #4 — Primary inverts on
+  graphite, RFQ stays accent (no onDark mapping exists for it, structurally)
+- **Components** (`packages/datum-ui`): ProductCard (§16 — required
+  oneLineScope, ≤3 mono chips, arrow nudge; replaces the Card.tsx stub),
+  ProjectCard (§16 — sector eyebrow, ≤3-figure mono metric strip),
+  Breadcrumbs (§17), Header (§17 — mega-menu Raised panel with IA groups +
+  capability rail, click-open, ESC/outside close, sticky compress to 60px
+  with §10 glass + degradation hooks), MobileDrawer (§17 — focus trap,
+  accordions, RFQ pinned, ESC/scrim close), MobileBottomBar (§17 —
+  call/WhatsApp/RFQ per playbook), Footer (§18 — title block consuming
+  EntityRecord, stamps strip, sitemap + LinkedIn labeled link), StatBand
+  (§19 — sourced mono figures), HomeHero / ProductHero / PageHero (§19),
+  DimensionLabel (internal — §11 signature count-up, reduced-motion final
+  frame; closes Session 4 deviation #1), CertificationCard, ApprovalsMatrix,
+  ClientWall, Testimonial (§20 — attribution as required props)
+- **New dependency:** `@vedanta/schemas` (workspace, type-only) in datum-ui
+  — Footer/ApprovalsMatrix/ClientWall consume CMS types. **Needs review.**
+- **Stories:** every component in dhruv AND precise scopes; axe per story
+- **Separate verify pass:** reviewer subagent given only the diff + §5/§9–§22
+  spec text. Verdict: PASS WITH DEVIATIONS. Fixed from findings: §17 icon
+  order (WhatsApp before call), §10 glass degradation (data-glass +
+  @supports-not / prefers-reduced-transparency solid fallback — was missing),
+  CertificationCard scope voice off the mono-reserved data step
+
+#### Gate result
+
+```
+pnpm typecheck   ✓  4/4 packages
+pnpm lint        ✓  0 errors, 0 warnings
+pnpm test        ✓  123/123 (tokens 26, schemas 26, datum-ui a11y 71)
+pnpm build       ✓  zero errors/warnings
+storybook build  ✓
+accent-leak grep ✓  zero arc-/flex- classes in components (gate met)
+```
+
+#### Deviations reported (verify pass — none silent)
+
+1. §16 project-card "11px labels" — no 11px step exists in §5.2; caption
+   12px (text-xs) used. Spec-internal conflict, nearest token chosen.
+2. §16 metric-strip figure size unspecified — data 15px used; data-lg
+   (24→32) is assigned to hero/case-study metrics and overwhelms a card.
+3. §17 bottom bar carries click-to-call as a third action — BUILD-PLAYBOOK
+   Session 5 orders "call / WhatsApp / RFQ"; §17's sentence names two.
+   Playbook followed.
+4. §11 drawer exit is an immediate unmount (no accelerate-out exit); entry
+   honors motion-deliberate. Accordion disclosure is instant — §11's own
+   compositor law bans height animation; only the chevron rotates.
+5. §18 zones 2–3 render on the page surface — spec names only Zone 1 as
+   the graphite band.
+6. §13 Secondary-on-graphite (steel-600 border / steel-50 text) is an
+   interpretation — spec names only Primary's inversion; §19's CTA pair on
+   graphite forces the question.
+7. §20 CertificationCard stampCode/artifactUrl optional — mirrors the
+   Certification Zod schema (artifactUrl optional); scope/issuer/validity
+   stay mandatory.
+8. Spec tension, page-level (no component change): §13 one-accent-per-view
+   vs §17 header RFQ on every page vs §19 hero RFQ. Header hides its RFQ on
+   mobile (drawer/bottom-bar handoff); desktop composition must resolve it
+   in Session 7.
+9. Reviewer flagged drawer slide / chevron rotation lacking per-component
+   reduced-motion guards — covered by the global §11 collapse in
+   globals.css + preview.css (the reviewer was not given those files by
+   design). Shared mechanism kept; no per-component classes added.
+
+#### Requires human review before merge (accumulated, Sessions 4+5 PR)
+
+- Preset token additions (Sessions 4 & 5 lists above) — §26 design-review
+- `@vedanta/schemas` dependency in datum-ui
+- `docs/` spec unchanged; no eslint-disable anywhere; no redirect-map change
+
+---
+
 ## Problems faced & how we tackled them
 
 ### 1. `pnpm install` blocked by `unrs-resolver` build
@@ -201,7 +287,7 @@ accent-leak grep ✓  zero arc-/flex- classes in components
 | 2 | Tokens + contrast tests | session-2-token-tests | sonnet | ✅ Done — merged (PR #2) |
 | 3 | CMS schemas + JSON-LD | session-3-schemas | sonnet | ✅ Done — PR #3 pending merge |
 | 4 | Component library part 1 — primitives | phase-2-components | **fable** | ✅ Done — PR pending |
-| 5 | Component library part 2 — composition | phase-2-components | **fable** | Not started |
+| 5 | Component library part 2 — composition | phase-2-components | **fable** | ✅ Done — PR pending (with Session 4) |
 | 6 | RFQ engine end-to-end | phase-3-proving | fable | Not started |
 | 7 | Dhruv home + Heat Exchangers page | phase-3-proving | fable | Not started |
 | 8 | Precise home + Metallic Bellows + group home | phase-3-proving | fable | Not started |
@@ -209,13 +295,14 @@ accent-leak grep ✓  zero arc-/flex- classes in components
 | 13 | Redirect map + robots + sitemaps | phase-5-launch | sonnet | Not started |
 | 14 | Launch checklist | phase-5-launch | opus/sonnet | Not started |
 
-### Immediate next: merge PR #3, then Session 4
+### Immediate next: open the Sessions 4+5 PR
 
-1. Merge `session-3-schemas` PR #3 on GitHub
-2. Session 4: `git checkout -b phase-2-components main`, switch to **fable model** (`/model fable`),
-   paste Session 4 prompt from BUILD-PLAYBOOK.md §SESSION 4
+1. Push `phase-2-components`, open PR → `main` covering Sessions 4 and 5
+2. Human review gates: preset token additions (§26), `@vedanta/schemas`
+   dep in datum-ui, the deviations lists in both session entries
+3. After merge: Session 6 (RFQ engine) on `phase-3-proving`
 
 ### Known gaps
 
-- `packages/datum-ui/src/` — empty, populated in Sessions 4–5
 - `content/redirect-map.csv` — header row only, Session 13
+- Amber-law page-level resolution (deviation 8, Session 5) — Session 7
