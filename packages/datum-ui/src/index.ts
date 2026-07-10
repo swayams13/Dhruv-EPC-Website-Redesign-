@@ -38,6 +38,10 @@ export {
   type FooterColumn,
   type FooterLink,
 } from './components/Footer'
+export { StatBand, type StatBandProps, type Stat } from './components/StatBand'
+export { HomeHero, type HomeHeroProps, type HeroCta } from './components/HomeHero'
+export { ProductHero, type ProductHeroProps } from './components/ProductHero'
+export { PageHero, type PageHeroProps } from './components/PageHero'
 export {
   ProjectCard,
   type ProjectCardProps,

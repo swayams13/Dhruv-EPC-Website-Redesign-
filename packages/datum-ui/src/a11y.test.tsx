@@ -25,6 +25,10 @@ import * as HeaderStories from './components/Header.stories'
 import * as MobileDrawerStories from './components/MobileDrawer.stories'
 import * as MobileBottomBarStories from './components/MobileBottomBar.stories'
 import * as FooterStories from './components/Footer.stories'
+import * as StatBandStories from './components/StatBand.stories'
+import * as HomeHeroStories from './components/HomeHero.stories'
+import * as ProductHeroStories from './components/ProductHero.stories'
+import * as PageHeroStories from './components/PageHero.stories'
 
 const allStories = {
   Stamp: StampStories,
@@ -43,6 +47,10 @@ const allStories = {
   MobileDrawer: MobileDrawerStories,
   MobileBottomBar: MobileBottomBarStories,
   Footer: FooterStories,
+  StatBand: StatBandStories,
+  HomeHero: HomeHeroStories,
+  ProductHero: ProductHeroStories,
+  PageHero: PageHeroStories,
 }
 
 for (const [componentName, mod] of Object.entries(allStories)) {
