@@ -126,6 +126,10 @@ export const datumPreset = {
       opacity: {
         88: '.88',
       },
+      // §16 card photograph ratio (Tailwind ships only square/video)
+      aspectRatio: {
+        '4/3': '4 / 3',
+      },
       // Caption voice tracking +0.06em (§5.2) — Tailwind has 0.05/0.1 only
       letterSpacing: {
         caption: '0.06em',

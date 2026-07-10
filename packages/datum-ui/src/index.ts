@@ -16,6 +16,9 @@ export {
   type SpecTableRow,
   type SpecTableMatrixRow,
 } from './components/SpecTable'
-
-// Card remains a stub — §16 composition is Session 5
-export type { CardProps } from './components/Card'
+export { ProductCard, type ProductCardProps } from './components/ProductCard'
+export {
+  ProjectCard,
+  type ProjectCardProps,
+  type ProjectMetric,
+} from './components/ProjectCard'

@@ -18,6 +18,8 @@ import * as TextareaStories from './components/Textarea.stories'
 import * as ChoiceCardStories from './components/ChoiceCard.stories'
 import * as UploadDropzoneStories from './components/UploadDropzone.stories'
 import * as SpecTableStories from './components/SpecTable.stories'
+import * as ProductCardStories from './components/ProductCard.stories'
+import * as ProjectCardStories from './components/ProjectCard.stories'
 
 const allStories = {
   Stamp: StampStories,
@@ -29,6 +31,8 @@ const allStories = {
   ChoiceCard: ChoiceCardStories,
   UploadDropzone: UploadDropzoneStories,
   SpecTable: SpecTableStories,
+  ProductCard: ProductCardStories,
+  ProjectCard: ProjectCardStories,
 }
 
 for (const [componentName, mod] of Object.entries(allStories)) {
