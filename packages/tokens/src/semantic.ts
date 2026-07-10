@@ -129,6 +129,9 @@ export const semanticGroup = {
       rfq: steel[950],      // group page has no amber primary action
       rfqHover: steel[800],
       rfqPressed: steel[700],
+      // Base rfqFg is steel-950 — on group's steel-950 fill that is 1:1 (invisible).
+      // steel-50 on steel-950 = 17.4:1 ✓ (§4.5 covenant). See mistakes.md 2026-07-10.
+      rfqFg: steel[50],
     },
     accent: {
       default: steel[950],

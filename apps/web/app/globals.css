@@ -13,6 +13,9 @@
   --accent-text: #C24E05;   /* arc-600 — text on light */
   --accent-text-hover: #9A3F06; /* arc-700 */
   --accent-focus: #F0670F;
+  --accent-hover: #C24E05;  /* arc-600 — rfqHover (§13: fill deepens one step) */
+  --accent-pressed: #9A3F06; /* arc-700 — rfqPressed (deepens two) */
+  --accent-fg: #121619;     /* steel-950 — rfqFg, 5.79:1 on arc-500 (Session 2) */
 }
 
 [data-company='precise'] {
@@ -21,6 +24,9 @@
   --accent-text: #0A5589;   /* flex-600 — text on light */
   --accent-text-hover: #083F6A; /* flex-700 */
   --accent-focus: #0E6BA8;
+  --accent-hover: #0A5589;  /* flex-600 — rfqHover */
+  --accent-pressed: #083F6A; /* flex-700 — rfqPressed */
+  --accent-fg: #F7F8F8;     /* steel-50 — rfqFg, ~7.1:1 on flex-500 (Session 2) */
 }
 
 [data-company='group'] {
@@ -29,6 +35,9 @@
   --accent-text: #3F4950;   /* steel-700 */
   --accent-text-hover: #1C2328; /* steel-900 */
   --accent-focus: #121619;
+  --accent-hover: #2A3238;  /* steel-800 — rfqHover */
+  --accent-pressed: #3F4950; /* steel-700 — rfqPressed */
+  --accent-fg: #F7F8F8;     /* steel-50 — rfqFg, 17.4:1 on steel-950 (fix, see mistakes.md) */
 }
 
 /* Universal focus ring — arc-500 (or company accent), 2px, 2px offset (Datum §25) */

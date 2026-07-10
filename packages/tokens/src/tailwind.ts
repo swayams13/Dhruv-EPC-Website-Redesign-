@@ -29,6 +29,10 @@ export const datumPreset = {
         dark: 'var(--accent-dark)',
         text: 'var(--accent-text)',
         'text-hover': 'var(--accent-text-hover)',
+        // RFQ button contract (§13) — fill states + label fg (rfqFg, Session 2)
+        hover: 'var(--accent-hover)',
+        pressed: 'var(--accent-pressed)',
+        fg: 'var(--accent-fg)',
       },
     },
     spacing: {
@@ -86,6 +90,30 @@ export const datumPreset = {
       wide: '1360px',
       '2xl': '1440px',
     },
-    extend: {},
+    extend: {
+      // Component heights (§26 tier 3) — NOT spacing; §6's gapped scale stands.
+      // compact 40px (§13 button/icon), row 44px (§15/§26 space.11), dense 36px (§15)
+      height: {
+        compact: '40px',
+        row: '44px',
+        'row-dense': '36px',
+      },
+      width: {
+        compact: '40px',
+      },
+      minHeight: {
+        row: '44px',
+        control: '48px',
+      },
+      // Type steps missing from Tailwind defaults (§5.2): data 15px, helper 13px
+      fontSize: {
+        data: ['15px', { lineHeight: '1.5' }],
+        helper: ['13px', { lineHeight: '1.5' }],
+      },
+      // Caption voice tracking +0.06em (§5.2) — Tailwind has 0.05/0.1 only
+      letterSpacing: {
+        caption: '0.06em',
+      },
+    },
   },
 } satisfies Partial<Config>

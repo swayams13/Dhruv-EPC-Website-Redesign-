@@ -108,6 +108,10 @@ describe('contrast covenant §4.5', () => {
     expect(cr(semanticPrecise.color.action.rfqFg, flex[500])).toBeGreaterThanOrEqual(4.5)
   })
 
+  it('rfqFg (group) on group rfq fill ≥ 4.5:1 (was 1:1 — steel-950 on steel-950, fixed 2026-07-10)', () => {
+    expect(cr(semanticGroup.color.action.rfqFg, semanticGroup.color.action.rfq)).toBeGreaterThanOrEqual(4.5)
+  })
+
   it('signal-success on white ≥ 4.5:1', () => {
     expect(cr(signal.success, '#FFFFFF')).toBeGreaterThanOrEqual(4.5)
   })

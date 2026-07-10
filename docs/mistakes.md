@@ -29,3 +29,15 @@ If the rule is general, promote it into CLAUDE.md.
 **Fix applied (2026-07-09):** Added `rfqFg` to the semantic action map. Dhruv keeps `steel[950]`; Precise overrides to `steel[50]` (~7.1:1 on flex-500 ✓). This token is a design-review event per CLAUDE.md §26 — **needs Swayam sign-off before this PR merges.**
 
 **Open question for Swayam:** The Precise RFQ button will render as dark-blue fill + near-white label text. Is that the intended look, or should flex-500 be lightened to work with dark text? (Lightening would change the approved hex values — another review event.)
+
+---
+
+## 2026-07-10 — semanticGroup.rfqFg inherited 1:1 contrast (invisible label)
+
+**What happened:** Session 4 discovered while wiring `--accent-fg` CSS variables that `semanticGroup` overrides `rfq: steel[950]` but not `rfqFg`, which therefore inherited `steel[950]` from `semanticBase` — black label on black fill, 1:1 contrast, on any group-page RFQ button.
+
+**Root cause:** Same class as the 2026-07-09 Precise incident: the spread-extension pattern (`...semanticBase.color.action`) silently carries the base `rfqFg` into a company map whose `rfq` fill changed. The Session 2 fix added the Precise override but did not audit group.
+
+**Rule (extends 2026-07-09 rule):** When ANY company map overrides `rfq`, it must also explicitly set `rfqFg` — the pair travels together. A contrast test asserting `rfqFg × rfq` per company now exists in tokens.test.ts for all three companies, so recurrence fails CI.
+
+**Fix applied (2026-07-10):** `semanticGroup.color.action.rfqFg = steel[50]` (17.4:1 on steel-950 ✓) + covenant test added.
