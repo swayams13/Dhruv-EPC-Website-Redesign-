@@ -35,8 +35,10 @@ for (const [componentName, mod] of Object.entries(allStories)) {
   const stories = composeStories(mod as Parameters<typeof composeStories>[0])
   describe(`${componentName} — axe`, () => {
     for (const [storyName, Story] of Object.entries(stories)) {
+      // composeStories loses the component signature over a heterogeneous module map
+      const Composed = Story as unknown as React.ComponentType
       it(`${storyName}: zero WCAG A/AA violations`, async () => {
-        const { container } = render(<Story />)
+        const { container } = render(<Composed />)
         const results = await axe.run(container, {
           runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'] },
         })
