@@ -44,6 +44,29 @@ export const HierarchyPrecise: Story = {
   decorators: [withCompany('precise')],
 }
 
+// §13: on graphite, Primary inverts; RFQ stays accent-filled — the one constant
+export const OnGraphite: Story = {
+  render: () => (
+    <div className="flex items-center gap-4 bg-steel-900 p-8">
+      <Button variant="rfq" href="/request-a-quote">
+        Request a quote
+      </Button>
+      <Button variant="primary" onDark>
+        View equipment
+      </Button>
+      <Button variant="secondary" onDark href="#capability-matrix">
+        Capability matrix
+      </Button>
+    </div>
+  ),
+  decorators: [withCompany('dhruv')],
+}
+
+export const AsLink: Story = {
+  args: { variant: 'rfq', href: '/request-a-quote', children: 'Request a quote' },
+  decorators: [withCompany('precise')],
+}
+
 export const Compact: Story = {
   args: { variant: 'secondary', size: 'compact', children: 'Download PDF' },
   decorators: [withCompany('dhruv')],

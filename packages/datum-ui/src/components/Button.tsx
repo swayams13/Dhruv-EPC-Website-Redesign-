@@ -14,6 +14,10 @@ export interface ButtonProps {
   disabled?: boolean
   /** Label swaps to spinner + "Sending…", width locked (§13) */
   loading?: boolean
+  /** Renders an <a> — navigation CTAs (heroes, nav). loading/disabled do not apply. */
+  href?: string
+  /** Graphite sections (§13): Primary inverts to white fill / carbon text; RFQ stays accent. */
+  onDark?: boolean
   type?: 'button' | 'submit' | 'reset'
   onClick?: () => void
   className?: never // components accept no className — theming is CSS-var scope
@@ -33,6 +37,15 @@ const variantClass: Record<ButtonProps['variant'], string> = {
   link: `${tick} inline font-medium text-data text-accent-text hover:text-accent-text-hover hover:underline`,
 }
 
+// §13 graphite inversion: Primary → white fill / carbon text. Secondary border/text
+// lighten to stay visible (spec names only Primary; RFQ is the constant).
+// Full replacement strings — appended overrides would fight the base fill on
+// stylesheet order. Only variants a graphite section uses are mapped.
+const onDarkClass: Partial<Record<ButtonProps['variant'], string>> = {
+  primary: `${box} ${press} ${tick} bg-white text-steel-950 hover:bg-steel-100 active:bg-steel-200 disabled:hover:bg-steel-200`,
+  secondary: `${box} ${press} ${tick} border border-steel-600 bg-transparent text-steel-50 hover:border-steel-400 disabled:border-steel-200 disabled:hover:border-steel-200`,
+}
+
 const disabledFill = 'disabled:bg-steel-200 disabled:text-steel-400'
 
 export function Button({
@@ -41,11 +54,22 @@ export function Button({
   size = 'default',
   disabled = false,
   loading = false,
+  href,
+  onDark = false,
   type = 'button',
   onClick,
 }: ButtonProps): React.ReactElement {
   const height = variant === 'link' ? '' : size === 'compact' ? 'h-compact' : 'h-12'
   const dis = variant === 'link' ? 'disabled:text-steel-400' : disabledFill
+  const look = (onDark && onDarkClass[variant]) || variantClass[variant]
+
+  if (href) {
+    return (
+      <a href={href} onClick={onClick} className={`${look} ${height}`}>
+        {children}
+      </a>
+    )
+  }
 
   return (
     <button
@@ -53,7 +77,7 @@ export function Button({
       disabled={disabled || loading}
       aria-busy={loading || undefined}
       onClick={onClick}
-      className={`relative ${variantClass[variant]} ${height} ${dis}`}
+      className={`relative ${look} ${height} ${dis}`}
     >
       {/* width lock: real label keeps its box, made invisible; overlay centers */}
       <span className={loading ? 'invisible' : 'contents'}>{children}</span>
