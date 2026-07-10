@@ -313,8 +313,24 @@ submit honestly (no silent lead loss).
   selected would have failed server-side Zod validation at runtime. Fixed by
   introducing `RFQCompany = z.enum(['dhruv','precise'])` in rfq.ts ('group' is
   not a valid RFQ target). Test `merge-preserves-slug` now passes.
-- ⏳ Still pending: §23 browser verify pass (focus rings, reduced motion, 320px,
-  one accent element per view) and E2E with real storage/Resend creds
+- ✅ §23 browser verify pass (Playwright + chromium against dev server,
+  17/17 checks): one H1; labeled "Step 1 of 2" progress; rail rows +
+  confidentiality + "Prefer to talk?" hatch; exactly one accent-filled element
+  at 1280px AND 320px; 2px focus outline on all 12 interactive elements;
+  touch targets ≥24px; 320px no horizontal scroll; reduced-motion functional
+  with zero non-opacity animations; JS-off renders content + fallback block;
+  thank-you 200 + mono reference + restated SLA. Screenshots reviewed against
+  §23 layout (8+4, rail right, form left).
+- **Two fixes from the browser pass:**
+  1. No `<noscript>` fallback existed — playbook requires "JS disabled renders
+     the static fallback instruction block". Added to page.tsx (email/call
+     instruction, env-gated contact details).
+  2. Rail tel/mailto links were 20px tall (< §25 24px floor) — now
+     `min-h-row` (44px) inline-flex targets.
+- Note: "Prefer to talk?" hatch and contact fallbacks render only when
+  `NEXT_PUBLIC_CONTACT_*` env is set (deviation #4 — no invented contact
+  info); verified with test values.
+- ⏳ Still pending (needs human/creds): E2E with real storage + Resend creds
   (playbook gate: real PDF from phone on 4G → email within a minute).
 
 ---

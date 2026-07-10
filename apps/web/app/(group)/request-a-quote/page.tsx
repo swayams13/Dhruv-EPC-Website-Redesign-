@@ -43,13 +43,20 @@ function ReassuranceRail({
         <div className="text-sm text-steel-700">
           <h2 className="text-h4 font-medium text-steel-950">Prefer to talk?</h2>
           <p className="mt-2 flex flex-col gap-1">
+            {/* §25 touch: 44px comfortable target for the call/email escape hatch */}
             {fallbackPhone && (
-              <a href={`tel:${fallbackPhone}`} className="font-mono text-accent-text hover:text-accent-text-hover hover:underline">
+              <a
+                href={`tel:${fallbackPhone}`}
+                className="inline-flex min-h-row items-center font-mono text-accent-text hover:text-accent-text-hover hover:underline"
+              >
                 {fallbackPhone}
               </a>
             )}
             {fallbackEmail && (
-              <a href={`mailto:${fallbackEmail}`} className="text-accent-text hover:text-accent-text-hover hover:underline">
+              <a
+                href={`mailto:${fallbackEmail}`}
+                className="inline-flex min-h-row items-center text-accent-text hover:text-accent-text-hover hover:underline"
+              >
                 {fallbackEmail}
               </a>
             )}
@@ -77,6 +84,36 @@ export default function RequestAQuotePage({ searchParams }: { searchParams: { co
       </p>
       <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-12">
         <div className="lg:col-span-8">
+          {/* Playbook §6: JS disabled renders the static fallback instruction block */}
+          <noscript>
+            <div className="mb-6 rounded-sm border border-steel-200 bg-steel-50 p-6 text-sm text-steel-700">
+              <p className="font-medium text-steel-950">This form needs JavaScript to attach drawings.</p>
+              <p className="mt-2">
+                Enable JavaScript, or send your requirement — equipment type, design code, material, quantity,
+                drawings — directly{' '}
+                {fallbackEmail ? (
+                  <>
+                    by email to{' '}
+                    <a href={`mailto:${fallbackEmail}`} className="font-medium text-accent-text underline">
+                      {fallbackEmail}
+                    </a>
+                  </>
+                ) : (
+                  'by email'
+                )}
+                {fallbackPhone && (
+                  <>
+                    {' '}
+                    or call{' '}
+                    <a href={`tel:${fallbackPhone}`} className="font-mono font-medium text-accent-text underline">
+                      {fallbackPhone}
+                    </a>
+                  </>
+                )}
+                . An engineer reviews every requirement.
+              </p>
+            </div>
+          </noscript>
           <RFQForm initialCompany={company} fallbackEmail={fallbackEmail} fallbackPhone={fallbackPhone} />
         </div>
         <ReassuranceRail fallbackEmail={fallbackEmail} fallbackPhone={fallbackPhone} />
