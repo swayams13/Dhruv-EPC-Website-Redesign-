@@ -9,7 +9,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "lint": "eslint \"src/**/*.{ts,tsx}\""
   },
   "dependencies": {
     "@vedanta/tokens": "workspace:*"
@@ -27,6 +28,8 @@
     "@types/react-dom": "^18.3.0",
     "autoprefixer": "^10.5.2",
     "axe-core": "^4.12.1",
+    "eslint": "^8.57.1",
+    "eslint-plugin-tailwindcss": "^3.18.3",
     "jsdom": "^29.1.1",
     "postcss": "^8.5.16",
     "react": "^18.3.1",
