@@ -300,15 +300,22 @@ submit honestly (no silent lead loss).
 4. Contact fallback via `NEXT_PUBLIC_CONTACT_*` env until EntityRecord lands in CMS.
 5. SLA "one business day" is the §23 placeholder, still pending client commitment.
 
-**VERIFICATION STATUS (honest):**
+**VERIFICATION STATUS (updated 2026-07-10, continuation session):**
 - ✅ Vector check for SigV4 signer (scratchpad, PASS)
-- ❌ First `pnpm typecheck` failed (2 errors — exactOptionalPropertyTypes on rail
-  props, notify.ts filter type). Both fixed in code, but the re-run was NOT
-  executed — typecheck, lint, test, build, and the browser pass are ALL pending.
-- Session interrupted by user before verification loop completed. **Do not treat
-  Session 6 as done.** Next session: run `pnpm typecheck && pnpm lint && pnpm test
-  && pnpm build`, then the §23 browser verify pass (focus rings, reduced motion,
-  320px, one accent element per view), then E2E with real storage/Resend creds.
+- ✅ `pnpm typecheck` — 4/4 packages, zero errors
+- ✅ `pnpm lint` — 0 errors, 0 warnings
+- ✅ `pnpm test` — 133/133 (tokens 26, schemas 36, datum-ui a11y 71)
+- ✅ `pnpm build` — zero errors/warnings; /request-a-quote 108 kB First Load JS
+  (under the 180 kB RFQ budget)
+- **Bug found by the test gate and fixed:** `RFQStep1.company` reused CMS
+  `CompanySlug` (`dhruv-epc`/`precise-engineers`/`group`) but the form submits
+  `dhruv`/`precise` (the data-company vocabulary) — every RFQ with a company
+  selected would have failed server-side Zod validation at runtime. Fixed by
+  introducing `RFQCompany = z.enum(['dhruv','precise'])` in rfq.ts ('group' is
+  not a valid RFQ target). Test `merge-preserves-slug` now passes.
+- ⏳ Still pending: §23 browser verify pass (focus rings, reduced motion, 320px,
+  one accent element per view) and E2E with real storage/Resend creds
+  (playbook gate: real PDF from phone on 4G → email within a minute).
 
 ---
 

@@ -1,10 +1,14 @@
 // RFQ form schemas — shared client/server (TRD §T-4, FR-3)
 
 import { z } from 'zod'
-import { CompanySlug } from './cms'
+
+// RFQ target vocabulary matches the form / data-company scopes ('dhruv' |
+// 'precise') — not CMS CompanySlug: 'group' is not a valid RFQ target.
+export const RFQCompany = z.enum(['dhruv', 'precise'])
+export type RFQCompany = z.infer<typeof RFQCompany>
 
 export const RFQStep1 = z.object({
-  company: CompanySlug.optional(),  // prefilled via ?company= but selectable
+  company: RFQCompany.optional(),  // prefilled via ?company= but selectable
   equipmentType: z.string().min(1, 'Select an equipment type'),
   designCode: z.string().optional(),
   moc: z.string().optional(),
