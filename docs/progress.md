@@ -102,6 +102,71 @@ pnpm build       ✓  zero errors/warnings
 
 ---
 
+### Session 4 — Component library part 1 (primitives)
+**Status:** Complete ✅
+**Branch:** `phase-2-components` (PR pending)
+**Date:** 2026-07-10
+**Model:** fable
+
+#### What was done
+
+- **Token wiring** (design-review items, all spec-cited): `typeScale.helper` 13px
+  (§14/§15 vs §5.2 conflict — Swayam approved 13px); preset heights compact
+  40px / row 44px / row-dense 36px (§13/§15/§26 tier-3); fontSize data 15px +
+  helper 13px; tracking-caption 0.06em; `accent.hover/pressed/fg` CSS-var slots
+  + per-company values in globals.css (projects Session-2 rfqFg semantics)
+- **Bug fix:** `semanticGroup.rfqFg` inherited steel-950 on steel-950 fill
+  (1:1 contrast, invisible label) — fixed to steel-50 (17.4:1), covenant test
+  added, mistakes.md entry written
+- **Components** (`packages/datum-ui`): Stamp (§12), DatumRule (§2/§11 line +
+  origin tick, signature draw, reduced-motion final frame), Button (§13 — 5
+  variants, 48/40px, loading width-lock, disabled steel-200/400), Input /
+  Select / Textarea (§14 — visible labels, 48px fields, error icon + live
+  region), ChoiceCard (§14 radio-semantics tiles), UploadDropzone (§14 —
+  presigned-PUT, per-file progress via scaleX, retry, confidentiality caption
+  built in), SpecTable (§15 — scope headers, mono right-aligned values, dl
+  reflow < 768px, comparative pinned-column mode)
+- **Storybook 8** (react-vite) with company-scope decorators — every component
+  storied in dhruv AND precise themes (32 stories)
+- **Axe per story:** vitest + axe-core over composed stories — 32/32 zero
+  WCAG A/AA violations (color-contrast covered numerically in token tests)
+- **Lint gap closed:** datum-ui now runs `tailwindcss/no-arbitrary-value`
+  (was apps/web-only) — zero findings
+- **Verify pass fix:** SpecTable cell padding 16px per §15 (wrapped text
+  touched the scribed rules)
+
+#### Gate result
+
+```
+pnpm typecheck   ✓  4/4 packages
+pnpm lint        ✓  2 lint tasks, 0 errors 0 warnings
+pnpm test        ✓  84/84 (tokens 26, schemas 26, datum-ui a11y 32)
+pnpm build       ✓  zero errors/warnings
+storybook build  ✓
+accent-leak grep ✓  zero arc-/flex- classes in components
+```
+
+#### Deviations reported (verify pass — none silent)
+
+1. §11 signature "measurement label counts up in mono" — DatumRule renders
+   line + tick only; count-up label belongs to the hero orchestration
+   (Session 5/7). Deferred, not dropped.
+2. §11 tick "drops" — implemented as opacity fade (compositor-safe,
+   reduced-motion-clean) rather than translate-drop.
+3. §13 primary pressed "deepens two" — steel-950 has no darker step;
+   pressed uses steel-700 (lightens). Spec written for amber fills.
+4. §13 "on graphite sections, Primary inverts" — no graphite section
+   context exists until Session 5; onDark variant deferred.
+5. §13 secondary/ghost hover — spec's "fill deepens one step" is
+   fill-oriented; transparent variants deepen border (secondary) /
+   tint bg steel-100 (ghost). Interpretation, consistent with §15 row hover.
+6. §15 comparative affordance shadow — Datum's closed shadow set has only
+   raised/overlay; pinned column uses shadow-raised (no new token invented).
+7. Upload file-type enforcement is client-`accept` only until api/presign
+   Zod-validates server-side (Session 6).
+
+---
+
 ## Problems faced & how we tackled them
 
 ### 1. `pnpm install` blocked by `unrs-resolver` build
@@ -135,7 +200,7 @@ pnpm build       ✓  zero errors/warnings
 | 1 | Scaffold monorepo | phase-1-foundations | sonnet | ✅ Done |
 | 2 | Tokens + contrast tests | session-2-token-tests | sonnet | ✅ Done — merged (PR #2) |
 | 3 | CMS schemas + JSON-LD | session-3-schemas | sonnet | ✅ Done — PR #3 pending merge |
-| 4 | Component library part 1 — primitives | phase-2-components | **fable** | Not started |
+| 4 | Component library part 1 — primitives | phase-2-components | **fable** | ✅ Done — PR pending |
 | 5 | Component library part 2 — composition | phase-2-components | **fable** | Not started |
 | 6 | RFQ engine end-to-end | phase-3-proving | fable | Not started |
 | 7 | Dhruv home + Heat Exchangers page | phase-3-proving | fable | Not started |
