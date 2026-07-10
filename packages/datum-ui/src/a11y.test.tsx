@@ -24,6 +24,7 @@ import * as BreadcrumbsStories from './components/Breadcrumbs.stories'
 import * as HeaderStories from './components/Header.stories'
 import * as MobileDrawerStories from './components/MobileDrawer.stories'
 import * as MobileBottomBarStories from './components/MobileBottomBar.stories'
+import * as FooterStories from './components/Footer.stories'
 
 const allStories = {
   Stamp: StampStories,
@@ -41,6 +42,7 @@ const allStories = {
   Header: HeaderStories,
   MobileDrawer: MobileDrawerStories,
   MobileBottomBar: MobileBottomBarStories,
+  Footer: FooterStories,
 }
 
 for (const [componentName, mod] of Object.entries(allStories)) {

@@ -31,7 +31,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^4.1.10
-        version: 4.1.10(@types/node@20.19.43)(jsdom@29.1.1)(vite@8.1.3(@types/node@20.19.43)(jiti@2.7.0))
+        version: 4.1.10(@types/node@20.19.43)(jsdom@29.1.1)(vite@8.1.3(@types/node@20.19.43)(jiti@1.21.7))
 
   apps/web:
     dependencies:
@@ -90,6 +90,9 @@ importers:
 
   packages/datum-ui:
     dependencies:
+      '@vedanta/schemas':
+        specifier: workspace:*
+        version: link:../schemas
       '@vedanta/tokens':
         specifier: workspace:*
         version: link:../tokens
@@ -4419,13 +4422,13 @@ snapshots:
     optionalDependencies:
       vite: 6.4.3(@types/node@20.19.43)(jiti@1.21.7)(lightningcss@1.32.0)
 
-  '@vitest/mocker@4.1.10(vite@8.1.3(@types/node@20.19.43)(jiti@2.7.0))':
+  '@vitest/mocker@4.1.10(vite@8.1.3(@types/node@20.19.43)(jiti@1.21.7))':
     dependencies:
       '@vitest/spy': 4.1.10
       estree-walker: 3.0.3
       magic-string: 0.30.21
     optionalDependencies:
-      vite: 8.1.3(@types/node@20.19.43)(jiti@2.7.0)
+      vite: 8.1.3(@types/node@20.19.43)(jiti@1.21.7)
 
   '@vitest/pretty-format@2.0.5':
     dependencies:
@@ -6648,7 +6651,7 @@ snapshots:
       jiti: 1.21.7
       lightningcss: 1.32.0
 
-  vite@8.1.3(@types/node@20.19.43)(jiti@2.7.0):
+  vite@8.1.3(@types/node@20.19.43)(jiti@1.21.7):
     dependencies:
       lightningcss: 1.32.0
       picomatch: 4.0.5
@@ -6658,7 +6661,7 @@ snapshots:
     optionalDependencies:
       '@types/node': 20.19.43
       fsevents: 2.3.3
-      jiti: 2.7.0
+      jiti: 1.21.7
 
   vitest@4.1.10(@types/node@20.19.43)(jsdom@29.1.1)(vite@6.4.3(@types/node@20.19.43)(jiti@1.21.7)(lightningcss@1.32.0)):
     dependencies:
@@ -6688,10 +6691,10 @@ snapshots:
     transitivePeerDependencies:
       - msw
 
-  vitest@4.1.10(@types/node@20.19.43)(jsdom@29.1.1)(vite@8.1.3(@types/node@20.19.43)(jiti@2.7.0)):
+  vitest@4.1.10(@types/node@20.19.43)(jsdom@29.1.1)(vite@8.1.3(@types/node@20.19.43)(jiti@1.21.7)):
     dependencies:
       '@vitest/expect': 4.1.10
-      '@vitest/mocker': 4.1.10(vite@8.1.3(@types/node@20.19.43)(jiti@2.7.0))
+      '@vitest/mocker': 4.1.10(vite@8.1.3(@types/node@20.19.43)(jiti@1.21.7))
       '@vitest/pretty-format': 4.1.10
       '@vitest/runner': 4.1.10
       '@vitest/snapshot': 4.1.10
@@ -6708,7 +6711,7 @@ snapshots:
       tinyexec: 1.2.4
       tinyglobby: 0.2.17
       tinyrainbow: 3.1.0
-      vite: 8.1.3(@types/node@20.19.43)(jiti@2.7.0)
+      vite: 8.1.3(@types/node@20.19.43)(jiti@1.21.7)
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 20.19.43

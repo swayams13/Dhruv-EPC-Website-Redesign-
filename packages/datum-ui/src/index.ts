@@ -33,6 +33,12 @@ export {
 } from './components/MobileDrawer'
 export { MobileBottomBar, type MobileBottomBarProps } from './components/MobileBottomBar'
 export {
+  Footer,
+  type FooterProps,
+  type FooterColumn,
+  type FooterLink,
+} from './components/Footer'
+export {
   ProjectCard,
   type ProjectCardProps,
   type ProjectMetric,
