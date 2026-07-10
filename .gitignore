@@ -28,3 +28,4 @@ Thumbs.db
 
 # pnpm
 pnpm-lock.yaml.bak
+storybook-static/
