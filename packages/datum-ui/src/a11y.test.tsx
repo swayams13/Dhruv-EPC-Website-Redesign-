@@ -20,6 +20,10 @@ import * as UploadDropzoneStories from './components/UploadDropzone.stories'
 import * as SpecTableStories from './components/SpecTable.stories'
 import * as ProductCardStories from './components/ProductCard.stories'
 import * as ProjectCardStories from './components/ProjectCard.stories'
+import * as BreadcrumbsStories from './components/Breadcrumbs.stories'
+import * as HeaderStories from './components/Header.stories'
+import * as MobileDrawerStories from './components/MobileDrawer.stories'
+import * as MobileBottomBarStories from './components/MobileBottomBar.stories'
 
 const allStories = {
   Stamp: StampStories,
@@ -33,6 +37,10 @@ const allStories = {
   SpecTable: SpecTableStories,
   ProductCard: ProductCardStories,
   ProjectCard: ProjectCardStories,
+  Breadcrumbs: BreadcrumbsStories,
+  Header: HeaderStories,
+  MobileDrawer: MobileDrawerStories,
+  MobileBottomBar: MobileBottomBarStories,
 }
 
 for (const [componentName, mod] of Object.entries(allStories)) {

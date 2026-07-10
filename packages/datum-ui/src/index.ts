@@ -17,6 +17,21 @@ export {
   type SpecTableMatrixRow,
 } from './components/SpecTable'
 export { ProductCard, type ProductCardProps } from './components/ProductCard'
+export { Breadcrumbs, type BreadcrumbsProps, type BreadcrumbItem } from './components/Breadcrumbs'
+export {
+  Header,
+  type HeaderProps,
+  type HeaderNavLink,
+  type MegaMenuGroup,
+  type MegaMenuItem,
+} from './components/Header'
+export {
+  MobileDrawer,
+  type MobileDrawerProps,
+  type DrawerGroup,
+  type DrawerNavLink,
+} from './components/MobileDrawer'
+export { MobileBottomBar, type MobileBottomBarProps } from './components/MobileBottomBar'
 export {
   ProjectCard,
   type ProjectCardProps,
