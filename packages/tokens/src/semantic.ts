@@ -21,6 +21,10 @@ export const semanticBase = {
       rfq: arc[500],
       rfqHover: arc[600],
       rfqPressed: arc[700],
+      // rfqFg: label text on the RFQ button fill — must meet 4.5:1 against rfq fill.
+      // arc-500 (amber) is light enough for steel-950 text (5.79:1).
+      // flex-500 (dark blue) requires white text — see semanticPrecise override below.
+      rfqFg: steel[950],
       primary: steel[950],
       primaryHover: steel[800],
       secondary: 'transparent',
@@ -100,6 +104,9 @@ export const semanticPrecise = {
       rfq: flex[500],
       rfqHover: flex[600],
       rfqPressed: flex[700],
+      // flex-500 (#0E6BA8) is dark; steel-950 text gives only 3.2:1 — WCAG fail.
+      // White text on flex-500 is ~7.1:1. Design-review gate before merge (CLAUDE.md §26).
+      rfqFg: steel[50],
     },
     accent: {
       default: flex[500],
