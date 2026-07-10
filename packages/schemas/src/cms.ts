@@ -41,6 +41,7 @@ export const ProductFAQ = z.object({
   question: z.string().min(1),
   answer: z.string().min(1),
 })
+export type ProductFAQ = z.infer<typeof ProductFAQ>
 
 export const Product = z.object({
   companySlug: CompanySlug,
