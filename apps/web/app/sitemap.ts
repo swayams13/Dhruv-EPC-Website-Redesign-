@@ -7,7 +7,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: base, lastModified: new Date(), changeFrequency: 'monthly', priority: 1 },
     { url: `${base}/dhruv-epc/`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${base}/dhruv-epc/equipment/heat-exchangers/`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
     { url: `${base}/precise-engineers/`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${base}/precise-engineers/products/metallic-bellows-expansion-joint/`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
     { url: `${base}/request-a-quote/`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
     { url: `${base}/contact/`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
   ]
