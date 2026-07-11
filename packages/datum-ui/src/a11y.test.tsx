@@ -34,6 +34,8 @@ import * as ApprovalsMatrixStories from './components/ApprovalsMatrix.stories'
 import * as ClientWallStories from './components/ClientWall.stories'
 import * as TestimonialStories from './components/Testimonial.stories'
 
+// NEW COMPONENT CHECKLIST: add an import above AND an entry below.
+// No auto-glob — a component absent from this map is silently skipped by axe.
 const allStories = {
   Stamp: StampStories,
   DatumRule: DatumRuleStories,
