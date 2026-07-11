@@ -411,6 +411,117 @@ Lighthouse (prod, mobile throttled): home 97/100/100, LCP 2.5s CLS 0;
 
 ---
 
+### Session 8 — Proving pair 2: Precise home + Metallic Bellows + group home
+**Status:** Complete ✅
+**Branch:** `phase-3-proving` · **Date:** 2026-07-11 · **Model:** fable
+**Governing specs:** Datum §19, §21, §16–§18, §20; plan §3.2, §5, §6.1/§6.2, Appendix A
+
+#### What was done
+
+- **Seeded CMS content** `apps/web/lib/content/precise-engineers.ts` — EntityRecord,
+  metallic-bellows Product (Appendix A field set: DN range 80–8,000 mm NB sourced,
+  EJMA/ASME B31.3, 8 configuration types sourced, MOC list sourced, 5 FAQs),
+  ISO 9001 + EIL certifications, EIL Approval record, stats (all four sourced —
+  better than Dhruv's), grouped product menu list. `lib/content/group.ts` — group
+  EntityRecord + sourced group stats. Sourcing: vedantagroup.net (fetched
+  2026-07-11); unsourced figures tagged DEMO-PLACEHOLDER per the standing
+  prototype approval, visible "DEMO figure — engineering data pending" notes.
+- **Precise chrome + layout:** PreciseChrome (Header §17 + MobileDrawer),
+  `precise-engineers/layout.tsx` now wraps routes with chrome + Footer
+  (**data-company layout touch = human-review gate**). Blue law via the existing
+  `useRfqAnchorInView` mechanism — no new code needed.
+- **/precise-engineers/** per §19: graphite HomeHero (9-word H1 with codes),
+  4-figure sourced stats band, 9 product cards, certifications strip,
+  RFQ band, LocalBusiness JSON-LD.
+- **/precise-engineers/products/metallic-bellows-expansion-joint/** per §21 +
+  §6.2 (plan §3.2 slug): ProductHero with mono chips anchored to #specifications;
+  spec table first scroll; 8 bellows-type cards; MOC/code chips; QA strip (text
+  variant); native-`<details>` FAQ; anchor rail; RFQ band; MobileBottomBar.
+  JSON-LD: Product + FAQPage + BreadcrumbList via typed builders. OG image via
+  next/og using flex/steel token primitives.
+- **Group home /** per plan §6.1: typographic graphite hero (verbatim §6.1 copy,
+  Est. 1994 sourced), two equal door cards with nested `data-company` scopes —
+  accent appears **only** inside each door, as `variant="link"` CTAs (zero
+  accent fills on the page), sourced group stats band, entity-tagged
+  certification union (company sub-headings), title-block footer from group
+  EntityRecord, Organization JSON-LD.
+- **Sitemap:** added both built product routes (incl. Session 7 heat-exchangers
+  gap).
+- **Fix from the reviewer pass:** BreadcrumbList JSON-LD host
+  `www.vedantagroup.net` drifted from sitemap's `vedantagroup.net` — aligned in
+  both product pages; mistakes.md entry (hoist BASE to a shared constant in
+  Phase 4; Session 13 CI should assert host match).
+
+#### Gate result
+
+```
+pnpm typecheck   ✓  4/4       pnpm lint  ✓ 0 errors
+pnpm test        ✓  133/133   pnpm build ✓ all 3 new routes 93.8 kB First Load (≤120)
+browser verify   ✓  28/28 (Playwright/chromium, prod build: axe zero
+                     critical/serious ×3 pages; blue law max 1 fill at 5 scroll
+                     states × 2 viewports; group home ZERO accent fills; one H1;
+                     no heading skips; JSON-LD parses w/ expected types; 320px
+                     no h-scroll; focus outline ≥2px on visible interactives;
+                     reduced-motion functional; OG image 200)
+Lighthouse (prod, mobile throttled):
+                     group    98/100/96, LCP 2.3s CLS 0 TBT 10ms
+                     precise  95/100/96, LCP 2.7s CLS 0 TBT 70ms
+                     bellows  97/100/96, LCP 2.7s CLS 0 TBT 50ms
+vision loop      ✓  1440px + 375px full-page screenshots diffed against §21/
+                     §19/§6.1 point by point
+reviewer subagent   PASS WITH DEVIATIONS (diff + spec only) — findings triaged
+                     below; #3 (host drift) fixed in-session
+```
+
+#### Deviations / flagged (none silent)
+
+1. **Product-card scopes for the 8 not-yet-built Precise products carry no
+   figures** (§16, Appendix B launch gate). No sourced figures exist; inventing
+   them is banned. Phase 4 content blocker — Appendix A field sets must come
+   from engineering. (Session 7 deviation-7 precedent.)
+2. **Certification `validFrom` DEMO dates render as "Issued 2023" with no
+   visible DEMO marker** (reviewer #2) — schema requires validFrom; applies
+   equally to Session 7's Dhruv cards. Queued to the swap-list; needs either
+   real scans or a rendered pending-marker decision. **Highest-priority content
+   swap before any non-demo audience.**
+3. **Group home has no header/nav.** §17 says RFQ in the header on every page;
+   plan §6.1 enumerates a chrome-less holding page. Ambiguity flagged, not
+   decided: recommend deciding group chrome before Phase 4 (a minimal group
+   header or an explicit "holding page has no chrome" rule in CLAUDE.md).
+4. §6.1.4 client wall omitted — no verified client records/permissions
+   (Session 7 deviation-6 precedent). Certifications half of the proof strip
+   is present, entity-tagged.
+5. §21.3 type cards lack section-view icons — no real icon artwork exists
+   (Session 7 deviation-2 precedent).
+6. Breadcrumb "Products" points to `/precise-engineers#products` until the
+   Phase 4 `/products/` index route exists (plan §3.2; Dhruv precedent).
+7. Design codes rendered without editions (§21.4 edition discipline) — edition
+   data pending engineering; source states none.
+8. EIL approval is modeled as an Approval record AND rendered as a §20
+   credential card on home; `preciseApprovals`/`dhruvApprovals` are seeded for
+   the Phase 4 proof hub, unrendered today.
+9. Group hero photograph absent (§6.1 names one) — real-or-absent law, §P-5
+   shoot pending.
+10. **LCP 2.7s vs §P-4 2.5s** on both Precise routes, Lighthouse simulated
+    slow-4G — same render-blocking-CSS round trip as Session 7's product page
+    finding; critical-CSS inlining is the Phase 5 lever. Group home is 2.3s ✓.
+11. `favicon.ico` 404 (the only Lighthouse best-practices deduction, 96) — no
+    brand favicon asset exists; creating one is a design decision. Queued.
+12. OG image typography is generic sans/mono (satori needs font files; token
+    colors correct). Session 7 precedent.
+13. FAQ chevron is a text glyph, not the §12 `ChevronDown` (glyphs are
+    deliberately barrel-private) — shared with heat-exchangers; one fix for
+    both when the barrel decision is made.
+
+#### Requires human review (accumulated)
+
+- `precise-engineers/layout.tsx` change (data-company file)
+- DEMO-PLACEHOLDER figures (content file headers) — esp. deviation 2 above
+- Template contract locks after this PR merges (playbook: client UAT on
+  staging before Phase 4 scale-out)
+
+---
+
 ## Problems faced & how we tackled them
 
 ### 1. `pnpm install` blocked by `unrs-resolver` build
@@ -448,7 +559,7 @@ Lighthouse (prod, mobile throttled): home 97/100/100, LCP 2.5s CLS 0;
 | 5 | Component library part 2 — composition | phase-2-components | **fable** | ✅ Done — PR #4 open (with Session 4) |
 | 6 | RFQ engine end-to-end | phase-3-proving | fable | ✅ Done (E2E creds gate queued) |
 | 7 | Dhruv home + Heat Exchangers page | phase-3-proving | fable | ✅ Done |
-| 8 | Precise home + Metallic Bellows + group home | phase-3-proving | fable | Not started |
+| 8 | Precise home + Metallic Bellows + group home | phase-3-proving | fable | ✅ Done |
 | 9–12 | Scale-out — remaining pages | phase-4-scaleout | sonnet | Not started |
 | 13 | Redirect map + robots + sitemaps | phase-5-launch | sonnet | Not started |
 | 14 | Launch checklist | phase-5-launch | opus/sonnet | Not started |
