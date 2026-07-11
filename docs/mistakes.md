@@ -82,3 +82,17 @@ and failed silently at render.
 **Rule:** stampsHeld values are the §12 Stamp codes, not display names. Candidate
 hardening (Phase 4): narrow the Zod field to the canonical enum so this fails at
 parse, not at render.
+
+## 2026-07-11 — BreadcrumbList JSON-LD host drifted from sitemap host (Session 8)
+**What happened:** Session 7's heat-exchangers page hard-coded
+`BASE = 'https://www.vedantagroup.net'` for BreadcrumbList JSON-LD while
+`sitemap.ts` and `robots.ts` use `https://vedantagroup.net` (no www). Session 8
+copied the pattern, creating a second instance before the reviewer pass caught
+it — the visible-record-vs-machine-record drift class CLAUDE.md exists to
+prevent.
+**Root cause:** canonical host constant duplicated per page file instead of
+living in one place; no CI check compares JSON-LD URLs to sitemap host.
+**Rule:** any absolute URL emitted into JSON-LD must use the same host string
+as sitemap.ts. When Phase 4 adds more product pages, hoist BASE into a shared
+lib/site.ts constant (one definition), and Session 13's redirect/sitemap CI
+should assert JSON-LD hosts match the sitemap host.

@@ -7,7 +7,7 @@ import { buildBreadcrumbList, buildFAQPage, buildProduct } from '@vedanta/schema
 import { RFQBand } from '../../../../components/RFQBand'
 import { dhruvEntity, dhruvPhoneHref, dhruvWhatsappHref, heatExchangers } from '../../../../lib/content/dhruv-epc'
 
-const BASE = 'https://www.vedantagroup.net' // canonical host until domain decision lands
+const BASE = 'https://vedantagroup.net' // canonical host — must match sitemap.ts/robots.ts (machine-record drift)
 
 export const metadata: Metadata = {
   title: 'Shell & Tube Heat Exchangers — ASME U/U2, TEMA | Dhruv EPC',

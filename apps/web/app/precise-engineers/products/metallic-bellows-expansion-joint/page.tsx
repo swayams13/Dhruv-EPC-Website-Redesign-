@@ -8,7 +8,7 @@ import { buildBreadcrumbList, buildFAQPage, buildProduct } from '@vedanta/schema
 import { RFQBand } from '../../../../components/RFQBand'
 import { metallicBellows, preciseEntity, precisePhoneHref, preciseWhatsappHref } from '../../../../lib/content/precise-engineers'
 
-const BASE = 'https://www.vedantagroup.net' // canonical host until domain decision lands
+const BASE = 'https://vedantagroup.net' // canonical host — must match sitemap.ts/robots.ts (machine-record drift)
 
 export const metadata: Metadata = {
   title: 'Metallic Bellows Expansion Joints — EJMA, ASME B31.3 | Precise Engineers',
