@@ -33,7 +33,7 @@ export function StatBand({ stats, onDark = false }: StatBandProps): React.ReactE
           <p className={`mt-1 text-xs font-medium uppercase tracking-caption ${caption}`}>
             {stat.label}
           </p>
-          {stat.source && <p className="mt-1 font-mono text-helper text-steel-500">{stat.source}</p>}
+          {stat.source && <p className={`mt-1 font-mono text-helper ${caption}`}>{stat.source}</p>}
         </li>
       ))}
     </ul>

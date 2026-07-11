@@ -41,3 +41,58 @@ If the rule is general, promote it into CLAUDE.md.
 **Rule (extends 2026-07-09 rule):** When ANY company map overrides `rfq`, it must also explicitly set `rfqFg` — the pair travels together. A contrast test asserting `rfqFg × rfq` per company now exists in tokens.test.ts for all three companies, so recurrence fails CI.
 
 **Fix applied (2026-07-10):** `semanticGroup.color.action.rfqFg = steel[50]` (17.4:1 on steel-950 ✓) + covenant test added.
+
+---
+
+## 2026-07-10 — steel-500 used for small text in four components (WCAG fail, caught by Session 7 axe pass)
+
+**What happened:** The Session 7 page-level axe run found 17 serious color-contrast
+violations across SpecTable (notes column), StatBand (source captions),
+CertificationCard (dt labels), Footer (column headings) and page-level captions —
+all `text-steel-500` at 12–13px. steel-500 (#7B858D) is 3.53:1 on steel-50 and
+3.76:1 on white — below the 4.5:1 normal-text floor. Sessions 4–5's per-story axe
+passes did not catch it because axe's color-contrast rule was evaluated against
+composed stories where several of these nodes didn't render with the failing
+surface pairings.
+
+**Root cause:** §15 itself specifies "units/notes (mono 13px steel-500)" — the
+spec text conflicts with §25.1's WCAG-AA-as-floor covenant. Components followed
+§15 literally.
+
+**Rule:** steel-500 is a large-text/non-text color only — never below 18px. Where
+a Datum section names steel-500 for small text, §25.1 wins and steel-600 (light
+surfaces) / steel-400 (graphite) is used, with a comment citing this entry.
+
+**Fix applied:** steel-600/steel-400 substituted in all five locations; full-page
+axe now zero critical/serious on both Session 7 routes.
+
+---
+
+## 2026-07-10 — EntityRecord.stampsHeld didn't use canonical Stamp codes (5 of 6 stamps silently dropped)
+
+**What happened:** Seeded `stampsHeld: ['ASME U', 'ASME U2', 'ISO 9001:2015', …]`;
+Footer filters through `isStampCode` against the §12 codes ('U','U2','IBR',
+'ISO-9001',…) — only 'IBR' survived, and the stamps strip rendered one tile.
+Caught in the Session 7 vision loop (screenshot vs §18), not by any automated gate.
+
+**Root cause:** `EntityRecord.stampsHeld` is `z.array(z.string())` — the schema
+doesn't constrain to the Stamp code vocabulary, so the mismatch validated fine
+and failed silently at render.
+
+**Rule:** stampsHeld values are the §12 Stamp codes, not display names. Candidate
+hardening (Phase 4): narrow the Zod field to the canonical enum so this fails at
+parse, not at render.
+
+## 2026-07-11 — BreadcrumbList JSON-LD host drifted from sitemap host (Session 8)
+**What happened:** Session 7's heat-exchangers page hard-coded
+`BASE = 'https://www.vedantagroup.net'` for BreadcrumbList JSON-LD while
+`sitemap.ts` and `robots.ts` use `https://vedantagroup.net` (no www). Session 8
+copied the pattern, creating a second instance before the reviewer pass caught
+it — the visible-record-vs-machine-record drift class CLAUDE.md exists to
+prevent.
+**Root cause:** canonical host constant duplicated per page file instead of
+living in one place; no CI check compares JSON-LD URLs to sitemap host.
+**Rule:** any absolute URL emitted into JSON-LD must use the same host string
+as sitemap.ts. When Phase 4 adds more product pages, hoist BASE into a shared
+lib/site.ts constant (one definition), and Session 13's redirect/sitemap CI
+should assert JSON-LD hosts match the sitemap host.

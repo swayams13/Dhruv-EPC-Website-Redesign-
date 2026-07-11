@@ -253,6 +253,275 @@ accent-leak grep ✓  zero arc-/flex- classes in components (gate met)
 
 ---
 
+### Session 6 — RFQ Engine End-to-End (IN PROGRESS, 2026-07-10)
+
+**Branch:** `phase-3-proving` · **Governing specs:** Datum §23, plan FR-3 + §T-4
+
+**Built (code complete, verification NOT finished — see below):**
+- `packages/schemas/src/rfq.ts` — `PresignRequest` now validates by file extension
+  (PDF/DWG/STEP/JPG/PNG/WEBP; browsers report `''`/octet-stream MIME for DWG/STEP),
+  positive size ≤25MB. **Bug fixed:** `RFQStep2.company` renamed `contactCompany` —
+  it collided with `RFQStep1.company` (target-company slug) in the `RFQSubmission`
+  merge and silently dropped the slug.
+- `packages/schemas/src/rfq.test.ts` — new: honeypot, uuid idempotency key, ≤5 file
+  keys, phone country code, merge-preserves-slug, presign extension/size gates.
+- `apps/web/lib/presign.ts` — hand-rolled SigV4 query presign (node:crypto — no new
+  dependency, which would be a human-review gate). Verified against the AWS
+  documented test vector (`aeeed9bb…`) via scratchpad script — PASS.
+- `apps/web/app/api/presign/route.ts` — real presigned PUT: `uploads/<uuid>/<name>`
+  scope, 10-min expiry, sanitized names, 503 with plain message when
+  `STORAGE_ENDPOINT/BUCKET/ACCESS_KEY_ID/SECRET_ACCESS_KEY` env unset.
+- `apps/web/app/api/rfq/route.ts` — full §T-4 pipeline: rate limit (in-memory,
+  5/10min/IP — ponytail: single-instance, move to KV if scaled), server Zod
+  re-validation, time-trap (≥5s), `uploads/` key-scope check, idempotency map
+  (24h, returns original reference on retry), email via Resend REST fetch
+  (throws → 502 so the client preserves state), WhatsApp ping stubbed behind
+  `WhatsAppNotifier` interface (`lib/notify.ts`).
+- `apps/web/app/(group)/request-a-quote/` — `page.tsx` (8+4 layout, reassurance
+  rail, ?company= prefill), `RFQForm.tsx` (two-step, ChoiceCards filtered by
+  company, company selectable when neutral, UploadDropzone with per-file
+  progress/retry, upload-busy blocks continue, honeypot, stable idempotency key,
+  failure keeps all fields + retry + email/phone fallback), `thank-you/page.tsx`
+  (mono reference, restated SLA).
+- `packages/datum-ui` `UploadDropzone` — added optional `onBusyChange` prop so the
+  form can honestly block submit mid-upload.
+
+**Env contract (all optional in dev):** `STORAGE_ENDPOINT`, `STORAGE_BUCKET`,
+`STORAGE_REGION` (default `auto`), `STORAGE_ACCESS_KEY_ID`,
+`STORAGE_SECRET_ACCESS_KEY`, `RESEND_API_KEY`, `RFQ_NOTIFY_TO`, `RFQ_NOTIFY_FROM`,
+`NEXT_PUBLIC_CONTACT_EMAIL`, `NEXT_PUBLIC_CONTACT_PHONE`. In dev without Resend
+config the lead is console-logged; in production missing email config fails the
+submit honestly (no silent lead loss).
+
+**Deviations / flagged (no invented claims):**
+1. §23 certification strip in the rail — omitted, awaits verified CMS cert records.
+2. §23 capability-statement PDF on thank-you — omitted, asset doesn't exist yet.
+3. Thank-you links home, not Projects — /projects routes are Phase 4.
+4. Contact fallback via `NEXT_PUBLIC_CONTACT_*` env until EntityRecord lands in CMS.
+5. SLA "one business day" is the §23 placeholder, still pending client commitment.
+
+**VERIFICATION STATUS (updated 2026-07-10, continuation session):**
+- ✅ Vector check for SigV4 signer (scratchpad, PASS)
+- ✅ `pnpm typecheck` — 4/4 packages, zero errors
+- ✅ `pnpm lint` — 0 errors, 0 warnings
+- ✅ `pnpm test` — 133/133 (tokens 26, schemas 36, datum-ui a11y 71)
+- ✅ `pnpm build` — zero errors/warnings; /request-a-quote 108 kB First Load JS
+  (under the 180 kB RFQ budget)
+- **Bug found by the test gate and fixed:** `RFQStep1.company` reused CMS
+  `CompanySlug` (`dhruv-epc`/`precise-engineers`/`group`) but the form submits
+  `dhruv`/`precise` (the data-company vocabulary) — every RFQ with a company
+  selected would have failed server-side Zod validation at runtime. Fixed by
+  introducing `RFQCompany = z.enum(['dhruv','precise'])` in rfq.ts ('group' is
+  not a valid RFQ target). Test `merge-preserves-slug` now passes.
+- ✅ §23 browser verify pass (Playwright + chromium against dev server,
+  17/17 checks): one H1; labeled "Step 1 of 2" progress; rail rows +
+  confidentiality + "Prefer to talk?" hatch; exactly one accent-filled element
+  at 1280px AND 320px; 2px focus outline on all 12 interactive elements;
+  touch targets ≥24px; 320px no horizontal scroll; reduced-motion functional
+  with zero non-opacity animations; JS-off renders content + fallback block;
+  thank-you 200 + mono reference + restated SLA. Screenshots reviewed against
+  §23 layout (8+4, rail right, form left).
+- **Two fixes from the browser pass:**
+  1. No `<noscript>` fallback existed — playbook requires "JS disabled renders
+     the static fallback instruction block". Added to page.tsx (email/call
+     instruction, env-gated contact details).
+  2. Rail tel/mailto links were 20px tall (< §25 24px floor) — now
+     `min-h-row` (44px) inline-flex targets.
+- Note: "Prefer to talk?" hatch and contact fallbacks render only when
+  `NEXT_PUBLIC_CONTACT_*` env is set (deviation #4 — no invented contact
+  info); verified with test values.
+- ⏳ Still pending (needs human/creds): E2E with real storage + Resend creds
+  (playbook gate: real PDF from phone on 4G → email within a minute).
+
+---
+
+### Session 7 — Proving pair 1: Dhruv home + Heat Exchangers
+**Status:** Complete ✅ (one flagged budget miss below)
+**Branch:** `phase-3-proving` · **Date:** 2026-07-10 · **Model:** fable
+**Governing specs:** Datum §19, §21, §16–§18, §20, plan §6/P-4
+
+#### What was done
+
+- **Seeded CMS content** `apps/web/lib/content/dhruv-epc.ts` — EntityRecord,
+  heat-exchangers Product (spec table, 6 types, MOC, codes, 5 FAQs),
+  4 Certifications, 3 TPIA Approvals, stats, equipment/menu list. All records
+  Zod-parsed at module load. Sourcing: facts quoted from vedantagroup.net
+  (fetched 2026-07-10); unsourced figures tagged **DEMO-PLACEHOLDER** per
+  Swayam's approval, each carrying "DEMO figure — engineering data pending"
+  visibly in the UI. Swap-list lives in the content file header.
+- **Amber-law resolution** (Session 5 deviation 8, deferred here): new internal
+  hook `useRfqAnchorInView` — Header and MobileBottomBar RFQ buttons render
+  `invisible` while any `[data-rfq-anchor]` (hero CTA row, RFQ band) is in the
+  viewport. Max one accent-filled element per view at every scroll position,
+  desktop and mobile, verified programmatically at 5 scroll states.
+- **Chrome:** DhruvChrome (Header + MobileDrawer wiring), RFQBand (§21.9
+  graphite closer), dhruv-epc/layout.tsx now wraps routes with chrome + Footer
+  (layout touch = human-review gate).
+- **/dhruv-epc/** per §19: graphite HomeHero (9-word H1), sourced stats band,
+  equipment card grid (no-photo variants), certifications strip, RFQ band,
+  LocalBusiness JSON-LD.
+- **/dhruv-epc/equipment/heat-exchangers/** per §21: ProductHero with mono
+  chips anchor-linked to #specifications; spec table first scroll; types cards;
+  MOC/code chips; 5-step Fab & QA strip (text variant); native-`<details>` FAQ
+  (§11 compositor law — no height animation); sticky anchor rail; RFQ band;
+  MobileBottomBar. JSON-LD: Product + FAQPage + BreadcrumbList via typed
+  builders. OG image via next/og (no new dep) using @vedanta/tokens colors.
+- **Fixes from the verify pass** (axe + vision loop):
+  - steel-500 small-text contrast class fixed in SpecTable/StatBand/
+    CertificationCard/Footer + page captions → steel-600/steel-400
+    (mistakes.md entry; §15-vs-§25.1 spec conflict resolved toward WCAG)
+  - Footer contact links py-1 (24px floor)
+  - stampsHeld → canonical §12 codes (was rendering 1 of 6 stamps;
+    mistakes.md entry)
+
+#### Gate result
+
+```
+pnpm typecheck   ✓  4/4       pnpm lint  ✓ 0 errors
+pnpm test        ✓  133/133   pnpm build ✓ both routes 93.8 kB First Load (≤120 budget)
+browser verify   ✓  25/25 (axe zero critical/serious, amber law × 5 scroll
+                     states × 2 viewports, JSON-LD parses, heading order,
+                     375px no h-scroll, FAQ, OG image)
+Lighthouse (prod, mobile throttled): home 97/100/100, LCP 2.5s CLS 0;
+                     product 96/100/100, LCP 2.7s CLS 0 TBT 100ms
+```
+
+#### Deviations / flagged
+
+1. **Product LCP 2.7s vs §P-4 2.5s** on Lighthouse simulated slow-4G — real
+   breakdown is TTFB 34ms + render delay 151ms; the simulated cost is one
+   render-blocking 6.8 kB CSS round trip. Lever if the client's p75 field data
+   agrees: critical-CSS inlining (Phase 5 launch tuning). Not silently accepted.
+2. §21.3 type cards lack "section-view icons" — no real icon artwork exists;
+   text-only cards (no invented graphics).
+3. §21.6 gallery + §21.7 related projects omitted — no real photography
+   (§P-5 shoot pending) and no Project records until Phase 4.
+4. §21.5 QA strip is text-only (photos pending the works shoot).
+5. Mega-menu/footer link to routes that 404 until Phase 4 scale-out
+   (pressure-vessels, capabilities, projects, company, contact, privacy, terms).
+6. Testimonials/ClientWall omitted — live site's quote is unattributed
+   (cannot publish per §20) and client names/permissions unverified.
+7. Some menu scopes lack figures (§16) — only sourced figures used; DEMO
+   figures were restricted to the spec table and stats band.
+
+#### Requires human review (accumulated)
+
+- `dhruv-epc/layout.tsx` change (data-company file)
+- DEMO-PLACEHOLDER figures list (content file header) before any non-demo use
+
+---
+
+### Session 8 — Proving pair 2: Precise home + Metallic Bellows + group home
+**Status:** Complete ✅
+**Branch:** `phase-3-proving` · **Date:** 2026-07-11 · **Model:** fable
+**Governing specs:** Datum §19, §21, §16–§18, §20; plan §3.2, §5, §6.1/§6.2, Appendix A
+
+#### What was done
+
+- **Seeded CMS content** `apps/web/lib/content/precise-engineers.ts` — EntityRecord,
+  metallic-bellows Product (Appendix A field set: DN range 80–8,000 mm NB sourced,
+  EJMA/ASME B31.3, 8 configuration types sourced, MOC list sourced, 5 FAQs),
+  ISO 9001 + EIL certifications, EIL Approval record, stats (all four sourced —
+  better than Dhruv's), grouped product menu list. `lib/content/group.ts` — group
+  EntityRecord + sourced group stats. Sourcing: vedantagroup.net (fetched
+  2026-07-11); unsourced figures tagged DEMO-PLACEHOLDER per the standing
+  prototype approval, visible "DEMO figure — engineering data pending" notes.
+- **Precise chrome + layout:** PreciseChrome (Header §17 + MobileDrawer),
+  `precise-engineers/layout.tsx` now wraps routes with chrome + Footer
+  (**data-company layout touch = human-review gate**). Blue law via the existing
+  `useRfqAnchorInView` mechanism — no new code needed.
+- **/precise-engineers/** per §19: graphite HomeHero (9-word H1 with codes),
+  4-figure sourced stats band, 9 product cards, certifications strip,
+  RFQ band, LocalBusiness JSON-LD.
+- **/precise-engineers/products/metallic-bellows-expansion-joint/** per §21 +
+  §6.2 (plan §3.2 slug): ProductHero with mono chips anchored to #specifications;
+  spec table first scroll; 8 bellows-type cards; MOC/code chips; QA strip (text
+  variant); native-`<details>` FAQ; anchor rail; RFQ band; MobileBottomBar.
+  JSON-LD: Product + FAQPage + BreadcrumbList via typed builders. OG image via
+  next/og using flex/steel token primitives.
+- **Group home /** per plan §6.1: typographic graphite hero (verbatim §6.1 copy,
+  Est. 1994 sourced), two equal door cards with nested `data-company` scopes —
+  accent appears **only** inside each door, as `variant="link"` CTAs (zero
+  accent fills on the page), sourced group stats band, entity-tagged
+  certification union (company sub-headings), title-block footer from group
+  EntityRecord, Organization JSON-LD.
+- **Sitemap:** added both built product routes (incl. Session 7 heat-exchangers
+  gap).
+- **Fix from the reviewer pass:** BreadcrumbList JSON-LD host
+  `www.vedantagroup.net` drifted from sitemap's `vedantagroup.net` — aligned in
+  both product pages; mistakes.md entry (hoist BASE to a shared constant in
+  Phase 4; Session 13 CI should assert host match).
+
+#### Gate result
+
+```
+pnpm typecheck   ✓  4/4       pnpm lint  ✓ 0 errors
+pnpm test        ✓  133/133   pnpm build ✓ all 3 new routes 93.8 kB First Load (≤120)
+browser verify   ✓  28/28 (Playwright/chromium, prod build: axe zero
+                     critical/serious ×3 pages; blue law max 1 fill at 5 scroll
+                     states × 2 viewports; group home ZERO accent fills; one H1;
+                     no heading skips; JSON-LD parses w/ expected types; 320px
+                     no h-scroll; focus outline ≥2px on visible interactives;
+                     reduced-motion functional; OG image 200)
+Lighthouse (prod, mobile throttled):
+                     group    98/100/96, LCP 2.3s CLS 0 TBT 10ms
+                     precise  95/100/96, LCP 2.7s CLS 0 TBT 70ms
+                     bellows  97/100/96, LCP 2.7s CLS 0 TBT 50ms
+vision loop      ✓  1440px + 375px full-page screenshots diffed against §21/
+                     §19/§6.1 point by point
+reviewer subagent   PASS WITH DEVIATIONS (diff + spec only) — findings triaged
+                     below; #3 (host drift) fixed in-session
+```
+
+#### Deviations / flagged (none silent)
+
+1. **Product-card scopes for the 8 not-yet-built Precise products carry no
+   figures** (§16, Appendix B launch gate). No sourced figures exist; inventing
+   them is banned. Phase 4 content blocker — Appendix A field sets must come
+   from engineering. (Session 7 deviation-7 precedent.)
+2. **Certification `validFrom` DEMO dates render as "Issued 2023" with no
+   visible DEMO marker** (reviewer #2) — schema requires validFrom; applies
+   equally to Session 7's Dhruv cards. Queued to the swap-list; needs either
+   real scans or a rendered pending-marker decision. **Highest-priority content
+   swap before any non-demo audience.**
+3. **Group home has no header/nav.** §17 says RFQ in the header on every page;
+   plan §6.1 enumerates a chrome-less holding page. Ambiguity flagged, not
+   decided: recommend deciding group chrome before Phase 4 (a minimal group
+   header or an explicit "holding page has no chrome" rule in CLAUDE.md).
+4. §6.1.4 client wall omitted — no verified client records/permissions
+   (Session 7 deviation-6 precedent). Certifications half of the proof strip
+   is present, entity-tagged.
+5. §21.3 type cards lack section-view icons — no real icon artwork exists
+   (Session 7 deviation-2 precedent).
+6. Breadcrumb "Products" points to `/precise-engineers#products` until the
+   Phase 4 `/products/` index route exists (plan §3.2; Dhruv precedent).
+7. Design codes rendered without editions (§21.4 edition discipline) — edition
+   data pending engineering; source states none.
+8. EIL approval is modeled as an Approval record AND rendered as a §20
+   credential card on home; `preciseApprovals`/`dhruvApprovals` are seeded for
+   the Phase 4 proof hub, unrendered today.
+9. Group hero photograph absent (§6.1 names one) — real-or-absent law, §P-5
+   shoot pending.
+10. **LCP 2.7s vs §P-4 2.5s** on both Precise routes, Lighthouse simulated
+    slow-4G — same render-blocking-CSS round trip as Session 7's product page
+    finding; critical-CSS inlining is the Phase 5 lever. Group home is 2.3s ✓.
+11. `favicon.ico` 404 (the only Lighthouse best-practices deduction, 96) — no
+    brand favicon asset exists; creating one is a design decision. Queued.
+12. OG image typography is generic sans/mono (satori needs font files; token
+    colors correct). Session 7 precedent.
+13. FAQ chevron is a text glyph, not the §12 `ChevronDown` (glyphs are
+    deliberately barrel-private) — shared with heat-exchangers; one fix for
+    both when the barrel decision is made.
+
+#### Requires human review (accumulated)
+
+- `precise-engineers/layout.tsx` change (data-company file)
+- DEMO-PLACEHOLDER figures (content file headers) — esp. deviation 2 above
+- Template contract locks after this PR merges (playbook: client UAT on
+  staging before Phase 4 scale-out)
+
+---
+
 ## Problems faced & how we tackled them
 
 ### 1. `pnpm install` blocked by `unrs-resolver` build
@@ -288,9 +557,9 @@ accent-leak grep ✓  zero arc-/flex- classes in components (gate met)
 | 3 | CMS schemas + JSON-LD | session-3-schemas | sonnet | ✅ Done — PR #3 pending merge |
 | 4 | Component library part 1 — primitives | phase-2-components | **fable** | ✅ Done — PR #4 open |
 | 5 | Component library part 2 — composition | phase-2-components | **fable** | ✅ Done — PR #4 open (with Session 4) |
-| 6 | RFQ engine end-to-end | phase-3-proving | fable | Not started |
-| 7 | Dhruv home + Heat Exchangers page | phase-3-proving | fable | Not started |
-| 8 | Precise home + Metallic Bellows + group home | phase-3-proving | fable | Not started |
+| 6 | RFQ engine end-to-end | phase-3-proving | fable | ✅ Done (E2E creds gate queued) |
+| 7 | Dhruv home + Heat Exchangers page | phase-3-proving | fable | ✅ Done |
+| 8 | Precise home + Metallic Bellows + group home | phase-3-proving | fable | ✅ Done |
 | 9–12 | Scale-out — remaining pages | phase-4-scaleout | sonnet | Not started |
 | 13 | Redirect map + robots + sitemaps | phase-5-launch | sonnet | Not started |
 | 14 | Launch checklist | phase-5-launch | opus/sonnet | Not started |
@@ -306,6 +575,19 @@ Human review gates before merge:
 - Deviations lists in both session entries above
 
 After merge: Session 6 (RFQ engine) on `phase-3-proving`
+
+### Deferred queue — ⏰ REMIND SWAYAM AFTER SESSION 10 (his instruction, 2026-07-10)
+
+1. **Session 6 human gate:** E2E RFQ with real creds — `STORAGE_*`, `RESEND_API_KEY`,
+   `RFQ_NOTIFY_*`, `NEXT_PUBLIC_CONTACT_*` in `.env.local`; real PDF from phone
+   on 4G → email within a minute (playbook gate).
+2. **PR #4 merge** (Sessions 4+5) — human review gates listed in that section.
+3. **PR #3 merge** (Session 3 schemas) — still pending merge.
+4. §23 certification strip in RFQ rail — awaits verified CMS cert records.
+5. Capability-statement PDF on thank-you — asset doesn't exist yet.
+6. SLA "one business day" — pending client commitment.
+7. Playwright E2E suite for RFQ (happy path, upload-retry, honeypot, JS-off)
+   as CI tests — browser verify was run manually this session, not committed as tests.
 
 ### Known gaps
 

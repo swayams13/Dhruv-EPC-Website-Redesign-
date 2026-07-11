@@ -1,6 +1,8 @@
 // SpecTable — Datum §15, the flagship component.
 // Anatomy: param (Inter 500 14px steel-600) | value (Plex Mono 15px steel-950,
-// tabular) | units/notes (mono 13px steel-500). Header row in caption voice on
+// tabular) | units/notes (mono 13px steel-600 — §15 writes steel-500, but at
+// 13px that pair is 3.53:1 and §25.1 makes WCAG AA the floor; Session 7 axe
+// finding). Header row in caption voice on
 // steel-100. Horizontal scribed rules only — no verticals, no zebra. 44px min
 // rows / 36px engineering density, 16px cell padding, numeric values
 // right-aligned. Row hover steel-100 tint only.
@@ -13,8 +15,8 @@
 export interface SpecTableRow {
   param: string
   value: string
-  unit?: string
-  note?: string
+  unit?: string | undefined
+  note?: string | undefined
 }
 
 export interface SpecTableMatrixRow {
@@ -114,7 +116,7 @@ export function SpecTable({
                 {row.param}
               </th>
               <td className={`${rowH} px-4 text-right font-mono text-data text-steel-950`}>{row.value}</td>
-              <td className={`${rowH} px-4 font-mono text-helper text-steel-500`}>{unitNote(row)}</td>
+              <td className={`${rowH} px-4 font-mono text-helper text-steel-600`}>{unitNote(row)}</td>
             </tr>
           ))}
         </tbody>
@@ -128,7 +130,7 @@ export function SpecTable({
               <dt className="text-sm font-medium text-steel-600">{row.param}</dt>
               <dd className="font-mono text-data text-steel-950">
                 {row.value}
-                {unitNote(row) && <span className="ml-2 text-helper text-steel-500">{unitNote(row)}</span>}
+                {unitNote(row) && <span className="ml-2 text-helper text-steel-600">{unitNote(row)}</span>}
               </dd>
             </div>
           ))}

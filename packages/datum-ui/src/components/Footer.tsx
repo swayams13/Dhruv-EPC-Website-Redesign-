@@ -122,7 +122,7 @@ export function Footer({
                 <a
                   key={phone}
                   href={`tel:${phone.replace(/[^+\d]/g, '')}`}
-                  className={`mt-1 block font-mono text-helper ${zone1Link}`}
+                  className={`mt-1 block py-1 font-mono text-helper ${zone1Link}`}
                 >
                   {phone}
                 </a>
@@ -134,7 +134,7 @@ export function Footer({
                 <a
                   key={email}
                   href={`mailto:${email}`}
-                  className={`mt-1 block font-mono text-helper ${zone1Link}`}
+                  className={`mt-1 block py-1 font-mono text-helper ${zone1Link}`}
                 >
                   {email}
                 </a>
@@ -165,7 +165,7 @@ export function Footer({
         <div className="mx-auto grid max-w-wide gap-8 px-6 py-12 sm:grid-cols-2 lg:grid-cols-4">
           {columns.map((col) => (
             <div key={col.heading}>
-              <p className="text-xs font-medium uppercase tracking-caption text-steel-500">
+              <p className="text-xs font-medium uppercase tracking-caption text-steel-600">
                 {col.heading}
               </p>
               <ul className="mt-3 space-y-2">

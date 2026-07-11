@@ -14,6 +14,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { Button } from './Button'
+import { useRfqAnchorInView } from './useRfqAnchorInView'
 import { ArrowRight, ChevronDown, Menu, Phone, WhatsApp } from './glyphs'
 
 export interface MegaMenuItem {
@@ -67,6 +68,7 @@ export function Header({
 }: HeaderProps): React.ReactElement {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const contentRfqInView = useRfqAnchorInView()
   const headerRef = useRef<HTMLElement>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
 
@@ -157,9 +159,12 @@ export function Header({
             >
               <Phone size={20} />
             </a>
-            <Button variant="rfq" size="compact" href={rfqHref}>
-              Request a quote
-            </Button>
+            {/* invisible (not unmount): keeps layout stable — no nav shift */}
+            <span className={contentRfqInView ? 'invisible' : undefined}>
+              <Button variant="rfq" size="compact" href={rfqHref}>
+                Request a quote
+              </Button>
+            </span>
           </div>
 
           <button
