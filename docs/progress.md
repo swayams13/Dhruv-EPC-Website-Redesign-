@@ -560,21 +560,80 @@ reviewer subagent   PASS WITH DEVIATIONS (diff + spec only) — findings triaged
 | 6 | RFQ engine end-to-end | phase-3-proving | fable | ✅ Done (E2E creds gate queued) |
 | 7 | Dhruv home + Heat Exchangers page | phase-3-proving | fable | ✅ Done |
 | 8 | Precise home + Metallic Bellows + group home | phase-3-proving | fable | ✅ Done |
-| 9–12 | Scale-out — remaining pages | phase-4-scaleout | sonnet | Not started |
+| 9 | Dhruv 7 remaining equipment pages | phase-3-proving | sonnet | ✅ Done |
+| 10–12 | Scale-out — Precise remaining pages, capabilities, proof hubs | phase-4-scaleout | sonnet | Not started |
 | 13 | Redirect map + robots + sitemaps | phase-5-launch | sonnet | Not started |
 | 14 | Launch checklist | phase-5-launch | opus/sonnet | Not started |
 
-### Immediate next: merge PR #4, then Session 6
+### Immediate next: Session 10 (Precise remaining product pages)
 
-PR #4 is open: https://github.com/swayams13/Dhruv-EPC-Website-Redesign-/pull/4
+All PRs (#3, #4, #5) are merged. Main is at a5d9a9a.
 
-Human review gates before merge:
-- Preset token additions (Sessions 4 & 5) — §26 design-review
+Human review gates before Session 9:
 - `@vedanta/schemas` workspace dep in datum-ui
 - Manual browser pass: focus rings, reduced-motion, 320px viewport, one accent element per view
 - Deviations lists in both session entries above
 
 After merge: Session 6 (RFQ engine) on `phase-3-proving`
+
+---
+
+### Session 9 — Dhruv 7 remaining equipment pages
+**Status:** Complete ✅
+**Branch:** `phase-3-proving` · **Date:** 2026-07-11 · **Model:** sonnet
+
+#### What was done
+
+- **CMS content** — 7 `Product.parse({…})` records appended to `apps/web/lib/content/dhruv-epc.ts`:
+  `pressureVessels`, `storageTanks`, `processSkids`, `pipeSpools`, `heavyFabrication`,
+  `heavyMachining`, `plateFlanges`. Each has: `oneLineScope` with digit ✓, ≥1 specTable
+  row ✓, 4–5 FAQs ✓, gallery: [] (no real photography yet). All quantitative figures marked
+  DEMO-PLACEHOLDER; codes/types drawn from `[source: vedantagroup.net products]` menu data
+  and standard industry knowledge for each product family.
+- **7 page routes** (`apps/web/app/dhruv-epc/equipment/[slug]/page.tsx`) — each follows
+  the §21 template exactly (template contract locked). Sections: spec table → types →
+  materials/codes → fabrication QA (5 steps, product-specific) → FAQ. JSON-LD:
+  Product + FAQPage + BreadcrumbList via typed builders. All content consumed from
+  the new Product records (no inline data in pages).
+- **7 OG images** (`opengraph-image.tsx`) — same satori pattern as heat-exchangers:
+  product name + key code on graphite, arc amber rule. No new fonts or dependencies.
+- **Sitemap** — 7 new equipment URLs added to `apps/web/app/sitemap.ts`.
+- **Bug fix during development:** straight apostrophe in `shop's` (pipe-spools FAQ)
+  terminated the string literal. Fixed by switching to double-quote delimiter; only
+  occurrence — curly apostrophes elsewhere were already safe.
+
+#### Gate result
+
+```
+pnpm typecheck   ✓  4/4 packages, zero errors
+pnpm lint        ✓  0 errors, 0 warnings (no arbitrary values — all pages use token classes)
+pnpm test        ✓  133/133 (tokens 26, schemas 36, datum-ui a11y 71)
+pnpm build       ✓  19 routes, zero errors/warnings
+                    All 7 new pages: 93.8 kB First Load JS (≤120 kB marketing budget ✓)
+```
+
+#### Deviations / flagged (none silent)
+
+1. All quantitative spec-table figures are DEMO-PLACEHOLDER — same policy as Sessions 7/8.
+   SWAP-LIST is in the content file header and applies to all 7 new records.
+2. §21.3 type cards lack section-view icons — no artwork exists (Sessions 7/8 precedent).
+3. §21.6 gallery and §21.7 related projects omitted — no real photography; no Project
+   records until Phase 4.
+4. API 650 for storage-tanks is marked DEMO-PLACEHOLDER (unverified against vedantagroup.net).
+5. Template contract note: verified zero component or layout changes in this session.
+
+#### Schema validation spot-check
+
+- `pressureVessels.oneLineScope` matches `/\d/` via "Div. 1 & 2" ✓
+- `storageTanks.oneLineScope` matches via "VIII Div. 1" ✓
+- `processSkids.oneLineScope` matches via "B31.3" ✓
+- `pipeSpools.oneLineScope` matches via "B31.3" and "½ to NPS 48" ✓
+- `heavyFabrication.oneLineScope` matches via "IS 2062" and "200 T" ✓
+- `heavyMachining.oneLineScope` matches via "4,000 mm" ✓
+- `plateFlanges.oneLineScope` matches via "B16.5" and "B16.47" ✓
+- All records: faqs.length ∈ [4, 6] ✓; specTable.length ≥ 1 ✓
+
+---
 
 ### Deferred queue — ⏰ REMIND SWAYAM AFTER SESSION 10 (his instruction, 2026-07-10)
 
