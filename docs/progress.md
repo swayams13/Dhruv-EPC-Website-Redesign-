@@ -561,20 +561,13 @@ reviewer subagent   PASS WITH DEVIATIONS (diff + spec only) — findings triaged
 | 7 | Dhruv home + Heat Exchangers page | phase-3-proving | fable | ✅ Done |
 | 8 | Precise home + Metallic Bellows + group home | phase-3-proving | fable | ✅ Done |
 | 9 | Dhruv 7 remaining equipment pages | phase-3-proving | sonnet | ✅ Done |
-| 10–12 | Scale-out — Precise remaining pages, capabilities, proof hubs | phase-4-scaleout | sonnet | Not started |
-| 13 | Redirect map + robots + sitemaps | phase-5-launch | sonnet | Not started |
-| 14 | Launch checklist | phase-5-launch | opus/sonnet | Not started |
+| 10 | Precise 8 remaining product pages | main | sonnet | ✅ Done |
+| 11 | Capability matrices + proof hubs (Dhruv + Precise) | main | sonnet | ✅ Done |
+| 12 | Contact + about + company pages | main | sonnet | Not started |
+| 13 | Redirect map + robots + sitemaps | main | sonnet | Not started |
+| 14 | Launch checklist | main | opus/sonnet | Not started |
 
-### Immediate next: Session 10 (Precise remaining product pages)
-
-All PRs (#3, #4, #5) are merged. Main is at a5d9a9a.
-
-Human review gates before Session 9:
-- `@vedanta/schemas` workspace dep in datum-ui
-- Manual browser pass: focus rings, reduced-motion, 320px viewport, one accent element per view
-- Deviations lists in both session entries above
-
-After merge: Session 6 (RFQ engine) on `phase-3-proving`
+### Immediate next: Session 12 (contact + about + company pages)
 
 ---
 
@@ -632,6 +625,89 @@ pnpm build       ✓  19 routes, zero errors/warnings
 - `heavyMachining.oneLineScope` matches via "4,000 mm" ✓
 - `plateFlanges.oneLineScope` matches via "B16.5" and "B16.47" ✓
 - All records: faqs.length ∈ [4, 6] ✓; specTable.length ≥ 1 ✓
+
+---
+
+### Session 10 — Precise 8 remaining product pages
+**Status:** Complete ✅
+**Branch:** `main` · **Date:** 2026-07-13 · **Model:** sonnet
+**Governing specs:** Datum §21, Appendix A (field-set contract)
+
+#### What was done
+
+- **CMS content** — 8 `Product.parse({…})` records appended to `apps/web/lib/content/precise-engineers.ts`:
+  `telescopicExpansionJoint`, `rubberBellows`, `fabricBellows`, `dismantlingJoint`,
+  `flangeAdaptor`, `zeroVelocityValve`, `dualPlateCheckValve`, `damper`.
+  All follow the Appendix A field set; quantitative figures DEMO-PLACEHOLDER per standing policy.
+- **16 new page files** — `page.tsx` + `opengraph-image.tsx` for each slug under
+  `apps/web/app/precise-engineers/products/[slug]/`. Each follows the §21 locked template exactly
+  (5 sections: specifications → types → materials-codes → fabrication-qa → faq). `company="precise"`,
+  `precisePhoneHref`/`preciseWhatsappHref`, JSON-LD: Product + FAQPage + BreadcrumbList.
+  OG images: `flex[500]` rule bar on graphite (matching metallic-bellows precedent).
+- **Sitemap** — 8 new Precise product URLs added.
+
+#### Gate result
+
+```
+pnpm typecheck   ✓  4/4 packages, zero errors
+pnpm lint        ✓  0 errors, 0 warnings
+pnpm test        ✓  133/133
+pnpm build       ✓  27 routes, all 8 new pages 93.8 kB First Load JS (≤120 kB budget ✓)
+```
+
+#### Commits
+
+- `feat(content): seed 8 Precise product CMS records per Datum §21 + Appendix A`
+- `feat(dhruv): 8 remaining Precise product pages per Datum §21 (Session 10)`
+
+---
+
+### Session 11 — Capability matrices + proof hubs (Dhruv + Precise)
+**Status:** Complete ✅
+**Branch:** `main` · **Date:** 2026-07-13 · **Model:** sonnet (multi-agent workflow)
+**Governing specs:** Datum §15 (capability matrix / engineering-density SpecTable), §20 (proof hub)
+
+#### What was done
+
+Built 4 new pages via parallel workflow (4 build agents + gate agent + reviewer agent):
+
+- **`/dhruv-epc/capabilities/`** — `PageHero` + `SpecTable` (rows mode, `density="engineering"`,
+  14-row capability envelope: max diameter 3,600 mm, max tonnage 200 T, design pressure range,
+  temperature range, MOC families, design codes, stamps, NDT, testing, TPI agencies).
+  Equipment families grid linking to individual product pages. DEMO figures labelled.
+- **`/dhruv-epc/proof/`** — `PageHero` + `CertificationCard` grid (4 certs: ISO 9001:2015,
+  ASME U, ASME U2, IBR) + `ApprovalsMatrix` (3 TPIA agencies: LRS, BV, DNV). No
+  ClientWall/Testimonials (no verified records — correct per Sessions 7/8 precedent).
+- **`/precise-engineers/capabilities/`** — Same pattern. 16-row envelope: bellows
+  80–8,000 mm NB (sourced), 8 product size ranges, 5 design-code families, MOC families,
+  12-sector list, EIL approval. Product families grid (expansion-joints + flow-control groups).
+- **`/precise-engineers/proof/`** — `CertificationCard` grid (ISO 9001:2015, EIL Approved Vendor)
+  + `ApprovalsMatrix` (EIL EPC class). DEMO date notice rendered.
+- **Sitemap** — 4 new URLs added (capabilities: weekly 0.8, proof: monthly 0.7).
+
+#### Reviewer findings + fixes
+
+Reviewer agent returned FAIL on 3 must-fix issues; all fixed before final commit:
+1. `text-h2` (not in Datum token map → no CSS output) → `text-h3` on "Product families" heading.
+2. `text-label` + `tracking-wide` (neither a Datum token) → `text-helper` + `tracking-caption`.
+3. Hardcoded phone number in `precise-engineers/proof/page.tsx` → `precisePhoneHref` from content file.
+
+Reviewer also noted (minor, not blocking): Dhruv proof `<h2>` headings use `text-h1` token
+(valid — h1 token on h2 element is a visual sizing choice, not a spec violation).
+
+#### Gate result
+
+```
+pnpm typecheck   ✓  4/4 packages, zero errors
+pnpm lint        ✓  0 errors (1 unescaped-entity fixed in-scope during build)
+pnpm test        ✓  133/133
+pnpm build       ✓  4 new SSG routes, all 93.8 kB First Load JS (≤120 kB budget ✓)
+```
+
+#### Commits
+
+- `08519be feat(session-11): capability matrices + proof hubs, Dhruv + Precise (Datum §15/§20)`
+- `e554a4b fix(session-11): replace undefined tokens + wire precisePhoneHref per reviewer`
 
 ---
 
