@@ -6,6 +6,7 @@ import { RFQBand } from '../../../components/RFQBand'
 import {
   preciseApprovals,
   preciseCertifications,
+  precisePhoneHref,
   preciseWhatsappHref,
 } from '../../../lib/content/precise-engineers'
 
@@ -93,7 +94,7 @@ export default function PreciseProof() {
       <RFQBand company="precise" whatsappHref={preciseWhatsappHref} />
 
       <MobileBottomBar
-        phoneHref={`tel:+919377773186`}
+        phoneHref={precisePhoneHref}
         whatsappHref={preciseWhatsappHref}
         rfqHref="/request-a-quote?company=precise"
       />

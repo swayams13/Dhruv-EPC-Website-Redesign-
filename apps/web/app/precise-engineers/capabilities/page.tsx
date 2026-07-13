@@ -88,10 +88,10 @@ export default function PreciseCapabilitiesPage() {
       </div>
 
       <div className="mx-auto max-w-wide px-6 py-12">
-        <h2 className="font-display text-h2 font-medium text-steel-950">Product families</h2>
+        <h2 className="font-display text-h3 font-medium text-steel-950">Product families</h2>
 
         <div className="mt-10">
-          <h3 className="text-label font-medium text-steel-600 uppercase tracking-wide">
+          <h3 className="text-helper font-medium text-steel-600 uppercase tracking-caption">
             Expansion Joints
           </h3>
           <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -109,7 +109,7 @@ export default function PreciseCapabilitiesPage() {
         </div>
 
         <div className="mt-10">
-          <h3 className="text-label font-medium text-steel-600 uppercase tracking-wide">
+          <h3 className="text-helper font-medium text-steel-600 uppercase tracking-caption">
             Flow Control
           </h3>
           <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
