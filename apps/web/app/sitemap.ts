@@ -31,5 +31,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/precise-engineers/proof/`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
     { url: `${base}/request-a-quote/`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
     { url: `${base}/contact/`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${base}/about/`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${base}/dhruv-epc/company/`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${base}/precise-engineers/company/`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
   ]
 }
