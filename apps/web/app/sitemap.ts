@@ -25,6 +25,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/precise-engineers/products/zero-velocity-valve/`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
     { url: `${base}/precise-engineers/products/dual-plate-check-valve/`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
     { url: `${base}/precise-engineers/products/damper/`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${base}/dhruv-epc/capabilities/`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${base}/dhruv-epc/proof/`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${base}/precise-engineers/capabilities/`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${base}/precise-engineers/proof/`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
     { url: `${base}/request-a-quote/`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
     { url: `${base}/contact/`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
   ]
