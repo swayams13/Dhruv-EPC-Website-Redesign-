@@ -563,11 +563,11 @@ reviewer subagent   PASS WITH DEVIATIONS (diff + spec only) — findings triaged
 | 9 | Dhruv 7 remaining equipment pages | phase-3-proving | sonnet | ✅ Done |
 | 10 | Precise 8 remaining product pages | main | sonnet | ✅ Done |
 | 11 | Capability matrices + proof hubs (Dhruv + Precise) | main | sonnet | ✅ Done |
-| 12 | Contact + about + company pages | main | sonnet | Not started |
+| 12 | Contact + about + company pages | main | fable | ✅ Done |
 | 13 | Redirect map + robots + sitemaps | main | sonnet | Not started |
 | 14 | Launch checklist | main | opus/sonnet | Not started |
 
-### Immediate next: Session 12 (contact + about + company pages)
+### Immediate next: Session 13 (redirect map + robots + sitemaps)
 
 ---
 
@@ -708,6 +708,74 @@ pnpm build       ✓  4 new SSG routes, all 93.8 kB First Load JS (≤120 kB bud
 
 - `08519be feat(session-11): capability matrices + proof hubs, Dhruv + Precise (Datum §15/§20)`
 - `e554a4b fix(session-11): replace undefined tokens + wire precisePhoneHref per reviewer`
+
+---
+
+### Session 12 — Contact + about + company pages
+**Status:** Complete ✅
+**Branch:** `main` · **Date:** 2026-07-13 · **Model:** fable
+**Governing specs:** plan §3.1–3.3 (sitemap), FR-6 (contact & entity), CLAUDE.md entity/JSON-LD rules
+
+#### What was done
+
+- **`/about`** — group history (Precise est. 1994 V.U.Nagar Anand; Dhruv static-equipment
+  works at Manjusar GIDC, Savli) + values in enforcement-rule format (each grounded in a
+  sourced credential, zero unattributed adjectives) + `StatBand(groupStats)` + light company
+  doors (group-home §6.1.2 pattern, `data-company` scoped accents, no fills).
+- **`/contact`** — entity blocks for Dhruv + Precise + group registered office, every
+  address/phone/email rendered from the `EntityRecord` singletons (FR-6 — nothing hard-coded).
+  `tel:`/`mailto:` links with `min-h-row` touch targets. JSON-LD: BreadcrumbList +
+  LocalBusiness ×2 via typed builders.
+- **`/dhruv-epc/company`** and **`/precise-engineers/company`** — about (hero/lead from
+  sourced facts), works (addresses from entity singletons), sectors/TPI facts from existing
+  sourced records, careers as an honest mailto (role families only, no fabricated openings),
+  `RFQBand` + `MobileBottomBar` per proof-page pattern. Chrome from route-group layouts.
+- **Sitemap** — `/about/`, `/dhruv-epc/company/`, `/precise-engineers/company/` added
+  (`/contact/` was already present).
+- All four nav/footer links that previously 404'd (`/about`, `/contact`, both `/company`)
+  now resolve.
+
+#### Reviewer pass (separate agent, diff + specs only)
+
+**PASS, zero must-fix.** Verified: token classes all resolve (Session-11 `text-h2` trap
+avoided), amber/blue law (group pages zero fills; company pages exactly one `variant="rfq"`),
+FR-6 sourcing, JSON-LD builders only, dl/dt/dd + aria-labelledby + heading-order a11y,
+sitemap conventions. One in-scope lint catch fixed during build: `gap-5` (not in the token
+spacing scale) → `gap-6`.
+
+Non-blocking reviewer notes (recorded, not actioned — out of scope):
+1. Breadcrumb JSON-LD URLs lack trailing slashes repo-wide (pre-existing convention,
+   conflicts with plan §2 trailing-slash canonical) — worth one sweep later.
+2. `FOOTER_COLUMNS` duplicated across group home / about / contact — could live in
+   `lib/content/group.ts`.
+
+#### Gate result
+
+```
+pnpm typecheck   ✓  4/4 packages, zero errors
+pnpm lint        ✓  0 errors (gap-5 → gap-6 fixed in-scope)
+pnpm test        ✓  133/133 (force-rerun, not cache)
+pnpm build       ✓  4 new SSG routes, all 93.8 kB First Load JS (≤120 kB budget ✓)
+```
+
+#### Deviations / flagged (none silent)
+
+1. **Leadership section omitted on `/about`** — plan §3.1 lists "leadership" but no sourced
+   names/roles exist anywhere (no invented claims). Needs client input: names, roles,
+   real photography.
+2. **Map embed replaced with Google Maps links on `/contact`** — plan §3.1 says "map";
+   an embed adds third-party JS/consent weight for a prototype. Links carry the same
+   information. Swap decision deferred to launch.
+3. **Careers copy is generic role families** (welders, QA/QC, design engineers) with an
+   entity-record mailto — no sourced openings exist. Non-quantitative, flagged for client copy.
+4. **Manual browser pass not run this session** — pages compose only previously
+   browser-verified components (PageHero, StatBand, Footer, RFQBand, MobileBottomBar);
+   reviewer covered spec/token/a11y statically. Browser QA rolls into the Session 14
+   launch checklist.
+
+#### Commits
+
+- `5b41dc7 feat(session-12): contact + about + company pages per plan §3.1–3.3 / FR-6`
 
 ---
 
