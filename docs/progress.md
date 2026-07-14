@@ -564,10 +564,10 @@ reviewer subagent   PASS WITH DEVIATIONS (diff + spec only) — findings triaged
 | 10 | Precise 8 remaining product pages | main | sonnet | ✅ Done |
 | 11 | Capability matrices + proof hubs (Dhruv + Precise) | main | sonnet | ✅ Done |
 | 12 | Contact + about + company pages | main | fable | ✅ Done |
-| 13 | Redirect map + robots + sitemaps | main | sonnet | In progress |
+| 13 | Redirect map + robots + sitemaps | main | sonnet | ✅ Done |
 | 14 | Launch checklist | main | opus/sonnet | Not started |
 
-### Immediate next: Session 13 (redirect map + robots + sitemaps — redirect map + CI done; robots.ts review + per-company sitemaps remain)
+### Immediate next: Session 14 (launch checklist)
 
 ---
 
@@ -782,7 +782,7 @@ pnpm build       ✓  4 new SSG routes, all 93.8 kB First Load JS (≤120 kB bud
 ---
 
 ### Session 13 — Redirect map + robots + sitemaps
-**Status:** In progress (redirect map + CI done; robots review + per-company XML sitemaps remain)
+**Status:** Complete ✅
 **Branch:** `main` · **Date:** 2026-07-14 · **Model:** sonnet
 **Governing specs:** plan FR-8, FR-9, §T-4
 
@@ -813,10 +813,34 @@ pnpm build       ✓  zero errors/warnings
 redirect-map integrity check  ✓  57 rules validated
 ```
 
-#### Remaining in Session 13
+- **`robots.ts`** — added explicit `Googlebot` rule (playbook FR-8 spec); `/api/` disallow already
+  present from Session 1
+- **`sitemap.ts`** — refactored to 29-entry flat sitemap with terse helper fns for readability;
+  per-company `generateSitemaps()` split attempted but reverted — Next.js 14.2 moves `/sitemap.xml`
+  to 404 when that API is used (no auto-generated index). Deferred to Phase 5 / next-sitemap upgrade.
+  `ponytail:` comment left in file explaining the decision.
+- **Lint fixes (pre-existing, surfaced by cache miss):** `gap-10` → `gap-8`, `mt-10` → `mt-8`,
+  `text-inherit` removed in capability pages (undefined Datum tokens from Session 11).
 
-- `robots.ts` — review/expand existing (already allows GPTBot etc.); add `/api/` disallow
-- Per-company XML sitemaps + sitemap index (currently one `sitemap.ts` for all routes)
+#### Gate result
+
+```
+pnpm typecheck   ✓  4/4 packages, zero errors
+pnpm lint        ✓  0 errors, 0 warnings (capability page tokens fixed in-scope)
+pnpm test        ✓  133/133
+pnpm build       ✓  /sitemap.xml ○ static, /robots.txt ○ static, zero errors
+redirect-map integrity check  ✓  57 rules validated
+```
+
+#### Deviations / flagged (none silent)
+
+1. **Per-company XML sitemaps not split** — `generateSitemaps()` in Next.js 14.2 generates sub-sitemaps
+   at `/sitemap/[id].xml` without an auto-generated index at `/sitemap.xml`, breaking the robots.ts
+   reference. Flat sitemap retained; search engines receive all 29 URLs identically. Phase 5 lever:
+   upgrade to `next-sitemap` package for proper multi-sitemap support.
+2. **`/sitemap.xml` trailing-slash canonical drift** (reviewer note from Session 12, pre-existing) —
+   breadcrumb JSON-LD URLs lack trailing slashes repo-wide; sitemap URLs have them. No fix this session
+   (scope creep); flagged for Session 14 sweep.
 
 ---
 
