@@ -115,9 +115,24 @@ export function buildBreadcrumbList(items: { name: string; url: string }[]): Bre
       '@type': 'ListItem',
       position: i + 1,
       name: item.name,
-      item: item.url,
+      item: normalizeCanonicalUrl(item.url),
     })),
   }
+}
+
+// Normalize URL to trailing-slash canonical form for sitemap alignment.
+// Fragment URLs (#) are left as-is; others must end with exactly one /.
+function normalizeCanonicalUrl(url: string): string {
+  // If URL has a fragment, leave it unchanged
+  if (url.includes('#')) {
+    return url
+  }
+  // If URL already ends with /, return as-is
+  if (url.endsWith('/')) {
+    return url
+  }
+  // Otherwise add trailing slash
+  return url + '/'
 }
 
 // Article builder uses Project as the content source

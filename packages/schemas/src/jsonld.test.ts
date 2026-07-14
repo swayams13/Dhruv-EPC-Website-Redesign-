@@ -129,6 +129,24 @@ describe('buildBreadcrumbList', () => {
     const ld = buildBreadcrumbList(crumbs)
     expect(ld.itemListElement[1]!.item).toBe(crumbs[1]!.url)
   })
+  it('normalizes URLs without trailing slashes to add one', () => {
+    const ld = buildBreadcrumbList([
+      { name: 'Dhruv EPC', url: 'https://vedantagroup.net/dhruv-epc' },
+    ])
+    expect(ld.itemListElement[0]!.item).toBe('https://vedantagroup.net/dhruv-epc/')
+  })
+  it('does not double-slash URLs that already end with /', () => {
+    const ld = buildBreadcrumbList([
+      { name: 'Home', url: 'https://vedantagroup.net/' },
+    ])
+    expect(ld.itemListElement[0]!.item).toBe('https://vedantagroup.net/')
+  })
+  it('does not add trailing slash to fragment URLs', () => {
+    const ld = buildBreadcrumbList([
+      { name: 'Equipment', url: 'https://vedantagroup.net/dhruv-epc#equipment' },
+    ])
+    expect(ld.itemListElement[0]!.item).toBe('https://vedantagroup.net/dhruv-epc#equipment')
+  })
 })
 
 describe('buildArticle', () => {
