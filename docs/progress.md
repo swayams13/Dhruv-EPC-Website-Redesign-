@@ -565,9 +565,9 @@ reviewer subagent   PASS WITH DEVIATIONS (diff + spec only) — findings triaged
 | 11 | Capability matrices + proof hubs (Dhruv + Precise) | main | sonnet | ✅ Done |
 | 12 | Contact + about + company pages | main | fable | ✅ Done |
 | 13 | Redirect map + robots + sitemaps | main | sonnet | ✅ Done |
-| 14 | Launch checklist | main | opus/sonnet | Not started |
+| 14 | Launch checklist | main | sonnet | ✅ Done |
 
-### Immediate next: Session 14 (launch checklist)
+### All sessions complete — awaiting client UAT + DNS cutover
 
 ---
 
@@ -838,9 +838,52 @@ redirect-map integrity check  ✓  57 rules validated
    at `/sitemap/[id].xml` without an auto-generated index at `/sitemap.xml`, breaking the robots.ts
    reference. Flat sitemap retained; search engines receive all 29 URLs identically. Phase 5 lever:
    upgrade to `next-sitemap` package for proper multi-sitemap support.
-2. **`/sitemap.xml` trailing-slash canonical drift** (reviewer note from Session 12, pre-existing) —
-   breadcrumb JSON-LD URLs lack trailing slashes repo-wide; sitemap URLs have them. No fix this session
-   (scope creep); flagged for Session 14 sweep.
+2. **`/sitemap.xml` trailing-slash canonical drift** — **FIXED in Session 14** (commit 8e0bd83).
+   `buildBreadcrumbList` now normalizes all non-fragment URLs to trailing-slash canonical form.
+
+---
+
+### Session 14 — Launch checklist
+**Status:** Complete ✅
+**Branch:** `main` · **Date:** 2026-07-14 · **Model:** sonnet (subagent-driven)
+**Governing specs:** plan Appendix B, FR-8, FR-9
+
+#### What was done
+
+- **Task 1: Trailing-slash canonical drift fixed** — `buildBreadcrumbList` in `packages/schemas/src/jsonld.ts` now normalizes all non-fragment URLs to trailing-slash canonical form (e.g. `/dhruv-epc` → `/dhruv-epc/`). Fragment anchor URLs (`#equipment`) are exempt. 3 new tests added. Commit: `8e0bd83`.
+- **Task 2: Launch checklist written** — `docs/launch-checklist.md` audits all 10 Appendix B gates with evidence. 7 PASS, 3 CLIENT-GATED, 0 FAIL. Commit: `1409afd`.
+- **Lint cleanup** — 4 pre-existing `classnames-order` warnings in `precise-engineers/capabilities/page.tsx` auto-fixed. Lint now 0 errors, 0 warnings. Commit: `260758b`.
+
+#### Gate result
+
+```
+pnpm typecheck   ✓  4/4 packages, zero errors
+pnpm lint        ✓  0 errors, 0 warnings
+pnpm test        ✓  136/136 (tokens: 26, schemas: 39, datum-ui a11y: 71)
+pnpm build       ✓  35 static routes + 6 dynamic, zero errors/warnings
+                    All routes: 93.8 kB First Load JS (≤120 kB budget ✓)
+                    RFQ route: 112 kB (≤180 kB budget ✓)
+```
+
+#### Launch gate summary: 7 PASS · 3 CLIENT-GATED · 0 FAIL
+
+| Gate | Result |
+|------|--------|
+| 1 — AI crawlers | ✅ PASS |
+| 2 — Redirect map CI | ✅ PASS |
+| 3 — LCP ≤ 2.5s p75 | ⏳ CLIENT-GATED — needs staging deployment |
+| 4 — axe zero criticals | ✅ PASS (71 component tests) |
+| 5 — oneLineScope digit | ✅ PASS (Zod enforced) |
+| 6 — Testimonials attributed | ⏳ CLIENT-GATED — no records seeded yet |
+| 7 — Entity record ↔ JSON-LD | ✅ PASS |
+| 8 — RFQ synthetic test | ⏳ CLIENT-GATED — needs production env vars |
+| 9 — Footer no vendor credit | ✅ PASS |
+| 10 — Zero stock imagery | ✅ PASS |
+
+#### Deviations / flagged (none silent)
+
+1. **axe CI step is a placeholder** — the `ci.yml` step echoes intent but does not fail. Component-level 71 tests are the real axe gate. Route-level Playwright axe deferred to post-deploy QA.
+2. **Per-company XML sitemaps** — still flat (29 URLs); per-company split deferred to Phase 5 via `next-sitemap`. Unchanged from Session 13.
 
 ---
 
@@ -857,7 +900,10 @@ redirect-map integrity check  ✓  57 rules validated
 7. Playwright E2E suite for RFQ (happy path, upload-retry, honeypot, JS-off)
    as CI tests — browser verify was run manually this session, not committed as tests.
 
-### Known gaps
+### Known gaps / client-gated items blocking DNS cutover
 
-- `content/redirect-map.csv` — header row only, Session 13
-- Amber-law page-level resolution (deviation 8, Session 5) — Session 7
+1. **CG-1: LCP ≤ 2.5s p75** — needs staging deployment URL + Lighthouse run
+2. **CG-2: Testimonials** — client to supply verified quotes with attribution
+3. **CG-3: RFQ E2E** — needs `STORAGE_*`, `RESEND_API_KEY`, `RFQ_NOTIFY_*` credentials
+4. Playwright E2E suite for RFQ — deferred (items 1–7 in original deferred queue)
+5. axe CI placeholder — route-level axe deferred to post-deploy QA
