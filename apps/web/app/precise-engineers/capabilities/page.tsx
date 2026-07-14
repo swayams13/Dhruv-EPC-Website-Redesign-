@@ -91,7 +91,7 @@ export default function PreciseCapabilitiesPage() {
         <h2 className="font-display text-h3 font-medium text-steel-950">Product families</h2>
 
         <div className="mt-8">
-          <h3 className="text-helper font-medium text-steel-600 uppercase tracking-caption">
+          <h3 className="text-helper font-medium uppercase tracking-caption text-steel-600">
             Expansion Joints
           </h3>
           <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -99,7 +99,7 @@ export default function PreciseCapabilitiesPage() {
               <a
                 key={product.href}
                 href={product.href}
-                className="block border border-steel-200 bg-white rounded-sm p-6 transition-colors duration-fast hover:border-steel-400"
+                className="block rounded-sm border border-steel-200 bg-white p-6 transition-colors duration-fast hover:border-steel-400"
               >
                 <p className="font-medium text-steel-950">{product.name}</p>
                 <p className="mt-1 text-helper text-steel-600">{product.scope}</p>
@@ -109,7 +109,7 @@ export default function PreciseCapabilitiesPage() {
         </div>
 
         <div className="mt-8">
-          <h3 className="text-helper font-medium text-steel-600 uppercase tracking-caption">
+          <h3 className="text-helper font-medium uppercase tracking-caption text-steel-600">
             Flow Control
           </h3>
           <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -117,7 +117,7 @@ export default function PreciseCapabilitiesPage() {
               <a
                 key={product.href}
                 href={product.href}
-                className="block border border-steel-200 bg-white rounded-sm p-6 transition-colors duration-fast hover:border-steel-400"
+                className="block rounded-sm border border-steel-200 bg-white p-6 transition-colors duration-fast hover:border-steel-400"
               >
                 <p className="font-medium text-steel-950">{product.name}</p>
                 <p className="mt-1 text-helper text-steel-600">{product.scope}</p>

@@ -11,12 +11,12 @@
 
 ```
 pnpm typecheck   PASS   4/4 packages, 0 errors (turbo cache hit, e1f76884)
-pnpm lint        PASS   4 warnings (classnames-order in capabilities/page.tsx lines 94/102/112/120) — no errors, no arbitrary values, no eslint-disable
+pnpm lint        PASS   0 warnings, 0 errors — no arbitrary values, no eslint-disable
 pnpm test        PASS   136 tests across 5 test files — 0 failures
   @vedanta/tokens:   26 tests (token covenant, §4.5 contrast ratios)
   @vedanta/schemas:  39 tests (cms.test.ts: 8, jsonld.test.ts: 21, rfq.test.ts: 10)
   @vedanta/datum-ui: 71 tests (a11y.test.tsx — axe WCAG 2.x A/AA, 24 components × stories)
-pnpm build       PASS   35 static routes + 6 dynamic, 0 errors, 0 warnings beyond classnames-order
+pnpm build       PASS   35 static routes + 6 dynamic, 0 errors, 0 warnings
   First Load JS (marketing routes): 93.8 kB — UNDER 120 kB budget
   First Load JS (RFQ route):        112 kB  — UNDER 180 kB budget
 ```
@@ -69,7 +69,7 @@ These cannot be verified without client input or a live staging deployment. DNS 
 
 ## Notes
 
-- **Classnames-order warnings** in `apps/web/app/precise-engineers/capabilities/page.tsx` (lines 94, 102, 112, 120): these are ESLint warnings, not errors. They do not block build or CI. Fix is cosmetic (reorder Tailwind classes per Prettier plugin). Not a launch blocker.
+- **Classnames-order warnings** in `apps/web/app/precise-engineers/capabilities/page.tsx` (lines 94, 102, 112, 120): fixed in Session 14 cleanup commit — class order auto-corrected by ESLint. Lint now clean at 0 warnings.
 - **axe-core CI step** is a placeholder in `ci.yml` — it echoes intent but does not fail. The `pnpm test` axe run (71 component-level tests) is the actual gate. Route-level axe testing via Playwright requires a running server and is deferred to post-deploy QA.
 - **Redirect map:** 66 rules validated. Session 13 added 57+ rules and the CI runtime test step. The integrity check (`node -e "..."`) and the runtime test (`scripts/test-redirects.mjs`) both run on every push to `main` and `dev`.
 - **JS budget:** All marketing routes at 93.8 kB First Load JS (budget: 120 kB gz). RFQ at 112 kB (budget: 180 kB). Both comfortably under budget as of this build.
