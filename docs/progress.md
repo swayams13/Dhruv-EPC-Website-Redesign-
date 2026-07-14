@@ -564,10 +564,10 @@ reviewer subagent   PASS WITH DEVIATIONS (diff + spec only) — findings triaged
 | 10 | Precise 8 remaining product pages | main | sonnet | ✅ Done |
 | 11 | Capability matrices + proof hubs (Dhruv + Precise) | main | sonnet | ✅ Done |
 | 12 | Contact + about + company pages | main | fable | ✅ Done |
-| 13 | Redirect map + robots + sitemaps | main | sonnet | Not started |
+| 13 | Redirect map + robots + sitemaps | main | sonnet | In progress |
 | 14 | Launch checklist | main | opus/sonnet | Not started |
 
-### Immediate next: Session 13 (redirect map + robots + sitemaps)
+### Immediate next: Session 13 (redirect map + robots + sitemaps — redirect map + CI done; robots.ts review + per-company sitemaps remain)
 
 ---
 
@@ -776,6 +776,47 @@ pnpm build       ✓  4 new SSG routes, all 93.8 kB First Load JS (≤120 kB bud
 #### Commits
 
 - `5b41dc7 feat(session-12): contact + about + company pages per plan §3.1–3.3 / FR-6`
+
+---
+
+---
+
+### Session 13 — Redirect map + robots + sitemaps
+**Status:** In progress (redirect map + CI done; robots review + per-company XML sitemaps remain)
+**Branch:** `main` · **Date:** 2026-07-14 · **Model:** sonnet
+**Governing specs:** plan FR-8, FR-9, §T-4
+
+#### What was done (first half)
+
+- **`content/redirect-map.csv`** — crawled live site (`vedantagroup.net/sitemap.xml`); 57 rules:
+  - Group-level: `/`, `/index.php`, `/about.php`, `/contact.php`, `/dhruv-epc.php`, `/precise-engineers.php`
+  - Precise (16 pages): company/proof/capabilities/9 products mapped to new slugs
+  - Dhruv (19 pages): company/proof/capabilities/9 equipment mapped; 4 pages with no equivalent
+    (`base-frame`, `reactor`, `distillation-column`, `air-receiver`) → `/dhruv-epc/` with `ponytail:` comment
+  - 11 legacy PDF URLs → company proof hub pages
+- **`apps/web/next.config.mjs`** — CSV parsed at config time (Node.js context), compiled to
+  `redirects()` array; skips comment lines, header row, and no-op `src===dst` entries
+- **`scripts/test-redirects.mjs`** — CI test script: reads CSV, curls each legacy path against
+  `TEST_URL` (default `localhost:3000`), asserts 301 + correct Location header, exits 1 on failure
+- **`.github/workflows/ci.yml`** — integrity check updated to skip comment lines; new
+  "Redirect runtime test" step added after build: starts prod server → runs test script → kills server
+- **Fix (found by lint):** `text-body-sm` → `text-sm` in `precise-engineers/proof/page.tsx`
+  (undefined Datum token, same pattern as Session 11 `text-h2` bug — mistakes.md precedent)
+
+#### Gate result
+
+```
+pnpm typecheck   ✓  4/4 packages, zero errors
+pnpm lint        ✓  0 errors, 0 warnings (text-body-sm fixed in-scope)
+pnpm test        ✓  133/133
+pnpm build       ✓  zero errors/warnings
+redirect-map integrity check  ✓  57 rules validated
+```
+
+#### Remaining in Session 13
+
+- `robots.ts` — review/expand existing (already allows GPTBot etc.); add `/api/` disallow
+- Per-company XML sitemaps + sitemap index (currently one `sitemap.ts` for all routes)
 
 ---
 
