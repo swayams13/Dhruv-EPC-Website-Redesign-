@@ -90,7 +90,7 @@ export default function PreciseCapabilitiesPage() {
       <div className="mx-auto max-w-wide px-6 py-12">
         <h2 className="font-display text-h3 font-medium text-steel-950">Product families</h2>
 
-        <div className="mt-10">
+        <div className="mt-8">
           <h3 className="text-helper font-medium text-steel-600 uppercase tracking-caption">
             Expansion Joints
           </h3>
@@ -99,7 +99,7 @@ export default function PreciseCapabilitiesPage() {
               <a
                 key={product.href}
                 href={product.href}
-                className="block border border-steel-200 bg-white rounded-sm p-6 text-inherit hover:border-steel-400 transition-colors duration-fast"
+                className="block border border-steel-200 bg-white rounded-sm p-6 transition-colors duration-fast hover:border-steel-400"
               >
                 <p className="font-medium text-steel-950">{product.name}</p>
                 <p className="mt-1 text-helper text-steel-600">{product.scope}</p>
@@ -108,7 +108,7 @@ export default function PreciseCapabilitiesPage() {
           </div>
         </div>
 
-        <div className="mt-10">
+        <div className="mt-8">
           <h3 className="text-helper font-medium text-steel-600 uppercase tracking-caption">
             Flow Control
           </h3>
@@ -117,7 +117,7 @@ export default function PreciseCapabilitiesPage() {
               <a
                 key={product.href}
                 href={product.href}
-                className="block border border-steel-200 bg-white rounded-sm p-6 text-inherit hover:border-steel-400 transition-colors duration-fast"
+                className="block border border-steel-200 bg-white rounded-sm p-6 transition-colors duration-fast hover:border-steel-400"
               >
                 <p className="font-medium text-steel-950">{product.name}</p>
                 <p className="mt-1 text-helper text-steel-600">{product.scope}</p>
@@ -126,7 +126,7 @@ export default function PreciseCapabilitiesPage() {
           </div>
         </div>
 
-        <p className="mt-10 text-helper text-steel-500">
+        <p className="mt-8 text-helper text-steel-500">
           Note: rows marked &ldquo;DEMO figure — engineering data pending&rdquo; are industry-plausible
           placeholder values for the management prototype only. Engineering-supplied data
           required before launch (plan §P-5).

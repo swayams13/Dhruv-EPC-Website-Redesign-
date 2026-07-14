@@ -9,7 +9,8 @@ export default function robots(): MetadataRoute.Robots {
         allow: '/',
         disallow: '/api/',
       },
-      // Explicit allow for AI answer-engine crawlers
+      // Explicit allow for crawlers (overrides any upstream blanket disallow)
+      { userAgent: 'Googlebot', allow: '/' },
       { userAgent: 'GPTBot', allow: '/' },
       { userAgent: 'ClaudeBot', allow: '/' },
       { userAgent: 'PerplexityBot', allow: '/' },

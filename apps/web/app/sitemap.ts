@@ -1,38 +1,48 @@
 import type { MetadataRoute } from 'next'
 
-// ponytail: static sitemap stub — Phase 4 generates per-company dynamic sitemaps
-// from CMS using next-sitemap
+// ponytail: flat sitemap — 29 URLs. generateSitemaps() moves routes to /sitemap/[id].xml
+// and doesn't auto-generate /sitemap.xml index in Next.js 14.2; adds complexity for zero
+// SEO gain at this scale. Per-company split deferred to Phase 5 (CMS-driven, next-sitemap).
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = 'https://vedantagroup.net'
+  const now = new Date()
+  const w = (path: string, priority = 0.8) =>
+    ({ url: `${base}${path}`, lastModified: now, changeFrequency: 'weekly' as const, priority })
+  const m = (path: string, priority = 0.7) =>
+    ({ url: `${base}${path}`, lastModified: now, changeFrequency: 'monthly' as const, priority })
+
   return [
-    { url: base, lastModified: new Date(), changeFrequency: 'monthly', priority: 1 },
-    { url: `${base}/dhruv-epc/`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
-    { url: `${base}/dhruv-epc/equipment/pressure-vessels/`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${base}/dhruv-epc/equipment/heat-exchangers/`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${base}/dhruv-epc/equipment/storage-tanks/`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${base}/dhruv-epc/equipment/process-skids/`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${base}/dhruv-epc/equipment/pipe-spools/`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${base}/dhruv-epc/equipment/heavy-fabrication/`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${base}/dhruv-epc/equipment/heavy-machining/`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${base}/dhruv-epc/equipment/plate-flanges/`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${base}/precise-engineers/`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
-    { url: `${base}/precise-engineers/products/metallic-bellows-expansion-joint/`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${base}/precise-engineers/products/telescopic-expansion-joint/`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${base}/precise-engineers/products/rubber-bellows/`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${base}/precise-engineers/products/fabric-bellows/`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${base}/precise-engineers/products/dismantling-joint/`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${base}/precise-engineers/products/flange-adaptor/`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${base}/precise-engineers/products/zero-velocity-valve/`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${base}/precise-engineers/products/dual-plate-check-valve/`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${base}/precise-engineers/products/damper/`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${base}/dhruv-epc/capabilities/`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${base}/dhruv-epc/proof/`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${base}/precise-engineers/capabilities/`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${base}/precise-engineers/proof/`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${base}/request-a-quote/`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${base}/contact/`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${base}/about/`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${base}/dhruv-epc/company/`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${base}/precise-engineers/company/`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
+    // Group
+    m('/', 1),
+    m('/about/'),
+    m('/contact/'),
+    m('/request-a-quote/', 0.8),
+    // Dhruv EPC
+    w('/dhruv-epc/', 0.9),
+    w('/dhruv-epc/equipment/heat-exchangers/'),
+    w('/dhruv-epc/equipment/pressure-vessels/'),
+    w('/dhruv-epc/equipment/storage-tanks/'),
+    w('/dhruv-epc/equipment/process-skids/'),
+    w('/dhruv-epc/equipment/pipe-spools/'),
+    w('/dhruv-epc/equipment/heavy-fabrication/'),
+    w('/dhruv-epc/equipment/heavy-machining/'),
+    w('/dhruv-epc/equipment/plate-flanges/'),
+    w('/dhruv-epc/capabilities/'),
+    m('/dhruv-epc/proof/'),
+    m('/dhruv-epc/company/'),
+    // Precise Engineers
+    w('/precise-engineers/', 0.9),
+    w('/precise-engineers/products/metallic-bellows-expansion-joint/'),
+    w('/precise-engineers/products/telescopic-expansion-joint/'),
+    w('/precise-engineers/products/rubber-bellows/'),
+    w('/precise-engineers/products/fabric-bellows/'),
+    w('/precise-engineers/products/dismantling-joint/'),
+    w('/precise-engineers/products/flange-adaptor/'),
+    w('/precise-engineers/products/zero-velocity-valve/'),
+    w('/precise-engineers/products/dual-plate-check-valve/'),
+    w('/precise-engineers/products/damper/'),
+    w('/precise-engineers/capabilities/'),
+    m('/precise-engineers/proof/'),
+    m('/precise-engineers/company/'),
   ]
 }
