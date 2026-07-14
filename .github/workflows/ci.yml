@@ -60,8 +60,17 @@ jobs:
         run: node -e "
           const fs = require('fs');
           const csv = fs.readFileSync('content/redirect-map.csv', 'utf8');
-          const rows = csv.trim().split('\n').slice(1);
+          const rows = csv.trim().split('\n').filter(r => r.trim() && !r.startsWith('#') && !r.startsWith('legacy_path'));
           const invalid = rows.filter(r => !r.match(/^\/[^,]*,\/[^,]*,(301|302)$/));
           if (invalid.length) { console.error('Invalid rows:', invalid); process.exit(1); }
           console.log(rows.length + ' redirect rules validated');
         "
+
+      - name: Redirect runtime test (301 checks)
+        run: |
+          pnpm --filter @vedanta/web start &
+          SERVER_PID=$!
+          echo "Waiting for server..."
+          timeout 30 bash -c 'until curl -sf http://localhost:3000/ > /dev/null 2>&1; do sleep 2; done'
+          node scripts/test-redirects.mjs
+          kill $SERVER_PID

@@ -85,7 +85,7 @@ export default function PreciseProof() {
       {/* Demo data notice */}
       <section aria-label="Data notice" className="border-t border-steel-200">
         <div className="mx-auto max-w-wide px-6 py-8">
-          <p className="text-body-sm text-steel-500">
+          <p className="text-sm text-steel-500">
             Certification validity dates are DEMO-PLACEHOLDER pending document scans. All credentials independently verifiable with the issuing authority.
           </p>
         </div>
