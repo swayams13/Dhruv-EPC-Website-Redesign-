@@ -27,7 +27,7 @@ export interface FooterProps {
   entity: EntityRecord
   /** Sitemap columns: Equipment / Capabilities / Company / Resources */
   columns: FooterColumn[]
-  certificationsHref: string
+  certificationsHref?: string
   privacyHref: string
   termsHref: string
   /** LinkedIn only, as a labeled link (§18 Zone 3) */
@@ -154,7 +154,7 @@ export function Footer({
         <div className="border-b border-steel-200 bg-steel-50">
           <div className="mx-auto flex max-w-wide flex-wrap items-center gap-3 px-6 py-6">
             {stamps.map((code) => (
-              <Stamp key={code} code={code} href={certificationsHref} />
+              <Stamp key={code} code={code} {...(certificationsHref ? { href: certificationsHref } : {})} />
             ))}
           </div>
         </div>

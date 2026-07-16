@@ -48,7 +48,8 @@ export function HomeHero({
 }: HomeHeroProps): React.ReactElement {
   return (
     <section className="bg-steel-900">
-      <div className="mx-auto max-w-wide px-6 py-16">
+      <div className="mx-auto max-w-wide px-6 py-24">
+        <div className="mb-6 h-px w-16 bg-accent" aria-hidden="true" />
         <p className="text-xs font-medium uppercase tracking-caption text-steel-400">{eyebrow}</p>
         <h1 className="mt-4 max-w-content font-display text-display-xl font-medium text-steel-50">
           {headline}

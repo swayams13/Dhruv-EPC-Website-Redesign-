@@ -24,7 +24,7 @@ export function DhruvChrome() {
   return (
     <>
       <Header
-        logo={<span className="font-display text-h4 font-medium">Dhruv EPC</span>}
+        logo={<span className="font-display text-h4 font-bold">Dhruv EPC</span>}
         homeHref="/dhruv-epc"
         menuLabel="Equipment"
         menuGroups={GROUPS.map((g) => ({

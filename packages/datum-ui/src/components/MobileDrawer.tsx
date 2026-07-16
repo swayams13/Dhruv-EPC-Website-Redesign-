@@ -33,7 +33,7 @@ export interface MobileDrawerProps {
   className?: never
 }
 
-const row = 'flex h-12 w-full items-center text-data font-medium text-steel-950'
+const row = 'flex h-12 w-full items-center text-data font-medium text-steel-100'
 
 export function MobileDrawer({
   open,
@@ -100,14 +100,14 @@ export function MobileDrawer({
         role="dialog"
         aria-modal="true"
         aria-label="Menu"
-        className={`absolute inset-y-0 right-0 flex w-4/5 flex-col bg-white shadow-overlay transition-transform duration-deliberate ease-enter ${shown ? 'translate-x-0' : 'translate-x-full'}`}
+        className={`absolute inset-y-0 right-0 flex w-4/5 flex-col bg-steel-950 shadow-overlay transition-transform duration-deliberate ease-enter ${shown ? 'translate-x-0' : 'translate-x-full'}`}
       >
         <div className="flex justify-end p-3">
           <button
             type="button"
             aria-label="Close menu"
             onClick={onClose}
-            className="flex h-12 w-12 items-center justify-center rounded-sm text-steel-950"
+            className="flex h-12 w-12 items-center justify-center rounded-sm text-steel-50"
           >
             <Close />
           </button>
@@ -117,7 +117,7 @@ export function MobileDrawer({
           {groups.map((group) => {
             const isOpen = expanded === group.label
             return (
-              <div key={group.label} className="border-b border-steel-200">
+              <div key={group.label} className="border-b border-steel-800">
                 <button
                   type="button"
                   aria-expanded={isOpen}
@@ -137,7 +137,7 @@ export function MobileDrawer({
                       <li key={item.href}>
                         <a
                           href={item.href}
-                          className="flex h-12 items-center pl-4 text-data text-steel-700"
+                          className="flex h-12 items-center pl-4 text-data text-steel-300"
                         >
                           {item.label}
                         </a>
@@ -149,14 +149,14 @@ export function MobileDrawer({
             )
           })}
           {links.map((l) => (
-            <a key={l.href} href={l.href} className={`${row} border-b border-steel-200`}>
+            <a key={l.href} href={l.href} className={`${row} border-b border-steel-800`}>
               {l.label}
             </a>
           ))}
         </nav>
 
         {/* RFQ pinned at drawer bottom (§17) */}
-        <div className="flex flex-col border-t border-steel-200 p-6">
+        <div className="flex flex-col border-t border-steel-800 p-6">
           <Button variant="rfq" href={rfqHref}>
             Request a quote
           </Button>

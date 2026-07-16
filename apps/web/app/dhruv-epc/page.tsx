@@ -39,14 +39,16 @@ export default function DhruvHome() {
       />
 
       {/* Equipment grid — §16 product cards, no-photo variant until the works shoot (§P-5) */}
-      <section id="equipment" aria-labelledby="equipment-heading" className="mx-auto max-w-wide px-6 py-16">
-        <h2 id="equipment-heading" className="font-display text-h1 font-medium text-steel-950">
-          Equipment
-        </h2>
-        <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {equipment.map((eq) => (
-            <ProductCard key={eq.href} name={eq.name} oneLineScope={eq.scope} href={eq.href} />
-          ))}
+      <section id="equipment" aria-labelledby="equipment-heading" className="bg-steel-950">
+        <div className="mx-auto max-w-wide px-6 py-16">
+          <h2 id="equipment-heading" className="font-display text-h1 font-medium text-steel-50">
+            Equipment
+          </h2>
+          <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {equipment.map((eq) => (
+              <ProductCard key={eq.href} name={eq.name} oneLineScope={eq.scope} href={eq.href} onDark />
+            ))}
+          </div>
         </div>
       </section>
 

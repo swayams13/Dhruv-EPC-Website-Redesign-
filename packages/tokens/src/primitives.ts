@@ -1,26 +1,28 @@
-// Datum Design System v1.0 — Primitive tokens (§4-§11)
+// Datum Design System v1.1 — Primitive tokens (§4-§11)
 // Never consumed directly by components — use semantic aliases
+// v1.1: palette shift to warm-gray (paper/ink) and industrial amber per approved design direction (2026-07-15)
 
 export const steel = {
-  50: '#F7F8F8',
-  100: '#EFF1F2',
-  200: '#E1E5E7',
-  300: '#C7CDD1',
-  400: '#A3ACB2',
-  500: '#7B858D',
-  600: '#59636B',
-  700: '#3F4950',
-  800: '#2A3238',
-  900: '#1C2328',
-  950: '#121619',
+  50: '#F2F0EA',   // warm paper — page background
+  100: '#E5E2D9',
+  200: '#DCD8CE',  // light dividers, borders on dark
+  300: '#C7C2B7',  // secondary text on dark
+  400: '#B5B0A4',  // muted/tertiary text
+  500: '#7A7269',
+  600: '#5C5850',  // secondary text on light (5.6:1 on steel-50 ✓)
+  700: '#3D3A34',  // emphasized text on light (9.1:1 on steel-50 ✓)
+  800: '#282520',
+  900: '#1C1A18',  // dark elevated surface
+  950: '#14171A',  // ink — near-black page dark bg
 } as const
 
-// Arc amber — the weld pool; exclusive to action/emphasis (§4.3)
+// Arc amber — industrial safety accent; exclusive to action/emphasis (§4.3)
+// v1.1: shifted to golden amber #C98A2E per approved creative direction (2026-07-15)
 export const arc = {
-  300: '#FFA45E',
-  500: '#F0670F',
-  600: '#C24E05',
-  700: '#9A3F06',
+  300: '#E5AF6A',  // lighter amber for on-dark text/icons (8.7:1 on steel-950 ✓)
+  500: '#C98A2E',  // primary — RFQ button fill, datum ticks (6.1:1 with steel-950 text ✓)
+  600: '#8A5D1D',  // accent text on light (4.56:1 on steel-50 ✓ WCAG AA)
+  700: '#6B4915',  // hover/pressed for arc-600 text (6.5:1 on steel-50 ✓)
 } as const
 
 // Flex blue — Precise Engineers accent; "blue is pressure" law mirrors "amber is heat" (§5)
@@ -74,18 +76,16 @@ export const easing = {
   standard: 'cubic-bezier(0.4, 0.0, 0.2, 1)',
 } as const
 
-// Shadows — two values, cool-tinted (§9)
+// Shadows — two values, warm-tinted (§9); updated RGB to match steel-950 = #14171A (20,23,26)
 export const shadow = {
-  // Raised: tight, low — dropdowns, sticky header, toasts
-  raised: '0 2px 8px rgba(18,22,25,0.08), 0 1px 2px rgba(18,22,25,0.06)',
-  // Overlay: modals, drawers, lightbox
-  overlay: '0 16px 40px rgba(18,22,25,0.16), 0 2px 8px rgba(18,22,25,0.08)',
+  raised: '0 2px 8px rgba(20,23,26,0.08), 0 1px 2px rgba(20,23,26,0.06)',
+  overlay: '0 16px 40px rgba(20,23,26,0.16), 0 2px 8px rgba(20,23,26,0.08)',
 } as const
 
-// Typography families (§5.1)
+// Typography families (§5.1) — v1.1: Archivo display, IBM Plex Sans body per approved design
 export const fontFamily = {
-  display: 'Schibsted Grotesk, sans-serif',
-  body: 'Inter, sans-serif',
+  display: 'Archivo, sans-serif',
+  body: 'IBM Plex Sans, sans-serif',
   data: 'IBM Plex Mono, monospace',
 } as const
 

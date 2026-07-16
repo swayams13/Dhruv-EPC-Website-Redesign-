@@ -77,7 +77,7 @@ export default function GroupHome() {
         {/* §6.1.1 — typographic graphite hero; group photograph pending the
             works shoot (§P-5): photo band absent, never stock */}
         <section className="bg-steel-900">
-          <div className="mx-auto max-w-wide px-6 py-16">
+          <div className="mx-auto max-w-wide px-6 py-24">
             <p className="text-xs font-medium uppercase tracking-caption text-steel-400">
               ASME U &amp; U2 · IBR · EIL Approved · ISO 9001:2015
             </p>
@@ -93,42 +93,51 @@ export default function GroupHome() {
 
         {/* §6.1.2 — two doors, equal visual weight; accents live only inside
             the cards via data-company scope */}
-        <section aria-labelledby="doors-heading" className="mx-auto max-w-wide px-6 py-16">
-          <h2 id="doors-heading" className="sr-only">
-            Group companies
-          </h2>
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-            {DOORS.map((door) => (
-              <article
-                key={door.company}
-                data-company={door.company}
-                className="flex flex-col rounded-sm border border-steel-200 bg-white p-8"
-              >
-                <h3 className="font-display text-h3 font-medium text-steel-950">{door.name}</h3>
-                <p className="mt-2 text-body-lg text-steel-700">{door.scope}</p>
-                <ul className="mt-4 flex flex-wrap gap-2">
-                  {door.chips.map((chip) => (
-                    <li
-                      key={chip}
-                      className="rounded-sm border border-steel-200 bg-steel-50 px-3 py-1 font-mono text-helper text-steel-700"
-                    >
-                      {chip}
-                    </li>
-                  ))}
-                </ul>
-                <p className="mt-4 text-sm text-steel-600">{door.groups.join(' · ')}</p>
-                <div className="mt-6">
-                  <Button variant="link" href={door.href}>
-                    {door.cta} →
-                  </Button>
-                </div>
-              </article>
-            ))}
+        <section aria-labelledby="doors-heading" className="bg-steel-900">
+          <div className="mx-auto max-w-wide px-6 pb-24">
+            <h2 id="doors-heading" className="sr-only">
+              Group companies
+            </h2>
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+              {DOORS.map((door) => (
+                <article
+                  key={door.company}
+                  data-company={door.company}
+                  className="flex h-full flex-col rounded-sm border border-steel-800 bg-steel-950 p-8 transition-colors duration-fast ease-standard hover:border-accent"
+                >
+                  <div className="mb-8 h-px w-16 bg-accent" aria-hidden="true" />
+                  <h3 className="font-display text-h3 font-medium text-steel-50">{door.name}</h3>
+                  <p className="mt-2 text-body-lg text-steel-400">{door.scope}</p>
+                  <ul className="mt-4 flex flex-wrap gap-2">
+                    {door.chips.map((chip) => (
+                      <li
+                        key={chip}
+                        className="rounded-sm border border-steel-800 bg-steel-900 px-3 py-1 font-mono text-helper text-steel-400"
+                      >
+                        {chip}
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="mt-4 text-xs font-medium uppercase tracking-caption text-steel-600">
+                    {door.groups.join(' · ')}
+                  </p>
+                  <div className="mt-auto pt-8">
+                    <Button variant="link" onDark href={door.href}>
+                      {door.cta} →
+                    </Button>
+                  </div>
+                </article>
+              ))}
+            </div>
           </div>
         </section>
 
         {/* §6.1.3 — group stats band, combined figures, each sourced */}
-        <StatBand stats={groupStats} />
+        <section className="bg-steel-900">
+          <div className="mx-auto max-w-wide px-6">
+            <StatBand stats={groupStats} onDark />
+          </div>
+        </section>
 
         {/* §6.1.4 — shared proof strip: certifications union, entity-tagged
             via company sub-headings. Client wall omitted — no verified client

@@ -61,8 +61,8 @@ export const datumPreset = {
       overlay: shadow.overlay,
     },
     fontFamily: {
-      display: ['Schibsted Grotesk', 'sans-serif'],
-      sans: ['Inter', 'sans-serif'],
+      display: ['Archivo', 'sans-serif'],
+      sans: ['IBM Plex Sans', 'sans-serif'],
       mono: ['IBM Plex Mono', 'monospace'],
     },
     transitionDuration: {
@@ -112,6 +112,7 @@ export const datumPreset = {
       // §5.2 fluid steps (360px floor → 1440px ceiling, linear between):
       // size(vw) = min + (max−min) · (100vw − 360px) / 1080px
       fontSize: {
+        'logo-sub': ['9px', { lineHeight: '1.4' }],
         data: ['15px', { lineHeight: '1.5' }],
         helper: ['13px', { lineHeight: '1.5' }],
         'display-xl': ['clamp(40px, 32px + 2.2222vw, 64px)', { lineHeight: '1.05' }],

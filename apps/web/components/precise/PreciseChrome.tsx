@@ -23,7 +23,7 @@ export function PreciseChrome() {
   return (
     <>
       <Header
-        logo={<span className="font-display text-h4 font-medium">Precise Engineers</span>}
+        logo={<span className="font-display text-h4 font-bold">Precise Engineers</span>}
         homeHref="/precise-engineers"
         menuLabel="Products"
         menuGroups={GROUPS.map((g) => ({
