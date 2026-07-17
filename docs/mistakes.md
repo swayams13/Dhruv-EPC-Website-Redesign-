@@ -6,6 +6,16 @@ If the rule is general, promote it into CLAUDE.md.
 ---
 <!-- entries go below this line -->
 
+## 2026-07-16 — AI-generated images used as exploded-view frames (rule override)
+
+**What happened:** Gemini-generated renders (not real works photography) placed in `apps/web/public/exploded/` for all three products (heat-exchanger, pressure-vessel, expansion-joint). CLAUDE.md §Never explicitly bans AI-generated images from the site.
+
+**Root cause:** No real works photography exists yet for the exploded-view sequence feature. AI renders were generated as the only available source while real photography is pending.
+
+**Decision:** User explicitly approved the override ("Rule override — use as-is") for the phase-4 prototype. The `// ═══ PLACEHOLDER PATHS — swap in real generated frames before launch ═══` comment in all three content files marks the replacement obligation.
+
+**Rule that prevents silent recurrence:** Any PR touching `apps/web/public/` image files must state in the PR description whether the images are real works photography or AI renders. AI renders require explicit human sign-off in the PR. Never silently treat renders as photography in commit messages.
+
 ## 2026-07-09 — primitives.ts flex scale written without human review
 
 **What happened:** Session 0 scaffold wrote hex values for the `flex` company colour scale (`flex-50` through `flex-900`) into `packages/tokens/src/primitives.ts` without first getting the exact palette approved by Swayam. BUILD-PLAYBOOK.md Session 2 is explicit that new hex values require human approval before being committed.

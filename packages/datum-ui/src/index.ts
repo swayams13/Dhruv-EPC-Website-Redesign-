@@ -4,6 +4,14 @@
 
 export { Stamp, type StampProps } from './components/Stamp'
 export { DatumRule, type DatumRuleProps } from './components/DatumRule'
+// DimensionLabel: opened to the barrel 2026-07-16 (docs/decisions.md) so the
+// group home's bespoke hero can reuse the exact §11 signature-moment label
+// instead of re-implementing the count-up mechanic.
+export { DimensionLabel, type DimensionLabelProps } from './components/DimensionLabel'
+// DomainIcon: the §12 domain set as code (2026-07-16, docs/ui-ux-review.md §5
+// P2 recommendation) — section-view icons for product cards until the works
+// shoot supplies real photography.
+export { DomainIcon, type DomainIconProps, type DomainIconName } from './components/DomainIcon'
 export { Button, type ButtonProps } from './components/Button'
 export { Input, type InputProps } from './components/Input'
 export { Select, type SelectProps, type SelectOption } from './components/Select'

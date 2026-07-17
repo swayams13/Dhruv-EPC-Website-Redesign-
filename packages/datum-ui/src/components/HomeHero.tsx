@@ -77,8 +77,14 @@ export function HomeHero({
             )}
             <DatumRule animate />
           </div>
-          {/* full-bleed: photography bands alone may exceed the content widths (§7) */}
-          <div className="mt-2 aspect-video w-full overflow-hidden bg-steel-800">
+          {/* full-bleed: photography bands alone may exceed the content widths (§7).
+              The band's aspect ratio is owned by the photo child, not this
+              wrapper (2026-07-16, docs/ui-ux-review.md §3.6): a fixed
+              aspect-video + overflow-hidden here clips the exploded-view
+              sequence's scroll track and disables its position:sticky —
+              sticky fails inside overflow-hidden ancestors. Plain photos
+              passed by pages must bring their own aspect class. */}
+          <div className="mt-2 w-full bg-steel-800">
             {photo}
           </div>
         </>

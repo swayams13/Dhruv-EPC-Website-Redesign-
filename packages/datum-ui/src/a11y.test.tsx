@@ -19,6 +19,7 @@ import * as ChoiceCardStories from './components/ChoiceCard.stories'
 import * as UploadDropzoneStories from './components/UploadDropzone.stories'
 import * as SpecTableStories from './components/SpecTable.stories'
 import * as ProductCardStories from './components/ProductCard.stories'
+import * as DomainIconStories from './components/DomainIcon.stories'
 import * as ProjectCardStories from './components/ProjectCard.stories'
 import * as BreadcrumbsStories from './components/Breadcrumbs.stories'
 import * as HeaderStories from './components/Header.stories'
@@ -47,6 +48,7 @@ const allStories = {
   UploadDropzone: UploadDropzoneStories,
   SpecTable: SpecTableStories,
   ProductCard: ProductCardStories,
+  DomainIcon: DomainIconStories,
   ProjectCard: ProjectCardStories,
   Breadcrumbs: BreadcrumbsStories,
   Header: HeaderStories,

@@ -11,6 +11,7 @@
 //   engineering-supplied data before launch (plan §P-5). ═══
 
 import { Approval, Certification, EntityRecord, Product } from '@vedanta/schemas'
+import type { ExplodedFrame } from '../../components/ExplodedSequence'
 
 export const dhruvEntity = EntityRecord.parse({
   companySlug: 'dhruv-epc',
@@ -156,6 +157,18 @@ export const dhruvStats = [
   { value: 'U · U2 · IBR', label: 'Stamps held' }, // [source: vedantagroup.net]
   { value: '100 T', label: 'Max unit weight', source: 'DEMO figure — engineering data pending' }, // DEMO-PLACEHOLDER
   { value: '5 sectors', label: 'Oil & gas to steel' }, // [source: vedantagroup.net]
+]
+
+// Exploded-view pressure-vessel frame sequence — home hero photo slot.
+// docs/design.md + docs/decisions.md [2026-07-16]: photorealistic AI-render
+// override, approved for this feature only. Frames go under
+// apps/web/public/exploded/pressure-vessel/ — see
+// docs/exploded-view-image-generation-guide.md for exact filenames/specs.
+// ═══ PLACEHOLDER PATHS — swap in real generated frames before launch ═══
+export const dhruvExplodedFrames: ExplodedFrame[] = [
+  { avif: '/exploded/pressure-vessel/frame-01.avif', webp: '/exploded/pressure-vessel/frame-01.webp' },
+  { avif: '/exploded/pressure-vessel/frame-02.avif', webp: '/exploded/pressure-vessel/frame-02.webp' },
+  { avif: '/exploded/pressure-vessel/frame-03.avif', webp: '/exploded/pressure-vessel/frame-03.webp' },
 ]
 
 // Mega-menu / home-grid equipment list — [source: vedantagroup.net products].

@@ -4,9 +4,9 @@
 // progress.md. Values are stated as verifiable practices, not adjectives
 // (house style: no superlatives without a sourced number).
 import type { Metadata } from 'next'
-import { Button, Footer, PageHero, StatBand } from '@vedanta/datum-ui'
+import { Button, PageHero, StatBand } from '@vedanta/datum-ui'
 import { buildBreadcrumbList } from '@vedanta/schemas'
-import { groupEntity, groupStats } from '../../../lib/content/group'
+import { groupStats } from '../../../lib/content/group'
 
 export const metadata: Metadata = {
   title: 'About — Vedanta Group',
@@ -36,23 +36,9 @@ const VALUES = [
   },
 ]
 
-const FOOTER_COLUMNS = [
-  {
-    heading: 'Companies',
-    links: [
-      { label: 'Dhruv EPC Solutions', href: '/dhruv-epc' },
-      { label: 'Precise Engineers', href: '/precise-engineers' },
-    ],
-  },
-  {
-    heading: 'Group',
-    links: [
-      { label: 'About', href: '/about' },
-      { label: 'Contact', href: '/contact' },
-      { label: 'Request a Quote', href: '/request-a-quote' },
-    ],
-  },
-]
+// Footer is owned by (group)/layout.tsx — pages must not render their own
+// (2026-07-16 audit P0-1: per-page Footers stacked a second full footer
+// under the layout's on every group route).
 
 export default function AboutPage() {
   return (
@@ -155,14 +141,6 @@ export default function AboutPage() {
           </div>
         </section>
       </main>
-
-      <Footer
-        entity={groupEntity}
-        columns={FOOTER_COLUMNS}
-        certificationsHref="/#proof"
-        privacyHref="/privacy"
-        termsHref="/terms"
-      />
     </>
   )
 }

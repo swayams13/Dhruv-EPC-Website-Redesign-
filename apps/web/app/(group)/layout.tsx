@@ -38,9 +38,12 @@ export default function GroupLayout({ children }: { children: React.ReactNode })
     <div data-company="group">
       <GroupChrome />
       {children}
+      {/* certificationsHref: stamps link to the group home proof strip —
+          carried over from the removed per-page Footers (audit P0-1). */}
       <Footer
         entity={groupEntity}
         columns={FOOTER_COLUMNS}
+        certificationsHref="/#proof"
         privacyHref="/privacy"
         termsHref="/terms"
       />

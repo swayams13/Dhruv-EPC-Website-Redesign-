@@ -4,10 +4,18 @@
 // elements on this page: the door CTAs are accent-colored links (§13
 // variant="link"), not fills.
 import type { Metadata } from 'next'
-import { Button, CertificationCard, Footer, StatBand, type StampProps } from '@vedanta/datum-ui'
+import {
+  Button,
+  CertificationCard,
+  DatumRule,
+  DimensionLabel,
+  StatBand,
+  type StampProps,
+} from '@vedanta/datum-ui'
 import { buildOrganization } from '@vedanta/schemas'
+import { ExplodedSequence } from '../../components/ExplodedSequence'
 import { dhruvCertifications } from '../../lib/content/dhruv-epc'
-import { groupEntity, groupStats } from '../../lib/content/group'
+import { groupEntity, groupExplodedFrames, groupStats } from '../../lib/content/group'
 import { preciseCertifications } from '../../lib/content/precise-engineers'
 
 export const metadata: Metadata = {
@@ -47,23 +55,9 @@ const STAMP_BY_NAME: Record<string, StampProps['code'] | undefined> = {
   'ISO 9001:2015': 'ISO-9001',
 }
 
-const FOOTER_COLUMNS = [
-  {
-    heading: 'Companies',
-    links: [
-      { label: 'Dhruv EPC Solutions', href: '/dhruv-epc' },
-      { label: 'Precise Engineers', href: '/precise-engineers' },
-    ],
-  },
-  {
-    heading: 'Group',
-    links: [
-      { label: 'About', href: '/about' },
-      { label: 'Contact', href: '/contact' },
-      { label: 'Request a Quote', href: '/request-a-quote' },
-    ],
-  },
-]
+// Footer is owned by (group)/layout.tsx — pages must not render their own
+// (2026-07-16 audit P0-1: this page previously stacked a second full footer
+// under the layout's).
 
 export default function GroupHome() {
   return (
@@ -74,10 +68,13 @@ export default function GroupHome() {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganization(groupEntity)) }}
         />
 
-        {/* §6.1.1 — typographic graphite hero; group photograph pending the
-            works shoot (§P-5): photo band absent, never stock */}
+        {/* §6.1.1 — typographic graphite hero, compressed. Doors-first
+            reorder (2026-07-16, docs/ui-ux-review.md §5 / decisions.md): the
+            two-doors section is this page's reason to exist and now sits
+            inside the first scroll; the exploded-view sequence moved below
+            the doors as the shared-capability statement. */}
         <section className="bg-steel-900">
-          <div className="mx-auto max-w-wide px-6 py-24">
+          <div className="mx-auto max-w-wide px-6 pb-16 pt-24">
             <p className="text-xs font-medium uppercase tracking-caption text-steel-400">
               ASME U &amp; U2 · IBR · EIL Approved · ISO 9001:2015
             </p>
@@ -132,9 +129,32 @@ export default function GroupHome() {
           </div>
         </section>
 
-        {/* §6.1.3 — group stats band, combined figures, each sourced */}
+        {/* Exploded-view heat exchanger — the shared-capability statement,
+            after the doors (doors-first reorder, docs/ui-ux-review.md §5).
+            Photo-law exception logged in docs/decisions.md [2026-07-16];
+            full spec in docs/design.md. Reuses HomeHero's DatumRule +
+            DimensionLabel signature-moment markup verbatim (§11). trackVh
+            160: enough travel for a legible five-frame scrub without
+            burying the stats band. No aspect-video/overflow-hidden wrapper —
+            the sequence owns its heights, and overflow-hidden on an ancestor
+            disables position:sticky (docs/ui-ux-review.md §3.5). */}
         <section className="bg-steel-900">
           <div className="mx-auto max-w-wide px-6">
+            <div className="pb-2">
+              {/* Dimension: heat-exchangers spec-table max shell diameter
+                  (DEMO-PLACEHOLDER, pending engineering data). */}
+              <DimensionLabel label="Ø 4,000 mm" animate />
+            </div>
+            <DatumRule animate />
+          </div>
+          <div className="mt-2 w-full bg-steel-800">
+            <ExplodedSequence frames={groupExplodedFrames} trackVh={160} />
+          </div>
+        </section>
+
+        {/* §6.1.3 — group stats band, combined figures, each sourced */}
+        <section className="bg-steel-900">
+          <div className="mx-auto max-w-wide px-6 pt-12">
             <StatBand stats={groupStats} onDark />
           </div>
         </section>
@@ -174,15 +194,8 @@ export default function GroupHome() {
           </div>
         </section>
       </main>
-
-      {/* §6.1.5 — title-block footer, group entity record */}
-      <Footer
-        entity={groupEntity}
-        columns={FOOTER_COLUMNS}
-        certificationsHref="#proof"
-        privacyHref="/privacy"
-        termsHref="/terms"
-      />
+      {/* §6.1.5 title-block footer renders from (group)/layout.tsx —
+          audit P0-1: this page previously stacked a second full footer. */}
     </>
   )
 }

@@ -887,6 +887,124 @@ pnpm build       ✓  35 static routes + 6 dynamic, zero errors/warnings
 
 ---
 
+### Session 15 — Exploded-view hero sequence (branch `phase-4-exploded-hero-sequence`)
+
+Reopens the Session-8 template lock, narrowly — see `docs/decisions.md` [2026-07-16] for the full override log (photo-law exception, motion-budget addendum). Full spec in `docs/design.md`; file-by-file plan in `docs/implementation-plan-exploded-hero.md`; image-sourcing steps in `docs/exploded-view-image-generation-guide.md`.
+
+#### What was done
+
+- **New component:** `apps/web/components/ExplodedSequence.tsx` — scroll-bound exploded-view frame sequence (assembled → fully exploded), cross-fading via opacity only. Lives in `apps/web`, not `@vedanta/datum-ui` (which takes no `next` dependency — see `ProductCard`'s existing "pages pass next/image" convention). No new npm dependency (plain scroll + rAF, no GSAP/Framer Motion). No new design token (scroll-track height is a behavioral constant, set via inline style, not a Tailwind class — sidesteps `tailwindcss/no-arbitrary-value` without a §26 governance event). `prefers-reduced-motion` renders a single static fully-exploded frame with no scroll track.
+- **Barrel change:** `DimensionLabel` opened from internal-only to the `@vedanta/datum-ui` public export (`packages/datum-ui/src/index.ts`) so the group home's bespoke hero markup can reuse the exact §11 signature-moment count-up mechanic instead of re-implementing it.
+- **Content:** added `dhruvExplodedFrames`, `preciseExplodedFrames`, `groupExplodedFrames` to the respective `lib/content/*` files — placeholder frame paths (`/exploded/<product>/frame-01..05.avif|webp`) pointing at `apps/web/public/exploded/<product>/`, which doesn't exist as real image content yet (README placeholders only — see swap-list below).
+- **Wired into all three home heroes:**
+  - `dhruv-epc/page.tsx` — `<HomeHero photo={<ExplodedSequence frames={dhruvExplodedFrames} />} dimensionLabel="Ø 5,000 mm" />` (pressure-vessel exploded view; dimension = pressure-vessels spec-table max shell diameter, DEMO-PLACEHOLDER).
+  - `precise-engineers/page.tsx` — same pattern, expansion-joint exploded view; dimension = metallic-bellows-expansion-joint max circular size, **sourced** (`8,000 mm NB`), not a demo figure.
+  - `(group)/page.tsx` — heat-exchanger exploded view. This page doesn't use `HomeHero` (bespoke hero, no CTA in the hero per the two-doors pattern), so a photo band was appended directly to its existing hero markup, reusing `DatumRule` + `DimensionLabel` verbatim rather than forcing a `HomeHero` refactor. Superseded the prior "photo band absent, never stock" comment.
+- **Docs:** new `docs/decisions.md` (override log), `docs/design.md`, `docs/exploded-view-image-generation-guide.md`, `docs/implementation-plan-exploded-hero.md`; `datum-design-system.md` §11 and §19 amended with the scroll-bound-sequence addendum and the named photo-law exception.
+
+#### Gate result (partial — see limitation below)
+
+```
+tsc --noEmit    ✓  packages/datum-ui — zero errors
+tsc --noEmit    ✓  apps/web — zero errors (1 strict-null error found and fixed:
+                    ExplodedSequence.tsx's reduced-motion branch needed an
+                    explicit `if (!hero) return null` guard)
+eslint          ✓  zero errors on all touched files in both packages —
+                    confirms no tailwindcss/no-arbitrary-value violations
+pnpm test       ⏳ NOT RUN — see limitation
+pnpm build      ⏳ NOT RUN — see limitation
+```
+
+**Limitation, flagged not hidden:** this session ran through the device-bridge sandbox, which has no network access and a native-module architecture mismatch (`vitest`'s bundled `@rollup/rollup-linux-arm64-gnu` isn't present, and reinstalling needs network the sandbox doesn't have). `tsc` and `eslint` run fine locally without pnpm/turbo (found and used the workspace-local binaries directly), so those two gates are real. `pnpm test` and `pnpm build` need to be run by Swayam locally before this branch is considered gate-clean — same four commands as every prior session (`pnpm typecheck && pnpm lint && pnpm test && pnpm build`).
+
+#### Deviations / flagged (none silent)
+
+1. **Photo-law + motion-budget override** — deliberate, logged in `docs/decisions.md`, not a silent rule violation. Scope: these three home-hero photo slots only.
+2. **Placeholder image paths** — no real exploded-view frames exist yet; `apps/web/public/exploded/**` has README markers only. Swap-list: generate frames per `docs/exploded-view-image-generation-guide.md`, drop them in, matching the exact filenames already referenced in the three `lib/content/*` files.
+3. **v1 scope cut** — ships with the existing single `DimensionLabel` count-up (already wired) rather than `design.md`'s fuller "3–5 in-image callouts" idea, to keep this PR's diff small. Flagged as a v2 follow-up, not forgotten.
+4. **Launch-checklist gate 10 ("Zero stock imagery")** now needs re-wording to carve out this named exception rather than silently continuing to read PASS against a rule that no longer holds universally — not yet done, tracked in `docs/decisions.md`'s follow-up list.
+5. **Not committed to git from this session** — the device-bridge sandbox has no git identity configured, and this agent doesn't set git config without being asked; asked, and the answer was for Swayam to review and commit locally. All files above are written to disk on branch `phase-4-exploded-hero-sequence`, uncommitted.
+
+#### Commits
+
+None yet — see deviation #5 above. All changes are uncommitted working-tree edits on `phase-4-exploded-hero-sequence`.
+
+#### Review pass (same day) — senior UI/UX critique, `docs/ui-ux-review.md`
+
+An adversarial design review of the whole platform including the Session-15 work itself. Full report in `docs/ui-ux-review.md`; six defects found in the exploded-view implementation, all fixed:
+
+1. **Sticky band pinned under the fixed header** — the header is `fixed` (72→60px); v1's `sticky top-0` sat 60px underneath it. Fixed with a 60px offset + `max-height: calc(100vh - 60px)` for short viewports, in `globals.css`.
+2. **Hydration flash + CLS** — v1 swapped SSR markup for a JS-measured branch after hydration (frame jump + wrapper height change post-paint). Fixed CSS-first: `.exploded-track/-static/-scrub` in `globals.css`; SSR heights are final per device class; scrub initializes at frame 0 = scroll position 0.
+3. **Mobile dead scroll** — 220vh track behind a ~211px sticky band on portrait phones. Resolved: <768px renders the static fully-exploded frame, no track (same as reduced motion). Datum §11 addendum updated; decisions.md follow-up marked resolved.
+4. **LCP priority on the wrong frame + mixed `<picture>`/`next/image` pipeline** — priority now on the static exploded shot (same file as the scrub's final frame, so never wasted); `next/image` everywhere.
+5. **Photo-slot clipping (would have broken Dhruv/Precise scrub outright)** — `HomeHero`'s `aspect-video overflow-hidden` band wrapper clipped the track and disabled `position:sticky`. Wrapper unframed (one structural line in `HomeHero.tsx`, logged as an amendment in decisions.md §3); story placeholder now owns its ratio. No page passed a plain photo before this branch — no regression.
+6. **Group doors too deep** — `trackVh={160}` on the group page keeps the two-doors section (the page's stated reason to exist) reachable a viewport sooner.
+
+Gate re-run after review-pass changes: `tsc --noEmit` ✓ both packages; `eslint` ✓ all touched files. `pnpm test` / `pnpm build` still owed locally (same sandbox limitation as above). Strategic recommendations not implemented (works shoot priority, proof-slot gaps, doors-first group layout option, §12 icon set for product cards, RFQ funnel events) are ranked in the report §5.
+
+---
+
+### Session 16 — Frontend redesign pass (subagent audit + fixes), branch `phase-4-exploded-hero-sequence`
+
+Plan of record: `docs/frontend-redesign-plan.md` (phases A–D, frontend-only guardrails — backend surfaces untouched by rule). Two subagents ran: a full page-level audit (25 ranked findings → `docs/frontend-audit.md`) and the §12 icon-set design.
+
+#### What was done (Phase A)
+
+- **P0-1 fixed — double footer on every `(group)` route:** `/`, `/about`, `/contact` each rendered a per-page `<Footer>` while `(group)/layout.tsx` also renders one (the audit caught about/contact; the group home had the same defect). Per-page Footers + their `FOOTER_COLUMNS` removed; layout owns chrome; `certificationsHref="/#proof"` moved onto the layout's Footer.
+- **P0-2 fixed — RFQ step-1 dead-click:** `company` is schema-optional (for `?company=` prefill), so an unset company passed zod and the failure landed on `equipmentType` — whose error node renders inside a fieldset that only mounts once company is set. `continueToContact()` now guards company explicitly with a rendered, friendly `role="alert"` message under the company fieldset.
+- **P0-3 NOT fixed — needs Swayam:** DEMO engineering figures asserted as fact in `dhruv-epc/capabilities` metadata/hero while the spec table carries "DEMO figure" notes (audit #3). Content/claims decision, queued in the plan Phase B.
+- **§12 domain set shipped as code:** new `DomainIcon` in `@vedanta/datum-ui` — 18 section-view icons to the §12 construction (24×24, 1.5px, squared caps/joins). Stories (`AllIcons`, `FeatureSize`) + a11y-map entry added per the package's NEW COMPONENT CHECKLIST. Subagent flagged `weldTorch`/`crane`/`machining`/`flange` as worth an eyeball in Storybook at 16px.
+- **`ProductCard` icon slot (additive):** optional `icon` prop rendered only when no photo is passed — §12 steel-500, aria-hidden. Both home grids (8 Dhruv + 9 Precise cards) now pass mapped icons via `ICON_BY_HREF` in the page files. Photography remains the end state; the slot self-retires as photos arrive.
+- **Doors-first group home:** copy-only compressed hero → doors → exploded sequence (shared-capability statement) → stats → proof. Logged in `docs/decisions.md`; single-section revert if it reads wrong in the browser.
+
+#### Gate result (partial — sandbox)
+
+```
+tsc --noEmit    ⏳ run below
+eslint          ⏳ run below
+pnpm test       ⏳ NOT RUN — sandbox (needs local run; NOTE: a11y map gained DomainIcon)
+pnpm build      ⏳ NOT RUN — sandbox (needs local run)
+```
+
+#### Deviations / flagged (none silent)
+
+1. Doors-first supersedes plan §6.1.1/§6.1.2 ordering — logged in decisions.md with revert path.
+2. Icon subagent's four least-confident glyphs need a human Storybook pass before merge.
+3. Audit P1/P2 findings (#4–#25) deliberately deferred to plan Phases C/D — not silently dropped; the full punch list lives in `docs/frontend-audit.md`.
+
+---
+
+### Session 17 — Real exploded-view frames validated, processed and wired, branch `phase-4-exploded-hero-sequence`
+
+Swayam supplied real Gemini-rendered exploded-view photo sets for all three products (pasted-image handoff resolved by having Swayam save files under `_incoming-exploded/<product>/` on the connected Mac, staged in via the remote-devices bridge — mid-session the bridge dropped file-access tools for an extended period while `get_device_info` kept reporting the device online; resolved once Swayam restarted the desktop app).
+
+#### What was done
+
+- **Validated all 11 source frames** (expansion-joint 4, heat-exchanger 4, pressure-vessel 3) against the continuity checklist in `docs/exploded-view-image-generation-guide.md`: consistent camera angle/lighting/background and a single held product configuration per set, no duplicate frames. Findings reported to Swayam before any processing:
+  - **Heat-exchanger** — strongest set; clean tube-bundle/tube-sheet reveal, no artifacts.
+  - **Expansion-joint** — good set; the 50%→fully-exploded pair is nearly identical (uneven scroll pacing), not blocking.
+  - **Pressure-vessel** — usable but weakest: only 3 frames (vs. 4 for the other two), only the dished head separates (shell courses never do despite visible weld-seam lines), and a small embossed-text artifact on the inspection-plate cover in the 25% frame. Swayam's call (asked via question): accept as-is and flag as a known weak point for a possible future regenerate, rather than block on a reshoot.
+- **Processed and wired all three sets:** cropped pressure-vessel's 4:3 source to 16:9 (identical crop window across all 3 frames to preserve alignment/no jitter — content-aware, verified by eye before committing), re-encoded all 11 frames to WebP (expansion-joint/heat-exchanger needed no crop, already ~16:9), renamed to the `frame-01..0N.webp` convention, committed to `apps/web/public/exploded/<product>/` on the connected Mac, and updated the frame arrays in `lib/content/{dhruv-epc,precise-engineers,group}.ts` to the real, correct paths and counts (4/4/3, not the assumed 5/5/5). Placeholder-path comments removed now that real assets exist.
+- **`avif` field:** no AVIF encoder was reachable in this sandbox (pip/apt package mirrors are outside the network allowlist here) to produce real `.avif` binaries. Since `ExplodedSequence.tsx` only reads `.webp` — next/image's built-in optimizer already re-encodes/serves true AVIF over the wire from a WebP source — both `ExplodedFrame` fields now point at the same real `.webp` file. No functional loss; documented inline in each content file.
+- **Corrected a stale decisions.md entry:** an earlier pass the same day (before this conversation's context was summarized/resumed) had processed a first-draft image batch — 2 usable expansion-joint frames only, one with a visible render-artifact glint — into real `.avif` files under `apps/web/public/exploded/` and marked the "real frames" follow-up resolved with incorrect 4/2/3 counts, citing a `docs/mistakes.md` entry that does not exist. Those stale `.avif`/README files were superseded and moved to `apps/web/public/exploded/_to_delete-stale-avif/` (device_bash cannot delete files on the connected Mac — Swayam should delete that folder). `docs/decisions.md` corrected to reflect the real, verified 4/4/3 frame counts and the pressure-vessel flag.
+
+#### Gate result
+
+```
+tsc --noEmit (apps/web, via device_bash on the connected Mac)   ✓ clean
+eslint (touched content files + ExplodedSequence.tsx)           ✓ clean
+pnpm test / pnpm build                                          ⏳ NOT RUN — sandbox limitation, Swayam to run locally
+```
+
+#### Deviations / flagged (none silent)
+
+1. Pressure-vessel ships with 3 frames and a shell that doesn't separate — accepted by Swayam, logged as a known weak point in `docs/decisions.md`, not a launch blocker.
+2. Expansion-joint's last two frames (50%/fully-exploded) are visually near-identical — cosmetic, uneven scroll pacing only, not fixed this session.
+3. `apps/web/public/exploded/_to_delete-stale-avif/` needs manual deletion by Swayam — outside device_bash's permissions.
+4. Real AVIF binaries were not produced (sandbox network restriction) — `avif`/`webp` fields both point at the same WebP asset; no visitor-facing effect since next/image negotiates format server-side regardless.
+
+---
+
 ### Deferred queue — ⏰ REMIND SWAYAM AFTER SESSION 10 (his instruction, 2026-07-10)
 
 1. **Session 6 human gate:** E2E RFQ with real creds — `STORAGE_*`, `RESEND_API_KEY`,

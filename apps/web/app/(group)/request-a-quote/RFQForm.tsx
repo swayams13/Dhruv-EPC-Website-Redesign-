@@ -97,6 +97,15 @@ export function RFQForm({ initialCompany, fallbackEmail, fallbackPhone }: RFQFor
   }
 
   function continueToContact() {
+    // audit P0-2 (2026-07-16): company is schema-optional (prefill via
+    // ?company=), so zod passes an unset company and fails equipmentType —
+    // whose error node lives in a fieldset that only mounts once company is
+    // set. Net effect: Continue dead-clicked with zero feedback. Guard the
+    // company choice explicitly with a friendly, rendered message.
+    if (!company) {
+      setErrors({ company: 'Select which company this requirement is for' })
+      return
+    }
     const parsed = RFQStep1.safeParse(step1Data())
     if (!parsed.success) {
       setErrors(fieldErrors(parsed.error.issues))
@@ -181,6 +190,14 @@ export function RFQForm({ initialCompany, fallbackEmail, fallbackPhone }: RFQFor
                   }}
                 />
               </div>
+              {/* audit P0-2 (2026-07-16): without this, Continue dead-clicked
+                  with zero feedback when no company was picked — the error
+                  existed in state but was rendered nowhere. */}
+              {errors.company && (
+                <p role="alert" className="mt-2 text-helper text-signal-error">
+                  {errors.company}
+                </p>
+              )}
             </fieldset>
           )}
 

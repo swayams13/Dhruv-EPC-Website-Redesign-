@@ -19,6 +19,10 @@ export interface ProductCardProps {
   /** Real works photograph filling the 4:3 frame (pass next/image from pages).
       Absent → the no-photo variant: text-only card, never a stock placeholder. */
   photo?: React.ReactNode
+  /** §12 domain icon (pass <DomainIcon size={32} />) — interim visual for the
+      no-photo variant until the works shoot (2026-07-16, ui-ux-review §5).
+      Ignored when photo is present; steel-500 per §12's default icon color. */
+  icon?: React.ReactNode
   /** Mono spec chips, max 3 rendered (§16) */
   chips?: string[]
   /** Dark ground variant — steel-900 card, accent-border hover (§T-2) */
@@ -31,6 +35,7 @@ export function ProductCard({
   oneLineScope,
   href,
   photo,
+  icon,
   chips,
   onDark = false,
 }: ProductCardProps): React.ReactElement {
@@ -42,6 +47,11 @@ export function ProductCard({
       >
         {photo && <div className="aspect-4/3 w-full overflow-hidden bg-steel-800">{photo}</div>}
         <div className="p-6">
+          {!photo && icon && (
+            <span aria-hidden="true" className="mb-4 block text-steel-500">
+              {icon}
+            </span>
+          )}
           <h3 className="font-display text-h3 font-semibold text-steel-50">{name}</h3>
           <p className="mt-2 text-sm text-steel-500">{oneLineScope}</p>
           {chips && chips.length > 0 && (
@@ -71,6 +81,11 @@ export function ProductCard({
     >
       {photo && <div className="aspect-4/3 w-full overflow-hidden bg-steel-100">{photo}</div>}
       <div className="p-6">
+        {!photo && icon && (
+          <span aria-hidden="true" className="mb-4 block text-steel-500">
+            {icon}
+          </span>
+        )}
         <h3 className="font-display text-h3 font-semibold text-steel-950">{name}</h3>
         <p className="mt-2 text-sm text-steel-600">{oneLineScope}</p>
         {chips && chips.length > 0 && (

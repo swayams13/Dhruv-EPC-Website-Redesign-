@@ -4,7 +4,9 @@
 // tick drops, and this label counts up in mono to its true figure
 // ("Ø 3,600 mm") over motion-signature. Reduced motion renders the final
 // frame — a first-class mode, not a fallback.
-// Internal (not in the barrel): it exists only inside hero anatomy (§19).
+// Exported from the barrel 2026-07-16 (docs/decisions.md) so the group
+// home's bespoke hero markup can reuse this exact mechanic — previously
+// internal-only, used only inside HomeHero/ProductHero anatomy (§19).
 
 import { useEffect, useState } from 'react'
 import { semanticBase } from '@vedanta/tokens'
