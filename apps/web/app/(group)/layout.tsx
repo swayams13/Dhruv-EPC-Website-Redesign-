@@ -1,6 +1,7 @@
 // Group holding page — steel-only, no color accent (§5)
 // data-company="group" scopes CSS variables to neutral steel values
 
+import Link from 'next/link'
 import { Footer } from '@vedanta/datum-ui'
 import { GroupChrome } from '../../components/group/GroupChrome'
 import { groupEntity } from '../../lib/content/group'
@@ -46,6 +47,7 @@ export default function GroupLayout({ children }: { children: React.ReactNode })
         certificationsHref="/#proof"
         privacyHref="/privacy"
         termsHref="/terms"
+        linkComponent={Link}
       />
     </div>
   )

@@ -2,6 +2,7 @@
 // 8+4 layout: two-step form left, reassurance rail right.
 import type { Metadata } from 'next'
 import { RFQForm } from './RFQForm'
+import { telHref } from '../../../lib/format'
 
 export const metadata: Metadata = {
   title: 'Request a Quote — Vedanta Group',
@@ -46,7 +47,7 @@ function ReassuranceRail({
             {/* §25 touch: 44px comfortable target for the call/email escape hatch */}
             {fallbackPhone && (
               <a
-                href={`tel:${fallbackPhone}`}
+                href={telHref(fallbackPhone)}
                 className="inline-flex min-h-row items-center font-mono text-accent-text hover:text-accent-text-hover hover:underline"
               >
                 {fallbackPhone}

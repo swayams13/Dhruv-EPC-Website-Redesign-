@@ -3,6 +3,7 @@
 // Menu content comes from the seeded product list; entity contact from the
 // EntityRecord (never hard-coded — CLAUDE.md). Mirrors DhruvChrome.
 import { useState } from 'react'
+import Link from 'next/link'
 import { Header, MobileDrawer } from '@vedanta/datum-ui'
 import { precisePhoneHref, preciseProducts, preciseWhatsappHref } from '../../lib/content/precise-engineers'
 
@@ -46,6 +47,7 @@ export function PreciseChrome() {
         }))}
         links={LINKS}
         rfqHref="/request-a-quote?company=precise"
+        linkComponent={Link}
       />
     </>
   )

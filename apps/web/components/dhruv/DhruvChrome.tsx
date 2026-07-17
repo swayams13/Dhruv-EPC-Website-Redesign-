@@ -3,6 +3,7 @@
 // Menu content comes from the seeded equipment list; entity contact from the
 // EntityRecord (never hard-coded — CLAUDE.md).
 import { useState } from 'react'
+import Link from 'next/link'
 import { Header, MobileDrawer } from '@vedanta/datum-ui'
 import { dhruvEquipment, dhruvPhoneHref, dhruvWhatsappHref } from '../../lib/content/dhruv-epc'
 
@@ -46,6 +47,7 @@ export function DhruvChrome() {
         }))}
         links={LINKS}
         rfqHref="/request-a-quote?company=dhruv"
+        linkComponent={Link}
       />
     </>
   )

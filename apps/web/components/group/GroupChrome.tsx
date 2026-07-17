@@ -3,6 +3,7 @@
 // Shows both companies' product lines in the mega-menu.
 // phoneHref / whatsappHref omitted: no single group-level contact line.
 import { useState } from 'react'
+import Link from 'next/link'
 import { Header, MobileDrawer } from '@vedanta/datum-ui'
 import { dhruvEquipment } from '../../lib/content/dhruv-epc'
 import { preciseProducts } from '../../lib/content/precise-engineers'
@@ -69,6 +70,7 @@ export function GroupChrome() {
         }))}
         links={LINKS}
         rfqHref="/request-a-quote"
+        linkComponent={Link}
       />
     </>
   )

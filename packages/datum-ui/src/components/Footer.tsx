@@ -32,6 +32,8 @@ export interface FooterProps {
   termsHref: string
   /** LinkedIn only, as a labeled link (§18 Zone 3) */
   linkedinHref?: string
+  /** Pass next/link (or any router Link) for client-side navigation in the sitemap. Defaults to <a>. */
+  linkComponent?: React.ElementType
   className?: never
 }
 
@@ -66,6 +68,7 @@ export function Footer({
   privacyHref,
   termsHref,
   linkedinHref,
+  linkComponent: Link = 'a',
 }: FooterProps): React.ReactElement {
   const stamps = entity.stampsHeld.filter(isStampCode)
 
@@ -171,12 +174,12 @@ export function Footer({
               <ul className="mt-3 space-y-2">
                 {col.links.map((link) => (
                   <li key={link.href}>
-                    <a
+                    <Link
                       href={link.href}
                       className="text-sm text-steel-700 transition-colors duration-instant hover:text-steel-950 hover:underline"
                     >
                       {link.label}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>

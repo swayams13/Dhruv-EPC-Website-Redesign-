@@ -2,6 +2,7 @@
 // company/product links at peak goodwill, contact fallback.
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { telHref } from '../../../../lib/format'
 
 export const metadata: Metadata = {
   title: 'Requirement received — Vedanta Group',
@@ -98,7 +99,7 @@ export default function ThankYouPage({ searchParams }: { searchParams: { ref?: s
           <p className="mt-2 flex flex-col gap-1">
             {fallbackPhone && (
               <a
-                href={`tel:${fallbackPhone}`}
+                href={telHref(fallbackPhone)}
                 className="inline-flex min-h-row items-center font-mono text-sm text-accent-text hover:text-accent-text-hover hover:underline"
               >
                 {fallbackPhone}

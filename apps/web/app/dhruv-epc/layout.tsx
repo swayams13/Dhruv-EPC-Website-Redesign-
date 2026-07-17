@@ -2,6 +2,7 @@
 // data-company="dhruv" scopes CSS variables to arc values
 // Session 7: chrome (Header/§17 + drawer) and Footer/§18 wrap every Dhruv route.
 
+import Link from 'next/link'
 import { Footer } from '@vedanta/datum-ui'
 import { DhruvChrome } from '../../components/dhruv/DhruvChrome'
 import { dhruvEntity } from '../../lib/content/dhruv-epc'
@@ -43,6 +44,7 @@ export default function DhruvLayout({ children }: { children: React.ReactNode })
         certificationsHref="/dhruv-epc/proof"
         privacyHref="/privacy"
         termsHref="/terms"
+        linkComponent={Link}
       />
     </div>
   )

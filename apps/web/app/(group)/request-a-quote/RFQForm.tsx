@@ -7,6 +7,7 @@ import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button, ChoiceCard, Input, Select, Textarea, UploadDropzone } from '@vedanta/datum-ui'
 import { RFQStep1, RFQStep2 } from '@vedanta/schemas'
+import { telHref } from '../../../lib/format'
 
 // ponytail: page-local equipment list mirroring plan §3.3/§3.4 IA —
 // becomes CMS-driven when Product records land (Phase 4)
@@ -421,7 +422,7 @@ export function RFQForm({ initialCompany, fallbackEmail, fallbackPhone }: RFQFor
                   )}
                   {fallbackEmail && fallbackPhone && ' · '}
                   {fallbackPhone && (
-                    <a href={`tel:${fallbackPhone}`} className="font-mono font-medium text-accent-text hover:underline">
+                    <a href={telHref(fallbackPhone)} className="font-mono font-medium text-accent-text hover:underline">
                       {fallbackPhone}
                     </a>
                   )}

@@ -30,6 +30,8 @@ export interface MobileDrawerProps {
   /** Flat links: Capabilities · Projects · Company */
   links: DrawerNavLink[]
   rfqHref: string
+  /** Pass next/link (or any router Link) for client-side navigation. Defaults to <a>. */
+  linkComponent?: React.ElementType
   className?: never
 }
 
@@ -41,6 +43,7 @@ export function MobileDrawer({
   groups,
   links,
   rfqHref,
+  linkComponent: Link = 'a',
 }: MobileDrawerProps): React.ReactElement | null {
   const [shown, setShown] = useState(false)
   const [expanded, setExpanded] = useState<string | null>(null)
@@ -135,12 +138,12 @@ export function MobileDrawer({
                   <ul className="pb-2">
                     {group.items.map((item) => (
                       <li key={item.href}>
-                        <a
+                        <Link
                           href={item.href}
                           className="flex h-12 items-center pl-4 text-data text-steel-300"
                         >
                           {item.label}
-                        </a>
+                        </Link>
                       </li>
                     ))}
                   </ul>
@@ -149,9 +152,9 @@ export function MobileDrawer({
             )
           })}
           {links.map((l) => (
-            <a key={l.href} href={l.href} className={`${row} border-b border-steel-800`}>
+            <Link key={l.href} href={l.href} className={`${row} border-b border-steel-800`}>
               {l.label}
-            </a>
+            </Link>
           ))}
         </nav>
 

@@ -8,6 +8,7 @@ import { PageHero } from '@vedanta/datum-ui'
 import type { EntityRecord } from '@vedanta/schemas'
 import { buildBreadcrumbList, buildLocalBusiness } from '@vedanta/schemas'
 import { dhruvEntity } from '../../../lib/content/dhruv-epc'
+import { telHref } from '../../../lib/format'
 import { groupEntity } from '../../../lib/content/group'
 import { preciseEntity } from '../../../lib/content/precise-engineers'
 
@@ -71,7 +72,7 @@ function EntityBlock({ entity, note }: { entity: EntityRecord; note?: string }) 
             {entity.phones.map((phone) => (
               <a
                 key={phone}
-                href={`tel:${phone}`}
+                href={telHref(phone)}
                 className="inline-flex min-h-row items-center font-mono text-sm text-accent-text hover:text-accent-text-hover hover:underline"
               >
                 {phone}
