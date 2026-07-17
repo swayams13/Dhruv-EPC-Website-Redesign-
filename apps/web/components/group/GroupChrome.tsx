@@ -16,6 +16,10 @@ const GROUPS = [
     ],
   },
   {
+    label: 'Dhruv EPC Solutions — Fabrication & Machining',
+    items: dhruvEquipment['fabrication-machining'],
+  },
+  {
     label: 'Precise Engineers — Flexible Elements',
     items: [
       ...preciseProducts['expansion-joints'],
@@ -40,7 +44,7 @@ export function GroupChrome() {
             <span className="font-display text-h4 font-extrabold leading-none tracking-tight">
               VEDANTA
             </span>
-            <span className="font-mono text-logo-sub font-medium uppercase tracking-widest text-accent">
+            <span className="font-mono text-logo-sub font-medium uppercase tracking-widest text-steel-500">
               Group of Companies
             </span>
           </span>
@@ -51,7 +55,7 @@ export function GroupChrome() {
           label: g.label,
           items: g.items.map(({ name, scope, href }) => ({ name, scope, href })),
         }))}
-        capabilityRail={{ label: 'Explore our companies', href: '/about' }}
+        capabilityRail={{ label: 'Two works · ASME U/U2 · EJMA certified', href: '/about' }}
         links={LINKS}
         rfqHref="/request-a-quote"
         onMenuOpen={() => setDrawerOpen(true)}

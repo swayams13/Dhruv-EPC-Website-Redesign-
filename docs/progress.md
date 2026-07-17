@@ -1005,6 +1005,68 @@ pnpm test / pnpm build                                          ⏳ NOT RUN — 
 
 ---
 
+---
+
+### Session 18 — Phase C punch list (frontend-redesign-plan.md), branch `phase-4-exploded-hero-sequence`
+**Status:** Complete ✅
+**Date:** 2026-07-17 · **Model:** claude-sonnet-4-6
+**Governing specs:** `docs/frontend-redesign-plan.md` Phase C, `docs/frontend-audit.md`, `docs/datum-design-system.md`, `docs/design.md`
+
+#### What was done
+
+All 8 Phase C items from `docs/frontend-redesign-plan.md` completed (findings by number from `docs/frontend-audit.md`):
+
+**Quick fixes (#1–#4 in session plan):**
+- **Dhruv footer certHref corrected (#5):** `certificationsHref="/dhruv-epc/proof/certifications"` → `/dhruv-epc/proof`. Every Dhruv footer stamp now links to the real proof hub instead of a 404.
+- **DEMO validity-date disclaimer removed (#10):** The "Certification validity dates are DEMO-PLACEHOLDER" paragraph deleted from `dhruv-epc/proof/page.tsx`. Dates are simply omitted until sourced.
+- **Dead nav/footer links cleaned up (#6, #24):** `DhruvChrome.tsx` LINKS — removed `/projects` and `/company`; added `{ label: 'Proof', href: '/dhruv-epc/proof' }`. `dhruv-epc/layout.tsx` footer — removed Projects row; Proof added to Capabilities column; Company column trimmed to Vedanta Group + Contact only.
+- **Group mega-menu: fabrication-machining added (#7):** `GroupChrome.tsx` GROUPS now has a third entry — "Dhruv EPC Solutions — Fabrication & Machining" with all items from `dhruvEquipment['fabrication-machining']`. Previously unreachable from group-level nav.
+- **Group header wordmark: `text-accent` → `text-steel-500` (#13):** "Group of Companies" sub-line was competing with the RFQ button for the one-accent slot. Now steel-500, consistent with the group's steel-only theme.
+- **Group capabilityRail label improved (#25):** "Explore our companies" → "Two works · ASME U/U2 · EJMA certified" — figures-first, information-bearing, consistent with Datum's copy voice.
+
+**MobileBottomBar safe-area (#4):**
+- Nav element gets `style={{ paddingBottom: 'calc(0.5rem + env(safe-area-inset-bottom, 0px))' }}` — inline style is appropriate here (browser env variable, not a design token).
+- `Footer.tsx` legal row gets `pb-20 md:pb-6` — 80px clearance on mobile for the fixed 64px bar; restores to 24px on desktop where bar is hidden.
+
+**MobileDrawer (#11, #19):**
+- Scrim and panel transitions gain `motion-reduce:transition-none` — reduced-motion users see instant open/close.
+- `aria-label` deduplicated: dialog changed from `"Menu"` to `"Navigation menu"`; inner `<nav>` from `"Menu"` to `"Site navigation"`.
+
+**Thank-you page (#12 — design-improved):**
+- Added "What happens next" 3-step process strip (mono step counters, consistent with RFQ page's reassurance rail).
+- Two-column company/product quick-links (Dhruv EPC + Precise Engineers with their main equipment pages + Proof hub).
+- Contact fallback (phone + email) gated on `NEXT_PUBLIC_CONTACT_EMAIL` / `NEXT_PUBLIC_CONTACT_PHONE` env vars — same pattern as RFQ page.
+- Back link reworded to "← Vedanta Group" (was "Back to Vedanta Group").
+
+**UploadDropzone (#9, #16, #17):**
+- **Cap notice (#9):** `addFiles()` now counts dropped-vs-allowed and surfaces `role="alert"` notice: "Only 5 files can be attached — N were not added."
+- **File-type validation on drop (#17):** `isAcceptedType()` helper checks extension + MIME; rejected files appear as error rows with "File type not accepted". Retry button hidden for type-rejected files.
+- **Hint derived from props (#16):** `deriveHint()` reads `accept` and `maxSizeBytes` — hint text updates if a caller overrides either prop instead of lying.
+
+**RFQForm (#8, #22 + #15 bonus):**
+- **Focus management (#8):** `focusFirstError()` helper focuses the first erroring element on validation failure (company/equipment fieldset radio, or named field by id). `submit()` also routes through it.
+- **Step heading focus (#8):** step progress `<p>` gets `tabIndex={-1}` and a ref; `continueToContact()` on success calls `requestAnimationFrame(() => stepHeadingRef.current?.focus())` — keyboard/SR focus doesn't drop to `<body>` on step change.
+- **Step-2 recap (#22):** compact summary above contact fields — company, equipment type, quantity, drawing count — with an "Edit" button that returns to step 1.
+- **Phone input fix (#15 bonus):** strip whitespace/hyphens on blur rather than on every keystroke — eliminates cursor-jump on mid-string edits.
+
+#### Gate result
+
+```
+pnpm typecheck   ✓  4/4 packages, zero errors
+pnpm lint        ✓  0 errors, 0 warnings
+pnpm test        ✓  142/142 (tokens 26, schemas 39, datum-ui 77)
+pnpm build       ✓  35 routes, zero errors/warnings
+                    /request-a-quote: 113 kB First Load JS (≤180 kB RFQ budget ✓)
+                    home routes: 100 kB (≤120 kB marketing budget ✓)
+```
+
+#### What's NOT done (deferred to Phase D or client-gated)
+
+- Phase D P2 items: accent-dedupe in group header rail, tel: helper, FAQ chevron glyph swap, next/link adoption in datum-ui, mobile anchor rail, SpecTable sticky-hover.
+- Phase B (client/content): works photography, testimonials, real engineering figures for capabilities, env credentials, staging LCP.
+
+---
+
 ### Deferred queue — ⏰ REMIND SWAYAM AFTER SESSION 10 (his instruction, 2026-07-10)
 
 1. **Session 6 human gate:** E2E RFQ with real creds — `STORAGE_*`, `RESEND_API_KEY`,

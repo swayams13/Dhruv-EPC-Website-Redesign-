@@ -14,8 +14,7 @@ const GROUPS = [
 
 const LINKS = [
   { label: 'Capabilities', href: '/dhruv-epc/capabilities' },
-  { label: 'Projects', href: '/dhruv-epc/projects' },
-  { label: 'Company', href: '/dhruv-epc/company' },
+  { label: 'Proof', href: '/dhruv-epc/proof' },
 ]
 
 export function DhruvChrome() {

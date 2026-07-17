@@ -55,6 +55,22 @@ function putWithProgress(url: string, file: File, onProgress: (pct: number) => v
   })
 }
 
+function deriveHint(accept: string, maxSizeBytes: number): string {
+  const types = accept
+    .split(',')
+    .map((s) => s.trim().replace(/^\./, '').toUpperCase())
+    .join(', ')
+  const mb = Math.round(maxSizeBytes / (1024 * 1024))
+  return `${types} · up to ${mb} MB each`
+}
+
+function isAcceptedType(file: File, accept: string): boolean {
+  const accepted = accept.split(',').map((s) => s.trim().toLowerCase())
+  const ext = `.${file.name.split('.').pop()?.toLowerCase() ?? ''}`
+  const mime = file.type.toLowerCase()
+  return accepted.some((a) => a === ext || a === mime || (a.endsWith('/*') && mime.startsWith(a.slice(0, -2))))
+}
+
 export function UploadDropzone({
   presign,
   onChange,
@@ -66,6 +82,7 @@ export function UploadDropzone({
 }: UploadDropzoneProps): React.ReactElement {
   const [entries, setEntries] = useState<FileEntry[]>([])
   const [dragOver, setDragOver] = useState(false)
+  const [capNotice, setCapNotice] = useState<string | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const entriesRef = useRef(entries)
   entriesRef.current = entries
@@ -94,16 +111,29 @@ export function UploadDropzone({
 
   function addFiles(list: FileList | null) {
     if (!list) return
+    const all = Array.from(list)
     const room = maxFiles - entriesRef.current.length
-    const picked = Array.from(list).slice(0, room)
+    const rejected = all.length - Math.min(all.length, room)
+    if (rejected > 0) {
+      setCapNotice(`Only ${maxFiles} files can be attached — ${rejected} ${rejected === 1 ? 'was' : 'were'} not added.`)
+    } else {
+      setCapNotice(null)
+    }
+    const picked = all.slice(0, room)
     const fresh: FileEntry[] = picked.map((file) => {
       const oversize = file.size > maxSizeBytes
+      const wrongType = !isAcceptedType(file, accept)
+      const errored = oversize || wrongType
       return {
         id: crypto.randomUUID(),
         file,
-        status: oversize ? 'error' : 'uploading',
+        status: errored ? 'error' : 'uploading',
         progress: 0,
-        message: oversize ? `File exceeds ${Math.round(maxSizeBytes / (1024 * 1024))} MB` : undefined,
+        message: oversize
+          ? `File exceeds ${Math.round(maxSizeBytes / (1024 * 1024))} MB`
+          : wrongType
+            ? `File type not accepted`
+            : undefined,
       }
     })
     emit([...entriesRef.current, ...fresh])
@@ -145,7 +175,7 @@ export function UploadDropzone({
         <span className="text-sm text-steel-950">
           {full ? `Maximum ${maxFiles} drawings` : 'Drop drawings here or browse'}
         </span>
-        <span className="text-helper text-steel-600">PDF, DWG, images · up to 25 MB each</span>
+        <span className="text-helper text-steel-600">{deriveHint(accept, maxSizeBytes)}</span>
       </button>
       <input
         ref={inputRef}
@@ -193,7 +223,7 @@ export function UploadDropzone({
                   <span className="text-helper text-signal-success">Uploaded</span>
                 )}
               </span>
-              {entry.status === 'error' && entry.file.size <= maxSizeBytes && (
+              {entry.status === 'error' && entry.file.size <= maxSizeBytes && isAcceptedType(entry.file, accept) && (
                 <button
                   type="button"
                   onClick={() => void upload(entry)}
@@ -217,6 +247,9 @@ export function UploadDropzone({
         </ul>
       )}
 
+      {capNotice && (
+        <p role="alert" className="text-helper text-signal-error">{capNotice}</p>
+      )}
       <p className="text-helper text-steel-600">{confidentialityNote}</p>
     </div>
   )

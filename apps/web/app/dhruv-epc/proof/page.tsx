@@ -85,14 +85,6 @@ export default function DhruvProofPage() {
         </div>
       </section>
 
-      {/* DEMO notice */}
-      <div className="mx-auto max-w-wide px-6 py-8">
-        <p className="text-helper text-steel-600">
-          Certification validity dates are DEMO-PLACEHOLDER pending document scans. All credentials
-          are independently verifiable with the issuing authority.
-        </p>
-      </div>
-
       <RFQBand company="dhruv" whatsappHref={dhruvWhatsappHref} />
 
       <MobileBottomBar

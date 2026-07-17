@@ -93,14 +93,14 @@ export function MobileDrawer({
       {/* scrim — §8 Overlay: steel-950 @ 40% */}
       <div
         onClick={onClose}
-        className={`absolute inset-0 bg-steel-950/40 transition-opacity duration-deliberate ease-enter ${shown ? 'opacity-100' : 'opacity-0'}`}
+        className={`absolute inset-0 bg-steel-950/40 transition-opacity duration-deliberate ease-enter motion-reduce:transition-none ${shown ? 'opacity-100' : 'opacity-0'}`}
       />
       <div
         ref={panelRef}
         role="dialog"
         aria-modal="true"
-        aria-label="Menu"
-        className={`absolute inset-y-0 right-0 flex w-4/5 flex-col bg-steel-950 shadow-overlay transition-transform duration-deliberate ease-enter ${shown ? 'translate-x-0' : 'translate-x-full'}`}
+        aria-label="Navigation menu"
+        className={`absolute inset-y-0 right-0 flex w-4/5 flex-col bg-steel-950 shadow-overlay transition-transform duration-deliberate ease-enter motion-reduce:transition-none ${shown ? 'translate-x-0' : 'translate-x-full'}`}
       >
         <div className="flex justify-end p-3">
           <button
@@ -113,7 +113,7 @@ export function MobileDrawer({
           </button>
         </div>
 
-        <nav aria-label="Menu" className="flex-1 overflow-y-auto px-6 pb-6">
+        <nav aria-label="Site navigation" className="flex-1 overflow-y-auto px-6 pb-6">
           {groups.map((group) => {
             const isOpen = expanded === group.label
             return (

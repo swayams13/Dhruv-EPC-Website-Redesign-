@@ -20,13 +20,12 @@ const FOOTER_COLUMNS = [
     heading: 'Capabilities',
     links: [
       { label: 'Capability Matrix', href: '/dhruv-epc/capabilities' },
-      { label: 'Projects', href: '/dhruv-epc/projects' },
+      { label: 'Proof', href: '/dhruv-epc/proof' },
     ],
   },
   {
     heading: 'Company',
     links: [
-      { label: 'About', href: '/dhruv-epc/company' },
       { label: 'Vedanta Group', href: '/' },
       { label: 'Contact', href: '/contact' },
     ],
@@ -41,7 +40,7 @@ export default function DhruvLayout({ children }: { children: React.ReactNode })
       <Footer
         entity={dhruvEntity}
         columns={FOOTER_COLUMNS}
-        certificationsHref="/dhruv-epc/proof/certifications"
+        certificationsHref="/dhruv-epc/proof"
         privacyHref="/privacy"
         termsHref="/terms"
       />

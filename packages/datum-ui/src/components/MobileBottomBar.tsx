@@ -30,6 +30,7 @@ export function MobileBottomBar({
     <nav
       aria-label="Contact actions"
       className="fixed inset-x-0 bottom-0 z-40 flex items-center gap-2 border-t border-steel-200 bg-white p-2 md:hidden"
+      style={{ paddingBottom: 'calc(0.5rem + env(safe-area-inset-bottom, 0px))' }}
     >
       <a href={phoneHref} aria-label="Call us" className={iconLink}>
         <Phone />

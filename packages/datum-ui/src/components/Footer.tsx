@@ -183,7 +183,7 @@ export function Footer({
             </div>
           ))}
         </div>
-        <div className="mx-auto flex max-w-wide flex-wrap items-center gap-6 border-t border-steel-200 px-6 py-6 text-sm text-steel-600">
+        <div className="mx-auto flex max-w-wide flex-wrap items-center gap-6 border-t border-steel-200 px-6 py-6 pb-20 text-sm text-steel-600 md:pb-6">
           <a href={privacyHref} className="hover:text-steel-950 hover:underline">
             Privacy
           </a>
