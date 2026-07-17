@@ -7,6 +7,7 @@
 // - DEMO-PLACEHOLDER figures per Swayam's prototype approval (2026-07-10).
 
 import { EntityRecord } from '@vedanta/schemas'
+import type { ExplodedFrame } from '../../components/ExplodedSequence'
 
 export const groupEntity = EntityRecord.parse({
   companySlug: 'group',
@@ -24,6 +25,19 @@ export const groupEntity = EntityRecord.parse({
   stampsHeld: ['U', 'U2', 'IBR', 'ISO-9001', 'ISO-14001', 'ISO-45001'],
   contentRevisedDate: '2026-07-11',
 })
+
+// Exploded-view heat-exchanger frame sequence — group home hero photo band.
+// docs/design.md + docs/decisions.md [2026-07-16]: photorealistic AI-render
+// override, approved for this feature only. Frames go under
+// apps/web/public/exploded/heat-exchanger/ — see
+// docs/exploded-view-image-generation-guide.md for exact filenames/specs.
+// ═══ PLACEHOLDER PATHS — swap in real generated frames before launch ═══
+export const groupExplodedFrames: ExplodedFrame[] = [
+  { avif: '/exploded/heat-exchanger/frame-01.avif', webp: '/exploded/heat-exchanger/frame-01.webp' },
+  { avif: '/exploded/heat-exchanger/frame-02.avif', webp: '/exploded/heat-exchanger/frame-02.webp' },
+  { avif: '/exploded/heat-exchanger/frame-03.avif', webp: '/exploded/heat-exchanger/frame-03.webp' },
+  { avif: '/exploded/heat-exchanger/frame-04.avif', webp: '/exploded/heat-exchanger/frame-04.webp' },
+]
 
 // §6.1 group stats band — combined mono figures, each sourced.
 export const groupStats = [

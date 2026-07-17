@@ -4,6 +4,7 @@
 // arrow glyph nudges 4px right (100ms) — never a floating-card lift.
 // Anatomy: 4:3 photograph (graded per §2.1) → h3 title → one-line scope →
 // mono spec chips (max 3) → arrow.
+// onDark: dark steel-900 card with accent-border hover (premium industrial grid).
 // oneLineScope is REQUIRED — a card that only names the product wastes the
 // buyer's glance (Phase 1 §10: numbers are the copy). The digit rule itself is
 // enforced at the CMS layer (Product.oneLineScope Zod regex).
@@ -18,8 +19,14 @@ export interface ProductCardProps {
   /** Real works photograph filling the 4:3 frame (pass next/image from pages).
       Absent → the no-photo variant: text-only card, never a stock placeholder. */
   photo?: React.ReactNode
+  /** §12 domain icon (pass <DomainIcon size={32} />) — interim visual for the
+      no-photo variant until the works shoot (2026-07-16, ui-ux-review §5).
+      Ignored when photo is present; steel-500 per §12's default icon color. */
+  icon?: React.ReactNode
   /** Mono spec chips, max 3 rendered (§16) */
   chips?: string[]
+  /** Dark ground variant — steel-900 card, accent-border hover (§T-2) */
+  onDark?: boolean
   className?: never
 }
 
@@ -28,8 +35,45 @@ export function ProductCard({
   oneLineScope,
   href,
   photo,
+  icon,
   chips,
+  onDark = false,
 }: ProductCardProps): React.ReactElement {
+  if (onDark) {
+    return (
+      <a
+        href={href}
+        className="group block h-full rounded-sm border border-steel-800 bg-steel-900 transition-colors duration-fast ease-standard hover:border-accent"
+      >
+        {photo && <div className="aspect-4/3 w-full overflow-hidden bg-steel-800">{photo}</div>}
+        <div className="p-6">
+          {!photo && icon && (
+            <span aria-hidden="true" className="mb-4 block text-steel-500">
+              {icon}
+            </span>
+          )}
+          <h3 className="font-display text-h3 font-semibold text-steel-50">{name}</h3>
+          <p className="mt-2 text-sm text-steel-500">{oneLineScope}</p>
+          {chips && chips.length > 0 && (
+            <ul className="mt-4 flex flex-wrap gap-2">
+              {chips.slice(0, 3).map((chip) => (
+                <li
+                  key={chip}
+                  className="rounded-sm border border-steel-700 bg-steel-800 px-2 py-1 font-mono text-helper text-steel-400"
+                >
+                  {chip}
+                </li>
+              ))}
+            </ul>
+          )}
+          <span className="mt-4 block text-steel-400 transition-transform duration-instant ease-standard group-hover:text-accent motion-safe:group-hover:translate-x-1">
+            <ArrowRight size={20} />
+          </span>
+        </div>
+      </a>
+    )
+  }
+
   return (
     <a
       href={href}
@@ -37,6 +81,11 @@ export function ProductCard({
     >
       {photo && <div className="aspect-4/3 w-full overflow-hidden bg-steel-100">{photo}</div>}
       <div className="p-6">
+        {!photo && icon && (
+          <span aria-hidden="true" className="mb-4 block text-steel-500">
+            {icon}
+          </span>
+        )}
         <h3 className="font-display text-h3 font-semibold text-steel-950">{name}</h3>
         <p className="mt-2 text-sm text-steel-600">{oneLineScope}</p>
         {chips && chips.length > 0 && (

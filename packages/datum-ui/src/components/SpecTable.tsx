@@ -74,8 +74,8 @@ export function SpecTable({
           </thead>
           <tbody>
             {matrixRows.map((row) => (
-              <tr key={row.param} className={rowLine}>
-                <th scope="row" className={`${paramCell} ${rowH} sticky left-0 z-10 bg-white shadow-raised`}>
+              <tr key={row.param} className={`${rowLine} group`}>
+                <th scope="row" className={`${paramCell} ${rowH} sticky left-0 z-10 bg-white shadow-raised group-hover:bg-steel-100`}>
                   {row.param}
                 </th>
                 {row.values.map((v, i) => (

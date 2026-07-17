@@ -1,5 +1,6 @@
 // Precise Engineers — Capabilities page (Datum §15 capability matrix).
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { MobileBottomBar, PageHero, SpecTable } from '@vedanta/datum-ui'
 import { buildBreadcrumbList } from '@vedanta/schemas'
 import { RFQBand } from '../../../components/RFQBand'
@@ -96,14 +97,14 @@ export default function PreciseCapabilitiesPage() {
           </h3>
           <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {preciseProducts['expansion-joints'].map((product) => (
-              <a
+              <Link
                 key={product.href}
                 href={product.href}
                 className="block rounded-sm border border-steel-200 bg-white p-6 transition-colors duration-fast hover:border-steel-400"
               >
                 <p className="font-medium text-steel-950">{product.name}</p>
                 <p className="mt-1 text-helper text-steel-600">{product.scope}</p>
-              </a>
+              </Link>
             ))}
           </div>
         </div>
@@ -114,14 +115,14 @@ export default function PreciseCapabilitiesPage() {
           </h3>
           <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {preciseProducts['flow-control'].map((product) => (
-              <a
+              <Link
                 key={product.href}
                 href={product.href}
                 className="block rounded-sm border border-steel-200 bg-white p-6 transition-colors duration-fast hover:border-steel-400"
               >
                 <p className="font-medium text-steel-950">{product.name}</p>
                 <p className="mt-1 text-helper text-steel-600">{product.scope}</p>
-              </a>
+              </Link>
             ))}
           </div>
         </div>

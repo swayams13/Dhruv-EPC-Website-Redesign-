@@ -1,8 +1,9 @@
 // Heavy Machining — Datum §21 product page (template contract locked after Session 8).
 import type { Metadata } from 'next'
-import { MobileBottomBar, ProductHero, SpecTable } from '@vedanta/datum-ui'
+import { ChevronDown, MobileBottomBar, ProductHero, SpecTable } from '@vedanta/datum-ui'
 import { buildBreadcrumbList, buildFAQPage, buildProduct } from '@vedanta/schemas'
 import { RFQBand } from '../../../../components/RFQBand'
+import { AnchorRailMobile } from '../../../../components/AnchorRail'
 import { dhruvEntity, dhruvPhoneHref, dhruvWhatsappHref, heavyMachining } from '../../../../lib/content/dhruv-epc'
 
 const BASE = 'https://vedantagroup.net'
@@ -64,6 +65,8 @@ export default function HeavyMachiningPage() {
         specHref="#specifications"
         rfq={{ label: 'Request a quote', href: '/request-a-quote?company=dhruv' }}
       />
+
+      <AnchorRailMobile sections={SECTIONS} />
 
       <div className="mx-auto grid max-w-wide grid-cols-1 gap-8 px-6 py-12 lg:grid-cols-12">
         <div className="flex flex-col gap-16 lg:col-span-8">
@@ -144,7 +147,7 @@ export default function HeavyMachiningPage() {
                   <summary className="flex min-h-row cursor-pointer list-none items-center justify-between gap-4 text-data font-medium text-steel-950 [&::-webkit-details-marker]:hidden">
                     {faq.question}
                     <span aria-hidden className="text-steel-500 transition-transform duration-instant ease-standard group-open:rotate-180">
-                      ⌄
+                      <ChevronDown size={20} />
                     </span>
                   </summary>
                   <p className="mt-3 max-w-content text-sm text-steel-700">{faq.answer}</p>

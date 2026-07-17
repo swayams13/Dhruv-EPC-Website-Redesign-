@@ -30,10 +30,12 @@ export interface MobileDrawerProps {
   /** Flat links: Capabilities · Projects · Company */
   links: DrawerNavLink[]
   rfqHref: string
+  /** Pass next/link (or any router Link) for client-side navigation. Defaults to <a>. */
+  linkComponent?: React.ElementType
   className?: never
 }
 
-const row = 'flex h-12 w-full items-center text-data font-medium text-steel-950'
+const row = 'flex h-12 w-full items-center text-data font-medium text-steel-100'
 
 export function MobileDrawer({
   open,
@@ -41,6 +43,7 @@ export function MobileDrawer({
   groups,
   links,
   rfqHref,
+  linkComponent: Link = 'a',
 }: MobileDrawerProps): React.ReactElement | null {
   const [shown, setShown] = useState(false)
   const [expanded, setExpanded] = useState<string | null>(null)
@@ -93,31 +96,31 @@ export function MobileDrawer({
       {/* scrim — §8 Overlay: steel-950 @ 40% */}
       <div
         onClick={onClose}
-        className={`absolute inset-0 bg-steel-950/40 transition-opacity duration-deliberate ease-enter ${shown ? 'opacity-100' : 'opacity-0'}`}
+        className={`absolute inset-0 bg-steel-950/40 transition-opacity duration-deliberate ease-enter motion-reduce:transition-none ${shown ? 'opacity-100' : 'opacity-0'}`}
       />
       <div
         ref={panelRef}
         role="dialog"
         aria-modal="true"
-        aria-label="Menu"
-        className={`absolute inset-y-0 right-0 flex w-4/5 flex-col bg-white shadow-overlay transition-transform duration-deliberate ease-enter ${shown ? 'translate-x-0' : 'translate-x-full'}`}
+        aria-label="Navigation menu"
+        className={`absolute inset-y-0 right-0 flex w-4/5 flex-col bg-steel-950 shadow-overlay transition-transform duration-deliberate ease-enter motion-reduce:transition-none ${shown ? 'translate-x-0' : 'translate-x-full'}`}
       >
         <div className="flex justify-end p-3">
           <button
             type="button"
             aria-label="Close menu"
             onClick={onClose}
-            className="flex h-12 w-12 items-center justify-center rounded-sm text-steel-950"
+            className="flex h-12 w-12 items-center justify-center rounded-sm text-steel-50"
           >
             <Close />
           </button>
         </div>
 
-        <nav aria-label="Menu" className="flex-1 overflow-y-auto px-6 pb-6">
+        <nav aria-label="Site navigation" className="flex-1 overflow-y-auto px-6 pb-6">
           {groups.map((group) => {
             const isOpen = expanded === group.label
             return (
-              <div key={group.label} className="border-b border-steel-200">
+              <div key={group.label} className="border-b border-steel-800">
                 <button
                   type="button"
                   aria-expanded={isOpen}
@@ -135,12 +138,12 @@ export function MobileDrawer({
                   <ul className="pb-2">
                     {group.items.map((item) => (
                       <li key={item.href}>
-                        <a
+                        <Link
                           href={item.href}
-                          className="flex h-12 items-center pl-4 text-data text-steel-700"
+                          className="flex h-12 items-center pl-4 text-data text-steel-300"
                         >
                           {item.label}
-                        </a>
+                        </Link>
                       </li>
                     ))}
                   </ul>
@@ -149,14 +152,14 @@ export function MobileDrawer({
             )
           })}
           {links.map((l) => (
-            <a key={l.href} href={l.href} className={`${row} border-b border-steel-200`}>
+            <Link key={l.href} href={l.href} className={`${row} border-b border-steel-800`}>
               {l.label}
-            </a>
+            </Link>
           ))}
         </nav>
 
         {/* RFQ pinned at drawer bottom (§17) */}
-        <div className="flex flex-col border-t border-steel-200 p-6">
+        <div className="flex flex-col border-t border-steel-800 p-6">
           <Button variant="rfq" href={rfqHref}>
             Request a quote
           </Button>

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
+import { DomainIcon } from './DomainIcon'
 import { ProductCard } from './ProductCard'
 import { withCompany } from '../story-helpers'
 
@@ -39,6 +40,31 @@ export const Precise: Story = {
   decorators: [withCompany('precise')],
 }
 
+// onDark variants — dark ground for premium equipment grids (§T-2)
+export const DhruvDark: Story = {
+  args: {
+    name: 'Shell & tube heat exchangers',
+    oneLineScope: 'Shell & tube, ASME U/U2, up to 250 T',
+    href: '/dhruv-epc/heat-exchangers',
+    photo: photoFrame,
+    chips: ['≤ 250 T', 'Ø 4,000 mm', 'ASME U/U2'],
+    onDark: true,
+  },
+  decorators: [withCompany('dhruv')],
+}
+
+export const PreciseDark: Story = {
+  args: {
+    name: 'Metallic expansion bellows',
+    oneLineScope: 'Single & multi-ply, DN 50–6,000, EJMA 10th ed.',
+    href: '/precise-engineers/metallic-bellows',
+    photo: photoFrame,
+    chips: ['DN 50–6,000', 'EJMA 10th'],
+    onDark: true,
+  },
+  decorators: [withCompany('precise')],
+}
+
 // No-photo variant — a missing photo never renders a stock placeholder
 export const NoPhoto: Story = {
   args: {
@@ -46,6 +72,31 @@ export const NoPhoto: Story = {
     oneLineScope: 'ASME Sec. VIII Div. 1 & 2, up to 120 mm shell',
     href: '/dhruv-epc/pressure-vessels',
     chips: ['Div. 1 & 2', '≤ 120 mm'],
+  },
+  decorators: [withCompany('dhruv')],
+}
+
+// Icon variant — §12 domain icon as the interim visual until the works shoot
+// (2026-07-16, ui-ux-review §5). Icon ignored once a photo is passed.
+export const WithIcon: Story = {
+  args: {
+    name: 'Metallic bellows expansion joints',
+    oneLineScope: 'EJMA/ASME B31.3, 80 – 8,000 mm NB circular',
+    href: '/precise-engineers/products/metallic-bellows-expansion-joint',
+    icon: <DomainIcon name="bellows" size={32} />,
+    chips: ['80 – 8,000 mm NB', 'EJMA'],
+  },
+  decorators: [withCompany('precise')],
+}
+
+export const WithIconDark: Story = {
+  args: {
+    name: 'Pressure vessels',
+    oneLineScope: 'Reactors, columns and drums to ASME Sec. VIII Div. 1 & 2',
+    href: '/dhruv-epc/equipment/pressure-vessels',
+    icon: <DomainIcon name="vessel" size={32} />,
+    chips: ['Div. 1 & 2', 'U/U2'],
+    onDark: true,
   },
   decorators: [withCompany('dhruv')],
 }

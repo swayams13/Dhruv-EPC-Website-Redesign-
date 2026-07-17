@@ -1,22 +1,24 @@
 import type { Metadata } from 'next'
-import { IBM_Plex_Mono, Inter, Schibsted_Grotesk } from 'next/font/google'
+import { Archivo, IBM_Plex_Mono, IBM_Plex_Sans } from 'next/font/google'
 import './globals.css'
 
-const schibsted = Schibsted_Grotesk({
+const archivo = Archivo({
   subsets: ['latin'],
+  weight: ['700', '800'],
   variable: '--font-display',
   display: 'swap',
 })
 
-const inter = Inter({
+const ibmPlexSans = IBM_Plex_Sans({
   subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
   variable: '--font-sans',
   display: 'swap',
 })
 
 const ibmPlexMono = IBM_Plex_Mono({
   subsets: ['latin'],
-  weight: ['400', '500'],
+  weight: ['400', '500', '600'],
   variable: '--font-mono',
   display: 'swap',
 })
@@ -38,7 +40,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${schibsted.variable} ${inter.variable} ${ibmPlexMono.variable}`}>
+    <html lang="en" className={`${archivo.variable} ${ibmPlexSans.variable} ${ibmPlexMono.variable}`}>
       <body className="bg-steel-50 font-sans text-steel-950 antialiased">
         {children}
       </body>

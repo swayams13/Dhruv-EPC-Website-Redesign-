@@ -13,6 +13,7 @@
 //   engineering-supplied data before launch (plan §P-5). ═══
 
 import { Approval, Certification, EntityRecord, Product } from '@vedanta/schemas'
+import type { ExplodedFrame } from '../../components/ExplodedSequence'
 
 export const preciseEntity = EntityRecord.parse({
   companySlug: 'precise-engineers',
@@ -146,6 +147,17 @@ export const preciseStats = [
   { value: '80 – 8,000 mm', label: 'Bellows size range', source: 'Circular NB; rectangular to 9,000 × 5,000 mm' }, // [source: vedantagroup.net]
   { value: 'EJMA · ASME', label: 'Design codes' }, // [source: vedantagroup.net]
   { value: '12 sectors', label: 'Oil & gas to atomic energy' }, // [source: vedantagroup.net about-us.php sector list]
+]
+
+// Exploded-view expansion-joint (metallic bellows) frame sequence — home
+// hero photo slot. docs/design.md + docs/decisions.md [2026-07-16]:
+// photorealistic AI-render override, approved for this feature only.
+// Frames go under apps/web/public/exploded/expansion-joint/ — see
+// docs/exploded-view-image-generation-guide.md for exact filenames/specs.
+// ═══ PLACEHOLDER PATHS — swap in real generated frames before launch ═══
+export const preciseExplodedFrames: ExplodedFrame[] = [
+  { avif: '/exploded/expansion-joint/frame-01.avif', webp: '/exploded/expansion-joint/frame-01.webp' },
+  { avif: '/exploded/expansion-joint/frame-02.avif', webp: '/exploded/expansion-joint/frame-02.webp' },
 ]
 
 export const telescopicExpansionJoint = Product.parse({

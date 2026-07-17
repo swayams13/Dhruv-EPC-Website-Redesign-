@@ -48,7 +48,8 @@ export function HomeHero({
 }: HomeHeroProps): React.ReactElement {
   return (
     <section className="bg-steel-900">
-      <div className="mx-auto max-w-wide px-6 py-16">
+      <div className="mx-auto max-w-wide px-6 py-24">
+        <div className="mb-6 h-px w-16 bg-accent" aria-hidden="true" />
         <p className="text-xs font-medium uppercase tracking-caption text-steel-400">{eyebrow}</p>
         <h1 className="mt-4 max-w-content font-display text-display-xl font-medium text-steel-50">
           {headline}
@@ -76,8 +77,14 @@ export function HomeHero({
             )}
             <DatumRule animate />
           </div>
-          {/* full-bleed: photography bands alone may exceed the content widths (§7) */}
-          <div className="mt-2 aspect-video w-full overflow-hidden bg-steel-800">
+          {/* full-bleed: photography bands alone may exceed the content widths (§7).
+              The band's aspect ratio is owned by the photo child, not this
+              wrapper (2026-07-16, docs/ui-ux-review.md §3.6): a fixed
+              aspect-video + overflow-hidden here clips the exploded-view
+              sequence's scroll track and disables its position:sticky —
+              sticky fails inside overflow-hidden ancestors. Plain photos
+              passed by pages must bring their own aspect class. */}
+          <div className="mt-2 w-full bg-steel-800">
             {photo}
           </div>
         </>

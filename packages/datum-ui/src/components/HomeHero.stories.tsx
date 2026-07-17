@@ -2,8 +2,10 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { HomeHero } from './HomeHero'
 import { withCompany } from '../story-helpers'
 
+// The photo child owns its own aspect ratio (2026-07-16 — HomeHero's band
+// wrapper no longer forces aspect-video; see the component comment).
 const photoFrame = (
-  <div className="flex h-full w-full items-center justify-center bg-steel-800 font-mono text-helper text-steel-500">
+  <div className="flex aspect-video w-full items-center justify-center bg-steel-800 font-mono text-helper text-steel-500">
     graded works photograph · full-bleed
   </div>
 )

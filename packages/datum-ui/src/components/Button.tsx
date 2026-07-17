@@ -44,6 +44,8 @@ const variantClass: Record<ButtonProps['variant'], string> = {
 const onDarkClass: Partial<Record<ButtonProps['variant'], string>> = {
   primary: `${box} ${press} ${tick} bg-white text-steel-950 hover:bg-steel-100 active:bg-steel-200 disabled:hover:bg-steel-200`,
   secondary: `${box} ${press} ${tick} border border-steel-600 bg-transparent text-steel-50 hover:border-steel-400 disabled:border-steel-200 disabled:hover:border-steel-200`,
+  // accent-dark is the light-surface accent for dark backgrounds (arc-300/flex-300 per company)
+  link: `${tick} inline font-medium text-data text-accent-dark hover:text-accent hover:underline`,
 }
 
 const disabledFill = 'disabled:bg-steel-200 disabled:text-steel-400'

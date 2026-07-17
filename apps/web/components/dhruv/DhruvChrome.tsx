@@ -3,6 +3,7 @@
 // Menu content comes from the seeded equipment list; entity contact from the
 // EntityRecord (never hard-coded — CLAUDE.md).
 import { useState } from 'react'
+import Link from 'next/link'
 import { Header, MobileDrawer } from '@vedanta/datum-ui'
 import { dhruvEquipment, dhruvPhoneHref, dhruvWhatsappHref } from '../../lib/content/dhruv-epc'
 
@@ -14,8 +15,7 @@ const GROUPS = [
 
 const LINKS = [
   { label: 'Capabilities', href: '/dhruv-epc/capabilities' },
-  { label: 'Projects', href: '/dhruv-epc/projects' },
-  { label: 'Company', href: '/dhruv-epc/company' },
+  { label: 'Proof', href: '/dhruv-epc/proof' },
 ]
 
 export function DhruvChrome() {
@@ -24,7 +24,7 @@ export function DhruvChrome() {
   return (
     <>
       <Header
-        logo={<span className="font-display text-h4 font-medium">Dhruv EPC</span>}
+        logo={<span className="font-display text-h4 font-bold">Dhruv EPC</span>}
         homeHref="/dhruv-epc"
         menuLabel="Equipment"
         menuGroups={GROUPS.map((g) => ({
@@ -47,6 +47,7 @@ export function DhruvChrome() {
         }))}
         links={LINKS}
         rfqHref="/request-a-quote?company=dhruv"
+        linkComponent={Link}
       />
     </>
   )

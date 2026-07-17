@@ -2,6 +2,7 @@
 // data-company="precise" scopes CSS variables to flex values
 // Session 8: chrome (Header/§17 + drawer) and Footer/§18 wrap every Precise route.
 
+import Link from 'next/link'
 import { Footer } from '@vedanta/datum-ui'
 import { PreciseChrome } from '../../components/precise/PreciseChrome'
 import { preciseEntity } from '../../lib/content/precise-engineers'
@@ -44,6 +45,7 @@ export default function PreciseLayout({ children }: { children: React.ReactNode 
         certificationsHref="/precise-engineers/proof/certifications"
         privacyHref="/privacy"
         termsHref="/terms"
+        linkComponent={Link}
       />
     </div>
   )

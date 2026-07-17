@@ -27,11 +27,13 @@ export interface FooterProps {
   entity: EntityRecord
   /** Sitemap columns: Equipment / Capabilities / Company / Resources */
   columns: FooterColumn[]
-  certificationsHref: string
+  certificationsHref?: string
   privacyHref: string
   termsHref: string
   /** LinkedIn only, as a labeled link (§18 Zone 3) */
   linkedinHref?: string
+  /** Pass next/link (or any router Link) for client-side navigation in the sitemap. Defaults to <a>. */
+  linkComponent?: React.ElementType
   className?: never
 }
 
@@ -66,6 +68,7 @@ export function Footer({
   privacyHref,
   termsHref,
   linkedinHref,
+  linkComponent: Link = 'a',
 }: FooterProps): React.ReactElement {
   const stamps = entity.stampsHeld.filter(isStampCode)
 
@@ -154,7 +157,7 @@ export function Footer({
         <div className="border-b border-steel-200 bg-steel-50">
           <div className="mx-auto flex max-w-wide flex-wrap items-center gap-3 px-6 py-6">
             {stamps.map((code) => (
-              <Stamp key={code} code={code} href={certificationsHref} />
+              <Stamp key={code} code={code} {...(certificationsHref ? { href: certificationsHref } : {})} />
             ))}
           </div>
         </div>
@@ -171,19 +174,19 @@ export function Footer({
               <ul className="mt-3 space-y-2">
                 {col.links.map((link) => (
                   <li key={link.href}>
-                    <a
+                    <Link
                       href={link.href}
                       className="text-sm text-steel-700 transition-colors duration-instant hover:text-steel-950 hover:underline"
                     >
                       {link.label}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
             </div>
           ))}
         </div>
-        <div className="mx-auto flex max-w-wide flex-wrap items-center gap-6 border-t border-steel-200 px-6 py-6 text-sm text-steel-600">
+        <div className="mx-auto flex max-w-wide flex-wrap items-center gap-6 border-t border-steel-200 px-6 py-6 pb-20 text-sm text-steel-600 md:pb-6">
           <a href={privacyHref} className="hover:text-steel-950 hover:underline">
             Privacy
           </a>

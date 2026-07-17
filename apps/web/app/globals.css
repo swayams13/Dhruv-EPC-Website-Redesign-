@@ -8,14 +8,14 @@
 
 :root,
 [data-company='dhruv'] {
-  --accent: #F0670F;        /* arc-500 */
-  --accent-dark: #FFA45E;   /* arc-300 — on dark surfaces */
-  --accent-text: #C24E05;   /* arc-600 — text on light */
-  --accent-text-hover: #9A3F06; /* arc-700 */
-  --accent-focus: #F0670F;
-  --accent-hover: #C24E05;  /* arc-600 — rfqHover (§13: fill deepens one step) */
-  --accent-pressed: #9A3F06; /* arc-700 — rfqPressed (deepens two) */
-  --accent-fg: #121619;     /* steel-950 — rfqFg, 5.79:1 on arc-500 (Session 2) */
+  --accent: #C98A2E;        /* arc-500 — industrial amber */
+  --accent-dark: #E5AF6A;   /* arc-300 — on dark surfaces, 8.7:1 on steel-950 */
+  --accent-text: #8A5D1D;   /* arc-600 — text on light, 4.56:1 on steel-50 */
+  --accent-text-hover: #6B4915; /* arc-700 — hover, 6.5:1 on steel-50 */
+  --accent-focus: #C98A2E;
+  --accent-hover: #8A5D1D;  /* arc-600 — rfqHover */
+  --accent-pressed: #6B4915; /* arc-700 — rfqPressed */
+  --accent-fg: #14171A;     /* steel-950 — rfqFg on amber fill */
 }
 
 [data-company='precise'] {
@@ -26,18 +26,18 @@
   --accent-focus: #0E6BA8;
   --accent-hover: #0A5589;  /* flex-600 — rfqHover */
   --accent-pressed: #083F6A; /* flex-700 — rfqPressed */
-  --accent-fg: #F7F8F8;     /* steel-50 — rfqFg, ~7.1:1 on flex-500 (Session 2) */
+  --accent-fg: #F2F0EA;     /* steel-50 — rfqFg on flex fill */
 }
 
 [data-company='group'] {
-  --accent: #121619;        /* steel-950 — neutral, no color accent */
-  --accent-dark: #E1E5E7;   /* steel-200 */
-  --accent-text: #3F4950;   /* steel-700 */
-  --accent-text-hover: #1C2328; /* steel-900 */
-  --accent-focus: #121619;
-  --accent-hover: #2A3238;  /* steel-800 — rfqHover */
-  --accent-pressed: #3F4950; /* steel-700 — rfqPressed */
-  --accent-fg: #F7F8F8;     /* steel-50 — rfqFg, 17.4:1 on steel-950 (fix, see mistakes.md) */
+  --accent: #14171A;        /* steel-950 — neutral, no color accent */
+  --accent-dark: #DCD8CE;   /* steel-200 */
+  --accent-text: #3D3A34;   /* steel-700 */
+  --accent-text-hover: #1C1A18; /* steel-900 */
+  --accent-focus: #14171A;
+  --accent-hover: #282520;  /* steel-800 — rfqHover */
+  --accent-pressed: #3D3A34; /* steel-700 — rfqPressed */
+  --accent-fg: #F2F0EA;     /* steel-50 — rfqFg */
 }
 
 /* Universal focus ring — arc-500 (or company accent), 2px, 2px offset (Datum §25) */
@@ -46,20 +46,48 @@
   outline-offset: 2px;
 }
 
-/* Schibsted Grotesk — self-hosted via next/font (no Google tracking) */
-/* Inter + IBM Plex Mono — via next/font */
+/* Archivo + IBM Plex Sans + IBM Plex Mono — all via next/font */
 
-/* §10 glass scrim degradation: solid steel-50 where blur is unsupported
-   or prefers-reduced-transparency is set (sticky header sets data-glass) */
+/* §10 glass scrim degradation: solid steel-50 where blur is unsupported */
 @supports not (backdrop-filter: blur(12px)) {
   [data-glass] {
-    background-color: #F7F8F8; /* steel-50 */
+    background-color: #F2F0EA; /* steel-50 warm */
   }
 }
 @media (prefers-reduced-transparency: reduce) {
   [data-glass] {
-    background-color: #F7F8F8; /* steel-50 */
+    background-color: #F2F0EA; /* steel-50 warm */
     backdrop-filter: none;
+  }
+}
+
+/* Exploded-view hero sequence (Datum §11 addendum, docs/decisions.md
+   2026-07-16; revised per docs/ui-ux-review.md). CSS-first branching so the
+   server-rendered height is final on every device class — no hydration
+   reflow (CLS), no wrong-frame flash. Baseline (narrow viewports, reduced
+   motion, no-JS): static fully-exploded frame, normal hero-photo footprint.
+   md+ with motion permitted: the scrubbed stack pins inside a tall track.
+   The 60px sticky offset mirrors h-header-scrolled in the Tailwind preset —
+   the header is fixed and always compressed by the time the band pins; if
+   the header heights ever change, this value must move with them. */
+.exploded-track {
+  position: relative;
+}
+.exploded-scrub {
+  display: none;
+}
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+  .exploded-track {
+    height: var(--exploded-track, 220vh);
+  }
+  .exploded-static {
+    display: none;
+  }
+  .exploded-scrub {
+    display: block;
+    position: sticky;
+    top: 60px; /* h-header-scrolled — fixed header clearance */
+    max-height: calc(100vh - 60px); /* short laptop viewports: keep the band fully visible */
   }
 }
 

@@ -3,10 +3,25 @@
 // flex-filled element per view. Content from lib/content/precise-engineers
 // (Zod-parsed).
 import type { Metadata } from 'next'
-import { CertificationCard, HomeHero, ProductCard, type StampProps } from '@vedanta/datum-ui'
+import {
+  CertificationCard,
+  DomainIcon,
+  type DomainIconName,
+  HomeHero,
+  ProductCard,
+  type StampProps,
+} from '@vedanta/datum-ui'
 import { buildLocalBusiness } from '@vedanta/schemas'
+import { ExplodedSequence } from '../../components/ExplodedSequence'
 import { RFQBand } from '../../components/RFQBand'
-import { preciseCertifications, preciseEntity, preciseProducts, preciseStats, preciseWhatsappHref } from '../../lib/content/precise-engineers'
+import {
+  preciseCertifications,
+  preciseEntity,
+  preciseExplodedFrames,
+  preciseProducts,
+  preciseStats,
+  preciseWhatsappHref,
+} from '../../lib/content/precise-engineers'
 
 export const metadata: Metadata = {
   title: 'Precise Engineers — EJMA Metallic Bellows & Expansion Joints, Anand',
@@ -19,6 +34,21 @@ const STAMP_BY_NAME: Record<string, StampProps['code'] | undefined> = {
   'EIL Approved Vendor': undefined, // no §12 stamp exists for EIL — card renders without a mark
 }
 
+// §12 domain icons on the product grid — interim visual until the works
+// shoot supplies real card photography (2026-07-16, docs/ui-ux-review.md §5).
+// Bellows variants intentionally share the bellows section view.
+const ICON_BY_HREF: Record<string, DomainIconName> = {
+  '/precise-engineers/products/metallic-bellows-expansion-joint': 'bellows',
+  '/precise-engineers/products/telescopic-expansion-joint': 'telescopic',
+  '/precise-engineers/products/rubber-bellows': 'bellows',
+  '/precise-engineers/products/fabric-bellows': 'bellows',
+  '/precise-engineers/products/dismantling-joint': 'flange',
+  '/precise-engineers/products/flange-adaptor': 'flange',
+  '/precise-engineers/products/zero-velocity-valve': 'valve',
+  '/precise-engineers/products/dual-plate-check-valve': 'valve',
+  '/precise-engineers/products/damper': 'damper',
+}
+
 export default function PreciseHome() {
   const products = Object.values(preciseProducts).flat()
 
@@ -29,6 +59,10 @@ export default function PreciseHome() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(buildLocalBusiness(preciseEntity)) }}
       />
 
+      {/* Exploded-view metallic bellows expansion joint in the photo slot —
+          docs/design.md, override logged in docs/decisions.md [2026-07-16].
+          Dimension label: metallic-bellows-expansion-joint spec-table max
+          circular size — sourced [vedantagroup.net], not a demo placeholder. */}
       <HomeHero
         eyebrow="EIL Approved · ISO 9001:2015 · V.U.Nagar, Anand"
         headline="Expansion joints to EJMA, from 80 to 8,000 mm."
@@ -36,17 +70,31 @@ export default function PreciseHome() {
         rfq={{ label: 'Request a quote', href: '/request-a-quote?company=precise' }}
         secondary={{ label: 'View products', href: '#products' }}
         stats={preciseStats}
+        photo={<ExplodedSequence frames={preciseExplodedFrames} />}
+        dimensionLabel="8,000 mm NB"
       />
 
       {/* Product grid — §16 product cards, no-photo variant until the works shoot (§P-5) */}
-      <section id="products" aria-labelledby="products-heading" className="mx-auto max-w-wide px-6 py-16">
-        <h2 id="products-heading" className="font-display text-h1 font-medium text-steel-950">
-          Products
-        </h2>
-        <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {products.map((p) => (
-            <ProductCard key={p.href} name={p.name} oneLineScope={p.scope} href={p.href} />
-          ))}
+      <section id="products" aria-labelledby="products-heading" className="bg-steel-950">
+        <div className="mx-auto max-w-wide px-6 py-16">
+          <h2 id="products-heading" className="font-display text-h1 font-medium text-steel-50">
+            Products
+          </h2>
+          <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {products.map((p) => {
+              const iconName = ICON_BY_HREF[p.href]
+              return (
+                <ProductCard
+                  key={p.href}
+                  name={p.name}
+                  oneLineScope={p.scope}
+                  href={p.href}
+                  icon={iconName && <DomainIcon name={iconName} size={32} />}
+                  onDark
+                />
+              )
+            })}
+          </div>
         </div>
       </section>
 

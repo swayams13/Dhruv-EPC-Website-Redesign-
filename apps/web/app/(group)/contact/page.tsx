@@ -4,10 +4,11 @@
 // plain Google Maps links carry the same information at zero JS/consent
 // cost; flagged in progress.md.
 import type { Metadata } from 'next'
-import { Footer, PageHero } from '@vedanta/datum-ui'
+import { PageHero } from '@vedanta/datum-ui'
 import type { EntityRecord } from '@vedanta/schemas'
 import { buildBreadcrumbList, buildLocalBusiness } from '@vedanta/schemas'
 import { dhruvEntity } from '../../../lib/content/dhruv-epc'
+import { telHref } from '../../../lib/format'
 import { groupEntity } from '../../../lib/content/group'
 import { preciseEntity } from '../../../lib/content/precise-engineers'
 
@@ -22,23 +23,9 @@ const breadcrumbLd = buildBreadcrumbList([
   { name: 'Contact', url: 'https://vedantagroup.net/contact' },
 ])
 
-const FOOTER_COLUMNS = [
-  {
-    heading: 'Companies',
-    links: [
-      { label: 'Dhruv EPC Solutions', href: '/dhruv-epc' },
-      { label: 'Precise Engineers', href: '/precise-engineers' },
-    ],
-  },
-  {
-    heading: 'Group',
-    links: [
-      { label: 'About', href: '/about' },
-      { label: 'Contact', href: '/contact' },
-      { label: 'Request a Quote', href: '/request-a-quote' },
-    ],
-  },
-]
+// Footer is owned by (group)/layout.tsx — pages must not render their own
+// (2026-07-16 audit P0-1: per-page Footers stacked a second full footer
+// under the layout's on every group route).
 
 function mapsHref(address: string): string {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`
@@ -85,7 +72,7 @@ function EntityBlock({ entity, note }: { entity: EntityRecord; note?: string }) 
             {entity.phones.map((phone) => (
               <a
                 key={phone}
-                href={`tel:${phone}`}
+                href={telHref(phone)}
                 className="inline-flex min-h-row items-center font-mono text-sm text-accent-text hover:text-accent-text-hover hover:underline"
               >
                 {phone}
@@ -171,14 +158,6 @@ export default function ContactPage() {
           </div>
         </section>
       </main>
-
-      <Footer
-        entity={groupEntity}
-        columns={FOOTER_COLUMNS}
-        certificationsHref="/#proof"
-        privacyHref="/privacy"
-        termsHref="/terms"
-      />
     </>
   )
 }

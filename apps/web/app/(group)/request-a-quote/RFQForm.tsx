@@ -7,6 +7,7 @@ import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button, ChoiceCard, Input, Select, Textarea, UploadDropzone } from '@vedanta/datum-ui'
 import { RFQStep1, RFQStep2 } from '@vedanta/schemas'
+import { telHref } from '../../../lib/format'
 
 // ponytail: page-local equipment list mirroring plan §3.3/§3.4 IA —
 // becomes CMS-driven when Product records land (Phase 4)
@@ -75,6 +76,7 @@ export function RFQForm({ initialCompany, fallbackEmail, fallbackPhone }: RFQFor
   // after a timed-out-but-delivered submit cannot create a duplicate lead
   const openedAt = useRef(Date.now())
   const idempotencyKey = useRef(crypto.randomUUID())
+  const stepHeadingRef = useRef<HTMLParagraphElement>(null)
 
   const step1Data = () => ({
     company,
@@ -96,20 +98,48 @@ export function RFQForm({ initialCompany, fallbackEmail, fallbackPhone }: RFQFor
     return out
   }
 
+  function focusFirstError(errs: Record<string, string>) {
+    // Company/equipment errors: focus the first radio in the fieldset.
+    // Named-field errors: focus by id (rfq-<field>).
+    if (errs.company || errs.equipmentType) {
+      const firstRadio = document.querySelector<HTMLElement>('[name="company"], [name="equipmentType"]')
+      firstRadio?.focus()
+      return
+    }
+    const firstKey = Object.keys(errs)[0]
+    if (firstKey) document.getElementById(`rfq-${firstKey}`)?.focus()
+  }
+
   function continueToContact() {
+    // audit P0-2 (2026-07-16): company is schema-optional (prefill via
+    // ?company=), so zod passes an unset company and fails equipmentType —
+    // whose error node lives in a fieldset that only mounts once company is
+    // set. Net effect: Continue dead-clicked with zero feedback. Guard the
+    // company choice explicitly with a friendly, rendered message.
+    if (!company) {
+      const errs = { company: 'Select which company this requirement is for' }
+      setErrors(errs)
+      focusFirstError(errs)
+      return
+    }
     const parsed = RFQStep1.safeParse(step1Data())
     if (!parsed.success) {
-      setErrors(fieldErrors(parsed.error.issues))
+      const errs = fieldErrors(parsed.error.issues)
+      setErrors(errs)
+      focusFirstError(errs)
       return
     }
     setErrors({})
     setStep(2)
+    requestAnimationFrame(() => stepHeadingRef.current?.focus())
   }
 
   async function submit() {
     const parsed = RFQStep2.safeParse({ name, contactCompany, email, phone })
     if (!parsed.success) {
-      setErrors(fieldErrors(parsed.error.issues))
+      const errs = fieldErrors(parsed.error.issues)
+      setErrors(errs)
+      focusFirstError(errs)
       return
     }
     setErrors({})
@@ -150,7 +180,12 @@ export function RFQForm({ initialCompany, fallbackEmail, fallbackPhone }: RFQFor
       }}
       className="flex flex-col gap-6"
     >
-      <p aria-live="polite" className="font-mono text-helper uppercase tracking-caption text-steel-600">
+      <p
+        ref={stepHeadingRef}
+        tabIndex={-1}
+        aria-live="polite"
+        className="font-mono text-helper uppercase tracking-caption text-steel-600 outline-none"
+      >
         {step === 1 ? 'Step 1 of 2 — Requirement' : 'Step 2 of 2 — Contact'}
       </p>
 
@@ -181,6 +216,14 @@ export function RFQForm({ initialCompany, fallbackEmail, fallbackPhone }: RFQFor
                   }}
                 />
               </div>
+              {/* audit P0-2 (2026-07-16): without this, Continue dead-clicked
+                  with zero feedback when no company was picked — the error
+                  existed in state but was rendered nowhere. */}
+              {errors.company && (
+                <p role="alert" className="mt-2 text-helper text-signal-error">
+                  {errors.company}
+                </p>
+              )}
             </fieldset>
           )}
 
@@ -272,6 +315,43 @@ export function RFQForm({ initialCompany, fallbackEmail, fallbackPhone }: RFQFor
 
       {step === 2 && (
         <>
+          {/* Step-1 recap — reduce mis-submits (#22) */}
+          <div className="rounded-sm border border-steel-200 bg-steel-50 px-4 py-3 text-sm text-steel-700">
+            <div className="flex items-start justify-between gap-4">
+              <dl className="flex flex-wrap gap-x-6 gap-y-1">
+                <div className="flex gap-2">
+                  <dt className="font-mono text-helper text-steel-500">Company</dt>
+                  <dd>{company === 'dhruv' ? 'Dhruv EPC' : 'Precise Engineers'}</dd>
+                </div>
+                {equipmentType && (
+                  <div className="flex gap-2">
+                    <dt className="font-mono text-helper text-steel-500">Equipment</dt>
+                    <dd>{EQUIPMENT.find((e) => e.value === equipmentType)?.label ?? equipmentType}</dd>
+                  </div>
+                )}
+                {quantity && (
+                  <div className="flex gap-2">
+                    <dt className="font-mono text-helper text-steel-500">Qty</dt>
+                    <dd>{quantity}</dd>
+                  </div>
+                )}
+                {uploadedFileKeys.length > 0 && (
+                  <div className="flex gap-2">
+                    <dt className="font-mono text-helper text-steel-500">Drawings</dt>
+                    <dd>{uploadedFileKeys.length}</dd>
+                  </div>
+                )}
+              </dl>
+              <button
+                type="button"
+                onClick={() => setStep(1)}
+                className="shrink-0 rounded-sm border border-steel-300 px-3 py-1 text-xs font-medium text-steel-700 transition-colors duration-instant hover:border-steel-400 hover:text-steel-950"
+              >
+                Edit
+              </button>
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <Input
               id="rfq-name"
@@ -309,7 +389,8 @@ export function RFQForm({ initialCompany, fallbackEmail, fallbackPhone }: RFQFor
               helper="Include the country code, e.g. +91"
               {...(errors.phone ? { error: errors.phone } : {})}
               value={phone}
-              onChange={(e) => setPhone(e.target.value.replace(/[\s-]/g, ''))}
+              onChange={(e) => setPhone(e.target.value)}
+              onBlur={(e) => setPhone(e.target.value.replace(/[\s-]/g, ''))}
             />
           </div>
 
@@ -341,7 +422,7 @@ export function RFQForm({ initialCompany, fallbackEmail, fallbackPhone }: RFQFor
                   )}
                   {fallbackEmail && fallbackPhone && ' · '}
                   {fallbackPhone && (
-                    <a href={`tel:${fallbackPhone}`} className="font-mono font-medium text-accent-text hover:underline">
+                    <a href={telHref(fallbackPhone)} className="font-mono font-medium text-accent-text hover:underline">
                       {fallbackPhone}
                     </a>
                   )}

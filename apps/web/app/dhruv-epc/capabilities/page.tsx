@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { MobileBottomBar, PageHero, SpecTable } from '@vedanta/datum-ui'
 import { buildBreadcrumbList } from '@vedanta/schemas'
 import { RFQBand } from '../../../components/RFQBand'
@@ -87,14 +88,14 @@ export default function DhruvCapabilitiesPage() {
               </h3>
               <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {items.map((item) => (
-                  <a
+                  <Link
                     key={item.href}
                     href={item.href}
                     className="rounded-sm border border-steel-200 bg-white p-6 transition-colors duration-instant hover:border-steel-400"
                   >
                     <p className="font-medium text-steel-950">{item.name}</p>
                     <p className="mt-1 text-helper text-steel-600">{item.scope}</p>
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>

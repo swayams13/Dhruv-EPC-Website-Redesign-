@@ -1,16 +1,9 @@
 'use client'
 // Header — Datum §17.
-// 72px, steel-50, bottom scribed line: logo left · Equipment (mega-menu) +
-// section links center · WhatsApp + click-to-call + the RFQ button right —
-// the RFQ button is present in the header on every page (PRD 5.3).
-// Sticky (§17/§10/§8): the header sits absolute in its 72px slot, scrolls away
-// with the page, and after one viewport reattaches fixed — compressed to 60px,
-// Raised (shadow-1), surface steel-50 @ 88% + 12px backdrop blur (the one
-// sanctioned glass effect). Height is not animated: height transitions trigger
-// layout, banned by §11's compositor law.
-// Mega-menu: click-to-open Raised panel (hover-only disclosure is banned) —
-// IA groups as name + one-line scope, right rail deep-linking the Capability
-// Matrix. ESC closes and refocuses the trigger; outside pointer closes.
+// Phase 1.1: dark nav — always fixed, solid steel-950 chrome. Scroll threshold
+// 40px (was innerHeight): compresses header to 60px after minimal scroll.
+// Gradient-over-hero effect deferred to Phase 2 (requires hero co-ordination).
+// phoneHref / whatsappHref are now optional — GroupChrome omits them.
 
 import { useEffect, useRef, useState } from 'react'
 import { Button } from './Button'
@@ -35,19 +28,18 @@ export interface HeaderNavLink {
 }
 
 export interface HeaderProps {
-  /** Logo lockup (monochrome per §2.2) */
+  /** Logo lockup */
   logo: React.ReactNode
   homeHref: string
   /** Mega-menu trigger label — "Equipment" (Dhruv) / "Products" (Precise) */
   menuLabel: string
   menuGroups: MegaMenuGroup[]
-  /** Right rail: deep-link to the Capability Matrix ("Max sizes, materials & codes") */
+  /** Right rail: deep-link to Capability Matrix */
   capabilityRail: HeaderNavLink
-  /** Capabilities · Projects · Company */
   links: HeaderNavLink[]
-  /** tel: link — click-to-call is first-class (PRD 5.3) */
-  phoneHref: string
-  whatsappHref: string
+  /** tel: link — optional; GroupChrome omits it */
+  phoneHref?: string
+  whatsappHref?: string
   rfqHref: string
   /** Opens the MobileDrawer (hamburger, <768px) */
   onMenuOpen?: () => void
@@ -73,7 +65,7 @@ export function Header({
   const triggerRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > window.innerHeight)
+    const onScroll = () => setScrolled(window.scrollY > 40)
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
@@ -99,20 +91,17 @@ export function Header({
   }, [menuOpen])
 
   const chrome = scrolled
-    ? 'fixed h-header-scrolled bg-steel-50/88 shadow-raised backdrop-blur-md'
-    : 'absolute h-header bg-steel-50'
+    ? 'fixed h-header-scrolled bg-steel-950 shadow-raised border-b border-steel-50/10'
+    : 'fixed h-header bg-steel-950 border-b border-steel-50/10'
 
   return (
     <div className="relative h-header">
       <header
         ref={headerRef}
-        // data-glass: §10 degradation hook — global CSS renders solid steel-50
-        // where backdrop-filter is unsupported or prefers-reduced-transparency
-        data-glass={scrolled || undefined}
-        className={`${chrome} inset-x-0 top-0 z-40 border-b border-steel-200`}
+        className={`${chrome} inset-x-0 top-0 z-40`}
       >
         <div className="mx-auto flex h-full max-w-wide items-center justify-between gap-6 px-6">
-          <a href={homeHref} className="flex items-center text-steel-950">
+          <a href={homeHref} className="flex items-center text-steel-50">
             {logo}
           </a>
 
@@ -123,7 +112,7 @@ export function Header({
               aria-expanded={menuOpen}
               aria-controls="datum-mega-menu"
               onClick={() => setMenuOpen((v) => !v)}
-              className="flex h-full items-center gap-1 text-data font-medium text-steel-950"
+              className="flex h-full items-center gap-1 text-data font-medium text-steel-200"
             >
               {menuLabel}
               <span
@@ -136,7 +125,7 @@ export function Header({
               <a
                 key={l.href}
                 href={l.href}
-                className="flex h-full items-center text-data font-medium text-steel-950"
+                className="flex h-full items-center text-data font-medium text-steel-200"
               >
                 {l.label}
               </a>
@@ -144,22 +133,24 @@ export function Header({
           </nav>
 
           <div className="hidden items-center gap-2 md:flex">
-            {/* §17 order: WhatsApp + click-to-call, then the RFQ button */}
-            <a
-              href={whatsappHref}
-              aria-label="Chat on WhatsApp"
-              className="flex h-compact w-compact items-center justify-center rounded-sm text-steel-700 transition-colors duration-instant hover:bg-steel-100 hover:text-steel-950"
-            >
-              <WhatsApp size={20} />
-            </a>
-            <a
-              href={phoneHref}
-              aria-label="Call us"
-              className="flex h-compact w-compact items-center justify-center rounded-sm text-steel-700 transition-colors duration-instant hover:bg-steel-100 hover:text-steel-950"
-            >
-              <Phone size={20} />
-            </a>
-            {/* invisible (not unmount): keeps layout stable — no nav shift */}
+            {whatsappHref && (
+              <a
+                href={whatsappHref}
+                aria-label="Chat on WhatsApp"
+                className="flex h-compact w-compact items-center justify-center rounded-sm text-steel-300 transition-colors duration-instant hover:bg-steel-800 hover:text-steel-50"
+              >
+                <WhatsApp size={20} />
+              </a>
+            )}
+            {phoneHref && (
+              <a
+                href={phoneHref}
+                aria-label="Call us"
+                className="flex h-compact w-compact items-center justify-center rounded-sm text-steel-300 transition-colors duration-instant hover:bg-steel-800 hover:text-steel-50"
+              >
+                <Phone size={20} />
+              </a>
+            )}
             <span className={contentRfqInView ? 'invisible' : undefined}>
               <Button variant="rfq" size="compact" href={rfqHref}>
                 Request a quote
@@ -171,22 +162,22 @@ export function Header({
             type="button"
             aria-label="Open menu"
             onClick={onMenuOpen}
-            className="flex h-compact w-compact items-center justify-center rounded-sm text-steel-950 md:hidden"
+            className="flex h-compact w-compact items-center justify-center rounded-sm text-steel-50 md:hidden"
           >
             <Menu />
           </button>
         </div>
 
-        {/* Mega-menu — Raised panel (§8): hairline border + shadow-1 */}
+        {/* Mega-menu — dark Raised panel */}
         <div
           id="datum-mega-menu"
           hidden={!menuOpen}
-          className="absolute inset-x-0 top-full border-b border-steel-200 bg-white shadow-raised"
+          className="absolute inset-x-0 top-full border-b border-steel-50/10 bg-steel-950 shadow-overlay"
         >
           <div className="mx-auto grid max-w-wide grid-cols-4 gap-8 px-6 py-8">
             {menuGroups.map((group) => (
               <div key={group.label}>
-                <p className="text-xs font-medium uppercase tracking-caption text-steel-500">
+                <p className="font-mono text-xs font-medium uppercase tracking-caption text-accent">
                   {group.label}
                 </p>
                 <ul className="mt-3">
@@ -194,23 +185,23 @@ export function Header({
                     <li key={item.href}>
                       <a
                         href={item.href}
-                        className="-mx-2 block rounded-sm px-2 py-2 transition-colors duration-instant hover:bg-steel-100"
+                        className="-mx-2 block rounded-sm px-2 py-2 transition-colors duration-instant hover:bg-steel-800"
                       >
-                        <span className="block text-data font-medium text-steel-950">
+                        <span className="block text-data font-medium text-steel-100">
                           {item.name}
                         </span>
-                        <span className="block text-helper text-steel-600">{item.scope}</span>
+                        <span className="block text-helper text-steel-500">{item.scope}</span>
                       </a>
                     </li>
                   ))}
                 </ul>
               </div>
             ))}
-            {/* the rail: "can you build mine?" is the question behind every menu open */}
-            <div className="border-l border-steel-200 pl-8">
+            {/* capability rail — "can you build mine?" is the question behind every menu open */}
+            <div className="border-l border-steel-700/50 pl-8">
               <a
                 href={capabilityRail.href}
-                className="group flex items-center gap-2 text-data font-medium text-accent-text transition-colors duration-instant hover:text-accent-text-hover"
+                className="group flex items-center gap-2 text-data font-medium text-accent-dark transition-colors duration-instant hover:text-accent"
               >
                 {capabilityRail.label}
                 <span className="transition-transform duration-instant ease-standard motion-safe:group-hover:translate-x-1">
