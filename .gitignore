@@ -30,3 +30,5 @@ Thumbs.db
 pnpm-lock.yaml.bak
 storybook-static/
 graphify-out/
+_incoming-exploded/
+_to_delete-*/
