@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { ChevronDown, MobileBottomBar, ProductHero, SpecTable } from '@vedanta/datum-ui'
 import { buildBreadcrumbList, buildFAQPage, buildProduct } from '@vedanta/schemas'
 import { RFQBand } from '../../../../components/RFQBand'
-import { AnchorRailMobile } from '../../../components/AnchorRail'
+import { AnchorRailMobile } from '../../../../components/AnchorRail'
 import { dismantlingJoint, preciseEntity, precisePhoneHref, preciseWhatsappHref } from '../../../../lib/content/precise-engineers'
 
 const BASE = 'https://vedantagroup.net'
