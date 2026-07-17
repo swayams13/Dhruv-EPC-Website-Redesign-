@@ -67,6 +67,7 @@ export default function ProcessSkidsPage() {
       />
 
       <AnchorRailMobile sections={SECTIONS} />
+
       <div className="mx-auto grid max-w-wide grid-cols-1 gap-8 px-6 py-12 lg:grid-cols-12">
         <div className="flex flex-col gap-16 lg:col-span-8">
           <section id="specifications" aria-labelledby="spec-heading">

@@ -6,7 +6,7 @@ import type { Metadata } from 'next'
 import { ChevronDown, MobileBottomBar, ProductHero, SpecTable } from '@vedanta/datum-ui'
 import { buildBreadcrumbList, buildFAQPage, buildProduct } from '@vedanta/schemas'
 import { RFQBand } from '../../../../components/RFQBand'
-import { AnchorRailMobile } from '../../../../components/AnchorRail'
+import { AnchorRailMobile } from '../../../components/AnchorRail'
 import { metallicBellows, preciseEntity, precisePhoneHref, preciseWhatsappHref } from '../../../../lib/content/precise-engineers'
 
 const BASE = 'https://vedantagroup.net' // canonical host — must match sitemap.ts/robots.ts (machine-record drift)
@@ -73,6 +73,7 @@ export default function MetallicBellowsPage() {
       />
 
       <AnchorRailMobile sections={SECTIONS} />
+
       <div className="mx-auto grid max-w-wide grid-cols-1 gap-8 px-6 py-12 lg:grid-cols-12">
         <div className="flex flex-col gap-16 lg:col-span-8">
           {/* §21.2 — spec table, first scroll, always above FAQ and gallery */}
