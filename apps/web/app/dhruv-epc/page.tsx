@@ -10,13 +10,11 @@ import {
   type StampProps,
 } from '@vedanta/datum-ui'
 import { buildLocalBusiness } from '@vedanta/schemas'
-import { ExplodedSequence } from '../../components/ExplodedSequence'
 import { RFQBand } from '../../components/RFQBand'
 import {
   dhruvCertifications,
   dhruvEntity,
   dhruvEquipment,
-  dhruvExplodedFrames,
   dhruvStats,
   dhruvWhatsappHref,
 } from '../../lib/content/dhruv-epc'
@@ -68,8 +66,7 @@ export default function DhruvHome() {
         rfq={{ label: 'Request a quote', href: '/request-a-quote?company=dhruv' }}
         secondary={{ label: 'View equipment', href: '#equipment' }}
         stats={dhruvStats}
-        photo={<ExplodedSequence frames={dhruvExplodedFrames} />}
-        dimensionLabel="Ø 5,000 mm"
+
       />
 
       {/* Equipment grid — §16 product cards, no-photo variant until the works shoot (§P-5) */}

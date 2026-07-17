@@ -12,12 +12,10 @@ import {
   type StampProps,
 } from '@vedanta/datum-ui'
 import { buildLocalBusiness } from '@vedanta/schemas'
-import { ExplodedSequence } from '../../components/ExplodedSequence'
 import { RFQBand } from '../../components/RFQBand'
 import {
   preciseCertifications,
   preciseEntity,
-  preciseExplodedFrames,
   preciseProducts,
   preciseStats,
   preciseWhatsappHref,
@@ -70,8 +68,7 @@ export default function PreciseHome() {
         rfq={{ label: 'Request a quote', href: '/request-a-quote?company=precise' }}
         secondary={{ label: 'View products', href: '#products' }}
         stats={preciseStats}
-        photo={<ExplodedSequence frames={preciseExplodedFrames} />}
-        dimensionLabel="8,000 mm NB"
+
       />
 
       {/* Product grid — §16 product cards, no-photo variant until the works shoot (§P-5) */}
