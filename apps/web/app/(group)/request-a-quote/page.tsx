@@ -68,9 +68,14 @@ function ReassuranceRail({
   )
 }
 
-export default function RequestAQuotePage({ searchParams }: { searchParams: { company?: string } }) {
+export default function RequestAQuotePage({
+  searchParams,
+}: {
+  searchParams: { company?: string; equipment?: string }
+}) {
   const company =
     searchParams.company === 'dhruv' || searchParams.company === 'precise' ? searchParams.company : undefined
+  const equipment = searchParams.equipment ?? undefined
 
   // Contact fallback from env until the EntityRecord singleton lands in CMS —
   // never hard-coded in a component (CLAUDE.md)
@@ -115,7 +120,7 @@ export default function RequestAQuotePage({ searchParams }: { searchParams: { co
               </p>
             </div>
           </noscript>
-          <RFQForm initialCompany={company} fallbackEmail={fallbackEmail} fallbackPhone={fallbackPhone} />
+          <RFQForm initialCompany={company} initialEquipment={equipment} fallbackEmail={fallbackEmail} fallbackPhone={fallbackPhone} />
         </div>
         <ReassuranceRail fallbackEmail={fallbackEmail} fallbackPhone={fallbackPhone} />
       </div>

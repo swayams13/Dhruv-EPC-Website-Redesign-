@@ -5,7 +5,8 @@
 import Link from 'next/link'
 import { Footer } from '@vedanta/datum-ui'
 import { PreciseChrome } from '../../components/precise/PreciseChrome'
-import { preciseEntity } from '../../lib/content/precise-engineers'
+import { StickyQuoteChip } from '../../components/StickyQuoteChip'
+import { preciseEntity, preciseWhatsappHref } from '../../lib/content/precise-engineers'
 
 const FOOTER_COLUMNS = [
   {
@@ -45,8 +46,10 @@ export default function PreciseLayout({ children }: { children: React.ReactNode 
         certificationsHref="/precise-engineers/proof/certifications"
         privacyHref="/privacy"
         termsHref="/terms"
+        whatsappHref={preciseWhatsappHref}
         linkComponent={Link}
       />
+      <StickyQuoteChip href="/request-a-quote?company=precise" />
     </div>
   )
 }

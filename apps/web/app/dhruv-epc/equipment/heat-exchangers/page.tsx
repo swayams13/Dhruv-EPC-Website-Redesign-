@@ -5,7 +5,7 @@ import type { Metadata } from 'next'
 import { ChevronDown, MobileBottomBar, ProductHero, SpecTable } from '@vedanta/datum-ui'
 import { buildBreadcrumbList, buildFAQPage, buildProduct } from '@vedanta/schemas'
 import { RFQBand } from '../../../../components/RFQBand'
-import { AnchorRailMobile } from '../../../../components/AnchorRail'
+import { AnchorRailDesktop, AnchorRailMobile } from '../../../../components/AnchorRail'
 import { dhruvEntity, dhruvPhoneHref, dhruvWhatsappHref, heatExchangers } from '../../../../lib/content/dhruv-epc'
 
 const BASE = 'https://vedantagroup.net' // canonical host — must match sitemap.ts/robots.ts (machine-record drift)
@@ -68,7 +68,8 @@ export default function HeatExchangersPage() {
         valueStatement="Designed and fabricated to ASME Sec. VIII Div. 1 & 2 with TEMA mechanical standards and HTRI thermal design — under ASME U and U2 Certificates of Authorization."
         chips={['ASME Sec. VIII Div. 1 & 2', 'TEMA · HTRI', 'CS · SS · duplex · Ni alloys']}
         specHref="#specifications"
-        rfq={{ label: 'Request a quote', href: '/request-a-quote?company=dhruv' }}
+        certChips={['ASME U', 'ASME U2', 'IBR', 'ISO 9001:2015']}
+        rfq={{ label: 'Request a quote', href: '/request-a-quote?company=dhruv&equipment=heat-exchangers' }}
       />
 
       <AnchorRailMobile sections={SECTIONS} />
@@ -135,7 +136,7 @@ export default function HeatExchangersPage() {
             <ol className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
               {QA_STEPS.map((s, i) => (
                 <li key={s.step} className="rounded-sm border border-steel-200 bg-white p-4">
-                  <span className="font-mono text-helper text-steel-600">{i + 1}</span>
+                  <span className="font-mono text-h3 font-light leading-none text-steel-300">{i + 1}</span>
                   <h3 className="mt-1 text-sm font-medium text-steel-950">{s.step}</h3>
                   <p className="mt-1 text-helper text-steel-600">{s.caption}</p>
                 </li>
@@ -168,28 +169,11 @@ export default function HeatExchangersPage() {
           </section>
         </div>
 
-        {/* §21 anchor rail — desktop only, the 8+4 grid's rail column */}
-        <nav aria-label="On this page" className="hidden lg:col-span-4 lg:block">
-          <div className="sticky top-24 rounded-sm border border-steel-200 bg-white p-6">
-            <p className="text-xs font-medium uppercase tracking-caption text-steel-600">On this page</p>
-            <ul className="mt-3 flex flex-col">
-              {SECTIONS.map((s) => (
-                <li key={s.id}>
-                  <a
-                    href={`#${s.id}`}
-                    className="flex min-h-row items-center text-sm text-steel-700 transition-colors duration-instant hover:text-steel-950"
-                  >
-                    {s.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </nav>
+        <AnchorRailDesktop sections={SECTIONS} />
       </div>
 
       {/* §21.9 — graphite closer */}
-      <RFQBand company="dhruv" whatsappHref={dhruvWhatsappHref} />
+      <RFQBand company="dhruv" equipment="heat-exchangers" whatsappHref={dhruvWhatsappHref} />
 
       {/* §17 — mobile bottom action bar persists on product pages */}
       <MobileBottomBar

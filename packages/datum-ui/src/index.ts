@@ -65,3 +65,4 @@ export {
   type ProjectCardProps,
   type ProjectMetric,
 } from './components/ProjectCard'
+export { useRfqAnchorInView } from './components/useRfqAnchorInView'

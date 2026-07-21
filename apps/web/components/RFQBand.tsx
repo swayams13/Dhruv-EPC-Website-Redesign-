@@ -3,7 +3,18 @@
 // data-rfq-anchor: the header RFQ yields while this band is in view (§13).
 import { Button } from '@vedanta/datum-ui'
 
-export function RFQBand({ company, whatsappHref }: { company: 'dhruv' | 'precise'; whatsappHref: string }) {
+export function RFQBand({
+  company,
+  whatsappHref,
+  equipment,
+}: {
+  company: 'dhruv' | 'precise'
+  whatsappHref: string
+  equipment?: string
+}) {
+  const rfqHref = equipment
+    ? `/request-a-quote?company=${company}&equipment=${equipment}`
+    : `/request-a-quote?company=${company}`
   return (
     <section data-rfq-anchor className="bg-steel-900">
       <div className="mx-auto flex max-w-wide flex-col items-start gap-6 px-6 py-16 md:flex-row md:items-center md:justify-between">
@@ -15,7 +26,7 @@ export function RFQBand({ company, whatsappHref }: { company: 'dhruv' | 'precise
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-4">
-          <Button variant="rfq" href={`/request-a-quote?company=${company}`}>
+          <Button variant="rfq" href={rfqHref}>
             Request a quote
           </Button>
           <Button variant="secondary" onDark href={whatsappHref}>

@@ -1067,6 +1067,49 @@ pnpm build       ✓  35 routes, zero errors/warnings
 
 ---
 
+### Session 19 — Phase D audit items, merge to main, ExplodedSequence removed
+**Status:** Complete ✅
+**Branch:** `phase-4-exploded-hero-sequence` → merged to `main` (PR #6) · **Date:** 2026-07-17 · **Model:** claude-sonnet-4-6
+**Governing specs:** `docs/frontend-redesign-plan.md` Phase D, `docs/frontend-audit.md`, `docs/datum-design-system.md`
+
+#### What was done
+
+**Phase D — 5 code-actionable audit items from `docs/frontend-audit.md`:**
+
+- **#23 — SpecTable matrix sticky-hover fix:** Pinned-column `<th scope="row">` gets `group-hover:bg-steel-100` via the `group` class on `<tr>` — hover now tints the full row including the sticky column instead of leaving it white while the data cells highlight.
+- **#14 — `tel:` helper:** `apps/web/lib/format.ts` — `telHref(phone)` normalises any phone string to a dialable `tel:+…` href (`phone.replace(/[^+\d]/g, '')`). Used on Footer phones to strip display formatting before the `tel:` prefix.
+- **#18 — `ChevronDown` opened in datum-ui barrel:** `packages/datum-ui/src/index.ts` now exports `ChevronDown` from the glyphs module. All 17 product pages (8 Dhruv equipment + 9 Precise products) replaced the `⌄` text glyph in FAQ `<details>` summaries with `<ChevronDown size={20} />`.
+- **#21 — `AnchorRailMobile` component:** New `apps/web/components/AnchorRail.tsx` — horizontal scroll rail with section jump-links, `overflow-x-auto`, `border-b border-steel-200`, `min-h-row` touch targets, visible only on `lg:hidden`. `AnchorRailDesktop` (sticky sidebar) also in the file for later. Wired into all 17 product pages immediately above the content grid.
+- **#20 — next/link adoption in datum-ui Footer + MobileDrawer via `linkComponent` prop:** `Footer` and `MobileDrawer` accept an optional `linkComponent?: React.ElementType` (defaults to `'a'`). All three layout files (`(group)/layout.tsx`, `dhruv-epc/layout.tsx`, `precise-engineers/layout.tsx`) and three chrome files pass `linkComponent={Link}` from `next/link` — sitemap and drawer links now use the Next.js router rather than full-page navigations. Capabilities pages converted `<a>` → `<Link>` directly.
+
+**Product pages batch:**
+- 17 product pages updated with `ChevronDown` glyph + `AnchorRailMobile` via Python batch script (correct 4-level relative import `../../../../components/AnchorRail` for both Dhruv and Precise routes). A subagent committed the initial batch with a wrong 3-level path on Precise pages; corrected in `2cfba3a`.
+
+**Merge:**
+- Branch pushed to remote; PR #6 opened and merged on GitHub (`3be237c`). Local main reset to `origin/main`.
+
+**ExplodedSequence removed from home pages (Swayam's request):**
+- `ExplodedSequence` import and `photo`/`dimensionLabel` props removed from `dhruv-epc/page.tsx` and `precise-engineers/page.tsx`.
+- Entire exploded-view section (DimensionLabel + DatumRule + ExplodedSequence) removed from `(group)/page.tsx`. Unused `DimensionLabel`, `DatumRule`, `groupExplodedFrames` imports cleaned up.
+- `ExplodedSequence` component and image assets remain in the repo for reuse when works photography is ready.
+- Committed `8556dff` and pushed to main.
+
+#### Gate result
+
+```
+pnpm typecheck   ✓  4/4 packages, zero errors
+pnpm lint        ✓  0 errors, 0 warnings
+pnpm test        ✓  142/142 (tokens 26, schemas 39, datum-ui 77)
+pnpm build       ✓  35 routes, zero errors/warnings
+```
+
+#### What's NOT done (client-gated or deferred)
+
+- Phase B (content): works photography, testimonials, real engineering figures, env credentials, staging LCP
+- `ExplodedSequence` re-wiring: drop real images in `apps/web/public/exploded/` and add `photo={<ExplodedSequence frames={…} />}` back to the three home pages
+
+---
+
 ### Deferred queue — ⏰ REMIND SWAYAM AFTER SESSION 10 (his instruction, 2026-07-10)
 
 1. **Session 6 human gate:** E2E RFQ with real creds — `STORAGE_*`, `RESEND_API_KEY`,

@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { ChevronDown, MobileBottomBar, ProductHero, SpecTable } from '@vedanta/datum-ui'
 import { buildBreadcrumbList, buildFAQPage, buildProduct } from '@vedanta/schemas'
 import { RFQBand } from '../../../../components/RFQBand'
-import { AnchorRailMobile } from '../../../../components/AnchorRail'
+import { AnchorRailDesktop, AnchorRailMobile } from '../../../../components/AnchorRail'
 import { dhruvEntity, dhruvPhoneHref, dhruvWhatsappHref, storageTanks } from '../../../../lib/content/dhruv-epc'
 
 const BASE = 'https://vedantagroup.net'
@@ -63,7 +63,8 @@ export default function StorageTanksPage() {
         valueStatement="Fixed-cone-roof and open-top storage tanks in carbon steel and stainless steel, plus shop-fabricated ASME Sec. VIII Div. 1 air receivers — for process, petroleum and utility storage duty."
         chips={['API 650 class', 'ASME Sec. VIII Div. 1', 'CS · SS · rubber-lined']}
         specHref="#specifications"
-        rfq={{ label: 'Request a quote', href: '/request-a-quote?company=dhruv' }}
+        certChips={['ASME U', 'ASME U2', 'IBR', 'ISO 9001:2015']}
+        rfq={{ label: 'Request a quote', href: '/request-a-quote?company=dhruv&equipment=storage-tanks' }}
       />
 
       <AnchorRailMobile sections={SECTIONS} />
@@ -126,7 +127,7 @@ export default function StorageTanksPage() {
             <ol className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
               {QA_STEPS.map((s, i) => (
                 <li key={s.step} className="rounded-sm border border-steel-200 bg-white p-4">
-                  <span className="font-mono text-helper text-steel-600">{i + 1}</span>
+                  <span className="font-mono text-h3 font-light leading-none text-steel-300">{i + 1}</span>
                   <h3 className="mt-1 text-sm font-medium text-steel-950">{s.step}</h3>
                   <p className="mt-1 text-helper text-steel-600">{s.caption}</p>
                 </li>
@@ -157,26 +158,10 @@ export default function StorageTanksPage() {
           </section>
         </div>
 
-        <nav aria-label="On this page" className="hidden lg:col-span-4 lg:block">
-          <div className="sticky top-24 rounded-sm border border-steel-200 bg-white p-6">
-            <p className="text-xs font-medium uppercase tracking-caption text-steel-600">On this page</p>
-            <ul className="mt-3 flex flex-col">
-              {SECTIONS.map((s) => (
-                <li key={s.id}>
-                  <a
-                    href={`#${s.id}`}
-                    className="flex min-h-row items-center text-sm text-steel-700 transition-colors duration-instant hover:text-steel-950"
-                  >
-                    {s.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </nav>
+        <AnchorRailDesktop sections={SECTIONS} />
       </div>
 
-      <RFQBand company="dhruv" whatsappHref={dhruvWhatsappHref} />
+      <RFQBand company="dhruv" equipment="storage-tanks" whatsappHref={dhruvWhatsappHref} />
 
       <MobileBottomBar
         phoneHref={dhruvPhoneHref}

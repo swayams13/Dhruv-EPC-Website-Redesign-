@@ -32,6 +32,8 @@ export interface FooterProps {
   termsHref: string
   /** LinkedIn only, as a labeled link (§18 Zone 3) */
   linkedinHref?: string
+  /** WhatsApp direct link — renders alongside LinkedIn */
+  whatsappHref?: string
   /** Pass next/link (or any router Link) for client-side navigation in the sitemap. Defaults to <a>. */
   linkComponent?: React.ElementType
   className?: never
@@ -68,6 +70,7 @@ export function Footer({
   privacyHref,
   termsHref,
   linkedinHref,
+  whatsappHref,
   linkComponent: Link = 'a',
 }: FooterProps): React.ReactElement {
   const stamps = entity.stampsHeld.filter(isStampCode)
@@ -196,6 +199,11 @@ export function Footer({
           {linkedinHref && (
             <a href={linkedinHref} className="hover:text-steel-950 hover:underline">
               LinkedIn
+            </a>
+          )}
+          {whatsappHref && (
+            <a href={whatsappHref} className="hover:text-steel-950 hover:underline">
+              WhatsApp
             </a>
           )}
         </div>

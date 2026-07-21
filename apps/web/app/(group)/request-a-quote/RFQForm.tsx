@@ -21,12 +21,16 @@ const EQUIPMENT: { value: string; label: string; company: 'dhruv' | 'precise' }[
   { value: 'base-frames', label: 'Base Frames', company: 'dhruv' },
   { value: 'heavy-fabrication', label: 'Heavy Fabrication', company: 'dhruv' },
   { value: 'heavy-machining', label: 'Heavy Machining', company: 'dhruv' },
+  { value: 'storage-tanks', label: 'Storage Tanks', company: 'dhruv' },
   { value: 'metallic-bellows-expansion-joint', label: 'Metallic Bellows Expansion Joint', company: 'precise' },
   { value: 'telescopic-expansion-joint', label: 'Telescopic Expansion Joint', company: 'precise' },
   { value: 'rubber-bellows', label: 'Rubber Bellows', company: 'precise' },
   { value: 'fabric-bellows', label: 'Fabric Bellows', company: 'precise' },
   { value: 'dismantling-joint', label: 'Dismantling Joint', company: 'precise' },
   { value: 'flange-adaptor', label: 'Flange Adaptor', company: 'precise' },
+  { value: 'zero-velocity-valve', label: 'Zero Velocity Valve', company: 'precise' },
+  { value: 'dual-plate-check-valve', label: 'Dual Plate Check Valve', company: 'precise' },
+  { value: 'damper', label: 'Damper', company: 'precise' },
 ]
 
 const DESIGN_CODES = ['ASME VIII Div 1', 'ASME VIII Div 2', 'IBR', 'IS 2825', 'EJMA', 'ASME B31.3', 'Other']
@@ -36,6 +40,7 @@ type Company = 'dhruv' | 'precise'
 
 export interface RFQFormProps {
   initialCompany?: Company | undefined
+  initialEquipment?: string | undefined
   fallbackEmail?: string | undefined
   fallbackPhone?: string | undefined
 }
@@ -51,11 +56,14 @@ async function presignFile(file: File): Promise<{ url: string; key: string }> {
   return { url: data.url, key: data.key }
 }
 
-export function RFQForm({ initialCompany, fallbackEmail, fallbackPhone }: RFQFormProps) {
+export function RFQForm({ initialCompany, initialEquipment, fallbackEmail, fallbackPhone }: RFQFormProps) {
   const router = useRouter()
   const [step, setStep] = useState<1 | 2>(1)
   const [company, setCompany] = useState<Company | undefined>(initialCompany)
-  const [equipmentType, setEquipmentType] = useState('')
+  const [equipmentType, setEquipmentType] = useState(
+    // Pre-select only if this value exists in the EQUIPMENT list
+    EQUIPMENT.some((e) => e.value === initialEquipment) ? (initialEquipment ?? '') : '',
+  )
   const [designCode, setDesignCode] = useState('')
   const [moc, setMoc] = useState('')
   const [quantity, setQuantity] = useState('')

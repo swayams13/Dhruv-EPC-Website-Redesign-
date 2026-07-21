@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { ChevronDown, MobileBottomBar, ProductHero, SpecTable } from '@vedanta/datum-ui'
 import { buildBreadcrumbList, buildFAQPage, buildProduct } from '@vedanta/schemas'
 import { RFQBand } from '../../../../components/RFQBand'
-import { AnchorRailMobile } from '../../../../components/AnchorRail'
+import { AnchorRailDesktop, AnchorRailMobile } from '../../../../components/AnchorRail'
 import { fabricBellows, preciseEntity, precisePhoneHref, preciseWhatsappHref } from '../../../../lib/content/precise-engineers'
 
 const BASE = 'https://vedantagroup.net'
@@ -63,7 +63,8 @@ export default function FabricBellowsPage() {
         valueStatement="Fabric expansion joints in E-glass, ceramic fibre, PTFE-coated and silicone-coated layups for hot flue-gas and air ducting at power stations, cement plants and refineries — circular and rectangular ducts."
         chips={['E-glass · ceramic fibre · PTFE-coated', 'Up to +1,000 °C', 'Circular & rectangular ducts']}
         specHref="#specifications"
-        rfq={{ label: 'Request a quote', href: '/request-a-quote?company=precise' }}
+        certChips={['EIL Approved Vendor', 'ISO 9001:2015']}
+        rfq={{ label: 'Request a quote', href: '/request-a-quote?company=precise&equipment=fabric-bellows' }}
       />
 
       <AnchorRailMobile sections={SECTIONS} />
@@ -126,7 +127,7 @@ export default function FabricBellowsPage() {
             <ol className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
               {QA_STEPS.map((s, i) => (
                 <li key={s.step} className="rounded-sm border border-steel-200 bg-white p-4">
-                  <span className="font-mono text-helper text-steel-600">{i + 1}</span>
+                  <span className="font-mono text-h3 font-light leading-none text-steel-300">{i + 1}</span>
                   <h3 className="mt-1 text-sm font-medium text-steel-950">{s.step}</h3>
                   <p className="mt-1 text-helper text-steel-600">{s.caption}</p>
                 </li>
@@ -157,26 +158,10 @@ export default function FabricBellowsPage() {
           </section>
         </div>
 
-        <nav aria-label="On this page" className="hidden lg:col-span-4 lg:block">
-          <div className="sticky top-24 rounded-sm border border-steel-200 bg-white p-6">
-            <p className="text-xs font-medium uppercase tracking-caption text-steel-600">On this page</p>
-            <ul className="mt-3 flex flex-col">
-              {SECTIONS.map((s) => (
-                <li key={s.id}>
-                  <a
-                    href={`#${s.id}`}
-                    className="flex min-h-row items-center text-sm text-steel-700 transition-colors duration-instant hover:text-steel-950"
-                  >
-                    {s.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </nav>
+        <AnchorRailDesktop sections={SECTIONS} />
       </div>
 
-      <RFQBand company="precise" whatsappHref={preciseWhatsappHref} />
+      <RFQBand company="precise" equipment="fabric-bellows" whatsappHref={preciseWhatsappHref} />
 
       <MobileBottomBar
         phoneHref={precisePhoneHref}

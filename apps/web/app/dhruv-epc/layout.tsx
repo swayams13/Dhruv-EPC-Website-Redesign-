@@ -5,7 +5,8 @@
 import Link from 'next/link'
 import { Footer } from '@vedanta/datum-ui'
 import { DhruvChrome } from '../../components/dhruv/DhruvChrome'
-import { dhruvEntity } from '../../lib/content/dhruv-epc'
+import { StickyQuoteChip } from '../../components/StickyQuoteChip'
+import { dhruvEntity, dhruvWhatsappHref } from '../../lib/content/dhruv-epc'
 
 const FOOTER_COLUMNS = [
   {
@@ -44,8 +45,10 @@ export default function DhruvLayout({ children }: { children: React.ReactNode })
         certificationsHref="/dhruv-epc/proof"
         privacyHref="/privacy"
         termsHref="/terms"
+        whatsappHref={dhruvWhatsappHref}
         linkComponent={Link}
       />
+      <StickyQuoteChip href="/request-a-quote?company=dhruv" />
     </div>
   )
 }

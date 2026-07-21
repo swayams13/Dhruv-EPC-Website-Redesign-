@@ -21,6 +21,8 @@ export interface ProductHeroProps {
   chips: string[]
   /** Spec-table anchor the chips jump to */
   specHref?: string
+  /** Credential chips shown below spec chips — e.g. ['ASME U', 'IBR', 'ISO 9001:2015'] */
+  certChips?: string[]
   rfq: { label: string; href: string }
   /** Optional real photograph (compact hero — not every product page has one) */
   photo?: React.ReactNode
@@ -35,6 +37,7 @@ export function ProductHero({
   valueStatement,
   chips,
   specHref = '#specifications',
+  certChips,
   rfq,
   photo,
   dimensionLabel,
@@ -57,6 +60,17 @@ export function ProductHero({
                 >
                   {chip}
                 </a>
+              </li>
+            ))}
+          </ul>
+        )}
+        {certChips && certChips.length > 0 && (
+          <ul className="mt-2 flex flex-wrap gap-2">
+            {certChips.map((chip) => (
+              <li key={chip}>
+                <span className="inline-block rounded-sm border border-steel-200 bg-steel-100 px-2 py-1 font-mono text-helper text-steel-600">
+                  ✓ {chip}
+                </span>
               </li>
             ))}
           </ul>
