@@ -1157,6 +1157,79 @@ pnpm build       ✓  35 routes, zero errors/warnings
 
 ---
 
+### Session 21 — Railway deploy fix: root start script for Railpack
+**Status:** Complete ✅
+**Branch:** `feat/brand-red-and-p0-fixes` → merged to `main` (PR #7) · **Commit:** `f21e1bb` · **Date:** 2026-08-27
+
+#### What was done
+
+- Diagnosed Railway service `beautiful-courage` / `Dhruv-EPC-Website-Redesign-` stuck in `Failed` status via `railway logs --build --latest`.
+- Root cause: Railpack builds from the repo root and only reads the root `package.json` for a start command. This pnpm/turbo monorepo's root had `dev/build/lint/typecheck/test` but no `start` — even though `apps/web/package.json` already defines `"start": "next start"`. Build failed at `railpack prepare` with `No start command detected`, never reaching the actual Next.js build.
+- Fix: added `"start": "pnpm --filter @vedanta/web start"` to root `package.json`. `next start` reads Railway's `$PORT` automatically — no other config needed.
+- PR #7 bundled this fix together with the pending `feat/brand-red-and-p0-fixes` branch (brand-red token update + Session 20 docs), per explicit instruction to merge the whole branch rather than cherry-pick.
+
+#### Files changed
+
+- `package.json` — added root `start` script
+
+#### Gate result
+
+Not re-run this session (deploy-config-only change, no app code touched). Railway should trigger a fresh build off `main` on merge — confirm via `railway status` that the new deployment succeeds.
+
+#### What's NOT done / deferred
+
+- Post-merge Railway deploy success not yet confirmed in this session — check `railway status` / `railway logs --build --latest` after the new build completes.
+
+---
+
+### Session 22 — Stabilization: 10 pre-existing defects (B1–B10) + governance bookkeeping
+**Status:** Complete ✅
+**Branch:** `stabilize/session-0-defects` → merged to `main` (PR #8) · **Date:** 2026-08-27
+
+#### What was done
+
+Ten independent, pre-existing defects fixed and verified — no redesign, content, routing-structure, or RFQ/schema work. Each fix its own commit citing its defect ID:
+
+- **B1** — `apps/web/tailwind.config.ts` content glob missing `./components/**/*.{ts,tsx}`; silently dropped utilities used only there (StickyQuoteChip, AnchorRail, RFQBand, chrome logos).
+- **B2** — `next/font` CSS vars (`--font-display`/`--font-sans`/`--font-mono`) declared in `layout.tsx` but the Tailwind preset's `fontFamily` referenced bare font names; also loaded missing Archivo 500/600 weights (only 700/800 existed, but ~90 headings use `font-medium`/`font-semibold`).
+- **B3** — `text-body`/`text-small`/`text-h2`/`text-caption` used in components (5× on `/privacy`, `/terms`) but absent from the Tailwind `fontSize` preset; added using the same clamp()/fixed-px pattern as the existing steps.
+- **B4** — two dead nav/footer links live on all 13 Precise Engineers routes: `/precise-engineers/projects` (never built) and a nested `certificationsHref` that didn't exist. Mirrored Dhruv's already-correct pattern.
+- **B5** — two redirect engines disagreed on status code: `next.config.mjs`'s hardcoded `redirects()` (308, no query-string preservation) ran before `middleware.ts`'s CSV-compiled, parity-tested engine (301). Deleted the config-based one.
+- **B6** — `trailingSlash` was unset while every redirect destination/sitemap URL/breadcrumb URL already expects one — was causing a 301-then-308 chain on every legacy URL. Set `trailingSlash: true`.
+- **B7** — `globals.css` hand-duplicated 16 `--accent*` hex values from `semantic.ts` with nothing enforcing parity. Added `apps/web/lib/css-parity.test.ts` (moved from `packages/tokens` after a `@types/node` gap surfaced there) that extracts the custom properties and asserts against `semanticByCompany` — verified it fails loudly on a manual one-hex drift, then reverted the drift.
+- **B8** — `/api/presign` was unauthenticated and unbounded. Added the same IP rate-limit pattern used in `/api/rfq` (60s/10req, pragmatic duplication logged in mistakes.md as the 3rd-caller extraction trigger) and bound `fileSizeBytes` into the presigned URL's SigV4 signature via a signed `content-length` header — R2/S3 now rejects a mismatched-size upload at the storage layer instead of only the advisory Zod check. No new dependency.
+- **B9** — `.step`/`.stp` CAD files passed server (Zod) validation but `UploadDropzone`'s default `accept` prop omitted them, so they couldn't be selected in the browser at all.
+- **B10** — 25 of 32 page titles were double-suffixed by the root `title.template` (`"... | Precise Engineers | Vedanta Group"`). Removed the template (pages already carry their own suffix); added `alternates.canonical` and hoisted the `BASE` host constant into `apps/web/lib/site.ts` for the 19 pages touched (20 total `const BASE` redeclarations existed — 1 more was the root layout itself).
+
+Plus governance bookkeeping: retroactive `docs/decisions.md` entry for the brand-red token commit (`9fa229f`, which required design-review sign-off but shipped without a logged entry); backlog status updates in `design docs/02-development-backlog (1).md` (VG-002 and VG-003 marked DONE, VG-040's dependency corrected from "P0 decision 4" to "Railway Postgres provisioned"); and a test-count fact-check — `docs/launch-checklist.md` claimed a stale 136/5-files, actual re-run count is 175 tests across 7 files (confirmed by running the suite, not estimated).
+
+Two P0 decisions from the session brief were left untouched as instructed: the warm neutral ramp in `primitives.ts`/`semantic.ts` (retained, not re-mapped to cool), and the Railway/Railway Postgres deployment target.
+
+#### Files changed
+
+16 commits — see `git log main~17..main~1` (or PR #8) for the full list; touches `apps/web/tailwind.config.ts`, `apps/web/app/layout.tsx`, `packages/tokens/src/tailwind.ts`, `apps/web/app/precise-engineers/{layout,components/PreciseChrome}.tsx`, `apps/web/next.config.mjs`, `apps/web/lib/css-parity.test.ts` (new), `apps/web/app/api/presign/route.ts` + `apps/web/lib/presign.ts`, `packages/datum-ui/src/components/UploadDropzone.tsx`, `apps/web/lib/site.ts` (new) + 19 page files, `docs/decisions.md`, `docs/mistakes.md`, `docs/launch-checklist.md`, `design docs/02-development-backlog (1).md`.
+
+#### Gate result
+
+```
+pnpm typecheck   ✓  4/4 packages, zero errors
+pnpm lint        ✓  0 errors (pre-existing unrelated warnings in LegalDocument.tsx only)
+pnpm test        ✓  175/175 (tokens 33, schemas 39, datum-ui 77, web 26)
+pnpm build       ✓  37 routes, zero errors/warnings — all First Load JS budgets under threshold
+```
+
+Manual browser check (Precise Engineers home + 320px viewport): fonts render correctly (Archivo weights confirmed), nav resolves ("Proof" not the dead "Projects" link), trailing slash confirmed end-to-end, no horizontal scroll at 320px, single accent-filled CTA per view.
+
+#### What's NOT done / deferred
+
+Logged in `docs/mistakes.md` rather than fixed inline (out of scope per CLAUDE.md scope discipline):
+- Rate-limiter duplication between `/api/rfq` and `/api/presign` — extract `lib/rate-limit.ts` if a 3rd route needs it.
+- `BASE` constant not fully hoisted — `apps/web/app/sitemap.ts` and hardcoded URLs in `contact`/`about` page JSON-LD still redeclare it.
+- `StickyQuoteChip`'s `variant="secondary"` button has a pre-existing low-contrast issue on dark (`steel-950`) sections, found during browser verification — not part of B1–B10, needs a `data-chrome`-aware secondary variant.
+- The `claude/06-pre-development-integration-review.md` and `claude/07-p0-decisions-locked.md` files referenced by the session brief were not found in this repo — proceeded directly from the ticket's own B1–B10 descriptions.
+
+---
+
 ### Deferred queue — ⏰ REMIND SWAYAM AFTER SESSION 10 (his instruction, 2026-07-10)
 
 1. **Session 6 human gate:** E2E RFQ with real creds — `STORAGE_*`, `RESEND_API_KEY`,
