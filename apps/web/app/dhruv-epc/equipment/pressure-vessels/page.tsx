@@ -5,13 +5,13 @@ import { buildBreadcrumbList, buildFAQPage, buildProduct } from '@vedanta/schema
 import { RFQBand } from '../../../../components/RFQBand'
 import { AnchorRailDesktop, AnchorRailMobile } from '../../../../components/AnchorRail'
 import { dhruvEntity, dhruvPhoneHref, dhruvWhatsappHref, pressureVessels } from '../../../../lib/content/dhruv-epc'
-
-const BASE = 'https://vedantagroup.net'
+import { BASE } from '../../../../lib/site'
 
 export const metadata: Metadata = {
   title: 'Pressure Vessels — ASME Sec. VIII Div. 1 & 2, U/U2 Stamped | Dhruv EPC',
   description:
     'Reactors, columns, separators and drums fabricated to ASME Section VIII Division 1 and 2 under U and U2 Certificates of Authorization. IBR approved. CS, SS, duplex and high-nickel alloys.',
+  alternates: { canonical: '/dhruv-epc/equipment/pressure-vessels/' },
 }
 
 const SECTIONS = [

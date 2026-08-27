@@ -8,13 +8,13 @@ import { buildBreadcrumbList, buildFAQPage, buildProduct } from '@vedanta/schema
 import { RFQBand } from '../../../../components/RFQBand'
 import { AnchorRailDesktop, AnchorRailMobile } from '../../../../components/AnchorRail'
 import { metallicBellows, preciseEntity, precisePhoneHref, preciseWhatsappHref } from '../../../../lib/content/precise-engineers'
-
-const BASE = 'https://vedantagroup.net' // canonical host — must match sitemap.ts/robots.ts (machine-record drift)
+import { BASE } from '../../../../lib/site'
 
 export const metadata: Metadata = {
   title: 'Metallic Bellows Expansion Joints — EJMA, ASME B31.3 | Precise Engineers',
   description:
     'Single, universal, hinged, gimbal and pressure-balanced expansion joints to EJMA and ASME B31.3. 80 – 8,000 mm NB circular, 9,000 × 5,000 mm rectangular. SS, Inconel, Incoloy, Hastelloy, duplex.',
+  alternates: { canonical: '/precise-engineers/products/metallic-bellows-expansion-joint/' },
 }
 
 // §21 anchor rail — engineers jump, they don't scroll politely

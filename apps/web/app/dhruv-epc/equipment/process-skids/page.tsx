@@ -5,13 +5,13 @@ import { buildBreadcrumbList, buildFAQPage, buildProduct } from '@vedanta/schema
 import { RFQBand } from '../../../../components/RFQBand'
 import { AnchorRailDesktop, AnchorRailMobile } from '../../../../components/AnchorRail'
 import { dhruvEntity, dhruvPhoneHref, dhruvWhatsappHref, processSkids } from '../../../../lib/content/dhruv-epc'
-
-const BASE = 'https://vedantagroup.net'
+import { BASE } from '../../../../lib/site'
 
 export const metadata: Metadata = {
   title: 'Process Skids — ASME B31.3, FAT-Tested | Dhruv EPC',
   description:
     'Skid-mounted process packages to ASME B31.3 — heat transfer, separator, metering and chemical-dosing skids — FAT-tested at the Manjusar works before dispatch.',
+  alternates: { canonical: '/dhruv-epc/equipment/process-skids/' },
 }
 
 const SECTIONS = [

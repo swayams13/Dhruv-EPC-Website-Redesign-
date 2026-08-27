@@ -5,13 +5,13 @@ import { buildBreadcrumbList, buildFAQPage, buildProduct } from '@vedanta/schema
 import { RFQBand } from '../../../../components/RFQBand'
 import { AnchorRailDesktop, AnchorRailMobile } from '../../../../components/AnchorRail'
 import { dhruvEntity, dhruvPhoneHref, dhruvWhatsappHref, heavyMachining } from '../../../../lib/content/dhruv-epc'
-
-const BASE = 'https://vedantagroup.net'
+import { BASE } from '../../../../lib/site'
 
 export const metadata: Metadata = {
   title: 'Heavy Machining — Boring, Turning & Facing to Ø 4,000 mm | Dhruv EPC',
   description:
     'Large-component boring, turning and flange facing at the Manjusar works — tube-sheet drilling to TEMA tolerances, ASME B16.5 and B16.47 flange faces, up to approximately Ø 4,000 mm.',
+  alternates: { canonical: '/dhruv-epc/equipment/heavy-machining/' },
 }
 
 const SECTIONS = [

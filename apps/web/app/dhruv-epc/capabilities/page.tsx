@@ -4,13 +4,13 @@ import { MobileBottomBar, PageHero, SpecTable } from '@vedanta/datum-ui'
 import { buildBreadcrumbList } from '@vedanta/schemas'
 import { RFQBand } from '../../../components/RFQBand'
 import { dhruvPhoneHref, dhruvWhatsappHref, dhruvEquipment } from '../../../lib/content/dhruv-epc'
-
-const BASE = 'https://vedantagroup.net'
+import { BASE } from '../../../lib/site'
 
 export const metadata: Metadata = {
   title: 'Capabilities — Max Sizes, Materials & Codes | Dhruv EPC',
   description:
     'Dhruv EPC holds ASME U, U2 and IBR stamps. Vessels to 3,600 mm dia / 200 T, design pressures full vacuum to 400 bar(g). TEMA · API 650 class. TPI by LRS, BV, DNV.',
+  alternates: { canonical: '/dhruv-epc/capabilities/' },
 }
 
 const CAPABILITY_ROWS = [

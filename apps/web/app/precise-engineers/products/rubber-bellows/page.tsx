@@ -5,13 +5,13 @@ import { buildBreadcrumbList, buildFAQPage, buildProduct } from '@vedanta/schema
 import { RFQBand } from '../../../../components/RFQBand'
 import { AnchorRailDesktop, AnchorRailMobile } from '../../../../components/AnchorRail'
 import { preciseEntity, precisePhoneHref, preciseWhatsappHref, rubberBellows } from '../../../../lib/content/precise-engineers'
-
-const BASE = 'https://vedantagroup.net'
+import { BASE } from '../../../../lib/site'
 
 export const metadata: Metadata = {
   title: 'Rubber Bellows — Elastomeric Expansion Joints, EPDM · NBR · Neoprene | Precise Engineers',
   description:
     'Single arch, dual arch and wide arch rubber expansion joints for vibration isolation and thermal movement. EPDM, NBR, Neoprene, Hypalon. Flanged, grooved. EIL approved, ISO 9001:2015.',
+  alternates: { canonical: '/precise-engineers/products/rubber-bellows/' },
 }
 
 const SECTIONS = [

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Archivo, IBM_Plex_Mono, IBM_Plex_Sans } from 'next/font/google'
+import { BASE } from '../lib/site'
 import './globals.css'
 
 const archivo = Archivo({
@@ -24,11 +25,13 @@ const ibmPlexMono = IBM_Plex_Mono({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://vedantagroup.net'),
-  title: {
-    template: '%s | Vedanta Group',
-    default: 'Vedanta Group — Precision Fabrication & Flow-Control Engineering',
-  },
+  metadataBase: new URL(BASE),
+  // Plain string, not a template: 25 of 32 pages already carry their own
+  // "| Precise Engineers"/"| Dhruv EPC"/"| Vedanta Group" suffix. A '%s | X'
+  // template here double-suffixed every one of them ("... | Precise
+  // Engineers | Vedanta Group"). Pages with no title of their own fall back
+  // to this string as-is.
+  title: 'Vedanta Group — Precision Fabrication & Flow-Control Engineering',
   description: 'Dhruv EPC Solutions and Precise Engineers — ASME U/U2, IBR, ISO certified fabricators of static equipment, pressure vessels, and expansion joints.',
   robots: {
     // Explicit allow for AI crawlers (FR-8 — the 409 dies here)

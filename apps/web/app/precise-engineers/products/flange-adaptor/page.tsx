@@ -5,13 +5,13 @@ import { buildBreadcrumbList, buildFAQPage, buildProduct } from '@vedanta/schema
 import { RFQBand } from '../../../../components/RFQBand'
 import { AnchorRailDesktop, AnchorRailMobile } from '../../../../components/AnchorRail'
 import { flangeAdaptor, preciseEntity, precisePhoneHref, preciseWhatsappHref } from '../../../../lib/content/precise-engineers'
-
-const BASE = 'https://vedantagroup.net'
+import { BASE } from '../../../../lib/site'
 
 export const metadata: Metadata = {
   title: 'Flange Adaptors — Pipe-to-Flange Transition Couplings | Precise Engineers',
   description:
     'Standard, stepped and anchor flange adaptors connecting plain-end pipe to flanged equipment. ANSI B16.1, BS 4504, DIN 2501. Ductile iron, CS, SS 304/316. EIL approved, ISO 9001:2015.',
+  alternates: { canonical: '/precise-engineers/products/flange-adaptor/' },
 }
 
 const SECTIONS = [

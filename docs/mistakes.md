@@ -120,3 +120,17 @@ two-file duplication was judged over-engineering for this session.
 
 **Rule:** if a third route needs IP rate limiting, extract
 `lib/rate-limit.ts` at that point — don't let a third copy-paste happen.
+
+## 2026-08-27 — Session 0 (B10 hoist): BASE constant not fully hoisted
+
+**What happened:** Created `apps/web/lib/site.ts` exporting `BASE` and
+replaced the 20 per-file `const BASE = 'https://vedantagroup.net'`
+redeclarations that B10's canonical-URL work already touched. Left
+un-hoisted (out of scope for this session, not touched by B1–B10):
+`apps/web/app/sitemap.ts` (its own `const base = ...`), and hardcoded
+literal `https://vedantagroup.net` strings in
+`app/(group)/contact/page.tsx` and `app/(group)/about/page.tsx`
+breadcrumb JSON-LD.
+
+**Rule:** the next session touching any of those three files should
+import `BASE` from `lib/site.ts` instead of redeclaring or hardcoding it.

@@ -5,13 +5,13 @@ import { buildBreadcrumbList, buildFAQPage, buildProduct } from '@vedanta/schema
 import { RFQBand } from '../../../../components/RFQBand'
 import { AnchorRailDesktop, AnchorRailMobile } from '../../../../components/AnchorRail'
 import { dualPlateCheckValve, preciseEntity, precisePhoneHref, preciseWhatsappHref } from '../../../../lib/content/precise-engineers'
-
-const BASE = 'https://vedantagroup.net'
+import { BASE } from '../../../../lib/site'
 
 export const metadata: Metadata = {
   title: 'Dual Plate Check Valves — API 594, ASME Class 150–600, Wafer & Lug | Precise Engineers',
   description:
     'Wafer and lug dual plate check valves to API 594, ASME Class 150, 300 and 600. WCB, CF8M, CF8, LCC. Metal-seated and soft-seated. EIL approved, ISO 9001:2015, Anand.',
+  alternates: { canonical: '/precise-engineers/products/dual-plate-check-valve/' },
 }
 
 const SECTIONS = [
