@@ -134,3 +134,19 @@ breadcrumb JSON-LD.
 
 **Rule:** the next session touching any of those three files should
 import `BASE` from `lib/site.ts` instead of redeclaring or hardcoding it.
+
+## 2026-08-27 — Session 0 browser verify: StickyQuoteChip low-contrast on dark sections (pre-existing, not touched)
+
+**What happened:** browser-checking B1 (Tailwind content glob restoring
+`bottom-6 right-6` on `StickyQuoteChip`) surfaced that the chip's
+`variant="secondary"` `Button` uses the light-surface style (dark
+`text-steel-950` on a transparent fill) regardless of what's actually
+behind it — over a `steel-950` product-grid section the label is nearly
+unreadable. The `bottom-6`/`right-6` positioning itself is correct
+(confirms B1's fix worked); this is a separate, pre-existing contrast
+bug, out of scope for this session (not one of B1–B10).
+
+**Rule:** `StickyQuoteChip`/`Button` needs a `data-chrome`-aware
+secondary variant (same mechanism `globals.css` already uses for the
+focus ring on dark chrome) before this is fixed — flag for a future
+session.
