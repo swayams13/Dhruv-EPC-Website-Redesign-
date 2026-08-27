@@ -2,6 +2,7 @@
 const config = {
   typescript: { ignoreBuildErrors: false },
   eslint: { ignoreDuringBuilds: false },
+  trailingSlash: true,
 
   images: {
     formats: ['image/avif', 'image/webp'],
