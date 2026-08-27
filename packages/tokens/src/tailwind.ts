@@ -64,9 +64,9 @@ export const datumPreset = {
       overlay: shadow.overlay,
     },
     fontFamily: {
-      display: ['Archivo', 'sans-serif'],
-      sans: ['IBM Plex Sans', 'sans-serif'],
-      mono: ['IBM Plex Mono', 'monospace'],
+      display: ['var(--font-display)', 'Archivo', 'sans-serif'],
+      sans: ['var(--font-sans)', 'IBM Plex Sans', 'sans-serif'],
+      mono: ['var(--font-mono)', 'IBM Plex Mono', 'monospace'],
     },
     transitionDuration: {
       instant: motion.instant,
