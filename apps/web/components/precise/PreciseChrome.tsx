@@ -14,7 +14,7 @@ const GROUPS = [
 
 const LINKS = [
   { label: 'Capabilities', href: '/precise-engineers/capabilities' },
-  { label: 'Projects', href: '/precise-engineers/projects' },
+  { label: 'Proof', href: '/precise-engineers/proof' },
   { label: 'Company', href: '/precise-engineers/company' },
 ]
 

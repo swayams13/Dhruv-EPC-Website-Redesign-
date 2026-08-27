@@ -22,7 +22,7 @@ const FOOTER_COLUMNS = [
     heading: 'Capabilities',
     links: [
       { label: 'Capability Matrix', href: '/precise-engineers/capabilities' },
-      { label: 'Projects', href: '/precise-engineers/projects' },
+      { label: 'Proof', href: '/precise-engineers/proof' },
     ],
   },
   {
@@ -43,7 +43,7 @@ export default function PreciseLayout({ children }: { children: React.ReactNode 
       <Footer
         entity={preciseEntity}
         columns={FOOTER_COLUMNS}
-        certificationsHref="/precise-engineers/proof/certifications"
+        certificationsHref="/precise-engineers/proof"
         privacyHref="/privacy"
         termsHref="/terms"
         whatsappHref={preciseWhatsappHref}
