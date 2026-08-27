@@ -1110,6 +1110,53 @@ pnpm build       ✓  35 routes, zero errors/warnings
 
 ---
 
+### Session 20 — 6 UX improvements: active AnchorRail, certChips, RFQ prefill, StickyQuoteChip, WhatsApp footer
+**Status:** Complete ✅
+**Branch:** `main` (committed directly) · **Commit:** `079e160` · **Date:** 2026-07-21 · **Model:** claude-sonnet-4-6
+**Governing specs:** `docs/datum-design-system.md` §17, §21, §23; `docs/frontend-audit.md`
+
+#### What was done
+
+- **AnchorRail — active section tracking:** `apps/web/components/AnchorRail.tsx` extended with `useActiveSection` hook using `IntersectionObserver` (`rootMargin: '-10% 0px -60% 0px'` — clips top/bottom so only the section filling the reading area is active). Both `AnchorRailMobile` and `AnchorRailDesktop` now highlight the in-view section. All 17 product pages updated: `AnchorRailDesktop` replaces any prior inline sidebar nav, placed in the `lg:col-span-4` grid column.
+
+- **`ProductHero` — `certChips` prop:** `packages/datum-ui/src/components/ProductHero.tsx` gained an optional `certChips?: string[]` prop — renders a `✓ CHIP` pill row below the spec chips using `border-steel-200 bg-steel-100 font-mono text-helper` styling. Wired on all 17 product pages with the relevant credential stamps (e.g. `['ASME U', 'ASME U2', 'IBR', 'ISO 9001:2015']` for Dhruv; `['EJMA', 'ISO 9001:2015', 'EIL Approved']` for Precise). Puts authority signals above the fold without touching the amber law.
+
+- **RFQ prefill — `?company=X&equipment=SLUG`:** `apps/web/components/RFQBand.tsx` gained an optional `equipment?: string` prop; when set, the "Get a Quote" button href becomes `/request-a-quote?company=${company}&equipment=${equipment}`. `apps/web/app/(group)/request-a-quote/page.tsx` reads `searchParams.equipment` and pre-selects it in `RFQForm`. `RFQForm.tsx` accepts `defaultEquipment?: string` to seed the step-1 equipment dropdown. All 17 product pages pass their equipment slug to `RFQBand`. Four equipment types that were missing from the `RFQForm` choice list were added: `storage-tanks`, `zero-velocity-valve`, `dual-plate-check-valve`, `damper`.
+
+- **`StickyQuoteChip` — desktop fixed CTA:** New component `apps/web/components/StickyQuoteChip.tsx`. Uses existing `useRfqAnchorInView` from datum-ui — slides down + fades out whenever any `[data-rfq-anchor]` (hero CTA row or RFQ band) is in the viewport. `variant="secondary"` — never competes with the amber/blue law accent fill. Desktop (`lg+`) only; mobile is covered by `MobileBottomBar`. Exported from `packages/datum-ui/src/index.ts`. Wired on all 17 product pages.
+
+- **Footer — `whatsappHref` prop:** `packages/datum-ui/src/components/Footer.tsx` Zone 3 now renders a WhatsApp link alongside LinkedIn when `whatsappHref` is supplied. Passed in `dhruv-epc/layout.tsx` and `precise-engineers/layout.tsx`.
+
+- **QA step counter — typographic hierarchy:** Step number on the QA strip section gets `text-h3 font-light text-steel-300` — a large watermark-style numeral that adds visual weight without color noise.
+
+#### Files changed
+
+- `apps/web/components/AnchorRail.tsx` — IntersectionObserver active tracking
+- `apps/web/components/StickyQuoteChip.tsx` — new component
+- `apps/web/components/RFQBand.tsx` — `equipment` prop + prefill href
+- `packages/datum-ui/src/components/ProductHero.tsx` — `certChips` prop
+- `packages/datum-ui/src/components/Footer.tsx` — `whatsappHref` prop
+- `packages/datum-ui/src/index.ts` — `StickyQuoteChip` export
+- `apps/web/app/(group)/request-a-quote/page.tsx` + `RFQForm.tsx` — `equipment` prefill + 4 new types
+- `apps/web/app/dhruv-epc/layout.tsx` + `precise-engineers/layout.tsx` — `whatsappHref` passed
+- All 17 product pages — `AnchorRailDesktop`, `certChips`, `equipment` prefill, `StickyQuoteChip` wired
+
+#### Gate result
+
+```
+pnpm typecheck   ✓  4/4 packages, zero errors
+pnpm lint        ✓  0 errors, 0 warnings
+pnpm test        ✓  142/142 (tokens 26, schemas 39, datum-ui 77)
+pnpm build       ✓  35 routes, zero errors/warnings
+```
+
+#### What's NOT done / deferred
+
+- Browser verify pass not run this session — no interactive states changed, only prop additions and IntersectionObserver logic.
+- `StickyQuoteChip` not yet added to group home or about page (no product anchor rails there).
+
+---
+
 ### Deferred queue — ⏰ REMIND SWAYAM AFTER SESSION 10 (his instruction, 2026-07-10)
 
 1. **Session 6 human gate:** E2E RFQ with real creds — `STORAGE_*`, `RESEND_API_KEY`,

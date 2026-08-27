@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { steel, arc, flex, signal } from './primitives'
+import { steel, brand, flex, signal } from './primitives'
 import { semanticBase, semanticDhruv, semanticPrecise, semanticGroup } from './semantic'
 
 // WCAG 2.1 relative luminance + contrast ratio
@@ -42,14 +42,17 @@ describe('semantic alias resolution', () => {
   it('base signal.error → signal primitive', () => {
     expect(semanticBase.color.signal.error).toBe(signal.error)
   })
-  it('dhruv action.rfq → arc-500 (amber law §13)', () => {
-    expect(semanticDhruv.color.action.rfq).toBe(arc[500])
+  it('dhruv action.rfq → brand-500 (§13, v1.2: brand red replaces arc amber)', () => {
+    expect(semanticDhruv.color.action.rfq).toBe(brand[500])
   })
-  it('dhruv action.rfqHover → arc-600', () => {
-    expect(semanticDhruv.color.action.rfqHover).toBe(arc[600])
+  it('dhruv action.rfqHover → brand-600', () => {
+    expect(semanticDhruv.color.action.rfqHover).toBe(brand[600])
   })
-  it('dhruv focus.ring → arc-500 (§25)', () => {
-    expect(semanticDhruv.color.focus.ring).toBe(arc[500])
+  it('dhruv focus.ring → brand-500 (§25)', () => {
+    expect(semanticDhruv.color.focus.ring).toBe(brand[500])
+  })
+  it('dhruv focus.ringOnDark → brand-300 (§25, dark chrome)', () => {
+    expect(semanticDhruv.color.focus.ringOnDark).toBe(brand[300])
   })
   it('precise action.rfq → flex-500 (blue law §13)', () => {
     expect(semanticPrecise.color.action.rfq).toBe(flex[500])
@@ -60,8 +63,21 @@ describe('semantic alias resolution', () => {
   it('precise focus.ring → flex-500 (§25)', () => {
     expect(semanticPrecise.color.focus.ring).toBe(flex[500])
   })
-  it('group accent — no color accent, resolves to steel-950', () => {
-    expect(semanticGroup.color.accent.default).toBe(steel[950])
+  it('precise focus.ringOnDark → flex-300 (§25, dark chrome)', () => {
+    expect(semanticPrecise.color.focus.ringOnDark).toBe(flex[300])
+  })
+  // v1.2: §5's "group has no accent" rule is retired. Red is the VEDANTA mark's
+  // colour, not Dhruv's — the group scope is where it is unambiguously correct.
+  it('group accent → brand-500 (v1.2, supersedes "steel only" §5)', () => {
+    expect(semanticGroup.color.accent.default).toBe(brand[500])
+  })
+  it('group action.rfq → brand-500', () => {
+    expect(semanticGroup.color.action.rfq).toBe(brand[500])
+  })
+  // Precise is the one scope that must NOT inherit the group red.
+  it('precise accent stays flex blue — the group red does not leak into it', () => {
+    expect(semanticPrecise.color.accent.default).toBe(flex[500])
+    expect(semanticPrecise.color.accent.default).not.toBe(brand[500])
   })
 })
 
@@ -82,17 +98,36 @@ describe('contrast covenant §4.5', () => {
     expect(cr(steel[50], steel[900])).toBeGreaterThanOrEqual(4.5)
   })
 
-  it('arc-300 on steel-900 ≥ 4.5:1 (accent on dark surface, spec states 7.4:1)', () => {
-    expect(cr(arc[300], steel[900])).toBeGreaterThanOrEqual(4.5)
+  it('brand-300 on steel-900 ≥ 4.5:1 (accent on Footer dark band)', () => {
+    expect(cr(brand[300], steel[900])).toBeGreaterThanOrEqual(4.5)
   })
 
-  it('arc-600 on steel-50 ≥ 4.5:1 (accent text on light — text must use arc-600+, not arc-500)', () => {
-    // ponytail: spec claims 4.9:1; computed against steel-50 is ~4.5. Assert the covenant floor.
-    expect(cr(arc[600], steel[50])).toBeGreaterThanOrEqual(4.5)
+  it('brand-300 on steel-950 ≥ 4.5:1 (accent on Header / MobileDrawer chrome)', () => {
+    expect(cr(brand[300], steel[950])).toBeGreaterThanOrEqual(4.5)
   })
 
-  it('steel-950 on arc-500 ≥ 4.5:1 (Dhruv RFQ button label)', () => {
-    expect(cr(steel[950], arc[500])).toBeGreaterThanOrEqual(4.5)
+  it('brand-600 on steel-50 ≥ 4.5:1 (accent text on light — text uses brand-600+, not brand-500)', () => {
+    expect(cr(brand[600], steel[50])).toBeGreaterThanOrEqual(4.5)
+  })
+
+  // ── The three assertions the v1.2 red swap exists to hold ────────────────────
+  // A straight hex swap of the accent breaks all three. They are regression locks.
+
+  it('steel-50 on brand-500 ≥ 4.5:1 (RFQ button label MUST be light on the red fill)', () => {
+    expect(cr(steel[50], brand[500])).toBeGreaterThanOrEqual(4.5)
+  })
+
+  it('steel-950 on brand-500 is BELOW 4.5:1 — dark labels on the red fill are forbidden', () => {
+    // Locks in why rfqFg flipped to steel-50. arc-500 (amber) passed this at 5.79:1;
+    // brand-500 does not. If someone reverts rfqFg to steel-950, this fails loudly.
+    expect(cr(steel[950], brand[500])).toBeLessThan(4.5)
+  })
+
+  it('brand-300 on steel-950 ≥ 3:1 (focus ring on dark chrome, WCAG 1.4.11)', () => {
+    // brand-500 itself is 2.85:1 here — under the floor. This is why globals.css
+    // rebinds --accent-focus inside [data-chrome='dark'].
+    expect(cr(brand[300], steel[950])).toBeGreaterThanOrEqual(3)
+    expect(cr(brand[500], steel[950])).toBeLessThan(3)
   })
 
   it('flex-500 on white ≥ 4.5:1 (Precise accent, 5.70:1 approved 2026-07-09)', () => {

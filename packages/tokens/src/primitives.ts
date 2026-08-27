@@ -16,8 +16,32 @@ export const steel = {
   950: '#14171A',  // ink — near-black page dark bg
 } as const
 
-// Arc amber — industrial safety accent; exclusive to action/emphasis (§4.3)
-// v1.1: shifted to golden amber #C98A2E per approved creative direction (2026-07-15)
+// Vedanta brand red — the group's actual mark colour (§4.3)
+// v1.2 (2026-08-27): replaces arc amber as the Dhruv/group accent. Rationale: the
+// amber was invented by the redesign; #AA3833 is the colour the client's own mark,
+// section headings and active nav states already render at on vedantagroup.net.
+// Adopting it is the single change that makes the new site read as the same company.
+//
+// PROVENANCE — brand-500 sampled from three independent regions of the client's
+// live site (masthead banner, active sidebar item, section eyebrow); all three
+// returned #AA3833 exactly. The Claude Design exploration used #B82828, described
+// as sampled from the wordmark. The two disagree. #AA3833 is used here because it
+// is measured from what the client actually ships. CONFIRM against the source
+// artwork at /dhruv-epc-solutions/images/logo.png before print/collateral use.
+//
+// 300/600/700 are derived (constant hue 2.5°, constant saturation) purely to
+// satisfy the §4.5 contrast covenant — they are not independent brand colours.
+export const brand = {
+  300: '#DC8D89',  // on-dark accent + focus ring on steel-950 chrome (7.04:1 on steel-950 ✓)
+  500: '#AA3833',  // THE brand red — fills, ticks, RFQ button (white label 6.32:1 ✓)
+  600: '#8D2F2A',  // accent text on light (7.16:1 on steel-50 ✓) + rfqHover
+  700: '#66221F',  // hover/pressed for brand-600 text (10.16:1 on steel-50 ✓)
+} as const
+
+// Arc amber — RETIRED as an accent at v1.2; superseded by `brand` above.
+// Retained as a primitive only because §4.3's "amber is heat" law may still be
+// wanted for thermal/temperature signalling. Not consumed by any semantic map.
+// Do not reintroduce as a company accent without a design review.
 export const arc = {
   300: '#E5AF6A',  // lighter amber for on-dark text/icons (8.7:1 on steel-950 ✓)
   500: '#C98A2E',  // primary — RFQ button fill, datum ticks (6.1:1 with steel-950 text ✓)
