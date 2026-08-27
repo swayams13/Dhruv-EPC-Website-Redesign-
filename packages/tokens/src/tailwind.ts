@@ -3,7 +3,7 @@
 // new values require a design-review event (Datum §26 governance).
 
 import type { Config } from 'tailwindcss'
-import { steel, arc, flex, signal, motion, shadow, radius } from './primitives'
+import { steel, brand, arc, flex, signal, motion, shadow, radius } from './primitives'
 
 export const datumPreset = {
   theme: {
@@ -13,6 +13,9 @@ export const datumPreset = {
       current: 'currentColor',
       white: '#FFFFFF',
       steel,
+      brand,
+      // arc: retired as an accent at v1.2 but still registered so any straggling
+      // `arc-*` utility class fails loudly in review rather than silently at runtime.
       arc,
       flex,
       signal: {

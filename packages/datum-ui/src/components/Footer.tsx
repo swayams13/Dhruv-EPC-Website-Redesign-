@@ -78,7 +78,8 @@ export function Footer({
   return (
     <footer>
       {/* Zone 1 — title block proper: graphite band, mono-heavy */}
-      <div className="bg-steel-900 text-steel-50">
+      {/* data-chrome='dark': focus rings on this band use the -dark accent step */}
+      <div data-chrome="dark" className="bg-steel-900 text-steel-50">
         <div className="mx-auto grid max-w-wide gap-8 px-6 py-12 md:grid-cols-3">
           <div>
             <p className="font-display text-h4 font-semibold">{entity.legalName}</p>

@@ -2,9 +2,9 @@
 // These are the ONLY tokens components may consume directly.
 // Primitives are never referenced in component code.
 
-import { steel, arc, flex, signal, space, shadow, motion, radius } from './primitives'
+import { steel, brand, flex, signal, space, shadow, motion, radius } from './primitives'
 
-// Base semantic map — company-agnostic (Dhruv accent = arc by default)
+// Base semantic map — company-agnostic (Dhruv accent = brand red by default)
 export const semanticBase = {
   color: {
     text: {
@@ -17,14 +17,15 @@ export const semanticBase = {
       onDarkSecondary: steel[400],
     },
     action: {
-      // ponytail: rfq is the ONLY arc-filled element; override per company below
-      rfq: arc[500],
-      rfqHover: arc[600],
-      rfqPressed: arc[700],
+      // rfq is the ONLY brand-filled element; override per company below
+      rfq: brand[500],
+      rfqHover: brand[600],
+      rfqPressed: brand[700],
       // rfqFg: label text on the RFQ button fill — must meet 4.5:1 against rfq fill.
-      // arc-500 (amber) is light enough for steel-950 text (5.79:1).
-      // flex-500 (dark blue) requires white text — see semanticPrecise override below.
-      rfqFg: steel[950],
+      // v1.2: brand-500 is a mid-dark red. steel-950 text on it is 2.85:1 — a FAIL.
+      // The amber it replaced was light enough for dark text; the red is not.
+      // White label on brand-500 is 6.32:1 ✓. This flip is mandatory, not cosmetic.
+      rfqFg: steel[50],
       primary: steel[950],
       primaryHover: steel[800],
       secondary: 'transparent',
@@ -32,9 +33,9 @@ export const semanticBase = {
     border: {
       scribed: steel[200],
       strong: steel[300],
-      focus: arc[500],
+      focus: brand[500],
       input: steel[300],
-      inputFocus: arc[500],
+      inputFocus: brand[500],
       card: steel[200],
       cardHover: steel[400],
     },
@@ -56,14 +57,20 @@ export const semanticBase = {
       info: steel[600],
     },
     focus: {
-      ring: arc[500],
+      ring: brand[500],
+      // v1.2: focus rings must also be visible on the steel-950 header/footer chrome.
+      // brand-500 on steel-950 is 2.85:1 — below the 3:1 floor for non-text indicators
+      // (WCAG 1.4.11). arc-500 was 6.13:1, so this failure mode did not exist before
+      // the swap. ringOnDark is the fix; globals.css rebinds --accent-focus inside
+      // dark chrome. Regression introduced by this change, closed by this change.
+      ringOnDark: brand[300],
     },
     // Accent — remapped per company (§5)
     accent: {
-      default: arc[500],
-      onDark: arc[300],
-      text: arc[600],
-      textHover: arc[700],
+      default: brand[500],
+      onDark: brand[300],
+      text: brand[600],
+      textHover: brand[700],
     },
   },
   shadow,
@@ -72,25 +79,26 @@ export const semanticBase = {
   motion,
 } as const
 
-// Dhruv EPC — arc amber accent (identical to base; explicit for clarity)
+// Dhruv EPC — Vedanta brand red accent (identical to base; explicit for clarity)
 export const semanticDhruv = {
   ...semanticBase,
   color: {
     ...semanticBase.color,
     action: {
       ...semanticBase.color.action,
-      rfq: arc[500],
-      rfqHover: arc[600],
-      rfqPressed: arc[700],
+      rfq: brand[500],
+      rfqHover: brand[600],
+      rfqPressed: brand[700],
+      rfqFg: steel[50],
     },
     accent: {
-      default: arc[500],
-      onDark: arc[300],
-      text: arc[600],
-      textHover: arc[700],
+      default: brand[500],
+      onDark: brand[300],
+      text: brand[600],
+      textHover: brand[700],
     },
-    focus: { ring: arc[500] },
-    border: { ...semanticBase.color.border, focus: arc[500], inputFocus: arc[500] },
+    focus: { ring: brand[500], ringOnDark: brand[300] },
+    border: { ...semanticBase.color.border, focus: brand[500], inputFocus: brand[500] },
   },
 } as const
 
@@ -114,33 +122,45 @@ export const semanticPrecise = {
       text: flex[600],
       textHover: flex[700],
     },
-    focus: { ring: flex[500] },
+    // flex-500 on steel-950 is 3.16:1 — clears the 1.4.11 floor, but only just.
+    // flex-300 is used on dark chrome for the same reason as brand-300.
+    focus: { ring: flex[500], ringOnDark: flex[300] },
     border: { ...semanticBase.color.border, focus: flex[500], inputFocus: flex[500] },
   },
 } as const
 
-// Group holding page — steel only, no accent (§5)
+// Group — Vedanta brand red (§5, revised v1.2)
+//
+// §5 previously specified "steel only, no accent" for the group scope. That rule
+// was written when the accent was arc amber — an invented colour that belonged to
+// neither company, so spending it on the group would have implied a false hierarchy.
+//
+// That reasoning inverts once the accent is the brand red. Red is not Dhruv's
+// colour; it is the VEDANTA mark's colour, and Dhruv inherits it by being inside
+// the group. Precise keeps flex blue because it has its own established identity.
+// So the group scope is now the one place the red is unambiguously *correct*, and
+// a red-free group home would be the version that fails to look like this company.
 export const semanticGroup = {
   ...semanticBase,
   color: {
     ...semanticBase.color,
     action: {
       ...semanticBase.color.action,
-      rfq: steel[950],      // group page has no amber primary action
-      rfqHover: steel[800],
-      rfqPressed: steel[700],
-      // Base rfqFg is steel-950 — on group's steel-950 fill that is 1:1 (invisible).
-      // steel-50 on steel-950 = 17.4:1 ✓ (§4.5 covenant). See mistakes.md 2026-07-10.
+      rfq: brand[500],
+      rfqHover: brand[600],
+      rfqPressed: brand[700],
+      // steel-50 on brand-500 = 6.32:1 ✓ (§4.5 covenant). See mistakes.md 2026-07-10
+      // for the earlier version of this same bug on the steel-950 fill.
       rfqFg: steel[50],
     },
     accent: {
-      default: steel[950],
-      onDark: steel[200],
-      text: steel[700],
-      textHover: steel[900],
+      default: brand[500],
+      onDark: brand[300],
+      text: brand[600],
+      textHover: brand[700],
     },
-    focus: { ring: steel[950] },
-    border: { ...semanticBase.color.border, focus: steel[950], inputFocus: steel[950] },
+    focus: { ring: brand[500], ringOnDark: brand[300] },
+    border: { ...semanticBase.color.border, focus: brand[500], inputFocus: brand[500] },
   },
 } as const
 

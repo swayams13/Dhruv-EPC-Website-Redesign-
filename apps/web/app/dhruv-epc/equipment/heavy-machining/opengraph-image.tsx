@@ -1,5 +1,5 @@
 import { ImageResponse } from 'next/og'
-import { arc, steel } from '@vedanta/tokens'
+import { brand, steel } from '@vedanta/tokens'
 
 export const runtime = 'edge'
 export const alt = 'Heavy Machining — Boring to Ø 4,000 mm, ASME B16.5 Flange Faces — Dhruv EPC'
@@ -31,7 +31,7 @@ export default function Image() {
           </div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
-          <div style={{ width: 64, height: 4, backgroundColor: arc[500] }} />
+          <div style={{ width: 64, height: 4, backgroundColor: brand[500] }} />
           <div style={{ fontSize: 36, fontFamily: 'monospace', color: steel[50] }}>
             Boring to Ø 4,000 mm · ASME B16.5 / B16.47
           </div>

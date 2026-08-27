@@ -103,6 +103,8 @@ export function MobileDrawer({
         role="dialog"
         aria-modal="true"
         aria-label="Navigation menu"
+        // steel-950 panel — rebind focus ring to the -dark accent step (globals.css §25)
+        data-chrome="dark"
         className={`absolute inset-y-0 right-0 flex w-4/5 flex-col bg-steel-950 shadow-overlay transition-transform duration-deliberate ease-enter motion-reduce:transition-none ${shown ? 'translate-x-0' : 'translate-x-full'}`}
       >
         <div className="flex justify-end p-3">

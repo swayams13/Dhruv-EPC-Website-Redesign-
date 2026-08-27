@@ -1,5 +1,5 @@
 import { ImageResponse } from 'next/og'
-import { arc, steel } from '@vedanta/tokens'
+import { brand, steel } from '@vedanta/tokens'
 
 export const runtime = 'edge'
 export const alt = 'Heavy Fabrication — IS 2062, AWS D1.1, up to 200 T — Dhruv EPC'
@@ -31,7 +31,7 @@ export default function Image() {
           </div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
-          <div style={{ width: 64, height: 4, backgroundColor: arc[500] }} />
+          <div style={{ width: 64, height: 4, backgroundColor: brand[500] }} />
           <div style={{ fontSize: 36, fontFamily: 'monospace', color: steel[50] }}>
             IS 2062 · AWS D1.1 · Up to 200 T
           </div>

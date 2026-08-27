@@ -98,6 +98,9 @@ export function Header({
     <div className="relative h-header">
       <header
         ref={headerRef}
+        // data-chrome='dark': rebinds --accent-focus to the -dark accent step so
+        // focus rings clear 3:1 on the steel-950 bar (globals.css §25, v1.2).
+        data-chrome="dark"
         className={`${chrome} inset-x-0 top-0 z-40`}
       >
         <div className="mx-auto flex h-full max-w-wide items-center justify-between gap-6 px-6">

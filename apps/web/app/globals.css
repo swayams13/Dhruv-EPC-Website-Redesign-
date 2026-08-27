@@ -7,15 +7,16 @@
    Components reference var(--accent-*) not raw token values. */
 
 :root,
-[data-company='dhruv'] {
-  --accent: #C98A2E;        /* arc-500 — industrial amber */
-  --accent-dark: #E5AF6A;   /* arc-300 — on dark surfaces, 8.7:1 on steel-950 */
-  --accent-text: #8A5D1D;   /* arc-600 — text on light, 4.56:1 on steel-50 */
-  --accent-text-hover: #6B4915; /* arc-700 — hover, 6.5:1 on steel-50 */
-  --accent-focus: #C98A2E;
-  --accent-hover: #8A5D1D;  /* arc-600 — rfqHover */
-  --accent-pressed: #6B4915; /* arc-700 — rfqPressed */
-  --accent-fg: #14171A;     /* steel-950 — rfqFg on amber fill */
+[data-company='dhruv'],
+[data-company='group'] {
+  --accent: #AA3833;        /* brand-500 — Vedanta mark red */
+  --accent-dark: #DC8D89;   /* brand-300 — on dark surfaces, 7.04:1 on steel-950 */
+  --accent-text: #8D2F2A;   /* brand-600 — text on light, 7.16:1 on steel-50 */
+  --accent-text-hover: #66221F; /* brand-700 — hover, 10.16:1 on steel-50 */
+  --accent-focus: #AA3833;
+  --accent-hover: #8D2F2A;  /* brand-600 — rfqHover */
+  --accent-pressed: #66221F; /* brand-700 — rfqPressed */
+  --accent-fg: #F2F0EA;     /* steel-50 — rfqFg; dark text on brand-500 is 2.85:1, a FAIL */
 }
 
 [data-company='precise'] {
@@ -29,21 +30,19 @@
   --accent-fg: #F2F0EA;     /* steel-50 — rfqFg on flex fill */
 }
 
-[data-company='group'] {
-  --accent: #14171A;        /* steel-950 — neutral, no color accent */
-  --accent-dark: #DCD8CE;   /* steel-200 */
-  --accent-text: #3D3A34;   /* steel-700 */
-  --accent-text-hover: #1C1A18; /* steel-900 */
-  --accent-focus: #14171A;
-  --accent-hover: #282520;  /* steel-800 — rfqHover */
-  --accent-pressed: #3D3A34; /* steel-700 — rfqPressed */
-  --accent-fg: #F2F0EA;     /* steel-50 — rfqFg */
+/* Universal focus ring — company accent, 2px, 2px offset (Datum §25) */
+:focus-visible {
+  outline: 2px solid var(--accent-focus, #AA3833);
+  outline-offset: 2px;
 }
 
-/* Universal focus ring — arc-500 (or company accent), 2px, 2px offset (Datum §25) */
-:focus-visible {
-  outline: 2px solid var(--accent-focus, #F0670F);
-  outline-offset: 2px;
+/* Focus ring on dark chrome (§25, added v1.2).
+   brand-500 on steel-950 is 2.85:1 — under the 3:1 floor WCAG 1.4.11 sets for
+   non-text indicators. The amber this replaced was 6.13:1, so the red swap is
+   what creates the failure. Any steel-950 surface carrying focusable elements
+   marks itself [data-chrome='dark'] and rebinds the ring to the -dark step. */
+[data-chrome='dark'] {
+  --accent-focus: var(--accent-dark);
 }
 
 /* Archivo + IBM Plex Sans + IBM Plex Mono — all via next/font */
