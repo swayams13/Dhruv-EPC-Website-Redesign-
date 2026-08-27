@@ -34,3 +34,26 @@ Append-only. Each entry records a deliberate override of a standing rule (in `CL
 3. **Bugfixes, not overrides** (logged in progress.md, listed here only because they touch chrome): per-page Footers removed from `(group)` routes (layout owns chrome — double-footer P0), RFQ step-1 company guard (dead-click P0).
 
 **Approval:** Swayam's 2026-07-16 instruction to proceed with the frontend redesign ("go ahead and continue with adding or modifying files if required"), scoped to frontend only; backend untouched.
+
+---
+
+## 2026-08-27 — Brand-red token update (commit 9fa229f), logged retroactively
+
+**What changed:** commit `9fa229f` ("feat(brand): apply brand-red token
+update and P0 fixes") edited `packages/tokens/src/primitives.ts` and
+`semantic.ts` — the Vedanta brand accent (`brand[500]`) is set to
+`#AA3833`. Its own commit message states the change "requires
+design-review sign-off on the token changes per packages/tokens/CLAUDE.md
+before merge," but it was merged to this branch without a decisions.md
+entry — this is that entry, logged retroactively at the start of Session
+0 stabilization.
+
+**Decision confirmed 27 Aug 2026:** brand red = `#AA3833` (brand-500).
+The warm neutral ramp (`steel-50 #F2F0EA … steel-950 #14171A`) is
+RETAINED — it is not re-mapped to the cool ramp the original
+design-integration plan (`04-design-integration-plan.md`) recommended
+alongside a red accent. This branch's Session 0 stabilization work
+(P0-1) treats both the red value and the warm-ramp retention as locked
+and does not revisit either.
+
+**Approval:** Swayam, confirmed 27 Aug 2026.
