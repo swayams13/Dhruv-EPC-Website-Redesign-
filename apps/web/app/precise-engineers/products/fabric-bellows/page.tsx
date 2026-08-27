@@ -8,7 +8,7 @@ import { fabricBellows, preciseEntity, precisePhoneHref, preciseWhatsappHref } f
 import { BASE } from '../../../../lib/site'
 
 export const metadata: Metadata = {
-  title: 'Fabric Bellows — Fabric Expansion Joints for Flue-Gas Ducting | Precise Engineers',
+  title: 'Fabric Bellows — Flue-Gas Duct Joints | Precise Engineers',
   description:
     'E-glass, ceramic fibre, PTFE-coated and silicone-coated fabric expansion joints for hot flue-gas and air ducting. Circular and rectangular ducts. EIL approved, ISO 9001:2015, Anand.',
   alternates: { canonical: '/precise-engineers/products/fabric-bellows/' },

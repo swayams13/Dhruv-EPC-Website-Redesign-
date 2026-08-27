@@ -8,7 +8,7 @@ import { dhruvEntity, dhruvPhoneHref, dhruvWhatsappHref, heavyFabrication } from
 import { BASE } from '../../../../lib/site'
 
 export const metadata: Metadata = {
-  title: 'Heavy Fabrication — IS 2062, AWS D1.1, up to 200 T | Dhruv EPC',
+  title: 'Heavy Fabrication — IS 2062, AWS D1.1, 200 T | Dhruv EPC',
   description:
     'Structural and equipment fabrication to IS 2062 and AWS D1.1 — pipe racks, module frames, industrial ductwork and access platforms. Shot-blasted and primed before dispatch from Manjusar, Vadodara.',
   alternates: { canonical: '/dhruv-epc/equipment/heavy-fabrication/' },

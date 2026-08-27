@@ -8,7 +8,7 @@ import { damper, preciseEntity, precisePhoneHref, preciseWhatsappHref } from '..
 import { BASE } from '../../../../lib/site'
 
 export const metadata: Metadata = {
-  title: 'Dampers — Louver, Butterfly & Guillotine Duct Dampers, AMCA 500 | Precise Engineers',
+  title: 'Dampers — Louver, Butterfly & Guillotine | Precise Engineers',
   description:
     'Louver, butterfly and guillotine duct dampers for gas and air service. Manual, electric, pneumatic and hydraulic actuation. MS, SS 304/316, Corten. EIL approved, ISO 9001:2015.',
   alternates: { canonical: '/precise-engineers/products/damper/' },

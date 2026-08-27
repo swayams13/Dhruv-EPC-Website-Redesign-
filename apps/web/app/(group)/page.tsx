@@ -16,7 +16,7 @@ import { groupEntity, groupStats } from '../../lib/content/group'
 import { preciseCertifications } from '../../lib/content/precise-engineers'
 
 export const metadata: Metadata = {
-  title: 'Vedanta Group — Precision Fabrication & Flow-Control Engineering, Gujarat',
+  title: 'Vedanta Group — Fabrication & Flow-Control Engineering',
   description:
     'Dhruv EPC Solutions (ASME U/U2, IBR static equipment, Vadodara) and Precise Engineers (EJMA expansion joints 80 – 8,000 mm, Anand). Est. 1994.',
 }

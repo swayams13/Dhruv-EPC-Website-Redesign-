@@ -8,7 +8,7 @@ import { preciseEntity, precisePhoneHref, preciseWhatsappHref, rubberBellows } f
 import { BASE } from '../../../../lib/site'
 
 export const metadata: Metadata = {
-  title: 'Rubber Bellows — Elastomeric Expansion Joints, EPDM · NBR · Neoprene | Precise Engineers',
+  title: 'Rubber Bellows — EPDM, NBR & Neoprene | Precise Engineers',
   description:
     'Single arch, dual arch and wide arch rubber expansion joints for vibration isolation and thermal movement. EPDM, NBR, Neoprene, Hypalon. Flanged, grooved. EIL approved, ISO 9001:2015.',
   alternates: { canonical: '/precise-engineers/products/rubber-bellows/' },

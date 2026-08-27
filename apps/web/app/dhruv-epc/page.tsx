@@ -20,7 +20,7 @@ import {
 } from '../../lib/content/dhruv-epc'
 
 export const metadata: Metadata = {
-  title: 'Dhruv EPC Solutions — ASME U/U2 Static Equipment Fabricator, Vadodara',
+  title: 'Dhruv EPC Solutions — ASME U/U2 Fabricator, Vadodara',
   description:
     'Pressure vessels, heat exchangers, pipe spools and process skids. ASME U & U2 stamp, IBR, ISO 9001/14001/45001.',
 }

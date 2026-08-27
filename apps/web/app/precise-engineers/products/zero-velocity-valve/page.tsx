@@ -8,7 +8,7 @@ import { preciseEntity, precisePhoneHref, preciseWhatsappHref, zeroVelocityValve
 import { BASE } from '../../../../lib/site'
 
 export const metadata: Metadata = {
-  title: 'Zero Velocity Valves — Water-Hammer Protection for Pumping Mains, IS 14845 | Precise Engineers',
+  title: 'Zero Velocity Valves — IS 14845 | Precise Engineers',
   description:
     'Hydraulically automatic zero velocity valves for water-hammer prevention on pumping mains. IS 14845. CI, DI, CS body. Standard, bypass and dashpot types. EIL approved, ISO 9001:2015.',
   alternates: { canonical: '/precise-engineers/products/zero-velocity-valve/' },
