@@ -106,3 +106,17 @@ living in one place; no CI check compares JSON-LD URLs to sitemap host.
 as sitemap.ts. When Phase 4 adds more product pages, hoist BASE into a shared
 lib/site.ts constant (one definition), and Session 13's redirect/sitemap CI
 should assert JSON-LD hosts match the sitemap host.
+
+## 2026-08-27 — Session 0 (B8): rate limiter duplicated between /api/rfq and /api/presign
+
+**What happened:** `/api/presign` had no rate limit at all. Fixed by copying
+the in-memory IP rate-limit pattern from `app/api/rfq/route.ts` into
+`app/api/presign/route.ts` with a shorter window (60s/10 req vs 10min/5 req) —
+a pragmatic duplication rather than extracting a shared module for two call
+sites.
+
+**Root cause:** no shared rate-limit helper existed; extracting one for a
+two-file duplication was judged over-engineering for this session.
+
+**Rule:** if a third route needs IP rate limiting, extract
+`lib/rate-limit.ts` at that point — don't let a third copy-paste happen.

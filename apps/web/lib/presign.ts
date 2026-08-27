@@ -30,6 +30,7 @@ export function presignPutUrl(
   config: PresignConfig,
   key: string,
   expiresSeconds: number,
+  fileSizeBytes: number,
   now: Date = new Date(),
 ): string {
   const host = new URL(config.endpoint).host
@@ -43,14 +44,19 @@ export function presignPutUrl(
     ['X-Amz-Credential', `${config.accessKeyId}/${scope}`],
     ['X-Amz-Date', amzDate],
     ['X-Amz-Expires', String(expiresSeconds)],
-    ['X-Amz-SignedHeaders', 'host'],
+    ['X-Amz-SignedHeaders', 'content-length;host'],
   ]
   const canonicalQuery = params
     .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
     .sort()
     .join('&')
 
-  const canonicalRequest = ['PUT', canonicalPath, canonicalQuery, `host:${host}\n`, 'host', 'UNSIGNED-PAYLOAD'].join('\n')
+  // Signing content-length binds the declared file size into the signature:
+  // R2/S3 validates the actual PUT request's Content-Length header against
+  // this value, so a client sending a different-sized body gets a
+  // SignatureDoesNotMatch instead of a silently-accepted oversized upload.
+  const canonicalHeaders = `content-length:${fileSizeBytes}\nhost:${host}\n`
+  const canonicalRequest = ['PUT', canonicalPath, canonicalQuery, canonicalHeaders, 'content-length;host', 'UNSIGNED-PAYLOAD'].join('\n')
   const stringToSign = ['AWS4-HMAC-SHA256', amzDate, scope, sha256Hex(canonicalRequest)].join('\n')
 
   const signingKey = hmac(hmac(hmac(hmac(`AWS4${config.secretAccessKey}`, dateStamp), config.region), 's3'), 'aws4_request')
