@@ -77,7 +77,7 @@ export function UploadDropzone({
   onBusyChange,
   maxFiles = 5,
   maxSizeBytes = 25 * 1024 * 1024,
-  accept = '.pdf,.dwg,.jpg,.jpeg,.png,.webp',
+  accept = '.pdf,.dwg,.step,.stp,.jpg,.jpeg,.png,.webp',
   confidentialityNote = 'Drawings are confidential and reviewed only by our engineering team.',
 }: UploadDropzoneProps): React.ReactElement {
   const [entries, setEntries] = useState<FileEntry[]>([])
