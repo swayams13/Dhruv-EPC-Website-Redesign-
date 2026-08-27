@@ -13,10 +13,10 @@
 pnpm typecheck   PASS   4/4 packages, 0 errors (turbo cache hit, e1f76884)
 pnpm lint        PASS   0 warnings, 0 errors — no arbitrary values, no eslint-disable
 pnpm test        PASS   175 tests across 7 test files — 0 failures (re-counted 2026-08-27, Session 0)
-  @vedanta/tokens:   51 tests, 2 files (token covenant, §4.5 contrast ratios, globals.css/semantic.ts parity)
+  @vedanta/tokens:   33 tests, 1 file (token covenant, §4.5 contrast ratios)
   @vedanta/schemas:  39 tests, 3 files (cms.test.ts: 8, jsonld.test.ts: 21, rfq.test.ts: 10)
   @vedanta/datum-ui: 77 tests, 1 file (a11y.test.tsx — axe WCAG 2.x A/AA, 24 components × stories)
-  @vedanta/web:       8 tests, 1 file (redirects.test.ts — CSV/compiled-map parity)
+  @vedanta/web:      26 tests, 2 files (redirects.test.ts: 8, css-parity.test.ts: 18 — globals.css/semantic.ts parity)
 pnpm build       PASS   35 static routes + 6 dynamic, 0 errors, 0 warnings
   First Load JS (marketing routes): 93.8 kB — UNDER 120 kB budget
   First Load JS (RFQ route):        112 kB  — UNDER 180 kB budget
