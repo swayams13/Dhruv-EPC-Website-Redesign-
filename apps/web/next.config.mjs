@@ -1,19 +1,3 @@
-import { readFileSync } from 'fs'
-import { fileURLToPath } from 'url'
-import { resolve, dirname } from 'path'
-
-const __dirname = dirname(fileURLToPath(import.meta.url))
-// ponytail: parse at config time (Node.js context); Edge runtime never sees the file
-const _csv = readFileSync(resolve(__dirname, '../../content/redirect-map.csv'), 'utf8')
-const _redirectEntries = _csv
-  .split('\n')
-  .filter(l => l.trim() && !l.startsWith('#') && !l.startsWith('legacy_path'))
-  .map(l => {
-    const parts = l.split(',')
-    return { source: parts[0].trim(), destination: parts[1].trim(), permanent: true }
-  })
-  .filter(r => r.source !== r.destination)
-
 /** @type {import('next').NextConfig} */
 const config = {
   typescript: { ignoreBuildErrors: false },
@@ -39,10 +23,6 @@ const config = {
         ],
       },
     ]
-  },
-
-  async redirects() {
-    return _redirectEntries
   },
 }
 
