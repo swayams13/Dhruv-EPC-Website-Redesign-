@@ -9,13 +9,13 @@ import {
   precisePhoneHref,
   preciseWhatsappHref,
 } from '../../../lib/content/precise-engineers'
-
-const BASE = 'https://vedantagroup.net'
+import { BASE } from '../../../lib/site'
 
 export const metadata: Metadata = {
   title: 'Proof — Certifications & Approvals | Precise Engineers',
   description:
     'Precise Engineers holds ISO 9001:2015 certification and is an EIL approved vendor for expansion joints and bellows. All credentials independently verifiable for vendor registration.',
+  alternates: { canonical: '/precise-engineers/proof/' },
 }
 
 // ponytail: same stamp map as precise home — one constant, not a shared util (only two callers)

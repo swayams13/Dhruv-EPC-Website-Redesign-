@@ -5,13 +5,13 @@ import { buildBreadcrumbList, buildFAQPage, buildProduct } from '@vedanta/schema
 import { RFQBand } from '../../../../components/RFQBand'
 import { AnchorRailDesktop, AnchorRailMobile } from '../../../../components/AnchorRail'
 import { dhruvEntity, dhruvPhoneHref, dhruvWhatsappHref, pipeSpools } from '../../../../lib/content/dhruv-epc'
-
-const BASE = 'https://vedantagroup.net'
+import { BASE } from '../../../../lib/site'
 
 export const metadata: Metadata = {
   title: 'Pipe Spools — ASME B31.3, NDT-Covered, NPS ½–48 | Dhruv EPC',
   description:
     'Shop-fabricated CS, alloy steel and SS pipe spools to ASME B31.3, NPS ½ to NPS 48. WPS/PQR-qualified welding, full heat-number traceability, RT/UT/PT/MT NDT per ITP.',
+  alternates: { canonical: '/dhruv-epc/equipment/pipe-spools/' },
 }
 
 const SECTIONS = [

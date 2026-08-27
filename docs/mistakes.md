@@ -106,3 +106,47 @@ living in one place; no CI check compares JSON-LD URLs to sitemap host.
 as sitemap.ts. When Phase 4 adds more product pages, hoist BASE into a shared
 lib/site.ts constant (one definition), and Session 13's redirect/sitemap CI
 should assert JSON-LD hosts match the sitemap host.
+
+## 2026-08-27 — Session 0 (B8): rate limiter duplicated between /api/rfq and /api/presign
+
+**What happened:** `/api/presign` had no rate limit at all. Fixed by copying
+the in-memory IP rate-limit pattern from `app/api/rfq/route.ts` into
+`app/api/presign/route.ts` with a shorter window (60s/10 req vs 10min/5 req) —
+a pragmatic duplication rather than extracting a shared module for two call
+sites.
+
+**Root cause:** no shared rate-limit helper existed; extracting one for a
+two-file duplication was judged over-engineering for this session.
+
+**Rule:** if a third route needs IP rate limiting, extract
+`lib/rate-limit.ts` at that point — don't let a third copy-paste happen.
+
+## 2026-08-27 — Session 0 (B10 hoist): BASE constant not fully hoisted
+
+**What happened:** Created `apps/web/lib/site.ts` exporting `BASE` and
+replaced the 20 per-file `const BASE = 'https://vedantagroup.net'`
+redeclarations that B10's canonical-URL work already touched. Left
+un-hoisted (out of scope for this session, not touched by B1–B10):
+`apps/web/app/sitemap.ts` (its own `const base = ...`), and hardcoded
+literal `https://vedantagroup.net` strings in
+`app/(group)/contact/page.tsx` and `app/(group)/about/page.tsx`
+breadcrumb JSON-LD.
+
+**Rule:** the next session touching any of those three files should
+import `BASE` from `lib/site.ts` instead of redeclaring or hardcoding it.
+
+## 2026-08-27 — Session 0 browser verify: StickyQuoteChip low-contrast on dark sections (pre-existing, not touched)
+
+**What happened:** browser-checking B1 (Tailwind content glob restoring
+`bottom-6 right-6` on `StickyQuoteChip`) surfaced that the chip's
+`variant="secondary"` `Button` uses the light-surface style (dark
+`text-steel-950` on a transparent fill) regardless of what's actually
+behind it — over a `steel-950` product-grid section the label is nearly
+unreadable. The `bottom-6`/`right-6` positioning itself is correct
+(confirms B1's fix worked); this is a separate, pre-existing contrast
+bug, out of scope for this session (not one of B1–B10).
+
+**Rule:** `StickyQuoteChip`/`Button` needs a `data-chrome`-aware
+secondary variant (same mechanism `globals.css` already uses for the
+focus ring on dark chrome) before this is fixed — flag for a future
+session.

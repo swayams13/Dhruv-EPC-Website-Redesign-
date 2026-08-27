@@ -5,13 +5,13 @@ import { buildBreadcrumbList, buildFAQPage, buildProduct } from '@vedanta/schema
 import { RFQBand } from '../../../../components/RFQBand'
 import { AnchorRailDesktop, AnchorRailMobile } from '../../../../components/AnchorRail'
 import { damper, preciseEntity, precisePhoneHref, preciseWhatsappHref } from '../../../../lib/content/precise-engineers'
-
-const BASE = 'https://vedantagroup.net'
+import { BASE } from '../../../../lib/site'
 
 export const metadata: Metadata = {
   title: 'Dampers — Louver, Butterfly & Guillotine Duct Dampers, AMCA 500 | Precise Engineers',
   description:
     'Louver, butterfly and guillotine duct dampers for gas and air service. Manual, electric, pneumatic and hydraulic actuation. MS, SS 304/316, Corten. EIL approved, ISO 9001:2015.',
+  alternates: { canonical: '/precise-engineers/products/damper/' },
 }
 
 const SECTIONS = [

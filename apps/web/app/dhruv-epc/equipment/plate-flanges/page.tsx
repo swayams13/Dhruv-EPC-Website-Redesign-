@@ -5,13 +5,13 @@ import { buildBreadcrumbList, buildFAQPage, buildProduct } from '@vedanta/schema
 import { RFQBand } from '../../../../components/RFQBand'
 import { AnchorRailDesktop, AnchorRailMobile } from '../../../../components/AnchorRail'
 import { dhruvEntity, dhruvPhoneHref, dhruvWhatsappHref, plateFlanges } from '../../../../lib/content/dhruv-epc'
-
-const BASE = 'https://vedantagroup.net'
+import { BASE } from '../../../../lib/site'
 
 export const metadata: Metadata = {
   title: 'Plate Flanges & Base Frames — ASME B16.5, B16.47 Series A & B | Dhruv EPC',
   description:
     'Plate-cut and machined weld-neck, slip-on, blind and spectacle flanges to ASME B16.5 and B16.47 Series A & B. CS, alloy and SS. Equipment base frames and sole plates machined at Manjusar works.',
+  alternates: { canonical: '/dhruv-epc/equipment/plate-flanges/' },
 }
 
 const SECTIONS = [

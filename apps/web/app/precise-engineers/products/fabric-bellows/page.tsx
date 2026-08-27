@@ -5,13 +5,13 @@ import { buildBreadcrumbList, buildFAQPage, buildProduct } from '@vedanta/schema
 import { RFQBand } from '../../../../components/RFQBand'
 import { AnchorRailDesktop, AnchorRailMobile } from '../../../../components/AnchorRail'
 import { fabricBellows, preciseEntity, precisePhoneHref, preciseWhatsappHref } from '../../../../lib/content/precise-engineers'
-
-const BASE = 'https://vedantagroup.net'
+import { BASE } from '../../../../lib/site'
 
 export const metadata: Metadata = {
   title: 'Fabric Bellows — Fabric Expansion Joints for Flue-Gas Ducting | Precise Engineers',
   description:
     'E-glass, ceramic fibre, PTFE-coated and silicone-coated fabric expansion joints for hot flue-gas and air ducting. Circular and rectangular ducts. EIL approved, ISO 9001:2015, Anand.',
+  alternates: { canonical: '/precise-engineers/products/fabric-bellows/' },
 }
 
 const SECTIONS = [

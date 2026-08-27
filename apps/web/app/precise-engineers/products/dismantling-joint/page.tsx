@@ -5,13 +5,13 @@ import { buildBreadcrumbList, buildFAQPage, buildProduct } from '@vedanta/schema
 import { RFQBand } from '../../../../components/RFQBand'
 import { AnchorRailDesktop, AnchorRailMobile } from '../../../../components/AnchorRail'
 import { dismantlingJoint, preciseEntity, precisePhoneHref, preciseWhatsappHref } from '../../../../lib/content/precise-engineers'
-
-const BASE = 'https://vedantagroup.net'
+import { BASE } from '../../../../lib/site'
 
 export const metadata: Metadata = {
   title: 'Dismantling Joints — Flanged Adjustment Joints for Valve Removal | Precise Engineers',
   description:
     'Single and double-step dismantling joints with adjustment length for in-line valve and pump removal. PN 10 to PN 25. Ductile iron, CS, SS 304/316. EIL approved, ISO 9001:2015.',
+  alternates: { canonical: '/precise-engineers/products/dismantling-joint/' },
 }
 
 const SECTIONS = [

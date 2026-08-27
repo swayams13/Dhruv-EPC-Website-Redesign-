@@ -5,13 +5,13 @@ import { buildBreadcrumbList, buildFAQPage, buildProduct } from '@vedanta/schema
 import { RFQBand } from '../../../../components/RFQBand'
 import { AnchorRailDesktop, AnchorRailMobile } from '../../../../components/AnchorRail'
 import { dhruvEntity, dhruvPhoneHref, dhruvWhatsappHref, storageTanks } from '../../../../lib/content/dhruv-epc'
-
-const BASE = 'https://vedantagroup.net'
+import { BASE } from '../../../../lib/site'
 
 export const metadata: Metadata = {
   title: 'Storage Tanks & Air Receivers — CS/SS, API 650 Class | Dhruv EPC',
   description:
     'Fixed-cone-roof and open-top storage tanks in carbon steel and stainless steel, plus ASME Sec. VIII Div. 1 air receivers. Shop and site fabrication from Manjusar GIDC, Vadodara.',
+  alternates: { canonical: '/dhruv-epc/equipment/storage-tanks/' },
 }
 
 const SECTIONS = [

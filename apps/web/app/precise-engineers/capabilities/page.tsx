@@ -10,13 +10,13 @@ import {
   preciseWhatsappHref,
   preciseProducts,
 } from '../../../lib/content/precise-engineers'
-
-const BASE = 'https://vedantagroup.net'
+import { BASE } from '../../../lib/site'
 
 export const metadata: Metadata = {
   title: 'Capabilities — Size Ranges, Codes & MOC | Precise Engineers',
   description:
     'Metallic bellows expansion joints to EJMA/ASME B31.3, 80–8,000 mm NB; 9 product families across 12 sectors. EIL-approved vendor since 1994, ISO 9001:2015 certified, Anand, Gujarat.',
+  alternates: { canonical: '/precise-engineers/capabilities/' },
 }
 
 const CAPABILITY_ROWS = [

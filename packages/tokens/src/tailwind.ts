@@ -64,9 +64,9 @@ export const datumPreset = {
       overlay: shadow.overlay,
     },
     fontFamily: {
-      display: ['Archivo', 'sans-serif'],
-      sans: ['IBM Plex Sans', 'sans-serif'],
-      mono: ['IBM Plex Mono', 'monospace'],
+      display: ['var(--font-display)', 'Archivo', 'sans-serif'],
+      sans: ['var(--font-sans)', 'IBM Plex Sans', 'sans-serif'],
+      mono: ['var(--font-mono)', 'IBM Plex Mono', 'monospace'],
     },
     transitionDuration: {
       instant: motion.instant,
@@ -121,9 +121,13 @@ export const datumPreset = {
         'display-xl': ['clamp(40px, 32px + 2.2222vw, 64px)', { lineHeight: '1.05' }],
         display: ['clamp(34px, 29.3333px + 1.2963vw, 48px)', { lineHeight: '1.1' }],
         h1: ['clamp(30px, 26.6667px + 0.9259vw, 40px)', { lineHeight: '1.15' }],
+        h2: ['clamp(26px, 24px + 0.5556vw, 32px)', { lineHeight: '1.2' }],
         h3: ['clamp(21px, 20px + 0.2778vw, 24px)', { lineHeight: '1.3' }],
         h4: ['clamp(18px, 17.3333px + 0.1852vw, 20px)', { lineHeight: '1.4' }],
         'body-lg': ['18px', { lineHeight: '1.6' }],
+        body: ['16px', { lineHeight: '1.6' }],
+        small: ['14px', { lineHeight: '1.5' }],
+        caption: ['12px', { lineHeight: '1.4' }],
         'data-lg': ['clamp(24px, 21.3333px + 0.7407vw, 32px)', { lineHeight: '1.2' }],
       },
       // §10 glass scrim: steel-50 at 88% — the one sanctioned translucency

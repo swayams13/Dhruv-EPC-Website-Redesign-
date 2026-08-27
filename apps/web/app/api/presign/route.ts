@@ -9,7 +9,28 @@ export const dynamic = 'force-dynamic'
 
 const EXPIRY_SECONDS = 600 // 10 minutes per §T-4
 
+// ponytail: in-memory rate limit, copied from app/api/rfq/route.ts rather than
+// extracted to a shared module (one extra file for two call sites isn't worth
+// it yet). Correct on a single instance, resets on redeploy — see
+// docs/mistakes.md B8 for the duplication note. Tighter window than RFQ
+// submit since this only issues a URL, not a completed lead.
+const RATE_WINDOW_MS = 60 * 1000
+const RATE_MAX = 10
+const rateLog = new Map<string, number[]>()
+
+function rateLimited(ip: string): boolean {
+  const now = Date.now()
+  const recent = (rateLog.get(ip) ?? []).filter((t) => now - t < RATE_WINDOW_MS)
+  rateLog.set(ip, [...recent, now])
+  return recent.length >= RATE_MAX
+}
+
 export async function POST(request: Request) {
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
+  if (rateLimited(ip)) {
+    return NextResponse.json({ error: 'Too many requests — please wait a moment and retry.' }, { status: 429 })
+  }
+
   const body = await request.json().catch(() => null)
   const parsed = PresignRequest.safeParse(body)
 
@@ -41,6 +62,7 @@ export async function POST(request: Request) {
     },
     key,
     EXPIRY_SECONDS,
+    parsed.data.fileSizeBytes,
   )
 
   return NextResponse.json({ url, key })

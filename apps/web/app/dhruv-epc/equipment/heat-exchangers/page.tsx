@@ -7,13 +7,13 @@ import { buildBreadcrumbList, buildFAQPage, buildProduct } from '@vedanta/schema
 import { RFQBand } from '../../../../components/RFQBand'
 import { AnchorRailDesktop, AnchorRailMobile } from '../../../../components/AnchorRail'
 import { dhruvEntity, dhruvPhoneHref, dhruvWhatsappHref, heatExchangers } from '../../../../lib/content/dhruv-epc'
-
-const BASE = 'https://vedantagroup.net' // canonical host — must match sitemap.ts/robots.ts (machine-record drift)
+import { BASE } from '../../../../lib/site'
 
 export const metadata: Metadata = {
   title: 'Shell & Tube Heat Exchangers — ASME U/U2, TEMA | Dhruv EPC',
   description:
     'Fixed tube-sheet, floating head, U-tube and kettle exchangers to ASME Sec. VIII Div. 1 & 2 and TEMA. HTRI thermal design. CS, SS, duplex and high-nickel alloys.',
+  alternates: { canonical: '/dhruv-epc/equipment/heat-exchangers/' },
 }
 
 // §21 anchor rail — engineers jump, they don't scroll politely
