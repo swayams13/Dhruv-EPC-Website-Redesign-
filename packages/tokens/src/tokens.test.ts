@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { steel, brand, flex, signal } from './primitives'
-import { semanticBase, semanticDhruv, semanticPrecise, semanticGroup } from './semantic'
+import { semanticBase, semanticDhruv, semanticPrecise, semanticGroup, semanticByCompany, type Company } from './semantic'
 
 // WCAG 2.1 relative luminance + contrast ratio
 function lum(hex: string): number {
@@ -81,38 +81,87 @@ describe('semantic alias resolution', () => {
   })
 })
 
-// ─── Contrast covenant (§4.5) ─────────────────────────────────────────────────
-// 4.5:1 minimum for normal text; 3:1 for UI components / large text.
-// Every pair listed here is a sanctioned combination in the spec.
+// ─── Contrast covenant (§4.5) — generated matrix ─────────────────────────────
+// Every (text token, surface token) combination the semantic maps can
+// actually produce, per company, asserted against its WCAG floor: 4.5:1 for
+// text, 3:1 for non-text UI indicators (§1.4.11 — focus rings). Below-floor
+// pairs that are a known exception — a deliberate design tradeoff, or a
+// tracked-but-not-yet-fixed defect — are named in EXCEPTIONS with the reason,
+// and the assertion flips to "still below floor" so it fails loudly the
+// moment the underlying token changes without the exception being removed.
+// Anything else that falls below its floor here is an unreported regression.
 
-describe('contrast covenant §4.5', () => {
-  it('steel-950 on steel-50 ≥ 7:1 (primary text, ink on mill-white)', () => {
-    expect(cr(steel[950], steel[50])).toBeGreaterThanOrEqual(7)
+const LIGHT_SURFACES = ['page', 'alt', 'white'] as const
+const DARK_SURFACES = ['dark', 'darkElevated'] as const
+const TEXT_ON_LIGHT = ['primary', 'secondary', 'tertiary'] as const
+const TEXT_ON_DARK = ['onDark', 'onDarkSecondary'] as const
+
+const EXCEPTIONS: Record<string, string> = {
+  // Deliberate: brand/flex-500's focus ring fails 3:1 against dark chrome —
+  // exactly why focus.ringOnDark exists (semantic.ts §25). globals.css
+  // rebinds --accent-focus to ringOnDark inside dark chrome.
+  'dhruv/focus.ring/dark': 'below 3:1 by design — dark chrome uses focus.ringOnDark instead',
+  'dhruv/focus.ring/darkElevated': 'below 3:1 by design — dark chrome uses focus.ringOnDark instead',
+  'precise/focus.ring/darkElevated': 'below 3:1 by design — dark chrome uses focus.ringOnDark instead',
+  'group/focus.ring/dark': 'below 3:1 by design — dark chrome uses focus.ringOnDark instead',
+  'group/focus.ring/darkElevated': 'below 3:1 by design — dark chrome uses focus.ringOnDark instead',
+  // Known, tracked defect (not deliberate) — docs/mistakes.md VG-004 (session 1,
+  // T3): text-steel-500 (tertiary) sits under 4.5:1 against most light
+  // surfaces, confirmed independently by the route-level axe gate.
+  'dhruv/text.tertiary/page': 'VG-004 — steel-500 tertiary text below 4.5:1, tracked not fixed here',
+  'dhruv/text.tertiary/alt': 'VG-004 — steel-500 tertiary text below 4.5:1, tracked not fixed here',
+  'precise/text.tertiary/page': 'VG-004 — steel-500 tertiary text below 4.5:1, tracked not fixed here',
+  'precise/text.tertiary/alt': 'VG-004 — steel-500 tertiary text below 4.5:1, tracked not fixed here',
+  'group/text.tertiary/page': 'VG-004 — steel-500 tertiary text below 4.5:1, tracked not fixed here',
+  'group/text.tertiary/alt': 'VG-004 — steel-500 tertiary text below 4.5:1, tracked not fixed here',
+}
+
+function checkPair(company: Company, label: string, fg: string, bg: string, floor: number) {
+  const key = `${company}/${label}`
+  const ratio = cr(fg, bg)
+  const reason = EXCEPTIONS[key]
+  const title = reason
+    ? `${key}: ${ratio.toFixed(2)}:1 — known exception (${reason})`
+    : `${key}: ${ratio.toFixed(2)}:1 ≥ ${floor}:1`
+  it(title, () => {
+    if (reason) {
+      expect(ratio).toBeLessThan(floor)
+    } else {
+      expect(ratio).toBeGreaterThanOrEqual(floor)
+    }
   })
+}
 
-  it('steel-600 on steel-50 ≥ 4.5:1 (secondary text, spec states 7.0:1)', () => {
-    expect(cr(steel[600], steel[50])).toBeGreaterThanOrEqual(4.5)
-  })
+describe('contrast covenant §4.5 — generated matrix', () => {
+  for (const company of Object.keys(semanticByCompany) as Company[]) {
+    const sem = semanticByCompany[company]
+    for (const surfaceName of LIGHT_SURFACES) {
+      const bg = sem.color.surface[surfaceName]
+      for (const textName of TEXT_ON_LIGHT) {
+        checkPair(company, `text.${textName}/${surfaceName}`, sem.color.text[textName], bg, 4.5)
+      }
+      checkPair(company, `accent.text/${surfaceName}`, sem.color.accent.text, bg, 4.5)
+      checkPair(company, `focus.ring/${surfaceName}`, sem.color.focus.ring, bg, 3)
+    }
+    for (const surfaceName of DARK_SURFACES) {
+      const bg = sem.color.surface[surfaceName]
+      for (const textName of TEXT_ON_DARK) {
+        checkPair(company, `text.${textName}/${surfaceName}`, sem.color.text[textName], bg, 4.5)
+      }
+      checkPair(company, `accent.onDark/${surfaceName}`, sem.color.accent.onDark, bg, 4.5)
+      checkPair(company, `focus.ring/${surfaceName}`, sem.color.focus.ring, bg, 3)
+      checkPair(company, `focus.ringOnDark/${surfaceName}`, sem.color.focus.ringOnDark, bg, 3)
+    }
+  }
+})
 
-  it('steel-50 on steel-900 ≥ 4.5:1 (onDark text)', () => {
-    expect(cr(steel[50], steel[900])).toBeGreaterThanOrEqual(4.5)
-  })
+// ─── Contrast covenant (§4.5) — regression locks ─────────────────────────────
+// Pairs tied to a specific incident or a literal (non-semantic-surface) hex
+// used directly in components — e.g. Header/MobileDrawer's chrome is
+// steel-950, not the surface.dark alias (steel-900), so the generated matrix
+// above can't cover it. Kept as explicit assertions, not generated.
 
-  it('brand-300 on steel-900 ≥ 4.5:1 (accent on Footer dark band)', () => {
-    expect(cr(brand[300], steel[900])).toBeGreaterThanOrEqual(4.5)
-  })
-
-  it('brand-300 on steel-950 ≥ 4.5:1 (accent on Header / MobileDrawer chrome)', () => {
-    expect(cr(brand[300], steel[950])).toBeGreaterThanOrEqual(4.5)
-  })
-
-  it('brand-600 on steel-50 ≥ 4.5:1 (accent text on light — text uses brand-600+, not brand-500)', () => {
-    expect(cr(brand[600], steel[50])).toBeGreaterThanOrEqual(4.5)
-  })
-
-  // ── The three assertions the v1.2 red swap exists to hold ────────────────────
-  // A straight hex swap of the accent breaks all three. They are regression locks.
-
+describe('contrast covenant §4.5 — regression locks', () => {
   it('steel-50 on brand-500 ≥ 4.5:1 (RFQ button label MUST be light on the red fill)', () => {
     expect(cr(steel[50], brand[500])).toBeGreaterThanOrEqual(4.5)
   })
@@ -123,19 +172,19 @@ describe('contrast covenant §4.5', () => {
     expect(cr(steel[950], brand[500])).toBeLessThan(4.5)
   })
 
-  it('brand-300 on steel-950 ≥ 3:1 (focus ring on dark chrome, WCAG 1.4.11)', () => {
+  it('brand-300 on steel-950 ≥ 4.5:1 (accent text on the literal Header/MobileDrawer chrome hex)', () => {
+    expect(cr(brand[300], steel[950])).toBeGreaterThanOrEqual(4.5)
+  })
+
+  it('brand-300 on steel-950 ≥ 3:1, brand-500 on steel-950 BELOW 3:1 (focus ring on the chrome hex, WCAG 1.4.11)', () => {
     // brand-500 itself is 2.85:1 here — under the floor. This is why globals.css
     // rebinds --accent-focus inside [data-chrome='dark'].
     expect(cr(brand[300], steel[950])).toBeGreaterThanOrEqual(3)
     expect(cr(brand[500], steel[950])).toBeLessThan(3)
   })
 
-  it('flex-500 on white ≥ 4.5:1 (Precise accent, 5.70:1 approved 2026-07-09)', () => {
+  it('flex-500 on white ≥ 4.5:1 (Precise accent fill, 5.70:1 approved 2026-07-09)', () => {
     expect(cr(flex[500], '#FFFFFF')).toBeGreaterThanOrEqual(4.5)
-  })
-
-  it('flex-600 on steel-50 ≥ 4.5:1 (Precise accent text on light)', () => {
-    expect(cr(flex[600], steel[50])).toBeGreaterThanOrEqual(4.5)
   })
 
   it('rfqFg (precise) on flex-500 ≥ 4.5:1 (Precise RFQ button label — white text on dark blue)', () => {
