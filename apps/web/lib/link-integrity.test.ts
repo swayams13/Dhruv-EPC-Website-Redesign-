@@ -3,55 +3,14 @@
 // actually resolves to a route, a legacy redirect, or a JSON-LD-visible URL —
 // so nothing would catch the next one. This test is that assertion.
 
-import { readdirSync, readFileSync } from 'node:fs'
-import { join, relative, resolve } from 'node:path'
+import { readFileSync } from 'node:fs'
+import { relative, resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { LEGACY_REDIRECTS } from './redirects.generated'
 import sitemap from '../app/sitemap'
-import { BASE } from './site'
+import { ROUTES, normalize, pageFiles, walk } from './routes'
 
-const APP_DIR = resolve(__dirname, '../app')
 const WEB_DIR = resolve(__dirname, '..')
-
-const SKIP_DIRS = new Set(['node_modules', '.next', 'dist'])
-
-function walk(dir: string, matches: (name: string) => boolean): string[] {
-  const out: string[] = []
-  for (const entry of readdirSync(dir, { withFileTypes: true })) {
-    if (SKIP_DIRS.has(entry.name)) continue
-    const full = join(dir, entry.name)
-    if (entry.isDirectory()) {
-      out.push(...walk(full, matches))
-    } else if (matches(entry.name)) {
-      out.push(full)
-    }
-  }
-  return out
-}
-
-// ── Step 1: enumerate every real route ───────────────────────────────────
-const pageFiles = walk(APP_DIR, (name) => name === 'page.tsx')
-
-function routeFromPageFile(file: string): string {
-  const rel = relative(APP_DIR, file)
-  const segments = rel
-    .split('/')
-    .slice(0, -1) // drop page.tsx
-    .filter((s) => !/^\(.*\)$/.test(s)) // drop route groups, e.g. (group)
-  return segments.length === 0 ? '/' : `/${segments.join('/')}/`
-}
-
-const ROUTES = new Set(pageFiles.map(routeFromPageFile))
-
-// path/query/hash -> canonical trailing-slash form comparable to ROUTES.
-// trailingSlash: true (next.config) means '/foo' and '/foo/' both resolve,
-// but the canonical form everything should point at has the slash.
-function normalize(path: string): string {
-  const withoutBase = path.startsWith(BASE) ? path.slice(BASE.length) : path
-  const bare = withoutBase.split('#')[0]?.split('?')[0] ?? ''
-  if (bare === '') return '/'
-  return bare.endsWith('/') ? bare : `${bare}/`
-}
 
 const REDIRECT_SOURCES = new Set(Object.keys(LEGACY_REDIRECTS))
 

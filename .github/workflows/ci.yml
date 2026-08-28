@@ -40,13 +40,15 @@ jobs:
       - name: Build
         run: pnpm turbo build
 
-      # ponytail: placeholder — wire axe-core after first deployable page exists
+      - name: Install Playwright browsers
+        run: pnpm --filter @vedanta/web exec playwright install --with-deps chromium
+
+      # Route-level a11y gate (session 1, T3): builds on `pnpm turbo build`
+      # above — starts that build, runs axe-core against every real route.
+      # 11 routes have a tracked, skipped violation — see docs/mistakes.md
+      # (VG-004) and apps/web/e2e/a11y.spec.ts's KNOWN_FAILURES.
       - name: Accessibility gate (axe-core CI)
-        run: |
-          echo "TODO: axe-core CI gate"
-          echo "Target: zero critical violations on every route"
-          echo "Implementation: @axe-core/playwright against Playwright-started dev server"
-          echo "Gate: exit 1 if any critical violation found"
+        run: pnpm --filter @vedanta/web exec playwright test
 
       # ponytail: placeholder — wire Lighthouse CI after first deployable page exists
       - name: Performance budgets (Lighthouse CI)

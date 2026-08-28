@@ -150,3 +150,72 @@ bug, out of scope for this session (not one of B1–B10).
 secondary variant (same mechanism `globals.css` already uses for the
 focus ring on dark chrome) before this is fixed — flag for a future
 session.
+
+## 2026-08-27 — Session 1 (T3): route-level axe surfaces sitewide steel-500 text contrast failures (VG-004)
+
+**What happened:** the new Playwright + axe-core route gate
+(`apps/web/e2e/a11y.spec.ts`) is the first check that ever ran axe
+against real painted routes rather than isolated jsdom component
+stories (`packages/datum-ui/src/a11y.test.tsx` explicitly cannot check
+color-contrast — no paint layer). It found `color-contrast` violations
+on 11 of 32 routes, all traced to the same root cause: `text-steel-500`
+(#7a7269) used as body/caption/menu text falls under the 4.5:1 floor
+against every background it appears on — 3.8:1 on the dark Header
+chrome (#14171a), 3.66:1 in the mega-menu panel (#1c1a18), and 4.15:1
+against the page surface (#f2f0ea). Two further one-off violations
+(muted tones #5c5850 and #b5b0a4, ratios 2.54 and 1.89) on `/` and
+`/request-a-quote/thank-you/` need their own look. This is a token-
+usage bug spanning `Header.tsx`, page-level muted captions, and the
+thank-you page — not a one-line fix, and out of scope for a
+test-harness session (CLAUDE.md scope discipline).
+
+**Affected routes (skipped in `e2e/a11y.spec.ts` via `KNOWN_FAILURES`,
+pending the fix):** `/`, `/about/`, `/contact/`, `/privacy/`, `/terms/`,
+`/request-a-quote/`, `/request-a-quote/thank-you/`, `/dhruv-epc/`,
+`/precise-engineers/`, `/precise-engineers/capabilities/`,
+`/precise-engineers/proof/`.
+
+**Rule:** before using `text-steel-500` (or any token below 4.5:1
+against its actual background) for body/caption text, check
+`packages/tokens/src/tokens.test.ts`'s contrast covenant — if the pair
+isn't an explicit allowlisted exception, it needs `steel-600`+ (proven
+≥4.5:1) instead. A future session should audit every `text-steel-500`
+usage against its real background and either swap the token or move
+the specific use to a covenant-sanctioned pair, then un-skip these
+routes one at a time.
+
+## 2026-08-27 — Session 1 (T3 verify): pre-existing `.github/workflows/ci.yml` "Redirect map integrity" step is not standard-compliant YAML
+
+**What happened:** while validating `ci.yml` after wiring T3's
+accessibility gate, two independent strict YAML parsers (PyYAML,
+Ruby's Psych) both fail to parse the whole file — not because of
+anything this session added, but because of a pre-existing step:
+
+```yaml
+- name: Redirect map integrity
+  run: node -e "
+    const fs = require('fs');
+    ...
+  "
+```
+
+`node -e "` is an unquoted plain scalar followed by a bare `"`, not a
+proper YAML double-quoted block — the trailing `"` line dedents back
+to the mapping's own indentation, which both parsers read as "scalar
+ended, now expecting a new key," and choke on the orphaned quote.
+Verified this predates the session (same failure, same construct, on
+`git show cf7faaa:.github/workflows/ci.yml`). GitHub Actions' own YAML
+parser may tolerate it — untested here — but it is not something to
+build new steps on by copying the pattern.
+
+**Root cause:** hand-written multi-line `node -e "..."` shell embedded
+directly in workflow YAML instead of a `|` block scalar or a checked-in
+script file.
+
+**Rule:** out of scope for T3 (unrelated step, not one of the two
+placeholders this session's brief named) — not fixed here. Next session
+touching `ci.yml` should convert that step to `run: |` with the JS
+written as plain shell-safe lines, or move it into
+`scripts/test-redirects.mjs`-style a checked-in file, and confirm with
+`python3 -c "import yaml; yaml.safe_load(open('.github/workflows/ci.yml'))"`
+that the whole file parses clean before merging.
