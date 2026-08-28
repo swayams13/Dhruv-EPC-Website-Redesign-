@@ -22,7 +22,7 @@ import {
 } from '../../lib/content/precise-engineers'
 
 export const metadata: Metadata = {
-  title: 'Precise Engineers — EJMA Metallic Bellows & Expansion Joints, Anand',
+  title: 'Precise Engineers — EJMA Bellows & Expansion Joints, Anand',
   description:
     'Metallic bellows expansion joints to EJMA and ASME B31.3, 80 – 8,000 mm NB. Rubber and fabric bellows, dismantling joints, zero velocity valves. EIL approved, ISO 9001:2015.',
 }

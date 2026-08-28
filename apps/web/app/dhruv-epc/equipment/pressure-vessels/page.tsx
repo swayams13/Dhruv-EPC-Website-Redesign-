@@ -8,7 +8,7 @@ import { dhruvEntity, dhruvPhoneHref, dhruvWhatsappHref, pressureVessels } from 
 import { BASE } from '../../../../lib/site'
 
 export const metadata: Metadata = {
-  title: 'Pressure Vessels — ASME Sec. VIII Div. 1 & 2, U/U2 Stamped | Dhruv EPC',
+  title: 'Pressure Vessels — ASME Sec. VIII, U/U2 Stamped | Dhruv EPC',
   description:
     'Reactors, columns, separators and drums fabricated to ASME Section VIII Division 1 and 2 under U and U2 Certificates of Authorization. IBR approved. CS, SS, duplex and high-nickel alloys.',
   alternates: { canonical: '/dhruv-epc/equipment/pressure-vessels/' },

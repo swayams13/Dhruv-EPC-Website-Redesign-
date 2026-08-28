@@ -8,7 +8,7 @@ import { flangeAdaptor, preciseEntity, precisePhoneHref, preciseWhatsappHref } f
 import { BASE } from '../../../../lib/site'
 
 export const metadata: Metadata = {
-  title: 'Flange Adaptors — Pipe-to-Flange Transition Couplings | Precise Engineers',
+  title: 'Flange Adaptors — Pipe-Flange Couplings | Precise Engineers',
   description:
     'Standard, stepped and anchor flange adaptors connecting plain-end pipe to flanged equipment. ANSI B16.1, BS 4504, DIN 2501. Ductile iron, CS, SS 304/316. EIL approved, ISO 9001:2015.',
   alternates: { canonical: '/precise-engineers/products/flange-adaptor/' },

@@ -11,7 +11,7 @@ import { metallicBellows, preciseEntity, precisePhoneHref, preciseWhatsappHref }
 import { BASE } from '../../../../lib/site'
 
 export const metadata: Metadata = {
-  title: 'Metallic Bellows Expansion Joints — EJMA, ASME B31.3 | Precise Engineers',
+  title: 'Metallic Bellows Expansion Joints — EJMA | Precise Engineers',
   description:
     'Single, universal, hinged, gimbal and pressure-balanced expansion joints to EJMA and ASME B31.3. 80 – 8,000 mm NB circular, 9,000 × 5,000 mm rectangular. SS, Inconel, Incoloy, Hastelloy, duplex.',
   alternates: { canonical: '/precise-engineers/products/metallic-bellows-expansion-joint/' },

@@ -4,69 +4,29 @@
 // color-contrast is excluded here: jsdom has no paint layer — contrast is
 // asserted numerically in packages/tokens/src/tokens.test.ts (§4.5 covenant).
 
-import { describe, it, expect } from 'vitest'
-import { render } from '@testing-library/react'
+import { afterEach, describe, it, expect } from 'vitest'
+import { cleanup, render } from '@testing-library/react'
 import { composeStories } from '@storybook/react'
 import axe from 'axe-core'
 
-import * as StampStories from './components/Stamp.stories'
-import * as DatumRuleStories from './components/DatumRule.stories'
-import * as ButtonStories from './components/Button.stories'
-import * as InputStories from './components/Input.stories'
-import * as SelectStories from './components/Select.stories'
-import * as TextareaStories from './components/Textarea.stories'
-import * as ChoiceCardStories from './components/ChoiceCard.stories'
-import * as UploadDropzoneStories from './components/UploadDropzone.stories'
-import * as SpecTableStories from './components/SpecTable.stories'
-import * as ProductCardStories from './components/ProductCard.stories'
-import * as DomainIconStories from './components/DomainIcon.stories'
-import * as ProjectCardStories from './components/ProjectCard.stories'
-import * as BreadcrumbsStories from './components/Breadcrumbs.stories'
-import * as HeaderStories from './components/Header.stories'
-import * as MobileDrawerStories from './components/MobileDrawer.stories'
-import * as MobileBottomBarStories from './components/MobileBottomBar.stories'
-import * as FooterStories from './components/Footer.stories'
-import * as StatBandStories from './components/StatBand.stories'
-import * as HomeHeroStories from './components/HomeHero.stories'
-import * as ProductHeroStories from './components/ProductHero.stories'
-import * as PageHeroStories from './components/PageHero.stories'
-import * as CertificationCardStories from './components/CertificationCard.stories'
-import * as ApprovalsMatrixStories from './components/ApprovalsMatrix.stories'
-import * as ClientWallStories from './components/ClientWall.stories'
-import * as TestimonialStories from './components/Testimonial.stories'
+// Without this, un-cleaned DOM from one story (e.g. a HomeHero's
+// [data-rfq-anchor] CTA) leaks into the next story's render — MobileBottomBar
+// then finds a stale anchor and tries to construct an IntersectionObserver,
+// which jsdom doesn't provide. Order-dependent before the auto-glob (T5)
+// happened to dodge it; explicit cleanup makes it order-independent.
+afterEach(cleanup)
 
-// NEW COMPONENT CHECKLIST: add an import above AND an entry below.
-// No auto-glob — a component absent from this map is silently skipped by axe.
-const allStories = {
-  Stamp: StampStories,
-  DatumRule: DatumRuleStories,
-  Button: ButtonStories,
-  Input: InputStories,
-  Select: SelectStories,
-  Textarea: TextareaStories,
-  ChoiceCard: ChoiceCardStories,
-  UploadDropzone: UploadDropzoneStories,
-  SpecTable: SpecTableStories,
-  ProductCard: ProductCardStories,
-  DomainIcon: DomainIconStories,
-  ProjectCard: ProjectCardStories,
-  Breadcrumbs: BreadcrumbsStories,
-  Header: HeaderStories,
-  MobileDrawer: MobileDrawerStories,
-  MobileBottomBar: MobileBottomBarStories,
-  Footer: FooterStories,
-  StatBand: StatBandStories,
-  HomeHero: HomeHeroStories,
-  ProductHero: ProductHeroStories,
-  PageHero: PageHeroStories,
-  CertificationCard: CertificationCardStories,
-  ApprovalsMatrix: ApprovalsMatrixStories,
-  ClientWall: ClientWallStories,
-  Testimonial: TestimonialStories,
-}
+// Auto-glob (session 1, T5): every *.stories.tsx file is picked up without
+// editing this file — the old hand-maintained map silently skipped any
+// component whose story file existed but wasn't added to the map by hand.
+const storyModules = import.meta.glob('./components/*.stories.tsx', { eager: true }) as Record<
+  string,
+  Parameters<typeof composeStories>[0]
+>
 
-for (const [componentName, mod] of Object.entries(allStories)) {
-  const stories = composeStories(mod as Parameters<typeof composeStories>[0])
+for (const [path, mod] of Object.entries(storyModules)) {
+  const componentName = path.replace('./components/', '').replace('.stories.tsx', '')
+  const stories = composeStories(mod)
   describe(`${componentName} — axe`, () => {
     for (const [storyName, Story] of Object.entries(stories)) {
       // composeStories loses the component signature over a heterogeneous module map
