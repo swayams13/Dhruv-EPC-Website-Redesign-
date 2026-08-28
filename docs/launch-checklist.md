@@ -62,8 +62,8 @@ These cannot be verified without client input or a live staging deployment. DNS 
 
 ### CG-3: RFQ synthetic test (Gate 8)
 
-**What's needed:** Production/staging env vars: `STORAGE_BUCKET`, `STORAGE_ENDPOINT`, `STORAGE_ACCESS_KEY_ID`, `STORAGE_SECRET_ACCESS_KEY`, `RESEND_API_KEY`, `RFQ_NOTIFY_EMAIL`, `RFQ_NOTIFY_CC`.  
-**What to run:** End-to-end test: POST a multipart RFQ payload to `/api/rfq`, verify 200 response, verify email delivered to `RFQ_NOTIFY_EMAIL`, verify file appears in R2 bucket.  
+**What's needed:** Production/staging env vars: `STORAGE_BUCKET`, `STORAGE_ENDPOINT`, `STORAGE_ACCESS_KEY_ID`, `STORAGE_SECRET_ACCESS_KEY`, `RESEND_API_KEY`, `RFQ_NOTIFY_TO`, `RFQ_NOTIFY_FROM`, `DATABASE_URL`.  
+**What to run:** End-to-end test: POST a multipart RFQ payload to `/api/rfq`, verify 200 response, verify email delivered to `RFQ_NOTIFY_TO`, verify file appears in R2 bucket.  
 **Risk if skipped:** The API route compiles and the presigned upload flow works in dev — but production storage and email delivery are unverified until this test runs with real keys against a live environment. This is a launch-blocking gate; do not cut DNS without a successful E2E RFQ submission.
 
 ---

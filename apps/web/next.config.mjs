@@ -3,6 +3,7 @@ const config = {
   typescript: { ignoreBuildErrors: false },
   eslint: { ignoreDuringBuilds: false },
   trailingSlash: true,
+  experimental: { instrumentationHook: true },
 
   images: {
     formats: ['image/avif', 'image/webp'],
