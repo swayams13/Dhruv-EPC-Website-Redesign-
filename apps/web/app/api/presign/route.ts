@@ -4,6 +4,7 @@
 import { NextResponse } from 'next/server'
 import { PresignRequest } from '@vedanta/schemas'
 import { presignPutUrl } from '../../../lib/presign'
+import { recordIssuedKey } from '../../../lib/presign-keys'
 
 export const dynamic = 'force-dynamic'
 
@@ -64,6 +65,10 @@ export async function POST(request: Request) {
     EXPIRY_SECONDS,
     parsed.data.fileSizeBytes,
   )
+
+  // Record the issue before responding: /api/rfq's key check (D4) needs
+  // this row to exist by the time any client could plausibly reference it.
+  await recordIssuedKey(key, new Date(Date.now() + EXPIRY_SECONDS * 1000))
 
   return NextResponse.json({ url, key })
 }
