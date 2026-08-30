@@ -8,7 +8,7 @@ import { preciseEntity, precisePhoneHref, preciseWhatsappHref, telescopicExpansi
 import { BASE } from '../../../../lib/site'
 
 export const metadata: Metadata = {
-  title: 'Telescopic Expansion Joints — Slip-type, ASME B31.3 | Precise Engineers',
+  title: 'Telescopic Expansion Joints — ASME B31.3 | Precise Engineers',
   description:
     'Single and double-slip telescopic expansion joints with graphite, PTFE and live-loaded packing seals. ASME B31.3. CS, SS 304, SS 316. EIL approved, ISO 9001:2015, Anand.',
   alternates: { canonical: '/precise-engineers/products/telescopic-expansion-joint/' },

@@ -8,7 +8,7 @@ import { dualPlateCheckValve, preciseEntity, precisePhoneHref, preciseWhatsappHr
 import { BASE } from '../../../../lib/site'
 
 export const metadata: Metadata = {
-  title: 'Dual Plate Check Valves — API 594, ASME Class 150–600, Wafer & Lug | Precise Engineers',
+  title: 'Dual Plate Check Valves — API 594 | Precise Engineers',
   description:
     'Wafer and lug dual plate check valves to API 594, ASME Class 150, 300 and 600. WCB, CF8M, CF8, LCC. Metal-seated and soft-seated. EIL approved, ISO 9001:2015, Anand.',
   alternates: { canonical: '/precise-engineers/products/dual-plate-check-valve/' },
