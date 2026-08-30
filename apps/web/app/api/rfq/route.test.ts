@@ -73,7 +73,7 @@ describe('POST /api/rfq — D7 (VG-040)', () => {
       json.referenceNumber,
     ])
     expect(rows).toHaveLength(1)
-    expect(rows[0].email).toBe(TEST_EMAIL)
+    expect(rows[0]?.email).toBe(TEST_EMAIL)
 
     // The email attempt is a fire-and-forget side effect kicked off after
     // the response is built (see route.ts) — poll for it to settle rather
@@ -83,7 +83,7 @@ describe('POST /api/rfq — D7 (VG-040)', () => {
         'SELECT notification_status FROM leads WHERE reference = $1',
         [json.referenceNumber],
       )
-      expect(row.notification_status.email).toBe('failed')
+      expect(row?.notification_status.email).toBe('failed')
     })
   })
 
