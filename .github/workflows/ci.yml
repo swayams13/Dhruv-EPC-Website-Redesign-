@@ -28,6 +28,19 @@ jobs:
           --health-retries 5
     env:
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/vedanta_test
+      # Not secrets — fixed, obviously-fake values so apps/web/lib/env.ts's
+      # boot-time validation (D6) doesn't crash `next start`/`next dev` when
+      # the a11y gate, JS-budget check, and redirect runtime test below spin
+      # up a real server. None of those steps exercise Resend or R2/S3.
+      RESEND_API_KEY: ci-placeholder
+      RFQ_NOTIFY_TO: ci-placeholder@example.com
+      RFQ_NOTIFY_FROM: ci-placeholder@example.com
+      STORAGE_ENDPOINT: https://ci-placeholder.r2.cloudflarestorage.com
+      STORAGE_BUCKET: ci-placeholder
+      STORAGE_ACCESS_KEY_ID: ci-placeholder
+      STORAGE_SECRET_ACCESS_KEY: ci-placeholder
+      NEXT_PUBLIC_CONTACT_EMAIL: ci-placeholder@example.com
+      NEXT_PUBLIC_CONTACT_PHONE: "+910000000000"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
