@@ -219,3 +219,22 @@ written as plain shell-safe lines, or move it into
 `scripts/test-redirects.mjs`-style a checked-in file, and confirm with
 `python3 -c "import yaml; yaml.safe_load(open('.github/workflows/ci.yml'))"`
 that the whole file parses clean before merging.
+
+**Resolution (2026-08-30):** confirmed the untested guess above was
+wrong — GitHub Actions' own parser does **not** tolerate the construct
+either. `gh run view` on every push to `main` since 2026-07-17 (PR #7,
+#8, #9's merge commits, and everything after) shows the same result:
+*"This run likely failed because of a workflow file issue."* CI has been
+a no-op — zero lint/typecheck/test/build/redirect gate has actually run
+in GitHub Actions on this repo for six weeks; only Vercel's own build
+checks were catching anything. Fixed in `fix/ci-workflow-yaml-syntax`:
+moved the inline script to `scripts/check-redirect-map-integrity.mjs`
+(same pattern as `scripts/test-redirects.mjs`), step is now a plain
+`run: node scripts/check-redirect-map-integrity.mjs`. Verified the whole
+file parses with the command above.
+
+**Broader rule:** `gh pr checks` / the PR UI checks list is not proof CI
+ran — it only lists checks that *reported*, and a parse failure reports
+nothing (no red X appears there; you have to check `gh run list` /
+`gh run view` directly). When asked to verify CI status, check the
+Actions run itself, not just the PR checks list.
