@@ -59,14 +59,7 @@ jobs:
         run: node scripts/check-js-budget.mjs
 
       - name: Redirect map integrity
-        run: node -e "
-          const fs = require('fs');
-          const csv = fs.readFileSync('content/redirect-map.csv', 'utf8');
-          const rows = csv.trim().split('\n').filter(r => r.trim() && !r.startsWith('#') && !r.startsWith('legacy_path'));
-          const invalid = rows.filter(r => !r.match(/^\/[^,]*,\/[^,]*,(301|302)$/));
-          if (invalid.length) { console.error('Invalid rows:', invalid); process.exit(1); }
-          console.log(rows.length + ' redirect rules validated');
-        "
+        run: node scripts/check-redirect-map-integrity.mjs
 
       - name: Redirect runtime test (301 checks)
         run: |
