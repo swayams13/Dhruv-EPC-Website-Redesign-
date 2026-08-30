@@ -14,10 +14,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # No `version:` input here — pnpm/action-setup@v4 errors
+      # ("Multiple versions of pnpm specified") if both this input and
+      # package.json's `packageManager` field are set. packageManager is
+      # now the single source of truth (see package.json).
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 9
 
       - name: Setup Node
         uses: actions/setup-node@v4
