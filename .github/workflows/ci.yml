@@ -10,6 +10,24 @@ jobs:
   ci:
     name: Lint · Typecheck · Test · Accessibility · Performance
     runs-on: ubuntu-latest
+    services:
+      # Backs apps/web/app/api/rfq/route.test.ts (D7) — a real integration
+      # test against Postgres, not a mock of the persistence layer.
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: vedanta_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/vedanta_test
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -33,6 +51,9 @@ jobs:
 
       - name: Typecheck
         run: pnpm turbo typecheck
+
+      - name: Migrate test database
+        run: pnpm migrate
 
       - name: Test
         run: pnpm turbo test
