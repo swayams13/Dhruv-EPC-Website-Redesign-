@@ -33,6 +33,10 @@ const product: Product = {
   faqs: Array.from({ length: 4 }, (_, i) => ({ question: `Q${i + 1}`, answer: `A${i + 1}` })),
   gallery: [],
   relatedProjectSlugs: [],
+  categorySlug: 'static-equipment',
+  industrySlugs: ['refining'],
+  capabilitySlugs: [],
+  standardsMatrix: [],
 }
 
 const project: Project = {
@@ -46,6 +50,11 @@ const project: Project = {
   qaSection: 'All welds radiographed; PWHT per ASME Sec VIII Div 1 UCS-56.',
   photos: [{ src: '/works/bpcl-vessel.jpg', alt: '18 T pressure vessel during hydrotest at GIDC Vatva works' }],
   anonymized: false,
+  productSlugs: ['heat-exchanger-shell-tube'],
+  industrySlug: 'refining',
+  capabilitySlugs: [],
+  location: 'GIDC Vatva, Ahmedabad',
+  documents: [],
 }
 
 describe('buildOrganization', () => {
