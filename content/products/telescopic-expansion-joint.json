@@ -5,32 +5,136 @@
   "oneLineScope": "Slip-type telescopic expansion joints to ASME B31.3, 50 – 1,200 mm NB axial traverse",
   "group": "expansion-joints",
   "categorySlug": "expansion-joints",
-  "industrySlugs": ["refining-petrochemical"],
+  "industrySlugs": [
+    "refining-petrochemical"
+  ],
   "capabilitySlugs": [],
   "standardsMatrix": [],
   "specTable": [
-    { "param": "Size range", "value": "50 – 1,200", "unit": "mm NB", "note": "DEMO figure — engineering data pending" },
-    { "param": "Axial traverse", "value": "25 – 300", "unit": "mm", "note": "DEMO figure — engineering data pending" },
-    { "param": "Design pressure", "value": "up to 16", "unit": "bar(g)", "note": "DEMO figure — engineering data pending" },
-    { "param": "Design temperature", "value": "up to +350", "unit": "°C", "note": "DEMO figure — engineering data pending" },
-    { "param": "Design code", "value": "ASME B31.3" },
-    { "param": "Sealing system", "value": "Graphite packing · PTFE packing · live-loaded" },
-    { "param": "MOC", "value": "CS (IS 2062) · SS 304 · SS 316", "note": "DEMO — full MOC list pending" },
-    { "param": "End connections", "value": "Weld ends · flanged (ANSI / BS 4504)", "note": "DEMO — engineering data pending" }
+    {
+      "param": "Size range",
+      "value": "50 – 1,200",
+      "unit": "mm NB",
+      "note": "DEMO figure — engineering data pending"
+    },
+    {
+      "param": "Axial traverse",
+      "value": "25 – 300",
+      "unit": "mm",
+      "note": "DEMO figure — engineering data pending"
+    },
+    {
+      "param": "Design pressure",
+      "value": "up to 16",
+      "unit": "bar(g)",
+      "note": "DEMO figure — engineering data pending"
+    },
+    {
+      "param": "Design temperature",
+      "value": "up to +350",
+      "unit": "°C",
+      "note": "DEMO figure — engineering data pending"
+    },
+    {
+      "param": "Design code",
+      "value": "ASME B31.3"
+    },
+    {
+      "param": "Sealing system",
+      "value": "Graphite packing · PTFE packing · live-loaded"
+    },
+    {
+      "param": "MOC",
+      "value": "CS (IS 2062) · SS 304 · SS 316",
+      "note": "DEMO — full MOC list pending"
+    },
+    {
+      "param": "End connections",
+      "value": "Weld ends · flanged (ANSI / BS 4504)",
+      "note": "DEMO — engineering data pending"
+    }
   ],
   "types": [
-    { "name": "Single-slip", "description": "One sliding element; compact and suited to moderate axial movement in steam and hot-water mains." },
-    { "name": "Double-slip", "description": "Two sliding elements with central spool; doubles the available axial traverse for longer pipe runs." }
+    {
+      "name": "Single-slip",
+      "description": "One sliding element; compact and suited to moderate axial movement in steam and hot-water mains."
+    },
+    {
+      "name": "Double-slip",
+      "description": "Two sliding elements with central spool; doubles the available axial traverse for longer pipe runs."
+    }
   ],
-  "materials": ["Carbon steel (IS 2062)", "SS 304", "SS 316"],
-  "codes": ["ASME B31.3"],
+  "materials": [
+    "Carbon steel (IS 2062)",
+    "SS 304",
+    "SS 316"
+  ],
+  "codes": [
+    "ASME B31.3"
+  ],
   "faqs": [
-    { "question": "What is a telescopic expansion joint?", "answer": "A telescopic (slip-type) expansion joint consists of a sleeve that slides inside an outer barrel to absorb axial pipe movement. Graphite or PTFE packing seals the annular gap, making it suitable for steam, hot-water and process piping where axial traverse is large." },
-    { "question": "What size range of telescopic expansion joints do you manufacture?", "answer": "Size range and traverse data are pending confirmation from engineering. Contact Precise Engineers with your line size, operating pressure, temperature and required traverse for a project-specific quotation." },
-    { "question": "What sealing systems are available?", "answer": "Graphite packing, PTFE packing and live-loaded seal arrangements are available depending on temperature and cyclic-service requirements. Live-loaded seals maintain constant packing compression as the bellows cycles." },
-    { "question": "What design code governs telescopic expansion joints?", "answer": "ASME B31.3 Process Piping governs the piping-stress analysis and pressure-containment design of telescopic expansion joints supplied by Precise Engineers." },
-    { "question": "Which industries use telescopic expansion joints?", "answer": "Steam distribution, district heating, hot-oil piping and process plants in refining and petrochemical service are the primary applications. Precise Engineers is an EIL-approved unit, ISO 9001:2015 certified, established 1994." }
+    {
+      "question": "What is a telescopic expansion joint?",
+      "answer": "A telescopic (slip-type) expansion joint consists of a sleeve that slides inside an outer barrel to absorb axial pipe movement. Graphite or PTFE packing seals the annular gap, making it suitable for steam, hot-water and process piping where axial traverse is large."
+    },
+    {
+      "question": "What size range of telescopic expansion joints do you manufacture?",
+      "answer": "Size range and traverse data are pending confirmation from engineering. Contact Precise Engineers with your line size, operating pressure, temperature and required traverse for a project-specific quotation."
+    },
+    {
+      "question": "What sealing systems are available?",
+      "answer": "Graphite packing, PTFE packing and live-loaded seal arrangements are available depending on temperature and cyclic-service requirements. Live-loaded seals maintain constant packing compression as the bellows cycles."
+    },
+    {
+      "question": "What design code governs telescopic expansion joints?",
+      "answer": "ASME B31.3 Process Piping governs the piping-stress analysis and pressure-containment design of telescopic expansion joints supplied by Precise Engineers."
+    },
+    {
+      "question": "Which industries use telescopic expansion joints?",
+      "answer": "Steam distribution, district heating, hot-oil piping and process plants in refining and petrochemical service are the primary applications. Precise Engineers is an EIL-approved unit, ISO 9001:2015 certified, established 1994."
+    }
   ],
   "gallery": [],
-  "relatedProjectSlugs": []
+  "relatedProjectSlugs": [],
+  "page": {
+    "metaTitle": "Telescopic Expansion Joints — ASME B31.3 | Precise Engineers",
+    "metaDescription": "Single and double-slip telescopic expansion joints with graphite, PTFE and live-loaded packing seals. ASME B31.3. CS, SS 304, SS 316. EIL approved, ISO 9001:2015, Anand.",
+    "breadcrumbLabel": "Telescopic Expansion Joints",
+    "heroTitle": "Telescopic Expansion Joints",
+    "valueStatement": "Single and double-slip telescopic expansion joints with graphite, PTFE and live-loaded packing seals, designed to ASME B31.3 for steam, hot-water and process piping requiring large axial traverse.",
+    "heroChips": [
+      "ASME B31.3",
+      "Graphite · PTFE · live-loaded",
+      "CS · SS 304 · SS 316"
+    ],
+    "certChips": [
+      "EIL Approved Vendor",
+      "ISO 9001:2015"
+    ],
+    "specCaption": "Telescopic expansion joint capability",
+    "materialsHeading": "Materials of construction",
+    "qaSteps": [
+      {
+        "step": "Design review",
+        "caption": "ASME B31.3 stress calc, traverse, pressure and sealing specification"
+      },
+      {
+        "step": "Material receipt",
+        "caption": "Bar, plate and packing MTCs verified against purchase order"
+      },
+      {
+        "step": "Machining",
+        "caption": "Sleeve OD and barrel ID machined to tolerance; surface finish checked"
+      },
+      {
+        "step": "Packing & assembly",
+        "caption": "Packing installed and adjusted to torque spec; sliding function verified"
+      },
+      {
+        "step": "Hydraulic test & dispatch",
+        "caption": "Proof test at 1.5× design pressure, final inspection and dispatch"
+      }
+    ],
+    "qaClosing": "Executed under EIL approval and ISO 9001:2015 QMS; third-party inspection available."
+  }
 }

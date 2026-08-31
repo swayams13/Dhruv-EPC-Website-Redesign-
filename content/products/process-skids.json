@@ -5,35 +5,152 @@
   "oneLineScope": "Skid-mounted process packages to ASME B31.3, FAT-tested at Manjusar works",
   "group": "skids-packages",
   "categorySlug": "skids-packages",
-  "industrySlugs": ["oil-gas", "refining-petrochemical", "fertilizer-chemicals", "power"],
+  "industrySlugs": [
+    "oil-gas",
+    "refining-petrochemical",
+    "fertilizer-chemicals",
+    "power"
+  ],
   "capabilitySlugs": [],
   "standardsMatrix": [],
   "specTable": [
-    { "param": "Piping code", "value": "ASME B31.3 · ASME B31.1 (where applicable)" },
-    { "param": "Structural standard", "value": "IS 2062 / ASTM A36 structural steel" },
-    { "param": "Skid types", "value": "Heat-transfer, filtration, metering, chemical-dosing, separator, wellhead" },
-    { "param": "Max skid dimensions", "value": "L 12,000 × W 4,500 × H 6,000", "unit": "mm", "note": "DEMO figure — engineering data pending" },
-    { "param": "Max lift weight", "value": "80", "unit": "T", "note": "DEMO figure — engineering data pending" },
-    { "param": "Piping class", "value": "ANSI 150 to 2,500", "note": "DEMO figure — engineering data pending" },
-    { "param": "FAT", "value": "Factory Acceptance Test performed at Manjusar works before dispatch" },
-    { "param": "Inspection", "value": "LRS · BV · DNV · IBR", "note": "Third-party per client ITP" }
+    {
+      "param": "Piping code",
+      "value": "ASME B31.3 · ASME B31.1 (where applicable)"
+    },
+    {
+      "param": "Structural standard",
+      "value": "IS 2062 / ASTM A36 structural steel"
+    },
+    {
+      "param": "Skid types",
+      "value": "Heat-transfer, filtration, metering, chemical-dosing, separator, wellhead"
+    },
+    {
+      "param": "Max skid dimensions",
+      "value": "L 12,000 × W 4,500 × H 6,000",
+      "unit": "mm",
+      "note": "DEMO figure — engineering data pending"
+    },
+    {
+      "param": "Max lift weight",
+      "value": "80",
+      "unit": "T",
+      "note": "DEMO figure — engineering data pending"
+    },
+    {
+      "param": "Piping class",
+      "value": "ANSI 150 to 2,500",
+      "note": "DEMO figure — engineering data pending"
+    },
+    {
+      "param": "FAT",
+      "value": "Factory Acceptance Test performed at Manjusar works before dispatch"
+    },
+    {
+      "param": "Inspection",
+      "value": "LRS · BV · DNV · IBR",
+      "note": "Third-party per client ITP"
+    }
   ],
   "types": [
-    { "name": "Heat-transfer skids", "description": "Compact heat exchanger skids for heating, cooling and heat-recovery applications." },
-    { "name": "Separator and filter skids", "description": "Gas/liquid and liquid/liquid separation with coalescer elements and instrumentation." },
-    { "name": "Metering skids", "description": "Fiscal and check metering skids with flow computers, printers and communication." },
-    { "name": "Chemical-dosing skids", "description": "Chemical injection packages with dosing pumps, day tanks and safety interlocks." },
-    { "name": "Wellhead & manifold skids", "description": "Wellhead control panels, production manifolds and choke-valve skids for upstream oil & gas." }
+    {
+      "name": "Heat-transfer skids",
+      "description": "Compact heat exchanger skids for heating, cooling and heat-recovery applications."
+    },
+    {
+      "name": "Separator and filter skids",
+      "description": "Gas/liquid and liquid/liquid separation with coalescer elements and instrumentation."
+    },
+    {
+      "name": "Metering skids",
+      "description": "Fiscal and check metering skids with flow computers, printers and communication."
+    },
+    {
+      "name": "Chemical-dosing skids",
+      "description": "Chemical injection packages with dosing pumps, day tanks and safety interlocks."
+    },
+    {
+      "name": "Wellhead & manifold skids",
+      "description": "Wellhead control panels, production manifolds and choke-valve skids for upstream oil & gas."
+    }
   ],
-  "materials": ["Carbon steel", "SS 304/316", "Duplex SS for corrosive services"],
-  "codes": ["ASME B31.3", "ASME B31.1", "IS 2062", "IS 800"],
+  "materials": [
+    "Carbon steel",
+    "SS 304/316",
+    "Duplex SS for corrosive services"
+  ],
+  "codes": [
+    "ASME B31.3",
+    "ASME B31.1",
+    "IS 2062",
+    "IS 800"
+  ],
   "faqs": [
-    { "question": "What types of process skids does Dhruv EPC supply?", "answer": "Heat-transfer skids, separator and filter skids, metering skids, chemical-dosing packages and wellhead/manifold skids — each assembled, piped, wired and FAT-tested at the Manjusar works before dispatch." },
-    { "question": "Is a Factory Acceptance Test (FAT) standard on your skids?", "answer": "Yes — all process skids are FAT-tested at the Manjusar GIDC works. The client or their third-party inspector witnesses the FAT, and a punch-list is cleared before dispatch." },
-    { "question": "Which piping design code governs your process skids?", "answer": "Process piping is designed and fabricated to ASME B31.3, with ASME B31.1 applied where power-piping requirements govern. Structural steel follows IS 2062 and IS 800." },
-    { "question": "Which third-party inspection agencies are accepted?", "answer": "The works has executed jobs under Lloyd's Register (LRS), Bureau Veritas (BV) and DNV in addition to the statutory agency IBR — the same portfolio as the pressure vessel and heat exchanger business." },
-    { "question": "What sectors use your process skids?", "answer": "Oil & gas (upstream, midstream and downstream), refineries & petrochemicals, fertilizers, power and the chemicals industry — served from the Manjusar GIDC works at Vadodara, Gujarat." }
+    {
+      "question": "What types of process skids does Dhruv EPC supply?",
+      "answer": "Heat-transfer skids, separator and filter skids, metering skids, chemical-dosing packages and wellhead/manifold skids — each assembled, piped, wired and FAT-tested at the Manjusar works before dispatch."
+    },
+    {
+      "question": "Is a Factory Acceptance Test (FAT) standard on your skids?",
+      "answer": "Yes — all process skids are FAT-tested at the Manjusar GIDC works. The client or their third-party inspector witnesses the FAT, and a punch-list is cleared before dispatch."
+    },
+    {
+      "question": "Which piping design code governs your process skids?",
+      "answer": "Process piping is designed and fabricated to ASME B31.3, with ASME B31.1 applied where power-piping requirements govern. Structural steel follows IS 2062 and IS 800."
+    },
+    {
+      "question": "Which third-party inspection agencies are accepted?",
+      "answer": "The works has executed jobs under Lloyd's Register (LRS), Bureau Veritas (BV) and DNV in addition to the statutory agency IBR — the same portfolio as the pressure vessel and heat exchanger business."
+    },
+    {
+      "question": "What sectors use your process skids?",
+      "answer": "Oil & gas (upstream, midstream and downstream), refineries & petrochemicals, fertilizers, power and the chemicals industry — served from the Manjusar GIDC works at Vadodara, Gujarat."
+    }
   ],
   "gallery": [],
-  "relatedProjectSlugs": []
+  "relatedProjectSlugs": [],
+  "page": {
+    "metaTitle": "Process Skids — ASME B31.3, FAT-Tested | Dhruv EPC",
+    "metaDescription": "Skid-mounted process packages to ASME B31.3 — heat transfer, separator, metering and chemical-dosing skids — FAT-tested at the Manjusar works before dispatch.",
+    "breadcrumbLabel": "Process Skids",
+    "heroTitle": "Process Skids — ASME B31.3, FAT-Tested",
+    "valueStatement": "Skid-mounted process packages designed and built to ASME B31.3, fully piped, wired and factory-acceptance-tested at the Manjusar works before dispatch.",
+    "heroChips": [
+      "ASME B31.3 piping",
+      "FAT at works",
+      "CS · SS · duplex"
+    ],
+    "certChips": [
+      "ASME U",
+      "ASME U2",
+      "IBR",
+      "ISO 9001:2015"
+    ],
+    "specCaption": "Process skid capability",
+    "materialsHeading": "Materials of construction",
+    "qaSteps": [
+      {
+        "step": "Engineering & layout",
+        "caption": "P&ID review, 3D layout, instrument tie-in list finalised"
+      },
+      {
+        "step": "Material & equipment receipt",
+        "caption": "MRB checked against project BOM; traceable allocation"
+      },
+      {
+        "step": "Skid fabrication",
+        "caption": "Structural steel, piping spool fit-up, equipment mounting"
+      },
+      {
+        "step": "Instrument installation",
+        "caption": "Instrument and electrical installation, NDE on all joints"
+      },
+      {
+        "step": "FAT & dispatch",
+        "caption": "Client-witnessed FAT, punch-list cleared, dispatch"
+      }
+    ],
+    "qaClosing": "Third-party inspection accepted under LRS, BV or DNV; FAT procedure issued at enquiry stage."
+  }
 }

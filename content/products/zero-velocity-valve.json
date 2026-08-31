@@ -5,32 +5,131 @@
   "oneLineScope": "Hydraulically automatic water-hammer protection valves for pumping mains, IS 14845, 80 – 1,200 mm NB",
   "group": "flow-control",
   "categorySlug": "flow-control",
-  "industrySlugs": ["water-infrastructure"],
+  "industrySlugs": [
+    "water-infrastructure"
+  ],
   "capabilitySlugs": [],
   "standardsMatrix": [],
   "specTable": [
-    { "param": "Size range", "value": "80 – 1,200", "unit": "mm NB", "note": "DEMO figure — engineering data pending" },
-    { "param": "Pressure class", "value": "PN 10 · PN 16", "note": "DEMO — pressure table pending" },
-    { "param": "Design standard", "value": "IS 14845" },
-    { "param": "MOC — body", "value": "CI (IS 210) · DI (IS 1865) · CS (IS 2062)", "note": "DEMO — MOC selection pending" },
-    { "param": "MOC — internals", "value": "SS 304 disc and seat" },
-    { "param": "Operation", "value": "Hydraulically automatic — no external power required" },
-    { "param": "Application", "value": "Water-hammer protection on pumping mains" }
+    {
+      "param": "Size range",
+      "value": "80 – 1,200",
+      "unit": "mm NB",
+      "note": "DEMO figure — engineering data pending"
+    },
+    {
+      "param": "Pressure class",
+      "value": "PN 10 · PN 16",
+      "note": "DEMO — pressure table pending"
+    },
+    {
+      "param": "Design standard",
+      "value": "IS 14845"
+    },
+    {
+      "param": "MOC — body",
+      "value": "CI (IS 210) · DI (IS 1865) · CS (IS 2062)",
+      "note": "DEMO — MOC selection pending"
+    },
+    {
+      "param": "MOC — internals",
+      "value": "SS 304 disc and seat"
+    },
+    {
+      "param": "Operation",
+      "value": "Hydraulically automatic — no external power required"
+    },
+    {
+      "param": "Application",
+      "value": "Water-hammer protection on pumping mains"
+    }
   ],
   "types": [
-    { "name": "Standard ZVV", "description": "Automatically closes as pump velocity reaches zero, preventing reverse-flow surge." },
-    { "name": "With bypass", "description": "Integral bypass valve for controlled line pressurisation at start-up." },
-    { "name": "With dashpot", "description": "Hydraulic dashpot for adjustable closing rate on longer mains." }
+    {
+      "name": "Standard ZVV",
+      "description": "Automatically closes as pump velocity reaches zero, preventing reverse-flow surge."
+    },
+    {
+      "name": "With bypass",
+      "description": "Integral bypass valve for controlled line pressurisation at start-up."
+    },
+    {
+      "name": "With dashpot",
+      "description": "Hydraulic dashpot for adjustable closing rate on longer mains."
+    }
   ],
-  "materials": ["Cast iron (IS 210 Gr FG 260)", "Ductile iron (IS 1865)", "Carbon steel (IS 2062)", "SS 304 internals"],
-  "codes": ["IS 14845"],
+  "materials": [
+    "Cast iron (IS 210 Gr FG 260)",
+    "Ductile iron (IS 1865)",
+    "Carbon steel (IS 2062)",
+    "SS 304 internals"
+  ],
+  "codes": [
+    "IS 14845"
+  ],
   "faqs": [
-    { "question": "What is a zero velocity valve?", "answer": "A zero velocity valve (ZVV) is a hydraulically automatic valve installed on a pumping main to prevent water hammer. It closes precisely when the forward water velocity reaches zero — the instant at which pump trip or failure would otherwise allow reverse flow and surge pressure." },
-    { "question": "Why use a zero velocity valve instead of a check valve?", "answer": "A conventional check valve slams shut under reverse flow, creating a pressure spike. A zero velocity valve closes at the moment of zero forward velocity, before reverse flow begins, eliminating the slam and the associated pressure transient." },
-    { "question": "What size range of zero velocity valves do you supply?", "answer": "Size range and pressure class data are pending confirmation from engineering. Precise Engineers supplies ZVVs to water utilities, irrigation projects and pumping stations across India. Contact us with your main diameter, design pressure and pump-trip scenario." },
-    { "question": "What standard governs zero velocity valves?", "answer": "Zero velocity valves supplied by Precise Engineers are designed to IS 14845, the Indian Standard for zero velocity valves for pumping mains. Precise Engineers is ISO 9001:2015 certified and EIL approved." },
-    { "question": "Are zero velocity valves hydraulically actuated?", "answer": "Yes — ZVVs use pipeline pressure to operate the closing mechanism without any external power source or actuator. This makes them fail-safe on power failure, the most common cause of pump trip." }
+    {
+      "question": "What is a zero velocity valve?",
+      "answer": "A zero velocity valve (ZVV) is a hydraulically automatic valve installed on a pumping main to prevent water hammer. It closes precisely when the forward water velocity reaches zero — the instant at which pump trip or failure would otherwise allow reverse flow and surge pressure."
+    },
+    {
+      "question": "Why use a zero velocity valve instead of a check valve?",
+      "answer": "A conventional check valve slams shut under reverse flow, creating a pressure spike. A zero velocity valve closes at the moment of zero forward velocity, before reverse flow begins, eliminating the slam and the associated pressure transient."
+    },
+    {
+      "question": "What size range of zero velocity valves do you supply?",
+      "answer": "Size range and pressure class data are pending confirmation from engineering. Precise Engineers supplies ZVVs to water utilities, irrigation projects and pumping stations across India. Contact us with your main diameter, design pressure and pump-trip scenario."
+    },
+    {
+      "question": "What standard governs zero velocity valves?",
+      "answer": "Zero velocity valves supplied by Precise Engineers are designed to IS 14845, the Indian Standard for zero velocity valves for pumping mains. Precise Engineers is ISO 9001:2015 certified and EIL approved."
+    },
+    {
+      "question": "Are zero velocity valves hydraulically actuated?",
+      "answer": "Yes — ZVVs use pipeline pressure to operate the closing mechanism without any external power source or actuator. This makes them fail-safe on power failure, the most common cause of pump trip."
+    }
   ],
   "gallery": [],
-  "relatedProjectSlugs": []
+  "relatedProjectSlugs": [],
+  "page": {
+    "metaTitle": "Zero Velocity Valves — IS 14845 | Precise Engineers",
+    "metaDescription": "Hydraulically automatic zero velocity valves for water-hammer prevention on pumping mains. IS 14845. CI, DI, CS body. Standard, bypass and dashpot types. EIL approved, ISO 9001:2015.",
+    "breadcrumbLabel": "Zero Velocity Valves",
+    "heroTitle": "Zero Velocity Valves",
+    "valueStatement": "Hydraulically automatic valves that close at the moment of zero forward velocity on a pumping main, preventing reverse flow and eliminating water-hammer pressure transients without external power — designed to IS 14845.",
+    "heroChips": [
+      "IS 14845",
+      "Hydraulically automatic",
+      "CI · DI · CS · SS 304 internals"
+    ],
+    "certChips": [
+      "EIL Approved Vendor",
+      "ISO 9001:2015"
+    ],
+    "specCaption": "Zero velocity valve capability",
+    "materialsHeading": "Materials of construction",
+    "qaSteps": [
+      {
+        "step": "Design review",
+        "caption": "Closing characteristic, main diameter and water-hammer duty confirmed to IS 14845"
+      },
+      {
+        "step": "Body & internals",
+        "caption": "Casting NDE; disc, seat and hydraulic pilot circuit inspected dimensionally"
+      },
+      {
+        "step": "Mechanism assembly",
+        "caption": "Disc, seating and hydraulic pilot assembled; torque and stroke verified"
+      },
+      {
+        "step": "Functional test",
+        "caption": "Closing velocity verified under simulated pump-trip flow condition"
+      },
+      {
+        "step": "Hydraulic test & dispatch",
+        "caption": "Shell proof test at 1.5× design pressure; final inspection and dispatch"
+      }
+    ],
+    "qaClosing": "Executed under EIL approval and ISO 9001:2015 QMS; third-party inspection available."
+  }
 }

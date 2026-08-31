@@ -50,6 +50,25 @@ export const StandardsMatrixEntry = z.object({
   phase: z.enum(['design', 'fabrication', 'testing']),
 })
 
+// Session-5 (VG-012) product-detail presentation copy — moved out of the 17
+// hand-written page.tsx files so a single [category]/[slug] route can render
+// every product. Optional: the dynamic route falls back to a generic render
+// (built from name/codes/materials) for products that don't carry this yet.
+export const ProductPage = z.object({
+  metaTitle: z.string().max(60, 'Title budget is 60 chars — VG-062 metadata-uniqueness'),
+  metaDescription: z.string(),
+  breadcrumbLabel: z.string().min(1),
+  heroTitle: z.string().min(1),
+  valueStatement: z.string().min(1),
+  heroChips: z.array(z.string()),
+  certChips: z.array(z.string()),
+  specCaption: z.string().min(1),
+  materialsHeading: z.string().min(1),
+  qaSteps: z.array(z.object({ step: z.string().min(1), caption: z.string().min(1) })),
+  qaClosing: z.string().min(1),
+})
+export type ProductPage = z.infer<typeof ProductPage>
+
 export const Product = z.object({
   companySlug: CompanySlug,
   slug: z.string().regex(/^[a-z0-9-]+$/, 'Slug must be lowercase hyphenated'),
@@ -71,6 +90,7 @@ export const Product = z.object({
   industrySlugs: z.array(z.string()).min(1, 'A product without an industry is unfindable — assign at least one'),
   capabilitySlugs: z.array(z.string()),
   standardsMatrix: z.array(StandardsMatrixEntry),
+  page: ProductPage.optional(),
 })
 export type Product = z.infer<typeof Product>
 

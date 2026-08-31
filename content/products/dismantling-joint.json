@@ -5,31 +5,129 @@
   "oneLineScope": "Flanged dismantling joints with adjustment length for valve removal, 50 – 1,200 mm NB",
   "group": "expansion-joints",
   "categorySlug": "expansion-joints",
-  "industrySlugs": ["water-infrastructure"],
+  "industrySlugs": [
+    "water-infrastructure"
+  ],
   "capabilitySlugs": [],
   "standardsMatrix": [],
   "specTable": [
-    { "param": "Size range", "value": "50 – 1,200", "unit": "mm NB", "note": "DEMO figure — engineering data pending" },
-    { "param": "Pressure rating", "value": "PN 10 · PN 16 · PN 25", "note": "DEMO — full pressure table pending" },
-    { "param": "Adjustment length", "value": "±25 – ±150", "unit": "mm", "note": "DEMO figure — engineering data pending" },
-    { "param": "Flange standard", "value": "ANSI B16.1 · BS 4504 · DIN 2501" },
-    { "param": "MOC — body", "value": "Ductile iron · CS · SS 304 · SS 316" },
-    { "param": "Seal", "value": "EPDM · NBR · Neoprene ring gasket" }
+    {
+      "param": "Size range",
+      "value": "50 – 1,200",
+      "unit": "mm NB",
+      "note": "DEMO figure — engineering data pending"
+    },
+    {
+      "param": "Pressure rating",
+      "value": "PN 10 · PN 16 · PN 25",
+      "note": "DEMO — full pressure table pending"
+    },
+    {
+      "param": "Adjustment length",
+      "value": "±25 – ±150",
+      "unit": "mm",
+      "note": "DEMO figure — engineering data pending"
+    },
+    {
+      "param": "Flange standard",
+      "value": "ANSI B16.1 · BS 4504 · DIN 2501"
+    },
+    {
+      "param": "MOC — body",
+      "value": "Ductile iron · CS · SS 304 · SS 316"
+    },
+    {
+      "param": "Seal",
+      "value": "EPDM · NBR · Neoprene ring gasket"
+    }
   ],
   "types": [
-    { "name": "Single-step", "description": "One adjustment sleeve for straightforward in-line valve removal." },
-    { "name": "Double-step", "description": "Two-stage adjustment for larger extraction distances." },
-    { "name": "Coupled type", "description": "Incorporates a sleeve coupling for pipe-length adjustment without flanges." }
+    {
+      "name": "Single-step",
+      "description": "One adjustment sleeve for straightforward in-line valve removal."
+    },
+    {
+      "name": "Double-step",
+      "description": "Two-stage adjustment for larger extraction distances."
+    },
+    {
+      "name": "Coupled type",
+      "description": "Incorporates a sleeve coupling for pipe-length adjustment without flanges."
+    }
   ],
-  "materials": ["Ductile iron", "Carbon steel (IS 2062)", "SS 304", "SS 316"],
-  "codes": ["BS 4504", "ANSI B16.1"],
+  "materials": [
+    "Ductile iron",
+    "Carbon steel (IS 2062)",
+    "SS 304",
+    "SS 316"
+  ],
+  "codes": [
+    "BS 4504",
+    "ANSI B16.1"
+  ],
   "faqs": [
-    { "question": "What is a dismantling joint?", "answer": "A dismantling joint is a flanged fitting with an adjustable length that allows valves, pumps and other in-line equipment to be removed for maintenance without cutting the pipe. The joint is compressed on installation and extended to create the clearance needed for removal." },
-    { "question": "What adjustment length is available?", "answer": "Adjustment length data are pending confirmation from engineering. Precise Engineers sizes the dismantling joint to match the face-to-face dimension of the valve or equipment it serves." },
-    { "question": "Which flange standards do dismantling joints suit?", "answer": "Dismantling joints are available drilled to ANSI B16.1, BS 4504 (EN 1092) and DIN 2501 flanges. Mixed drilling is available on request." },
-    { "question": "What seal materials are available?", "answer": "EPDM for water and mild chemicals, NBR for oil-containing services and Neoprene for weather-exposed installations. The seal grade is selected to suit the medium and operating temperature." },
-    { "question": "What pressure ratings are offered?", "answer": "Pressure capability data are pending from engineering. Precise Engineers is ISO 9001:2015 certified and EIL approved, supplying dismantling joints to water utilities, pumping stations and process plant across India." }
+    {
+      "question": "What is a dismantling joint?",
+      "answer": "A dismantling joint is a flanged fitting with an adjustable length that allows valves, pumps and other in-line equipment to be removed for maintenance without cutting the pipe. The joint is compressed on installation and extended to create the clearance needed for removal."
+    },
+    {
+      "question": "What adjustment length is available?",
+      "answer": "Adjustment length data are pending confirmation from engineering. Precise Engineers sizes the dismantling joint to match the face-to-face dimension of the valve or equipment it serves."
+    },
+    {
+      "question": "Which flange standards do dismantling joints suit?",
+      "answer": "Dismantling joints are available drilled to ANSI B16.1, BS 4504 (EN 1092) and DIN 2501 flanges. Mixed drilling is available on request."
+    },
+    {
+      "question": "What seal materials are available?",
+      "answer": "EPDM for water and mild chemicals, NBR for oil-containing services and Neoprene for weather-exposed installations. The seal grade is selected to suit the medium and operating temperature."
+    },
+    {
+      "question": "What pressure ratings are offered?",
+      "answer": "Pressure capability data are pending from engineering. Precise Engineers is ISO 9001:2015 certified and EIL approved, supplying dismantling joints to water utilities, pumping stations and process plant across India."
+    }
   ],
   "gallery": [],
-  "relatedProjectSlugs": []
+  "relatedProjectSlugs": [],
+  "page": {
+    "metaTitle": "Dismantling Joints — Valve Removal | Precise Engineers",
+    "metaDescription": "Single and double-step dismantling joints with adjustment length for in-line valve and pump removal. PN 10 to PN 25. Ductile iron, CS, SS 304/316. EIL approved, ISO 9001:2015.",
+    "breadcrumbLabel": "Dismantling Joints",
+    "heroTitle": "Dismantling Joints",
+    "valueStatement": "Flanged dismantling joints with adjustable length for in-line valve, pump and equipment removal without pipe cutting — single-step and double-step configurations to ANSI B16.1, BS 4504 and DIN 2501.",
+    "heroChips": [
+      "PN 10 · PN 16 · PN 25",
+      "ANSI B16.1 · BS 4504 · DIN 2501",
+      "DI · CS · SS 304 · SS 316"
+    ],
+    "certChips": [
+      "EIL Approved Vendor",
+      "ISO 9001:2015"
+    ],
+    "specCaption": "Dismantling joint capability",
+    "materialsHeading": "Materials of construction",
+    "qaSteps": [
+      {
+        "step": "Design",
+        "caption": "Adjustment travel, pressure class and flange drilling layout confirmed"
+      },
+      {
+        "step": "Body fabrication",
+        "caption": "Material inspection; body and sleeve machined to dimensional tolerances"
+      },
+      {
+        "step": "Seal installation",
+        "caption": "Ring gasket seated and lubricated per assembly procedure"
+      },
+      {
+        "step": "Hydraulic test",
+        "caption": "Proof test at 1.5× design pressure; adjustment function verified under pressure"
+      },
+      {
+        "step": "Final inspection & dispatch",
+        "caption": "Full extension/compression stroke checked; painting and dispatch"
+      }
+    ],
+    "qaClosing": "Executed under EIL approval and ISO 9001:2015 QMS; third-party inspection available."
+  }
 }

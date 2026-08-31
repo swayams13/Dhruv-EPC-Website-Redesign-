@@ -5,34 +5,145 @@
   "oneLineScope": "Shop-fabricated CS, alloy and SS pipe spools to ASME B31.3, NPS ½ to NPS 48",
   "group": "skids-packages",
   "categorySlug": "skids-packages",
-  "industrySlugs": ["general"],
+  "industrySlugs": [
+    "general"
+  ],
   "capabilitySlugs": [],
   "standardsMatrix": [],
   "specTable": [
-    { "param": "Piping code", "value": "ASME B31.3 · ASME B31.1" },
-    { "param": "Size range", "value": "NPS ½ to NPS 48", "note": "DEMO figure — engineering data pending" },
-    { "param": "Wall thickness", "value": "SCH 10 to SCH 160 / XXS", "note": "DEMO figure — engineering data pending" },
-    { "param": "Materials", "value": "CS, LTCS, LAS, austenitic SS, duplex SS, high-nickel alloys" },
-    { "param": "Welding standard", "value": "WPS/PQR to ASME Sec. IX · heat number traceability maintained" },
-    { "param": "NDT", "value": "RT · UT · PT · MT per ITP", "note": "NDT-covered per [source: vedantagroup.net]" },
-    { "param": "Testing", "value": "Hydrotest or pneumatic per ASME B31.3 design pressure" }
+    {
+      "param": "Piping code",
+      "value": "ASME B31.3 · ASME B31.1"
+    },
+    {
+      "param": "Size range",
+      "value": "NPS ½ to NPS 48",
+      "note": "DEMO figure — engineering data pending"
+    },
+    {
+      "param": "Wall thickness",
+      "value": "SCH 10 to SCH 160 / XXS",
+      "note": "DEMO figure — engineering data pending"
+    },
+    {
+      "param": "Materials",
+      "value": "CS, LTCS, LAS, austenitic SS, duplex SS, high-nickel alloys"
+    },
+    {
+      "param": "Welding standard",
+      "value": "WPS/PQR to ASME Sec. IX · heat number traceability maintained"
+    },
+    {
+      "param": "NDT",
+      "value": "RT · UT · PT · MT per ITP",
+      "note": "NDT-covered per [source: vedantagroup.net]"
+    },
+    {
+      "param": "Testing",
+      "value": "Hydrotest or pneumatic per ASME B31.3 design pressure"
+    }
   ],
   "types": [
-    { "name": "Straight run spools", "description": "Straight pipe sections with buttweld or flanged ends per isometric drawing." },
-    { "name": "Elbow assemblies", "description": "Short-radius and long-radius elbow spools for directional changes." },
-    { "name": "Branch connection spools", "description": "Tees, weldolets and threadolets with reinforcement per B31.3 code." },
-    { "name": "Reducer spools", "description": "Concentric and eccentric reducers for size transitions in process lines." },
-    { "name": "Flanged spools", "description": "Spool assemblies with raised-face, flat-face or ring-type-joint flanges per ASME B16.5." }
+    {
+      "name": "Straight run spools",
+      "description": "Straight pipe sections with buttweld or flanged ends per isometric drawing."
+    },
+    {
+      "name": "Elbow assemblies",
+      "description": "Short-radius and long-radius elbow spools for directional changes."
+    },
+    {
+      "name": "Branch connection spools",
+      "description": "Tees, weldolets and threadolets with reinforcement per B31.3 code."
+    },
+    {
+      "name": "Reducer spools",
+      "description": "Concentric and eccentric reducers for size transitions in process lines."
+    },
+    {
+      "name": "Flanged spools",
+      "description": "Spool assemblies with raised-face, flat-face or ring-type-joint flanges per ASME B16.5."
+    }
   ],
-  "materials": ["Carbon steel (A106 Gr. B, A53)", "LTCS (A333 Gr. 6)", "Low alloy steel (A335 P11/P22)", "Austenitic SS (A312 TP304/316/321)", "Duplex SS (A790 / A928)", "High-nickel alloys"],
-  "codes": ["ASME B31.3", "ASME B31.1", "ASME Sec. IX (welding)", "ASME B16.5 (flanges)"],
+  "materials": [
+    "Carbon steel (A106 Gr. B, A53)",
+    "LTCS (A333 Gr. 6)",
+    "Low alloy steel (A335 P11/P22)",
+    "Austenitic SS (A312 TP304/316/321)",
+    "Duplex SS (A790 / A928)",
+    "High-nickel alloys"
+  ],
+  "codes": [
+    "ASME B31.3",
+    "ASME B31.1",
+    "ASME Sec. IX (welding)",
+    "ASME B16.5 (flanges)"
+  ],
   "faqs": [
-    { "question": "Which piping design codes govern your pipe spool fabrication?", "answer": "Pipe spools are fabricated to ASME B31.3 (process piping) and ASME B31.1 (power piping) as applicable, with welding procedures qualified to ASME Section IX and full heat-number traceability maintained throughout." },
-    { "question": "What materials do you work with for pipe spools?", "answer": "Carbon steel (A106 Gr. B, A53), low-temperature carbon steel (A333 Gr. 6), low alloy steels (A335 P11/P22), austenitic stainless steel (TP304/316/321), duplex stainless steel and high-nickel alloys." },
-    { "question": "What NDT methods are applied to pipe spools?", "answer": "Radiographic testing (RT), ultrasonic testing (UT), penetrant testing (PT) and magnetic-particle testing (MT) are applied per the client inspection and test plan (ITP) — the works is NDT-covered." },
-    { "question": "What size range of pipe spools can you fabricate?", "answer": "The shop handles spools from NPS ½ through NPS 48 across schedule 10 to XXS wall thicknesses — covering the full range of process and utility piping found in refinery, petrochemical and fertilizer plants." },
-    { "question": "Can you supply pipe spools for offshore and cryogenic service?", "answer": "Yes — low-temperature carbon steel (A333 Gr. 6) and austenitic stainless steel spools suitable for cryogenic and offshore duty are within the shop's capability; specific requirements are reviewed at enquiry stage." }
+    {
+      "question": "Which piping design codes govern your pipe spool fabrication?",
+      "answer": "Pipe spools are fabricated to ASME B31.3 (process piping) and ASME B31.1 (power piping) as applicable, with welding procedures qualified to ASME Section IX and full heat-number traceability maintained throughout."
+    },
+    {
+      "question": "What materials do you work with for pipe spools?",
+      "answer": "Carbon steel (A106 Gr. B, A53), low-temperature carbon steel (A333 Gr. 6), low alloy steels (A335 P11/P22), austenitic stainless steel (TP304/316/321), duplex stainless steel and high-nickel alloys."
+    },
+    {
+      "question": "What NDT methods are applied to pipe spools?",
+      "answer": "Radiographic testing (RT), ultrasonic testing (UT), penetrant testing (PT) and magnetic-particle testing (MT) are applied per the client inspection and test plan (ITP) — the works is NDT-covered."
+    },
+    {
+      "question": "What size range of pipe spools can you fabricate?",
+      "answer": "The shop handles spools from NPS ½ through NPS 48 across schedule 10 to XXS wall thicknesses — covering the full range of process and utility piping found in refinery, petrochemical and fertilizer plants."
+    },
+    {
+      "question": "Can you supply pipe spools for offshore and cryogenic service?",
+      "answer": "Yes — low-temperature carbon steel (A333 Gr. 6) and austenitic stainless steel spools suitable for cryogenic and offshore duty are within the shop's capability; specific requirements are reviewed at enquiry stage."
+    }
   ],
   "gallery": [],
-  "relatedProjectSlugs": []
+  "relatedProjectSlugs": [],
+  "page": {
+    "metaTitle": "Pipe Spools — ASME B31.3, NDT-Covered, NPS ½–48 | Dhruv EPC",
+    "metaDescription": "Shop-fabricated CS, alloy steel and SS pipe spools to ASME B31.3, NPS ½ to NPS 48. WPS/PQR-qualified welding, full heat-number traceability, RT/UT/PT/MT NDT per ITP.",
+    "breadcrumbLabel": "Pipe Spools",
+    "heroTitle": "Pipe Spools — ASME B31.3, NDT-Covered",
+    "valueStatement": "Shop-fabricated CS, alloy steel and stainless steel pipe spools to ASME B31.3, NPS ½ to NPS 48, with WPS/PQR-qualified welding, full heat-number traceability and RT/UT/PT NDT per client ITP.",
+    "heroChips": [
+      "ASME B31.3",
+      "NDT-covered",
+      "NPS ½ – NPS 48"
+    ],
+    "certChips": [
+      "ASME U",
+      "ASME U2",
+      "IBR",
+      "ISO 9001:2015"
+    ],
+    "specCaption": "Pipe spool fabrication capability",
+    "materialsHeading": "Materials of construction",
+    "qaSteps": [
+      {
+        "step": "Isometric extraction",
+        "caption": "Spool cut-list generated from client piping isometrics"
+      },
+      {
+        "step": "Material receipt",
+        "caption": "Pipe and fitting MTCs verified; heat numbers allocated"
+      },
+      {
+        "step": "Cutting & fit-up",
+        "caption": "Saw/plasma cut, bevel machined, dimensional check"
+      },
+      {
+        "step": "Welding",
+        "caption": "WPS/PQR-qualified welders; heat-number traceability on each joint"
+      },
+      {
+        "step": "NDT & dispatch",
+        "caption": "RT/UT/PT per ITP, dimensional report, hydrotest, dispatch"
+      }
+    ],
+    "qaClosing": "NDT-covered per client ITP; inspection under LRS, BV and DNV accepted."
+  }
 }
