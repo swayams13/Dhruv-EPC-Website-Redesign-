@@ -5,7 +5,7 @@
   "oneLineScope": "Fabric expansion joints for hot flue-gas ducting, rectangular ducts up to 6,000 × 4,000 mm",
   "group": "expansion-joints",
   "categorySlug": "expansion-joints",
-  "industrySlugs": ["general"],
+  "industrySlugs": ["power", "refining-petrochemical"],
   "capabilitySlugs": [],
   "standardsMatrix": [],
   "specTable": [

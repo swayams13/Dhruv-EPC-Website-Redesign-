@@ -5,7 +5,7 @@
   "oneLineScope": "Metallic bellows expansion joints to EJMA and ASME B31.3, 80 – 8,000 mm NB circular",
   "group": "expansion-joints",
   "categorySlug": "expansion-joints",
-  "industrySlugs": ["general"],
+  "industrySlugs": ["oil-gas", "refining-petrochemical", "fertilizer-chemicals", "power"],
   "capabilitySlugs": [],
   "standardsMatrix": [],
   "specTable": [

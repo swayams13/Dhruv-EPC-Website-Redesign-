@@ -5,7 +5,7 @@
   "oneLineScope": "Reactors, columns and drums to ASME Sec. VIII Div. 1 & 2 — U/U2 stamped works",
   "group": "static-equipment",
   "categorySlug": "static-equipment",
-  "industrySlugs": ["general"],
+  "industrySlugs": ["oil-gas", "refining-petrochemical", "fertilizer-chemicals", "power"],
   "capabilitySlugs": [],
   "standardsMatrix": [],
   "specTable": [

@@ -5,7 +5,7 @@
   "oneLineScope": "Shell & tube exchangers to ASME Sec. VIII Div. 1 & 2 and TEMA, up to 100 T",
   "group": "static-equipment",
   "categorySlug": "static-equipment",
-  "industrySlugs": ["general"],
+  "industrySlugs": ["oil-gas", "refining-petrochemical", "fertilizer-chemicals", "power"],
   "capabilitySlugs": [],
   "standardsMatrix": [],
   "specTable": [

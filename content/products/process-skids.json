@@ -5,7 +5,7 @@
   "oneLineScope": "Skid-mounted process packages to ASME B31.3, FAT-tested at Manjusar works",
   "group": "skids-packages",
   "categorySlug": "skids-packages",
-  "industrySlugs": ["general"],
+  "industrySlugs": ["oil-gas", "refining-petrochemical", "fertilizer-chemicals", "power"],
   "capabilitySlugs": [],
   "standardsMatrix": [],
   "specTable": [
