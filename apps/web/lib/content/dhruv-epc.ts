@@ -42,6 +42,11 @@ export const heatExchangers = Product.parse({
   // Codes sourced; "up to 100 T" is DEMO-PLACEHOLDER
   oneLineScope: 'Shell & tube exchangers to ASME Sec. VIII Div. 1 & 2 and TEMA, up to 100 T',
   group: 'static-equipment',
+  categorySlug: 'static-equipment',
+  // STOPGAP placeholder — real industry/capability tagging is content-migration session work
+  industrySlugs: ['general'],
+  capabilitySlugs: [],
+  standardsMatrix: [],
   specTable: [
     // [source: vedantagroup.net heat-exchanger.php] — types, codes, MOC
     { param: 'Design codes', value: 'ASME Sec. VIII Div. 1 & 2 · TEMA', note: 'HTRI thermal design' },
@@ -203,6 +208,11 @@ export const pressureVessels = Product.parse({
   // ASME codes sourced [vedantagroup.net]; weight/size DEMO-PLACEHOLDER
   oneLineScope: 'Reactors, columns and drums to ASME Sec. VIII Div. 1 & 2 — U/U2 stamped works',
   group: 'static-equipment',
+  categorySlug: 'static-equipment',
+  // STOPGAP placeholder — real industry/capability tagging is content-migration session work
+  industrySlugs: ['general'],
+  capabilitySlugs: [],
+  standardsMatrix: [],
   specTable: [
     // [source: vedantagroup.net] — stamps and codes
     { param: 'Design codes', value: 'ASME Sec. VIII Div. 1 & 2 · IBR', note: 'U and U2 Certificates of Authorization held' },
@@ -272,6 +282,11 @@ export const storageTanks = Product.parse({
   // [source: vedantagroup.net products] CS/SS storage; API 650 DEMO-PLACEHOLDER (unverified)
   oneLineScope: 'CS and SS storage tanks and ASME Sec. VIII Div. 1 air receivers for process storage',
   group: 'static-equipment',
+  categorySlug: 'static-equipment',
+  // STOPGAP placeholder — real industry/capability tagging is content-migration session work
+  industrySlugs: ['general'],
+  capabilitySlugs: [],
+  standardsMatrix: [],
   specTable: [
     { param: 'Design codes', value: 'API 650 (storage tanks) · ASME Sec. VIII Div. 1 (air receivers)', note: 'DEMO-PLACEHOLDER: API 650 unverified against vedantagroup.net' },
     { param: 'Tank types', value: 'Fixed-cone-roof, open-top, shop-fabricated process tanks, air receivers' },
@@ -329,6 +344,11 @@ export const processSkids = Product.parse({
   // [source: vedantagroup.net products] "Skid-mounted process packages, FAT-tested"
   oneLineScope: 'Skid-mounted process packages to ASME B31.3, FAT-tested at Manjusar works',
   group: 'skids-packages',
+  categorySlug: 'skids-packages',
+  // STOPGAP placeholder — real industry/capability tagging is content-migration session work
+  industrySlugs: ['general'],
+  capabilitySlugs: [],
+  standardsMatrix: [],
   specTable: [
     { param: 'Piping code', value: 'ASME B31.3 · ASME B31.1 (where applicable)' },
     { param: 'Structural standard', value: 'IS 2062 / ASTM A36 structural steel' },
@@ -387,6 +407,11 @@ export const pipeSpools = Product.parse({
   // [source: vedantagroup.net products] "Shop-fabricated spools, CS/AS/SS, NDT-covered"
   oneLineScope: 'Shop-fabricated CS, alloy and SS pipe spools to ASME B31.3, NPS ½ to NPS 48',
   group: 'skids-packages',
+  categorySlug: 'skids-packages',
+  // STOPGAP placeholder — real industry/capability tagging is content-migration session work
+  industrySlugs: ['general'],
+  capabilitySlugs: [],
+  standardsMatrix: [],
   specTable: [
     { param: 'Piping code', value: 'ASME B31.3 · ASME B31.1' },
     // DEMO-PLACEHOLDER rows:
@@ -451,6 +476,11 @@ export const heavyFabrication = Product.parse({
   // [source: vedantagroup.net products] "Structural and equipment fabrication"
   oneLineScope: 'Structural and equipment fabrication to IS 2062 and AWS D1.1, up to 200 T per unit',
   group: 'fabrication-machining',
+  categorySlug: 'fabrication-machining',
+  // STOPGAP placeholder — real industry/capability tagging is content-migration session work
+  industrySlugs: ['general'],
+  capabilitySlugs: [],
+  standardsMatrix: [],
   specTable: [
     { param: 'Structural standard', value: 'IS 2062 · ASTM A36 · IS 800' },
     { param: 'Welding standard', value: 'AWS D1.1 · IS 816 · WPS/PQR-qualified welders' },
@@ -514,6 +544,11 @@ export const heavyMachining = Product.parse({
   // [source: vedantagroup.net products] "Large-component machining services"; dimensions DEMO-PLACEHOLDER
   oneLineScope: 'Large-component boring, turning and facing — up to Ø 4,000 mm on floor-type boring mills',
   group: 'fabrication-machining',
+  categorySlug: 'fabrication-machining',
+  // STOPGAP placeholder — real industry/capability tagging is content-migration session work
+  industrySlugs: ['general'],
+  capabilitySlugs: [],
+  standardsMatrix: [],
   specTable: [
     // DEMO-PLACEHOLDER rows:
     { param: 'Floor-type boring mill', value: 'Ø up to 4,000', unit: 'mm bore/face', note: 'DEMO figure — engineering data pending' },
@@ -570,6 +605,11 @@ export const plateFlanges = Product.parse({
   // [source: vedantagroup.net products] "Machined flanges and equipment base frames"
   oneLineScope: 'Plate flanges to ASME B16.5 and ASME B16.47 Series A & B, plus machined equipment base frames',
   group: 'fabrication-machining',
+  categorySlug: 'fabrication-machining',
+  // STOPGAP placeholder — real industry/capability tagging is content-migration session work
+  industrySlugs: ['general'],
+  capabilitySlugs: [],
+  standardsMatrix: [],
   specTable: [
     { param: 'Flange standards', value: 'ASME B16.5 · ASME B16.47 Series A (MSS SP-44) & B (API 605)' },
     // DEMO-PLACEHOLDER rows:

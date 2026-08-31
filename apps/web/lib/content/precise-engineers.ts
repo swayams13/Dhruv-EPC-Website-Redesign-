@@ -45,6 +45,11 @@ export const metallicBellows = Product.parse({
   // 8000 mm for circular bellows"; EJMA/ASME per same page + plan §6.2
   oneLineScope: 'Metallic bellows expansion joints to EJMA and ASME B31.3, 80 – 8,000 mm NB circular',
   group: 'expansion-joints',
+  categorySlug: 'expansion-joints',
+  // STOPGAP placeholder — real industry/capability tagging is content-migration session work
+  industrySlugs: ['general'],
+  capabilitySlugs: [],
+  standardsMatrix: [],
   specTable: [
     // [source: vedantagroup.net metallic-expansion-bellows-joint.php]
     { param: 'Design codes', value: 'EJMA · ASME B31.3', note: 'FEA analysis under special conditions' },
@@ -166,6 +171,11 @@ export const telescopicExpansionJoint = Product.parse({
   name: 'Telescopic Expansion Joints',
   oneLineScope: 'Slip-type telescopic expansion joints to ASME B31.3, 50 – 1,200 mm NB axial traverse',
   group: 'expansion-joints',
+  categorySlug: 'expansion-joints',
+  // STOPGAP placeholder — real industry/capability tagging is content-migration session work
+  industrySlugs: ['general'],
+  capabilitySlugs: [],
+  standardsMatrix: [],
   specTable: [
     { param: 'Size range', value: '50 – 1,200', unit: 'mm NB', note: 'DEMO figure — engineering data pending' },
     { param: 'Axial traverse', value: '25 – 300', unit: 'mm', note: 'DEMO figure — engineering data pending' },
@@ -214,6 +224,11 @@ export const rubberBellows = Product.parse({
   name: 'Rubber Bellows',
   oneLineScope: 'Elastomeric expansion joints for vibration isolation and movement, 25 – 2,000 mm NB',
   group: 'expansion-joints',
+  categorySlug: 'expansion-joints',
+  // STOPGAP placeholder — real industry/capability tagging is content-migration session work
+  industrySlugs: ['general'],
+  capabilitySlugs: [],
+  standardsMatrix: [],
   specTable: [
     { param: 'Size range', value: '25 – 2,000', unit: 'mm NB', note: 'DEMO figure — engineering data pending' },
     { param: 'Design pressure', value: 'full vacuum to 10', unit: 'bar(g)', note: 'DEMO figure — engineering data pending' },
@@ -263,6 +278,11 @@ export const fabricBellows = Product.parse({
   name: 'Fabric Bellows',
   oneLineScope: 'Fabric expansion joints for hot flue-gas ducting, rectangular ducts up to 6,000 × 4,000 mm',
   group: 'expansion-joints',
+  categorySlug: 'expansion-joints',
+  // STOPGAP placeholder — real industry/capability tagging is content-migration session work
+  industrySlugs: ['general'],
+  capabilitySlugs: [],
+  standardsMatrix: [],
   specTable: [
     { param: 'Duct size — circular', value: 'up to 6,000', unit: 'mm dia.', note: 'DEMO figure — engineering data pending' },
     { param: 'Duct size — rectangular', value: 'up to 6,000 × 4,000', unit: 'mm', note: 'DEMO figure — engineering data pending' },
@@ -312,6 +332,11 @@ export const dismantlingJoint = Product.parse({
   name: 'Dismantling Joints',
   oneLineScope: 'Flanged dismantling joints with adjustment length for valve removal, 50 – 1,200 mm NB',
   group: 'expansion-joints',
+  categorySlug: 'expansion-joints',
+  // STOPGAP placeholder — real industry/capability tagging is content-migration session work
+  industrySlugs: ['general'],
+  capabilitySlugs: [],
+  standardsMatrix: [],
   specTable: [
     { param: 'Size range', value: '50 – 1,200', unit: 'mm NB', note: 'DEMO figure — engineering data pending' },
     { param: 'Pressure rating', value: 'PN 10 · PN 16 · PN 25', note: 'DEMO — full pressure table pending' },
@@ -359,6 +384,11 @@ export const flangeAdaptor = Product.parse({
   name: 'Flange Adaptors',
   oneLineScope: 'Pipe-to-flange transition couplings for plain-end pipe, 50 – 1,200 mm NB',
   group: 'expansion-joints',
+  categorySlug: 'expansion-joints',
+  // STOPGAP placeholder — real industry/capability tagging is content-migration session work
+  industrySlugs: ['general'],
+  capabilitySlugs: [],
+  standardsMatrix: [],
   specTable: [
     { param: 'Size range', value: '50 – 1,200', unit: 'mm NB', note: 'DEMO figure — engineering data pending' },
     { param: 'Design pressure', value: 'up to PN 16', note: 'DEMO — full pressure table pending' },
@@ -406,6 +436,11 @@ export const zeroVelocityValve = Product.parse({
   name: 'Zero Velocity Valves',
   oneLineScope: 'Hydraulically automatic water-hammer protection valves for pumping mains, IS 14845, 80 – 1,200 mm NB',
   group: 'flow-control',
+  categorySlug: 'flow-control',
+  // STOPGAP placeholder — real industry/capability tagging is content-migration session work
+  industrySlugs: ['general'],
+  capabilitySlugs: [],
+  standardsMatrix: [],
   specTable: [
     { param: 'Size range', value: '80 – 1,200', unit: 'mm NB', note: 'DEMO figure — engineering data pending' },
     { param: 'Pressure class', value: 'PN 10 · PN 16', note: 'DEMO — pressure table pending' },
@@ -454,6 +489,11 @@ export const dualPlateCheckValve = Product.parse({
   name: 'Dual Plate Check Valves',
   oneLineScope: 'Wafer and lug dual plate check valves to API 594, ASME Class 150 – 600, 50 – 900 mm NB',
   group: 'flow-control',
+  categorySlug: 'flow-control',
+  // STOPGAP placeholder — real industry/capability tagging is content-migration session work
+  industrySlugs: ['general'],
+  capabilitySlugs: [],
+  standardsMatrix: [],
   specTable: [
     { param: 'Size range', value: '50 – 900', unit: 'mm NB', note: 'DEMO figure — engineering data pending' },
     { param: 'Pressure class', value: 'ASME 150 · 300 · 600' },
@@ -505,6 +545,11 @@ export const damper = Product.parse({
   name: 'Dampers',
   oneLineScope: 'Louver, butterfly and guillotine duct dampers for gas and air service, rectangular ducts up to 4,000 × 3,000 mm',
   group: 'flow-control',
+  categorySlug: 'flow-control',
+  // STOPGAP placeholder — real industry/capability tagging is content-migration session work
+  industrySlugs: ['general'],
+  capabilitySlugs: [],
+  standardsMatrix: [],
   specTable: [
     { param: 'Types', value: 'Louver (multi-blade) · butterfly (single-blade) · guillotine (slide-gate)' },
     { param: 'Duct size — circular', value: 'up to 3,000', unit: 'mm dia.', note: 'DEMO figure — engineering data pending' },
