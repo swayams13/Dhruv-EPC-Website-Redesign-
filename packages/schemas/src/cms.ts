@@ -158,6 +158,12 @@ export type Project = z.infer<typeof Project>
 // must resolve to a Client on file with an approved permission. Project
 // only holds a slug, so this can't be a Zod .refine() on Project alone —
 // the content loader calls this once all entities are parsed.
+//
+// By design, a Client record is only ever created once permission is
+// granted — Client.permission has no "unapproved" state to model, so
+// there's no scenario where a Client exists but isn't approved. This
+// means "no matching Client record" IS "not approved" — the two are the
+// same failure, not two different ones. Confirmed 2026-08-31.
 export function validateProjectClientPermission(
   project: Project,
   allClients: (Client & { slug: string })[],
@@ -165,7 +171,7 @@ export function validateProjectClientPermission(
   if (!project.clientSlug) return { success: true }
   const client = allClients.find((c) => c.slug === project.clientSlug)
   if (!client) {
-    return { success: false, error: `Project references clientSlug "${project.clientSlug}" with no matching Client record` }
+    return { success: false, error: `Project references clientSlug "${project.clientSlug}" with no matching Client record (a Client record only exists once permission is approved)` }
   }
   if (client.permission !== 'logo-approved' && client.permission !== 'name-only') {
     return { success: false, error: `Client "${client.slug}" does not have an approved permission on file` }
