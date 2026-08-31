@@ -10,7 +10,10 @@
     "typecheck": "tsc --noEmit",
     "prebuild": "node ../../scripts/build-redirects.mjs",
     "redirects": "node ../../scripts/build-redirects.mjs",
-    "test": "vitest run"
+    "test": "vitest run",
+    "snapshot": "node scripts/snapshot-routes.mjs",
+    "snapshot:baseline": "node scripts/snapshot-routes.mjs __snapshots__/routes-baseline",
+    "snapshot:compare": "node scripts/compare-snapshots.mjs"
   },
   "dependencies": {
     "@vedanta/datum-ui": "workspace:*",
