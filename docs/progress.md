@@ -1216,3 +1216,44 @@ playwright test  ✓  21 passed, 11 tracked-skip (VG-004), dry run confirms serv
 3. **CG-3: RFQ E2E** — needs `STORAGE_*`, `RESEND_API_KEY`, `RFQ_NOTIFY_*` credentials
 4. Playwright E2E suite for RFQ — deferred (items 1–7 in original deferred queue)
 5. axe CI placeholder — route-level axe deferred to post-deploy QA
+
+---
+
+### Session 21 — Content migration to /content JSON (VG-011)
+**Status:** Complete ✅ — open for human review, not merged
+**Branch:** `content/session-4-json-migration` (off `main`) · **Date:** 2026-08-31
+**Governing docs:** session brief implementing VG-011, `design docs/02-development-backlog (1).md` lines 84–91. Referenced blueprint `01-final-implementation-blueprint-v2.md` does not exist in this repo — proceeded from the brief + backlog + existing schema/content.
+**Plan:** `docs/superpowers/plans/2026-08-31-session-4-json-content-migration.md`
+
+#### What was done
+
+- **C1 — Snapshot harness:** `apps/web/scripts/snapshot-routes.mjs` (crawls `.next/server/app/**/*.html` for 30 routes) + `compare-snapshots.mjs`, baseline checked into `apps/web/__snapshots__/routes-baseline/`. Tolerance: whitespace between tags, Next's hydration-id attrs, and build-hashed asset references (`<script src="/_next/static/…">`, `<link rel="preload|stylesheet">`, the inline `self.__next_f.push(...)` RSC chunk-manifest payload) are stripped before comparing — confirmed these are genuine build-to-build noise (webpack's chunk graph/hash count differs between any two `next build` runs of the same source), not content drift. `application/ld+json` script tags are NOT stripped — real content.
+- **C2/C3 — content-loader.ts + migration:** New `/content/{companies,products,productCategories,certifications,approvals}/*.json` (30 files), one per record, transcribed field-for-field from the old `apps/web/lib/content/{dhruv-epc,precise-engineers,group}.ts`. New `apps/web/lib/content-loader.ts` reads each directory, `.parse()`s every record against `@vedanta/schemas`, throws (fails the build) on any invalid record. 10 loader tests including an invalid-fixture-throws test.
+- **C4 — 5 ProductCategory records:** mechanical 1:1 mapping from each product's existing `group` value; `oneLineScope` figures reused from that category's own products' spec tables (no new numbers invented).
+- **C5 — industrySlugs derivation:** 11 of 17 products got real `industrySlugs` derived from their own sourced FAQ prose (full source-sentence table in the commit message); the other 6 (dhruv pipe-spools/heavy-fabrication/heavy-machining/plate-flanges, precise flange-adaptor/dual-plate-check-valve) have no sector-list sentence anywhere in their existing content and kept the Session-3 `["general"]` stopgap — flagged as a content gap, not a mapping decision. Committed separately per the brief, **needs Swayam's sign-off**.
+- **C6 — capabilitySlugs/standardsMatrix:** confirmed no `.min()` on either field in `cms.ts`; both stay `[]` (unchanged), locked in with a regression test.
+- **C7 — swap 33 files + delete old TS:** all pages/layouts/chrome components now import from `content-loader.ts` (CMS records) or the new `apps/web/lib/site-data.ts` (non-CMS plain data — stats bands, exploded-hero frames, mega-menu lists). `apps/web/lib/content/{dhruv-epc,precise-engineers,group}.ts` deleted.
+- **C8 — verified against the snapshot:** all 30 routes byte-identical to the pre-migration baseline.
+
+#### Three real bugs found and fixed during verification (not anticipated by the session brief)
+
+1. **`__dirname` resolves wrong once bundled.** `content-loader.ts` originally used `resolve(__dirname, ...)` to locate `/content`; this works under Vitest (real source path) but breaks under `next build`, because webpack ships the module inside `.next/server/chunks/`, and `__dirname` there resolves to the chunk's location, not the source file's. Every server route failed at build with `ENOENT: .../apps/web/content/companies`. Fixed by switching to `process.cwd()`, which Next.js reliably sets to `apps/web` for dev/build/start alike.
+2. **`'use client'` components can't import an `fs`-based module.** `DhruvChrome`/`PreciseChrome`/`GroupChrome` are client components; importing anything from `content-loader.ts` (which does `node:fs` reads at module scope) would try to bundle `node:fs` into the browser build. Split the non-CMS plain data (no `fs` dependency) into `apps/web/lib/site-data.ts`, safe for both client and server. `Dhruv/PreciseChrome` now take `phoneHref`/`whatsappHref` as props computed by their parent `layout.tsx` instead of importing the fs-tainted helpers directly.
+3. **Certification/approval order changed.** `readdirSync` returns directory-alphabetical order; the original TS arrays had a specific order (`preciseCertifications`: ISO before EIL; `dhruvApprovals`: LRS, BV, DNV) that alphabetical filenames didn't reproduce. The snapshot harness (C1) caught this exactly as designed — renamed the affected JSON files with numeric prefixes (`dhruv-epc-1-lrs.json`, etc.) to lock in the original order.
+
+#### Gate result
+
+```
+pnpm typecheck   ✓  4/4 packages, zero errors
+pnpm lint        ✓  0 errors (pre-existing LegalDocument.tsx Tailwind warnings, unrelated)
+pnpm test        ✓  289/290 (tokens 102, schemas 64, datum-ui 77, web 46/47 —
+                    1 pre-existing DATABASE_URL-gated RFQ integration test,
+                    tracked since PR #15, unrelated to this session)
+pnpm build       ✓  37 routes, zero errors/warnings
+snapshot:compare ✓  30/30 routes byte-identical to pre-migration baseline
+```
+
+#### What's NOT done / deferred
+
+- Task 5's 6 `["general"]`-stopgap products need real industry content once that copy exists — not this session's call to invent.
+- Branch open for human review, not merged to `main`. Task 5's industrySlugs table specifically needs Swayam's read before merge, not just green CI.
