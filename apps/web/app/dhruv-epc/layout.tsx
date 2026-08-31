@@ -16,10 +16,10 @@ const FOOTER_COLUMNS = [
   {
     heading: 'Equipment',
     links: [
-      { label: 'Pressure Vessels', href: '/dhruv-epc/equipment/pressure-vessels' },
-      { label: 'Heat Exchangers', href: '/dhruv-epc/equipment/heat-exchangers' },
-      { label: 'Process Skids', href: '/dhruv-epc/equipment/process-skids' },
-      { label: 'Pipe Spools', href: '/dhruv-epc/equipment/pipe-spools' },
+      { label: 'Pressure Vessels', href: '/dhruv-epc/products/static-equipment/pressure-vessels/' },
+      { label: 'Heat Exchangers', href: '/dhruv-epc/products/static-equipment/heat-exchangers/' },
+      { label: 'Process Skids', href: '/dhruv-epc/products/skids-packages/process-skids/' },
+      { label: 'Pipe Spools', href: '/dhruv-epc/products/skids-packages/pipe-spools/' },
     ],
   },
   {

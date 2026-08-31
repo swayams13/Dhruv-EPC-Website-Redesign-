@@ -20,8 +20,8 @@ const COMPANY_LINKS = [
     company: 'Dhruv EPC Solutions',
     href: '/dhruv-epc',
     products: [
-      { label: 'Pressure Vessels', href: '/dhruv-epc/equipment/pressure-vessels' },
-      { label: 'Heat Exchangers', href: '/dhruv-epc/equipment/heat-exchangers' },
+      { label: 'Pressure Vessels', href: '/dhruv-epc/products/static-equipment/pressure-vessels/' },
+      { label: 'Heat Exchangers', href: '/dhruv-epc/products/static-equipment/heat-exchangers/' },
       { label: 'Proof & Certifications', href: '/dhruv-epc/proof' },
     ],
   },
@@ -29,9 +29,9 @@ const COMPANY_LINKS = [
     company: 'Precise Engineers',
     href: '/precise-engineers',
     products: [
-      { label: 'Metallic Bellows', href: '/precise-engineers/products/metallic-bellows-expansion-joint' },
-      { label: 'Telescopic Joints', href: '/precise-engineers/products/telescopic-expansion-joint' },
-      { label: 'Rubber Bellows', href: '/precise-engineers/products/rubber-bellows' },
+      { label: 'Metallic Bellows', href: '/precise-engineers/products/expansion-joints/metallic-bellows-expansion-joint/' },
+      { label: 'Telescopic Joints', href: '/precise-engineers/products/expansion-joints/telescopic-expansion-joint/' },
+      { label: 'Rubber Bellows', href: '/precise-engineers/products/expansion-joints/rubber-bellows/' },
     ],
   },
 ]

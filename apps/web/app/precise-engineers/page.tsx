@@ -35,15 +35,15 @@ const STAMP_BY_NAME: Record<string, StampProps['code'] | undefined> = {
 // shoot supplies real card photography (2026-07-16, docs/ui-ux-review.md §5).
 // Bellows variants intentionally share the bellows section view.
 const ICON_BY_HREF: Record<string, DomainIconName> = {
-  '/precise-engineers/products/metallic-bellows-expansion-joint': 'bellows',
-  '/precise-engineers/products/telescopic-expansion-joint': 'telescopic',
-  '/precise-engineers/products/rubber-bellows': 'bellows',
-  '/precise-engineers/products/fabric-bellows': 'bellows',
-  '/precise-engineers/products/dismantling-joint': 'flange',
-  '/precise-engineers/products/flange-adaptor': 'flange',
-  '/precise-engineers/products/zero-velocity-valve': 'valve',
-  '/precise-engineers/products/dual-plate-check-valve': 'valve',
-  '/precise-engineers/products/damper': 'damper',
+  '/precise-engineers/products/expansion-joints/metallic-bellows-expansion-joint/': 'bellows',
+  '/precise-engineers/products/expansion-joints/telescopic-expansion-joint/': 'telescopic',
+  '/precise-engineers/products/expansion-joints/rubber-bellows/': 'bellows',
+  '/precise-engineers/products/expansion-joints/fabric-bellows/': 'bellows',
+  '/precise-engineers/products/expansion-joints/dismantling-joint/': 'flange',
+  '/precise-engineers/products/expansion-joints/flange-adaptor/': 'flange',
+  '/precise-engineers/products/flow-control/zero-velocity-valve/': 'valve',
+  '/precise-engineers/products/flow-control/dual-plate-check-valve/': 'valve',
+  '/precise-engineers/products/flow-control/damper/': 'damper',
 }
 
 export default function PreciseHome() {

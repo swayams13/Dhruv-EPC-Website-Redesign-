@@ -16,10 +16,10 @@ const FOOTER_COLUMNS = [
   {
     heading: 'Products',
     links: [
-      { label: 'Metallic Bellows Expansion Joints', href: '/precise-engineers/products/metallic-bellows-expansion-joint' },
-      { label: 'Telescopic Expansion Joints', href: '/precise-engineers/products/telescopic-expansion-joint' },
-      { label: 'Dismantling Joints', href: '/precise-engineers/products/dismantling-joint' },
-      { label: 'Zero Velocity Valves', href: '/precise-engineers/products/zero-velocity-valve' },
+      { label: 'Metallic Bellows Expansion Joints', href: '/precise-engineers/products/expansion-joints/metallic-bellows-expansion-joint/' },
+      { label: 'Telescopic Expansion Joints', href: '/precise-engineers/products/expansion-joints/telescopic-expansion-joint/' },
+      { label: 'Dismantling Joints', href: '/precise-engineers/products/expansion-joints/dismantling-joint/' },
+      { label: 'Zero Velocity Valves', href: '/precise-engineers/products/flow-control/zero-velocity-valve/' },
     ],
   },
   {
