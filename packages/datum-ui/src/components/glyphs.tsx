@@ -72,3 +72,20 @@ export function WhatsApp(props: GlyphProps): React.ReactElement {
     </svg>
   )
 }
+
+// SpecRail provenance marks (Session 6, golden page) — sourced/unverified.
+export function Check(props: GlyphProps): React.ReactElement {
+  return (
+    <svg {...svgProps(props)}>
+      <path d="M4 12l6 6L20 6" />
+    </svg>
+  )
+}
+
+export function Triangle(props: GlyphProps): React.ReactElement {
+  return (
+    <svg {...svgProps(props)}>
+      <path d="M12 4l9 16H3L12 4zM12 10v4M12 17h.01" />
+    </svg>
+  )
+}
