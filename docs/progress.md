@@ -1258,3 +1258,157 @@ snapshot:compare ✓  30/30 routes byte-identical to pre-migration baseline
 - Task 5's 6 `["general"]`-stopgap products need real industry content once that copy exists — not this session's call to invent.
 
 **Merged:** PR #18 squash-merged to `main` as `bd9c312` (2026-08-31), after Swayam's review.
+
+---
+
+### Session 22 — Dynamic product routing (VG-012, VG-013, VG-014)
+**Status:** Complete ✅, PR open for review
+**Branch:** `routing/session-5-dynamic-products` · **Date:** 2026-08-31
+**Governing spec:** `01-final-implementation-blueprint-v2.md` §3 (Final URL architecture)
+
+#### What was done
+
+- **R1 — URL normalization:** both companies now share the `products` noun
+  and gained a category segment: `/dhruv-epc/equipment/{slug}` →
+  `/dhruv-epc/products/{category}/{slug}/`; `/precise-engineers/products/{slug}` →
+  `/precise-engineers/products/{category}/{slug}/`. All 17 product URLs
+  changed, shipping with their redirects in this same PR (R5 below).
+- **R2 — Dynamic route:** `apps/web/app/{company}/products/[category]/[slug]/page.tsx`.
+  Company stays a static top-level segment per company (kept `dhruv-epc/layout.tsx`
+  and `precise-engineers/layout.tsx` untouched at the `data-company` level —
+  no new human-review-gated layout change). The actual template/logic lives
+  once in `apps/web/lib/product-detail-page.tsx` (JSX) +
+  `product-detail-page-data.ts` (pure data — see below), consumed by two
+  6-line wrapper `page.tsx` files. `generateStaticParams` reads every
+  product from the content loader, grouped by `categorySlug`.
+- **Content migration (unplanned but required):** the 17 old page.tsx files
+  carried per-product presentation copy (hero value statement, cert chips,
+  QA-step captions, breadcrumb label, meta title/description) that had no
+  home in the `Product` schema. Added an optional `Product.page` block
+  (`packages/schemas/src/cms.ts` — `ProductPage`) and programmatically
+  extracted the exact strings from all 17 old files into
+  `content/products/*.json` before deleting those files, so the new dynamic
+  route renders byte-identical hero/QA/meta content. Products without a
+  `page` block fall back to a generic render derived from `name`/`codes`.
+- **R3 — Category tier:** `apps/web/app/{company}/products/page.tsx`
+  (index) and `.../products/[category]/page.tsx` (listing), same
+  JSX/data-module split, in `lib/product-category-pages.tsx` +
+  `product-category-pages-data.ts`. New `CategoryCard` in
+  `packages/datum-ui` (flat/bordered/machined family match with
+  `ProductCard`, accent-rule top bar, thin state for `productCount === 0`,
+  onDark variant), story + auto-globbed axe coverage.
+- **R4 — Metadata + breadcrumbs:** `generateMetadata` per instance from the
+  Product/ProductCategory record. `buildBreadcrumbList` unchanged (already
+  handles arbitrary depth). `lib/metadata-uniqueness.test.ts` (T2) updated:
+  it previously regex-scanned page.tsx source for a literal `title: '...'`,
+  which can't see a computed `generateMetadata()` title — extended it to
+  call the real `generateMetadata`/`metadata` implementations for every
+  product/category/company instance and check uniqueness against what
+  actually renders, rather than weakening the test.
+- **R5 — Redirects:** 17 existing `content/redirect-map.csv` rows (legacy
+  `.php` → old current URL) repointed straight to the new final URL, plus
+  17 new rows (old current URL → new final URL) — both hops point directly
+  at the final destination, so no chain is introduced. Verified live via
+  `next start`: exact CSV-stored source URLs 301 in exactly one hop
+  (`curl -L -w '%{num_redirects}'` = 1).
+- **R6 — Sitemap:** `apps/web/app/sitemap.ts` rewritten to generate from
+  the content loader (every product, category, both companies) plus a
+  small static list of hand-written routes; `lastModified` from
+  `EntityRecord.contentRevisedDate` where entity-scoped, `now` for
+  Product/ProductCategory (no revision-date field exists on those yet —
+  not invented).
+- **R7 — OG images:** 17 `opengraph-image.tsx` files collapsed into
+  `lib/product-og-image.tsx` + 2 thin per-company wrappers. Also fixed the
+  primitive-import violation the pre-development review flagged (raw
+  `brand`/`flex` imported straight from `@vedanta/tokens`, bypassing the
+  semantic per-company theming layer) — now routes through
+  `semanticByCompany[...]`, whose resolved values are real hex strings
+  (not CSS vars), which is what `next/og`'s edge/node `ImageResponse`
+  needs anyway. **Runtime changed from `edge` to Node.js** — the shared
+  version reads product data via `content-loader.ts` (`node:fs`), which
+  Next's edge bundler rejects; all params are still fully prerendered at
+  build time via `generateStaticParams`, so this only affects bundling,
+  not latency.
+- **R8 — Deleted** the 8 `dhruv-epc/equipment/*` directories and 9
+  `precise-engineers/products/*` (flat) directories, plus all hardcoded
+  hrefs pointing at the old URLs across `site-data.ts`, both company
+  `layout.tsx` mega-menus, the group `layout.tsx`, the RFQ thank-you page's
+  "explore other products" links, and both home pages' `ICON_BY_HREF` maps.
+
+#### Infra bugs found and fixed (blocking this session's own acceptance criteria)
+
+1. **`scripts/build-redirects.mjs`'s `main()` guard never ran on this
+   machine** — `import.meta.url === \`file://${argv[1]}\`` naive string
+   concatenation never matches on a path containing spaces (this repo's
+   does); needed `pathToFileURL(argv[1]).href` like the sibling
+   `check-redirect-map-integrity.mjs` already does. Silently left
+   `redirects.generated.ts` stale at its pre-session row count. mistakes.md entry written.
+2. **`lib/link-integrity.test.ts`'s `HREF_RE` matches inside comments and
+   template literals**, contradicting its own header comment. Any newly
+   computed URL assigned to a `...href`/`...Href`-named prop/key now goes
+   through a named function (`apps/web/lib/product-urls.ts`) instead of an
+   inline template literal, sidestepping the false positive. mistakes.md entry written.
+3. **`lib/routes.ts`'s route enumeration never expanded dynamic segments**
+   — this is the first dynamic route this app has ever had (`[category]`,
+   `[slug]`), so the literal-filesystem-walk approach that worked for 32
+   static routes needed extending to expand `[category]`/`[slug]` from the
+   content loader (mirroring `generateStaticParams`), or every sitemap URL
+   and BreadcrumbList JSON-LD URL for a real product would fail link-integrity.
+
+#### Architectural note: JSX vs. data-only module split
+
+`product-detail-page.tsx` / `product-category-pages.tsx` (JSX, the Page
+components) each have a `-data.ts` sibling (pure functions, no JSX) holding
+`generateStaticParams`/`generateMetadata`. This wasn't a stylistic choice:
+`apps/web`'s `tsconfig.json` sets `jsx: "preserve"` (required for Next's own
+compiler), which vite's transform can't parse when `metadata-uniqueness.test.ts`
+tries to `import` a `.tsx` file directly — this is the first time an
+apps/web vitest test has imported a `.tsx` module rather than text-scanning
+it. The pure-data module is what the test imports; the JSX module imports
+the data module and adds the Page component.
+
+#### Gate result
+
+```
+pnpm typecheck   ✓  4/4 packages, zero errors
+pnpm lint        ✓  0 errors (2 pre-existing warnings in an untouched file,
+                    apps/web/app/(group)/legal/LegalDocument.tsx — not this
+                    session's scope)
+pnpm test        ✓  277/278 (1 pre-existing DATABASE_URL-gated RFQ
+                    integration test, tracked since PR #15/#18, unrelated
+                    to this session)
+pnpm build       ✓  61 routes (17 products + 5 category listings + 2
+                    category indexes + their 17 OG images, plus all
+                    pre-existing routes), all 94.3–94.9 kB First Load JS
+                    (≤120 kB marketing budget ✓)
+redirect runtime ✓  manually verified via next start: exact CSV-stored
+                    source URLs 301 in exactly one hop to the final URL
+```
+
+#### Deviations / flagged (none silent)
+
+1. **CategoryCard built without reading its named engineering spec** —
+   `Vedanta Component Specs.html` (referenced by the session brief and the
+   pre-development-integration-review as carrying "props interface, three
+   company variants, five states including a thin state, 360px behavior,
+   and a contrast table") is a client-rendered JS-bundle export, not static
+   markup, and this session had no browser tool available to render it.
+   Built instead by pattern-matching the existing `ProductCard` (same
+   family, same session's stated description: 3 accent variants via
+   `onDark`, 5 states — default/hover/focus-visible/thin/onDark). Needs a
+   visual check against the actual spec file before this is considered
+   locked.
+2. **Breadcrumb parent label changed from "Equipment"/"Products" (per
+   company) to a single "Products"** for both companies, matching the
+   unified URL noun (blueprint §3.1's stated correction). The old Dhruv
+   breadcrumb read "Equipment"; this is a deliberate, spec-directed change,
+   not an oversight.
+3. **OG image alt text is company-level, not per-product** — `next/og`'s
+   file-based `alt` export must be a static value in this single-image-
+   per-route case (`generateImageMetadata` is a different, multi-image
+   API this doesn't need); the per-product detail lives in the rendered
+   image's headline instead.
+4. **Product `page` block content was extracted programmatically from the
+   old files' JSX**, not re-authored — every hero/QA/meta string is
+   byte-identical to what shipped before this session, so this is data
+   migration, not new copy.
