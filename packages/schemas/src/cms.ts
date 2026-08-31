@@ -43,6 +43,13 @@ export const ProductFAQ = z.object({
 })
 export type ProductFAQ = z.infer<typeof ProductFAQ>
 
+// Which code governs which phase of a product's lifecycle — design/fab/test
+// are distinct approval gates for an EPC buyer, unlike the flat `codes` list.
+export const StandardsMatrixEntry = z.object({
+  code: z.string().min(1),
+  phase: z.enum(['design', 'fabrication', 'testing']),
+})
+
 export const Product = z.object({
   companySlug: CompanySlug,
   slug: z.string().regex(/^[a-z0-9-]+$/, 'Slug must be lowercase hyphenated'),
@@ -60,6 +67,10 @@ export const Product = z.object({
     caption: z.string().optional(),
   })),
   relatedProjectSlugs: z.array(z.string()),
+  categorySlug: z.string(),
+  industrySlugs: z.array(z.string()).min(1, 'A product without an industry is unfindable — assign at least one'),
+  capabilitySlugs: z.array(z.string()),
+  standardsMatrix: z.array(StandardsMatrixEntry),
 })
 export type Product = z.infer<typeof Product>
 
@@ -125,5 +136,68 @@ export const Project = z.object({
   })).min(1),
   anonymized: z.boolean(),
   anonymizationLabel: z.string().optional(),
+  productSlugs: z.array(z.string()).min(1, 'A project without a linked product is unfindable — assign at least one'),
+  industrySlug: z.string(),
+  capabilitySlugs: z.array(z.string()),
+  location: z.string(),
+  clientSlug: z.string().optional(),
+  scope: z.string().optional(),
+  challenge: z.string().optional(),
+  solution: z.string().optional(),
+  testing: z.string().optional(),
+  inspection: z.string().optional(),
+  documents: z.array(z.object({
+    label: z.string().min(1),
+    href: z.string().min(1),
+    gated: z.boolean(),
+  })),
 })
 export type Project = z.infer<typeof Project>
+
+const slugField = z.string().regex(/^[a-z0-9-]+$/, 'Slug must be lowercase hyphenated')
+
+export const ProductCategory = z.object({
+  slug: slugField,
+  companySlug: CompanySlug,
+  name: z.string().min(1),
+  oneLineScope: oneLinescopeWithNumber,
+  productSlugs: z.array(z.string()),
+})
+export type ProductCategory = z.infer<typeof ProductCategory>
+
+export const Industry = z.object({
+  slug: slugField,
+  name: z.string().min(1),
+  oneLineScope: oneLinescopeWithNumber,
+  requirements: z.string().min(1),
+  applications: z.array(z.string()),
+  engineeringConsiderations: z.string().min(1),
+  // An industry with fewer than two products is the generic SEO page the plan forbids.
+  productSlugs: z.array(z.string()).min(2, 'An industry with fewer than two products is the generic SEO page the plan forbids.'),
+  capabilitySlugs: z.array(z.string()),
+  companySlugs: z.array(CompanySlug),
+  faqs: z.array(ProductFAQ).min(4, 'FAQ block requires 4–6 Q&As (GEO surface — Datum §21)').max(6),
+})
+export type Industry = z.infer<typeof Industry>
+
+export const Capability = z.object({
+  slug: slugField,
+  name: z.string().min(1),
+  companySlugs: z.array(CompanySlug),
+  equipmentList: z.array(z.string()),
+  envelope: z.array(SpecTableRow).min(1, 'A capability without an envelope spec table does not ship'),
+  standards: z.array(z.string()),
+  productSlugs: z.array(z.string()),
+  faqs: z.array(ProductFAQ).min(4, 'FAQ block requires 4–6 Q&As (GEO surface — Datum §21)').max(6),
+})
+export type Capability = z.infer<typeof Capability>
+
+export const Resource = z.object({
+  slug: slugField,
+  title: z.string().min(1),
+  type: z.string().min(1),
+  fileHref: z.string().min(1),
+  gated: z.boolean(),
+  relatedSlugs: z.array(z.string()),
+})
+export type Resource = z.infer<typeof Resource>
