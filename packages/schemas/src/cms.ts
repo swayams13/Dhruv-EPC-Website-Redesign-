@@ -154,6 +154,25 @@ export const Project = z.object({
 })
 export type Project = z.infer<typeof Project>
 
+// Cross-entity gate (Datum/blueprint §6): a Project referencing a Client
+// must resolve to a Client on file with an approved permission. Project
+// only holds a slug, so this can't be a Zod .refine() on Project alone —
+// the content loader calls this once all entities are parsed.
+export function validateProjectClientPermission(
+  project: Project,
+  allClients: (Client & { slug: string })[],
+): { success: true } | { success: false; error: string } {
+  if (!project.clientSlug) return { success: true }
+  const client = allClients.find((c) => c.slug === project.clientSlug)
+  if (!client) {
+    return { success: false, error: `Project references clientSlug "${project.clientSlug}" with no matching Client record` }
+  }
+  if (client.permission !== 'logo-approved' && client.permission !== 'name-only') {
+    return { success: false, error: `Client "${client.slug}" does not have an approved permission on file` }
+  }
+  return { success: true }
+}
+
 const slugField = z.string().regex(/^[a-z0-9-]+$/, 'Slug must be lowercase hyphenated')
 
 export const ProductCategory = z.object({

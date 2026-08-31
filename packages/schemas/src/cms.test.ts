@@ -4,10 +4,12 @@ import {
   Testimonial,
   CompanySlug,
   Project,
+  Client,
   ProductCategory,
   Industry,
   Capability,
   Resource,
+  validateProjectClientPermission,
 } from './cms'
 
 const minProduct = {
@@ -257,6 +259,35 @@ describe('Project junction fields (S2)', () => {
       documents: [{ label: 'Datasheet', href: '/docs/x.pdf', gated: true }],
     })
     expect(result.success).toBe(true)
+  })
+})
+
+describe('validateProjectClientPermission (cross-entity gate)', () => {
+  const client: Client = {
+    companySlugs: ['dhruv-epc'],
+    name: 'BPCL',
+    sector: 'Oil & Gas',
+    permission: 'logo-approved',
+  }
+  it('passes when the referenced client is on file with an approved permission', () => {
+    const project = { ...minProject, clientSlug: 'bpcl' }
+    const result = validateProjectClientPermission(project, [{ slug: 'bpcl', ...client }])
+    expect(result.success).toBe(true)
+  })
+  it('passes when clientSlug is not set — no client to check', () => {
+    const result = validateProjectClientPermission(minProject, [])
+    expect(result.success).toBe(true)
+  })
+  it('fails when clientSlug references a client not on file', () => {
+    const project = { ...minProject, clientSlug: 'missing-client' }
+    const result = validateProjectClientPermission(project, [{ slug: 'bpcl', ...client }])
+    expect(result.success).toBe(false)
+  })
+  it('fails when the referenced client permission is not an approved value', () => {
+    const project = { ...minProject, clientSlug: 'bpcl' }
+    const unapproved = { slug: 'bpcl', ...client, permission: 'unapproved' as unknown as Client['permission'] }
+    const result = validateProjectClientPermission(project, [unapproved])
+    expect(result.success).toBe(false)
   })
 })
 
