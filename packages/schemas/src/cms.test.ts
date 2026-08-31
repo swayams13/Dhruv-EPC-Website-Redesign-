@@ -9,6 +9,7 @@ import {
   Industry,
   Capability,
   Resource,
+  SpecTableRow,
   validateProjectClientPermission,
 } from './cms'
 
@@ -65,6 +66,27 @@ describe('Product.oneLineScope', () => {
   it('accepts a scope containing a digit', () => {
     const result = Product.safeParse(minProduct)
     expect(result.success).toBe(true)
+  })
+})
+
+describe('SpecTableRow provenance (Session 6, golden page)', () => {
+  it('accepts optional provenance and sourceNote fields', () => {
+    const row = SpecTableRow.parse({
+      param: 'Shell diameter',
+      value: '300 – 5,000',
+      unit: 'mm',
+      provenance: 'unverified',
+      sourceNote: 'DEMO figure — engineering data pending',
+    })
+    expect(row.provenance).toBe('unverified')
+    expect(row.sourceNote).toBe('DEMO figure — engineering data pending')
+  })
+  it('rejects an invalid provenance value', () => {
+    expect(() => SpecTableRow.parse({ param: 'x', value: 'y', provenance: 'confirmed' })).toThrow()
+  })
+  it('still accepts a row with neither field (existing products)', () => {
+    const row = SpecTableRow.parse({ param: 'x', value: 'y' })
+    expect(row.provenance).toBeUndefined()
   })
 })
 

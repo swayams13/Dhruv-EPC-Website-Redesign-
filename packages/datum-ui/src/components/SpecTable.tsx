@@ -17,6 +17,10 @@ export interface SpecTableRow {
   value: string
   unit?: string | undefined
   note?: string | undefined
+  /** Rail-only provenance mark — SpecTable itself does not render it (§15's
+      table anatomy is unchanged); SpecRail reads it off the same row data. */
+  provenance?: 'sourced' | 'unverified' | undefined
+  sourceNote?: string | undefined
 }
 
 export interface SpecTableMatrixRow {
