@@ -3,8 +3,13 @@ import Link from 'next/link'
 import { MobileBottomBar, PageHero, SpecTable } from '@vedanta/datum-ui'
 import { buildBreadcrumbList } from '@vedanta/schemas'
 import { RFQBand } from '../../../components/RFQBand'
-import { dhruvPhoneHref, dhruvWhatsappHref, dhruvEquipment } from '../../../lib/content/dhruv-epc'
+import { getEntity, phoneHref, whatsappHref } from '../../../lib/content-loader'
+import { dhruvEquipment } from '../../../lib/site-data'
 import { BASE } from '../../../lib/site'
+
+const dhruvEntity = getEntity('dhruv-epc')
+const dhruvPhoneHref = phoneHref(dhruvEntity)
+const dhruvWhatsappHref = whatsappHref(dhruvEntity)
 
 export const metadata: Metadata = {
   title: 'Capabilities — Max Sizes, Materials & Codes | Dhruv EPC',

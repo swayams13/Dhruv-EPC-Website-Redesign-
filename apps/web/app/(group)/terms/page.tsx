@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 import { PageHero } from '@vedanta/datum-ui'
 import { LegalDocument, type LegalSection } from '../legal/LegalDocument'
-import { groupEntity } from '../../../lib/content/group'
+import { getEntity } from '../../../lib/content-loader'
+
+const groupEntity = getEntity('group')
 
 export const metadata: Metadata = {
   title: 'Terms of Use | Vedanta Group of Companies',

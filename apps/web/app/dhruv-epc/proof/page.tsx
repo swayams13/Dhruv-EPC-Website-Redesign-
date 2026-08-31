@@ -1,16 +1,17 @@
 // Dhruv EPC Proof hub — Datum §20 (certifications, approvals, TPI agencies).
-// Content from lib/content/dhruv-epc (Zod-parsed). No ClientWall or Testimonials
+// Content from lib/content-loader (JSON-backed, Zod-parsed). No ClientWall or Testimonials
 // — no Client/Testimonial records exist for Dhruv (CLAUDE.md: no fabricated data).
 import type { Metadata } from 'next'
 import { ApprovalsMatrix, CertificationCard, MobileBottomBar, PageHero } from '@vedanta/datum-ui'
 import { buildBreadcrumbList } from '@vedanta/schemas'
 import { RFQBand } from '../../../components/RFQBand'
-import {
-  dhruvApprovals,
-  dhruvCertifications,
-  dhruvPhoneHref,
-  dhruvWhatsappHref,
-} from '../../../lib/content/dhruv-epc'
+import { getApprovals, getCertifications, getEntity, phoneHref, whatsappHref } from '../../../lib/content-loader'
+
+const dhruvEntity = getEntity('dhruv-epc')
+const dhruvApprovals = getApprovals('dhruv-epc')
+const dhruvCertifications = getCertifications('dhruv-epc')
+const dhruvPhoneHref = phoneHref(dhruvEntity)
+const dhruvWhatsappHref = whatsappHref(dhruvEntity)
 
 export const metadata: Metadata = {
   title: 'Proof — Certifications & Approvals | Dhruv EPC',

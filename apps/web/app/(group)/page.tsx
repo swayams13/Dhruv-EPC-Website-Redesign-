@@ -11,9 +11,12 @@ import {
   type StampProps,
 } from '@vedanta/datum-ui'
 import { buildOrganization } from '@vedanta/schemas'
-import { dhruvCertifications } from '../../lib/content/dhruv-epc'
-import { groupEntity, groupStats } from '../../lib/content/group'
-import { preciseCertifications } from '../../lib/content/precise-engineers'
+import { getCertifications, getEntity } from '../../lib/content-loader'
+import { groupStats } from '../../lib/site-data'
+
+const dhruvCertifications = getCertifications('dhruv-epc')
+const groupEntity = getEntity('group')
+const preciseCertifications = getCertifications('precise-engineers')
 
 export const metadata: Metadata = {
   title: 'Vedanta Group — Fabrication & Flow-Control Engineering',

@@ -5,7 +5,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Header, MobileDrawer } from '@vedanta/datum-ui'
-import { precisePhoneHref, preciseProducts, preciseWhatsappHref } from '../../lib/content/precise-engineers'
+import { preciseProducts } from '../../lib/site-data'
 
 const GROUPS = [
   { label: 'Expansion Joints', items: preciseProducts['expansion-joints'] },
@@ -18,7 +18,7 @@ const LINKS = [
   { label: 'Company', href: '/precise-engineers/company' },
 ]
 
-export function PreciseChrome() {
+export function PreciseChrome({ phoneHref, whatsappHref }: { phoneHref: string; whatsappHref: string }) {
   const [drawerOpen, setDrawerOpen] = useState(false)
 
   return (
@@ -33,8 +33,8 @@ export function PreciseChrome() {
         }))}
         capabilityRail={{ label: 'Sizes, materials & codes', href: '/precise-engineers/capabilities' }}
         links={LINKS}
-        phoneHref={precisePhoneHref}
-        whatsappHref={preciseWhatsappHref}
+        phoneHref={phoneHref}
+        whatsappHref={whatsappHref}
         rfqHref="/request-a-quote?company=precise"
         onMenuOpen={() => setDrawerOpen(true)}
       />

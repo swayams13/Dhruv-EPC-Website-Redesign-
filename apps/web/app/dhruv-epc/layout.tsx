@@ -6,7 +6,11 @@ import Link from 'next/link'
 import { Footer } from '@vedanta/datum-ui'
 import { DhruvChrome } from '../../components/dhruv/DhruvChrome'
 import { StickyQuoteChip } from '../../components/StickyQuoteChip'
-import { dhruvEntity, dhruvWhatsappHref } from '../../lib/content/dhruv-epc'
+import { getEntity, phoneHref, whatsappHref } from '../../lib/content-loader'
+
+const dhruvEntity = getEntity('dhruv-epc')
+const dhruvPhoneHref = phoneHref(dhruvEntity)
+const dhruvWhatsappHref = whatsappHref(dhruvEntity)
 
 const FOOTER_COLUMNS = [
   {
@@ -37,7 +41,7 @@ const FOOTER_COLUMNS = [
 export default function DhruvLayout({ children }: { children: React.ReactNode }) {
   return (
     <div data-company="dhruv">
-      <DhruvChrome />
+      <DhruvChrome phoneHref={dhruvPhoneHref} whatsappHref={dhruvWhatsappHref} />
       {children}
       <Footer
         entity={dhruvEntity}

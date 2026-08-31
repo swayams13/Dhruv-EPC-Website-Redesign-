@@ -12,11 +12,25 @@ import {
   ProductCategory,
   type CompanySlug,
 } from '@vedanta/schemas'
-import type { ExplodedFrame } from '../components/ExplodedSequence'
+// Non-CMS page-decoration data has no fs dependency of its own — kept in a
+// separate module (site-data.ts) so 'use client' Chrome components can
+// import it directly without pulling in this file's node:fs reads. Server
+// components that already import both kinds from this module keep working
+// via this re-export.
+export * from './site-data'
 
-// apps/web/lib -> apps/web -> apps -> repo root -> content
-const CONTENT_ROOT = resolve(__dirname, '..', '..', '..', 'content')
+// Next.js sets process.cwd() to the app directory (apps/web) for dev, build,
+// and start alike — unlike __dirname, which resolves to the bundled
+// webpack chunk's location once this module ships inside .next/server, not
+// its original source path.
+const CONTENT_ROOT = resolve(process.cwd(), '..', '..', 'content')
 
+// readdirSync returns entries in filesystem (effectively alphabetical) order.
+// certifications/ and approvals/ render as ordered lists on the proof pages,
+// so their filenames carry an explicit numeric prefix (dhruv-epc-1-…,
+// dhruv-epc-2-…) to reproduce the original array order from the pre-JSON
+// TS files. products/, companies/, and productCategories/ are looked up by
+// slug/companySlug, not rendered in directory order, so no prefix is needed.
 function loadDir<T>(dirName: string, schema: { parse: (v: unknown) => T }): T[] {
   const dir = resolve(CONTENT_ROOT, dirName)
   return readdirSync(dir)
@@ -82,82 +96,4 @@ export function phoneHref(entity: EntityRecord): string {
 export function whatsappHref(entity: EntityRecord): string {
   const number = entity.whatsapp ?? entity.phones[0] ?? ''
   return `https://wa.me/${number.replace('+', '')}`
-}
-
-// ─── Non-CMS page-decoration data ───────────────────────────────────────
-// No Zod schema exists for these (stats bands, exploded-hero frame paths,
-// mega-menu lists) — VG-011 scopes the JSON migration to the four
-// schema-backed record types above. Relocated unchanged from the old
-// lib/content/{dhruv-epc,precise-engineers,group}.ts files.
-
-export const dhruvStats = [
-  { value: '30+ yrs', label: 'Group experience', source: 'Est. 1994, Anand' },
-  { value: 'U · U2 · IBR', label: 'Stamps held' },
-  { value: '100 T', label: 'Max unit weight', source: 'DEMO figure — engineering data pending' },
-  { value: '5 sectors', label: 'Oil & gas to steel' },
-]
-
-export const preciseStats = [
-  { value: '30+ yrs', label: 'In expansion joints', source: 'Est. 1994, V.U.Nagar, Anand' },
-  { value: '80 – 8,000 mm', label: 'Bellows size range', source: 'Circular NB; rectangular to 9,000 × 5,000 mm' },
-  { value: 'EJMA · ASME', label: 'Design codes' },
-  { value: '12 sectors', label: 'Oil & gas to atomic energy' },
-]
-
-export const groupStats = [
-  { value: '30+ yrs', label: 'Group experience', source: 'Est. 1994, Anand' },
-  { value: '2 works', label: 'Vadodara · Anand', source: 'Manjusar GIDC · V.U.Nagar GIDC' },
-  { value: 'U · U2 · IBR', label: 'Stamps held' },
-  { value: '12 sectors', label: 'Oil & gas to atomic energy' },
-]
-
-export const dhruvExplodedFrames: ExplodedFrame[] = [
-  { avif: '/exploded/pressure-vessel/frame-01.avif', webp: '/exploded/pressure-vessel/frame-01.webp' },
-  { avif: '/exploded/pressure-vessel/frame-02.avif', webp: '/exploded/pressure-vessel/frame-02.webp' },
-  { avif: '/exploded/pressure-vessel/frame-03.avif', webp: '/exploded/pressure-vessel/frame-03.webp' },
-]
-
-export const preciseExplodedFrames: ExplodedFrame[] = [
-  { avif: '/exploded/expansion-joint/frame-01.avif', webp: '/exploded/expansion-joint/frame-01.webp' },
-  { avif: '/exploded/expansion-joint/frame-02.avif', webp: '/exploded/expansion-joint/frame-02.webp' },
-]
-
-export const groupExplodedFrames: ExplodedFrame[] = [
-  { avif: '/exploded/heat-exchanger/frame-01.avif', webp: '/exploded/heat-exchanger/frame-01.webp' },
-  { avif: '/exploded/heat-exchanger/frame-02.avif', webp: '/exploded/heat-exchanger/frame-02.webp' },
-  { avif: '/exploded/heat-exchanger/frame-03.avif', webp: '/exploded/heat-exchanger/frame-03.webp' },
-  { avif: '/exploded/heat-exchanger/frame-04.avif', webp: '/exploded/heat-exchanger/frame-04.webp' },
-]
-
-export const dhruvEquipment = {
-  'static-equipment': [
-    { name: 'Pressure Vessels', scope: 'Reactors, columns, drums to ASME Sec. VIII Div. 1 & 2', href: '/dhruv-epc/equipment/pressure-vessels' },
-    { name: 'Heat Exchangers', scope: 'Shell & tube to ASME Sec. VIII Div. 1 & 2, TEMA', href: '/dhruv-epc/equipment/heat-exchangers' },
-    { name: 'Storage Tanks & Air Receivers', scope: 'CS/SS storage to API 650 class duty', href: '/dhruv-epc/equipment/storage-tanks' },
-  ],
-  'skids-packages': [
-    { name: 'Process Skids', scope: 'Skid-mounted process packages, FAT-tested', href: '/dhruv-epc/equipment/process-skids' },
-    { name: 'Pipe Spools', scope: 'Shop-fabricated spools, CS/AS/SS, NDT-covered', href: '/dhruv-epc/equipment/pipe-spools' },
-  ],
-  'fabrication-machining': [
-    { name: 'Heavy Fabrication', scope: 'Structural and equipment fabrication', href: '/dhruv-epc/equipment/heavy-fabrication' },
-    { name: 'Heavy Machining', scope: 'Large-component machining services', href: '/dhruv-epc/equipment/heavy-machining' },
-    { name: 'Plate Flanges & Base Frames', scope: 'Machined flanges and equipment base frames', href: '/dhruv-epc/equipment/plate-flanges' },
-  ],
-}
-
-export const preciseProducts = {
-  'expansion-joints': [
-    { name: 'Metallic Bellows Expansion Joints', scope: 'EJMA/ASME B31.3, 80 – 8,000 mm NB circular', href: '/precise-engineers/products/metallic-bellows-expansion-joint' },
-    { name: 'Telescopic Expansion Joints', scope: 'Slip-type joints for axial traverse', href: '/precise-engineers/products/telescopic-expansion-joint' },
-    { name: 'Rubber Bellows', scope: 'Elastomeric joints for vibration and movement', href: '/precise-engineers/products/rubber-bellows' },
-    { name: 'Fabric Bellows', scope: 'Fabric layup joints for hot flue-gas ducting', href: '/precise-engineers/products/fabric-bellows' },
-    { name: 'Dismantling Joints', scope: 'Flanged joints with adjustment length for valve removal', href: '/precise-engineers/products/dismantling-joint' },
-    { name: 'Flange Adaptors', scope: 'Pipe-to-flange transition couplings', href: '/precise-engineers/products/flange-adaptor' },
-  ],
-  'flow-control': [
-    { name: 'Zero Velocity Valves', scope: 'Water-hammer protection for pumping mains', href: '/precise-engineers/products/zero-velocity-valve' },
-    { name: 'Dual Plate Check Valves', scope: 'Compact non-return valves', href: '/precise-engineers/products/dual-plate-check-valve' },
-    { name: 'Dampers', scope: 'Louver, butterfly and guillotine duct dampers', href: '/precise-engineers/products/damper' },
-  ],
 }

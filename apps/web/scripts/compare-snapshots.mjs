@@ -4,9 +4,22 @@
 // __snapshots__/routes-baseline/ (written once by snapshot-routes.mjs before
 // any content migration and never touched again).
 //
-// Tolerance (documented per VG-011 C1): collapse whitespace between tags and
-// strip Next's own hydration-id attributes. Any other difference — text,
-// attribute values, element order, class names — is a failure.
+// Tolerance (documented per VG-011 C1):
+//   1. Whitespace between tags is collapsed.
+//   2. Next's own hydration-id attributes are stripped.
+//   3. External build-hashed asset references are stripped entirely —
+//      <script src="/_next/static/…">, <link rel="preload|stylesheet"
+//      href="/_next/static/…"> — because webpack's chunk graph (filenames,
+//      hashes, AND chunk count) legitimately differs between any two
+//      `next build` runs, independent of rendered content. Confirmed by
+//      running two builds of the pre-migration code and seeing the same
+//      false-positive diff before this session touched anything.
+//   4. The inline `self.__next_f.push(...)` RSC flight-data script is
+//      stripped — it embeds the same webpack chunk-id manifest as #3, just
+//      serialized as JS instead of an href. `<script type="application/
+//      ld+json">` (real structured-data content) is NOT stripped.
+// Anything else — text, attribute values, element order, class names — is a
+// failure.
 import { readFileSync, readdirSync, existsSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -25,6 +38,10 @@ execFileSync(process.execPath, [resolve(root, 'scripts/snapshot-routes.mjs')], {
 
 function normalize(html) {
   return html
+    .replace(/<link rel="preload"[^>]*href="\/_next\/static\/[^"]*"[^>]*\/>/g, '')
+    .replace(/<link rel="stylesheet"[^>]*href="\/_next\/static\/[^"]*"[^>]*\/>/g, '')
+    .replace(/<script src="\/_next\/static\/[^"]*"[^>]*><\/script>/g, '')
+    .replace(/<script>self\.__next_f\.push\([\s\S]*?\)<\/script>/g, '')
     .replace(/>\s+</g, '><')
     .replace(/\sdata-[a-z-]*hydrat[a-z-]*="[^"]*"/gi, '')
     .trim()

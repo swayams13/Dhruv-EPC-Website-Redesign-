@@ -3,13 +3,14 @@ import type { Metadata } from 'next'
 import { ApprovalsMatrix, CertificationCard, MobileBottomBar, PageHero } from '@vedanta/datum-ui'
 import { buildBreadcrumbList } from '@vedanta/schemas'
 import { RFQBand } from '../../../components/RFQBand'
-import {
-  preciseApprovals,
-  preciseCertifications,
-  precisePhoneHref,
-  preciseWhatsappHref,
-} from '../../../lib/content/precise-engineers'
+import { getApprovals, getCertifications, getEntity, phoneHref, whatsappHref } from '../../../lib/content-loader'
 import { BASE } from '../../../lib/site'
+
+const preciseEntity = getEntity('precise-engineers')
+const preciseApprovals = getApprovals('precise-engineers')
+const preciseCertifications = getCertifications('precise-engineers')
+const precisePhoneHref = phoneHref(preciseEntity)
+const preciseWhatsappHref = whatsappHref(preciseEntity)
 
 export const metadata: Metadata = {
   title: 'Proof — Certifications & Approvals | Precise Engineers',

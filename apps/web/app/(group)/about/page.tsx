@@ -6,7 +6,7 @@
 import type { Metadata } from 'next'
 import { Button, PageHero, StatBand } from '@vedanta/datum-ui'
 import { buildBreadcrumbList } from '@vedanta/schemas'
-import { groupStats } from '../../../lib/content/group'
+import { groupStats } from '../../../lib/site-data'
 
 export const metadata: Metadata = {
   title: 'About — Vedanta Group',

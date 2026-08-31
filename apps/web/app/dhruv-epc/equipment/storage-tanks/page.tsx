@@ -4,8 +4,13 @@ import { ChevronDown, MobileBottomBar, ProductHero, SpecTable } from '@vedanta/d
 import { buildBreadcrumbList, buildFAQPage, buildProduct } from '@vedanta/schemas'
 import { RFQBand } from '../../../../components/RFQBand'
 import { AnchorRailDesktop, AnchorRailMobile } from '../../../../components/AnchorRail'
-import { dhruvEntity, dhruvPhoneHref, dhruvWhatsappHref, storageTanks } from '../../../../lib/content/dhruv-epc'
+import { getEntity, getProduct, phoneHref, whatsappHref } from '../../../../lib/content-loader'
 import { BASE } from '../../../../lib/site'
+
+const dhruvEntity = getEntity('dhruv-epc')
+const dhruvPhoneHref = phoneHref(dhruvEntity)
+const dhruvWhatsappHref = whatsappHref(dhruvEntity)
+const storageTanks = getProduct('dhruv-epc', 'storage-tanks')
 
 export const metadata: Metadata = {
   title: 'Storage Tanks & Air Receivers — API 650 Class | Dhruv EPC',
