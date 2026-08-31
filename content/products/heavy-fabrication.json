@@ -1,0 +1,39 @@
+{
+  "companySlug": "dhruv-epc",
+  "slug": "heavy-fabrication",
+  "name": "Heavy Fabrication",
+  "oneLineScope": "Structural and equipment fabrication to IS 2062 and AWS D1.1, up to 200 T per unit",
+  "group": "fabrication-machining",
+  "categorySlug": "fabrication-machining",
+  "industrySlugs": ["general"],
+  "capabilitySlugs": [],
+  "standardsMatrix": [],
+  "specTable": [
+    { "param": "Structural standard", "value": "IS 2062 · ASTM A36 · IS 800" },
+    { "param": "Welding standard", "value": "AWS D1.1 · IS 816 · WPS/PQR-qualified welders" },
+    { "param": "Fabrication types", "value": "Pipe racks, equipment structures, module frames, duct assemblies, pressure equipment" },
+    { "param": "Max unit weight", "value": "200", "unit": "T", "note": "DEMO figure — engineering data pending" },
+    { "param": "Max plate thickness", "value": "up to 200", "unit": "mm", "note": "DEMO figure — engineering data pending" },
+    { "param": "NDT", "value": "UT · MT · PT on critical structural welds per ITP" },
+    { "param": "Surface preparation", "value": "Blast to SA 2½, primer and finish coating to client spec" },
+    { "param": "Inspection", "value": "Third-party per client ITP" }
+  ],
+  "types": [
+    { "name": "Pipe racks & equipment supports", "description": "Multi-level pipe racks and equipment support structures for process plants." },
+    { "name": "Module frames", "description": "Skid and module frames for equipment packages, designed for road or barge transport." },
+    { "name": "Industrial ductwork", "description": "Flue gas and process duct assemblies for boilers, heaters and gas-treatment units." },
+    { "name": "Stairways, platforms & ladders", "description": "Access platforms, staircases and cage ladders per IS 7969 and client standards." },
+    { "name": "Miscellaneous pressure parts", "description": "Nozzles, pads, internals and support rings fabricated for pressure vessel integration." }
+  ],
+  "materials": ["IS 2062 Gr. E250 / E350 / E410", "ASTM A36", "IS 2002 (boiler-quality plates)", "SS 304/316 structural sections"],
+  "codes": ["IS 2062", "IS 800", "AWS D1.1", "IS 816"],
+  "faqs": [
+    { "question": "What types of heavy fabrication work does Dhruv EPC undertake?", "answer": "Pipe racks, equipment support structures, module frames, industrial ductwork, access platforms, staircases and miscellaneous pressure parts — welded to IS 2062 structural steel standards and AWS D1.1 welding code." },
+    { "question": "What welding standards govern your structural fabrication?", "answer": "Structural welds follow AWS D1.1 (steel structures) and IS 816; all welders are qualified per WPS/PQR procedures, and critical welds receive UT, MT or PT per the client ITP." },
+    { "question": "What surface preparation and coating can you provide?", "answer": "Shot-blasting to Sa 2½ followed by primer and finish coating systems to client specification — covering epoxy, polyurethane and zinc-silicate schemes for industrial environments." },
+    { "question": "What material grades do you typically use for structural fabrication?", "answer": "IS 2062 Gr. E250, E350 and E410 cover most process-plant duty; ASTM A36 and IS 2002 (boiler-quality) are available for import-specification projects." },
+    { "question": "How does heavy fabrication integrate with your pressure vessel and skid work?", "answer": "The same Manjusar works handles structural fabrication alongside vessel and skid work, allowing integrated fabrication — equipment, support structures and piping spools all produced and fit-checked before dispatch." }
+  ],
+  "gallery": [],
+  "relatedProjectSlugs": []
+}

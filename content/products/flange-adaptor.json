@@ -1,0 +1,35 @@
+{
+  "companySlug": "precise-engineers",
+  "slug": "flange-adaptor",
+  "name": "Flange Adaptors",
+  "oneLineScope": "Pipe-to-flange transition couplings for plain-end pipe, 50 – 1,200 mm NB",
+  "group": "expansion-joints",
+  "categorySlug": "expansion-joints",
+  "industrySlugs": ["general"],
+  "capabilitySlugs": [],
+  "standardsMatrix": [],
+  "specTable": [
+    { "param": "Size range", "value": "50 – 1,200", "unit": "mm NB", "note": "DEMO figure — engineering data pending" },
+    { "param": "Design pressure", "value": "up to PN 16", "note": "DEMO — full pressure table pending" },
+    { "param": "Pipe OD tolerance", "value": "OD-specific per pipe schedule", "note": "DEMO — pipe OD table pending" },
+    { "param": "Flange standard", "value": "ANSI B16.1 · BS 4504 · DIN 2501" },
+    { "param": "MOC — body", "value": "Ductile iron · CS · SS 304 · SS 316" },
+    { "param": "Seal", "value": "EPDM · NBR · Neoprene" }
+  ],
+  "types": [
+    { "name": "Standard flange adaptor", "description": "Single-bolt-circle adaptor connecting plain-end pipe to a flanged fitting or valve." },
+    { "name": "Stepped flange adaptor", "description": "Stepped bore for connecting pipes of different outside diameters at a transition." },
+    { "name": "Anchor flange", "description": "Heavy-duty adaptor with anti-thrust ribs for use at fixed points in a piping system." }
+  ],
+  "materials": ["Ductile iron", "Carbon steel (IS 2062)", "SS 304", "SS 316"],
+  "codes": ["ANSI B16.1", "BS 4504"],
+  "faqs": [
+    { "question": "What is a flange adaptor?", "answer": "A flange adaptor is a mechanical coupling that connects plain-end (unthreaded, un-flanged) pipe to a flanged valve, fitting or equipment. A stainless-steel bolt compresses a rubber seal ring against the pipe OD to form a pressure-tight joint." },
+    { "question": "What pipe materials can a flange adaptor connect?", "answer": "Flange adaptors suit ductile iron, steel, GRP, uPVC and HDPE pipe — any pipe whose outside diameter falls within the adaptor's specified OD range. Consult the OD tolerance table for the line size before ordering." },
+    { "question": "What pressure ratings are available?", "answer": "Pressure capability data are pending from engineering. Precise Engineers is ISO 9001:2015 certified and EIL approved, and can confirm the appropriate pressure class for your application." },
+    { "question": "Which flange standards are available?", "answer": "Flange adaptors are drilled to ANSI B16.1, BS 4504 (EN 1092) or DIN 2501 as standard. Mixed drilling and special bolt circles are available on request." },
+    { "question": "What seal grades are offered?", "answer": "EPDM for water and mild chemicals, NBR for oil and fuel service, and Neoprene for general industrial service. Precise Engineers selects the seal grade based on medium and operating temperature." }
+  ],
+  "gallery": [],
+  "relatedProjectSlugs": []
+}

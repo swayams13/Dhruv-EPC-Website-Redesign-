@@ -1,0 +1,37 @@
+{
+  "companySlug": "precise-engineers",
+  "slug": "damper",
+  "name": "Dampers",
+  "oneLineScope": "Louver, butterfly and guillotine duct dampers for gas and air service, rectangular ducts up to 4,000 × 3,000 mm",
+  "group": "flow-control",
+  "categorySlug": "flow-control",
+  "industrySlugs": ["general"],
+  "capabilitySlugs": [],
+  "standardsMatrix": [],
+  "specTable": [
+    { "param": "Types", "value": "Louver (multi-blade) · butterfly (single-blade) · guillotine (slide-gate)" },
+    { "param": "Duct size — circular", "value": "up to 3,000", "unit": "mm dia.", "note": "DEMO figure — engineering data pending" },
+    { "param": "Duct size — rectangular", "value": "up to 4,000 × 3,000", "unit": "mm", "note": "DEMO figure — engineering data pending" },
+    { "param": "Design temperature", "value": "ambient to +600", "unit": "°C", "note": "DEMO figure — engineering data pending" },
+    { "param": "Leakage class", "value": "Class II · Class IV per AMCA 500", "note": "DEMO — class per application" },
+    { "param": "Actuation", "value": "Manual · electric · pneumatic · hydraulic" },
+    { "param": "Frame MOC", "value": "MS · SS 304 · SS 316 · Corten" }
+  ],
+  "types": [
+    { "name": "Louver (multi-blade)", "description": "Multiple parallel blades for modulating flow control; suited to large rectangular ducts." },
+    { "name": "Butterfly (single-blade)", "description": "Single rotating blade for on/off or throttling duty in circular ducts." },
+    { "name": "Guillotine (slide-gate)", "description": "Flat plate slides across the duct opening for tight shut-off; suited to particulate-laden or high-temperature gas." },
+    { "name": "Isolation damper", "description": "Heavy-duty multi-blade with inflatable seal for positive gas-tight isolation." }
+  ],
+  "materials": ["Mild steel (IS 2062)", "SS 304", "SS 316", "Corten steel"],
+  "codes": ["AMCA 500"],
+  "faqs": [
+    { "question": "What types of dampers do you manufacture?", "answer": "Precise Engineers manufactures louver (multi-blade), butterfly (single-blade), guillotine (slide-gate) and isolation dampers for gas and air ducting in power, cement, steel and process plant service." },
+    { "question": "What duct sizes can be accommodated?", "answer": "Duct size data are pending confirmation from engineering. Dampers are designed to fit existing circular and rectangular duct cross-sections and are supplied with a matching flanged frame for installation." },
+    { "question": "What actuation options are available?", "answer": "Manual (lever or handwheel), electric, pneumatic or hydraulic actuation. The actuator is sized to the damper torque or thrust requirement at operating conditions. Fail-safe spring-return actuators are available for safety-critical applications." },
+    { "question": "What is the difference between a louver damper and a guillotine damper?", "answer": "A louver damper uses multiple parallel blades and is preferred for modulating flow control in large rectangular ducts. A guillotine damper uses a single flat plate that slides across the full duct opening, providing positive shut-off in high-temperature or particulate-laden gas where blade dampers may seize or accumulate dust." },
+    { "question": "What leakage class and temperature range do your dampers achieve?", "answer": "Leakage class and temperature range are application-specific, depending on blade material, seal design and actuation. Precise Engineers is ISO 9001:2015 certified and EIL approved. Contact us with your duct size, gas temperature and isolation duty for a detailed specification." }
+  ],
+  "gallery": [],
+  "relatedProjectSlugs": []
+}

@@ -1,0 +1,38 @@
+{
+  "companySlug": "dhruv-epc",
+  "slug": "storage-tanks",
+  "name": "Storage Tanks & Air Receivers",
+  "oneLineScope": "CS and SS storage tanks and ASME Sec. VIII Div. 1 air receivers for process storage",
+  "group": "static-equipment",
+  "categorySlug": "static-equipment",
+  "industrySlugs": ["general"],
+  "capabilitySlugs": [],
+  "standardsMatrix": [],
+  "specTable": [
+    { "param": "Design codes", "value": "API 650 (storage tanks) · ASME Sec. VIII Div. 1 (air receivers)", "note": "DEMO-PLACEHOLDER: API 650 unverified against vedantagroup.net" },
+    { "param": "Tank types", "value": "Fixed-cone-roof, open-top, shop-fabricated process tanks, air receivers" },
+    { "param": "Tank diameter", "value": "up to 20,000", "unit": "mm", "note": "DEMO figure — engineering data pending" },
+    { "param": "Tank height", "value": "up to 15,000", "unit": "mm", "note": "DEMO figure — engineering data pending" },
+    { "param": "Design pressure (receivers)", "value": "up to 25", "unit": "bar(g)", "note": "DEMO figure — engineering data pending" },
+    { "param": "Materials", "value": "Carbon steel, SS 304/316, rubber-lined CS" },
+    { "param": "Inspection", "value": "Third-party per client ITP" }
+  ],
+  "types": [
+    { "name": "Fixed-cone-roof tanks", "description": "Shop or site-erected fixed-roof tanks for petroleum products and chemicals." },
+    { "name": "Open-top tanks", "description": "Open-top cylindrical tanks for water, effluent and non-volatile chemical storage." },
+    { "name": "Process storage tanks", "description": "Jacketed and insulated tanks for temperature-controlled chemical processes." },
+    { "name": "Air receivers", "description": "ASME Sec. VIII Div. 1 shop-fabricated receivers for compressed-air and nitrogen service." },
+    { "name": "Rubber-lined vessels", "description": "CS vessels with rubber lining for acid and corrosive-slurry storage duty." }
+  ],
+  "materials": ["Carbon steel", "SS 304/316", "Rubber-lined carbon steel"],
+  "codes": ["API 650", "ASME Sec. VIII Div. 1", "IS 803"],
+  "faqs": [
+    { "question": "What types of storage tanks and receivers does Dhruv EPC fabricate?", "answer": "Fixed-cone-roof and open-top cylindrical storage tanks, process storage tanks (jacketed or insulated), rubber-lined corrosion-resistant vessels, and shop-fabricated ASME Sec. VIII Div. 1 air receivers for compressed-air and nitrogen service." },
+    { "question": "Do you fabricate both shop-built and site-erected tanks?", "answer": "Yes — smaller tanks and air receivers are fully shop-fabricated and dispatched as complete units; larger field-erected storage tanks are pre-fabricated in sections and assembled at site." },
+    { "question": "Which materials of construction are available for storage tanks?", "answer": "Carbon steel, stainless steel (SS 304 and 316) for corrosive service, and rubber-lined carbon steel for acid and slurry storage." },
+    { "question": "Can the works fabricate rubber-lined storage vessels?", "answer": "Yes — carbon steel vessels with hard or soft rubber lining are fabricated for acid, corrosive chemical and slurry service. Lining specification and holiday test are per client ITP." },
+    { "question": "What sectors use your storage tanks?", "answer": "Refineries & petrochemicals, fertilizers, water treatment, and the chemicals industry — the same sectors served by the pressure vessel and heat exchanger business from Manjusar GIDC, Vadodara." }
+  ],
+  "gallery": [],
+  "relatedProjectSlugs": []
+}
