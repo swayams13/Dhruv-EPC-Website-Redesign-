@@ -1262,9 +1262,10 @@ snapshot:compare ✓  30/30 routes byte-identical to pre-migration baseline
 ---
 
 ### Session 22 — Dynamic product routing (VG-012, VG-013, VG-014)
-**Status:** Complete ✅, PR open for review
+**Status:** Complete ✅ — merged to `main`
 **Branch:** `routing/session-5-dynamic-products` · **Date:** 2026-08-31
 **Governing spec:** `01-final-implementation-blueprint-v2.md` §3 (Final URL architecture)
+**Merged:** PR #19 squash-merged to `main` as `6317068` (2026-08-31), CI green (Lint · Typecheck · Test · Accessibility · Performance · Redirect map integrity · Redirect runtime test). Still open: CategoryCard visual check against `Vedanta Component Specs.html` (deviation 1) and human review of the three `layout.tsx` nav diffs.
 
 #### What was done
 
