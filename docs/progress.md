@@ -1256,4 +1256,5 @@ snapshot:compare ✓  30/30 routes byte-identical to pre-migration baseline
 #### What's NOT done / deferred
 
 - Task 5's 6 `["general"]`-stopgap products need real industry content once that copy exists — not this session's call to invent.
-- Branch open for human review, not merged to `main`. Task 5's industrySlugs table specifically needs Swayam's read before merge, not just green CI.
+
+**Merged:** PR #18 squash-merged to `main` as `bd9c312` (2026-08-31), after Swayam's review.
