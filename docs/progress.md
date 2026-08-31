@@ -1196,23 +1196,84 @@ playwright test  ✓  21 passed, 11 tracked-skip (VG-004), dry run confirms serv
 
 ---
 
+### Session 2 — Backend persistence (VG-040, VG-041) + CI repair
+**Status:** Complete ✅ — merged to `main`
+**Branches:** `backend/session-2-persistence` (PR #10), `fix/ci-workflow-yaml-syntax` (PR #11) · **Date:** 2026-08-30/31
+**Governing doc:** `02-development-backlog.md` VG-040/VG-041, plus finishing Session 0's B8 presign gap
+
+#### What was done (D1–D7)
+
+- **D1** `apps/web/lib/db.ts` — pooled `pg` (node-postgres) client, max 10 connections (long-lived Railway container running `next start`, not serverless). New production dependency, justified in the PR (minimal, un-opinionated, no ORM for one table).
+- **D2** `migrations/0001_leads.sql` + `scripts/migrate.mjs` — `leads` table (reference, timestamps, company/product/industry context, contact fields, `uploaded_keys` jsonb, `source_page`, `utm` jsonb, `status`, `notification_status` jsonb, `scan_status`, unique `idempotency_key`) plus `issued_presign_keys`; idempotent runner in the `build-redirects.mjs` style, wired as `pnpm migrate`.
+- **D3** `/api/rfq` reordered: validate → time-trap → verify presign keys → idempotency (DB) → rate-limit (DB) → **insert, get reference, respond 200** → email/WhatsApp as best-effort side effects updating `notification_status`, never affecting the response. In-memory `rateLog`/`seenSubmissions` Maps removed entirely.
+- **D4** `issued_presign_keys` ledger — closes the B8 gap Session 0 left open: `/api/presign` records every key it issues with real expiry; `/api/rfq` checks real existence + non-expiry instead of a forgeable `startsWith('uploads/')` check.
+- **D5** Reference number is now a Postgres-sequence-backed `VG-XXXXXX`, not `Date.now().toString(36)`.
+- **D6** `env.ts` / `.env.example` / `instrumentation.ts` boot-time validation — confirmed complete against every env var actually read in code; `launch-checklist.md`'s `RFQ_NOTIFY_TO`/`RFQ_NOTIFY_FROM` naming corrected.
+- **D7** `apps/web/app/api/rfq/route.test.ts` — real integration test (actual route handler + real Postgres, not a mock) proving a lead survives an email-provider failure; plus idempotent-retry and forged-upload-key cases. Establishes the route-handler integration-test convention for this repo.
+
+#### CI: found broken, repaired (PR #11 + 3 more fixes folded into PR #10)
+
+Checking CI status on PR #10 surfaced that **CI had been silently failing to even parse since 2026-07-17** — every push to `main` since (PR #7, #8, #9's merges included) shows "This run likely failed because of a workflow file issue." No lint/typecheck/test/build/redirect gate had actually run in GitHub Actions for six weeks; only Vercel's build checks were reporting anything on PRs. Fixed across four commits, each surfaced by actually re-running CI rather than assuming the previous fix was sufficient:
+
+1. `.github/workflows/ci.yml`'s "Redirect map integrity" step embedded a multi-line `run: node -e "..."` as an unquoted plain YAML scalar — invalid YAML, and GitHub Actions' own parser doesn't tolerate it either (`docs/mistakes.md`'s 2026-08-27 entry had this as untested). Moved to `scripts/check-redirect-map-integrity.mjs`.
+2. `package.json`'s `packageManager: "pnpm@11.10.0"` doesn't run under Node 20 (this repo's pinned CI runtime) and conflicted with `ci.yml`'s `version: 9` — pinned to `pnpm@9.15.9`.
+3. `pnpm/action-setup@v4` hard-errors if both its `version:` input and `packageManager` are set, even when they agree — dropped the redundant input.
+4. Turbo 2.x's default env mode strips undeclared env vars, so `DATABASE_URL` never reached `vitest` inside `pnpm turbo test` — added `passThroughEnv` to the `test` task in `turbo.json`.
+5. D6's boot-time env validation crashed `next start`/`next dev` in CI once a real Postgres was reachable, because `RESEND_API_KEY`/`STORAGE_*`/etc. were never set there — added fixed, non-secret placeholder values to `ci.yml`'s job env.
+
+A `postgres:16` CI service was added (backs D7) with a migration step before `Test`.
+
+#### Gate result
+
+```
+pnpm typecheck   PASS  4/4 packages
+pnpm lint        PASS  0 errors (pre-existing LegalDocument.tsx warnings only, unrelated)
+pnpm test        PASS  178 tests locally; CI green end-to-end (first real, complete CI run since 2026-07-17)
+pnpm build       PASS  all routes 94–114 kB First Load JS (under budget)
+```
+
+Manually verified against a local Postgres instance with a live `next start`: submitted a real RFQ with an invalid Resend key → `200`, `VG-001006` persisted, `notification_status: {"email":"failed","whatsapp":"sent"}`; retried with the same idempotency key → `duplicate: true`, no second row; real `/api/presign` call → key landed in `issued_presign_keys`.
+
+#### Deviations (none silent)
+
+1. Idempotency is now **permanent** via the DB unique constraint, not the 24h window VG-041's acceptance text names — strictly stronger than the old in-memory 24h expiry (which only bounded `Map` growth, not a business rule).
+2. `x-forwarded-for` remains the IP source for rate limiting — no more-trustworthy Railway-specific header is currently documented to cross-check against.
+3. Added a `postgres:16` CI service and the four CI fixes above — not explicitly scoped to VG-040/VG-041, but required to get a real CI signal on this PR at all.
+
+#### Also this session
+
+- Checked the deferred queue / known-gaps lists below against actual repo state (Swayam's request) — found PR #3 and PR #4 (listed as "pending merge") were in fact merged long ago, and the axe CI placeholder (listed as still a placeholder) was already replaced by Harness Session 1's real Playwright gate. Corrected below. Also found a real Vercel Production deployment now exists, which changes CG-1's "no deployable URL" blocker.
+- Recovered the Harness Session 1 log entry (PR #12) — it had been merged via PR #9 without its own `docs/progress.md` write-up ever being committed.
+- Deleted the merged branches (`backend/session-2-persistence`, `fix/ci-workflow-yaml-syntax`, `docs/log-harness-session-1`) from origin and their local worktrees.
+
+#### Commits
+
+PR #10: `feat(db)` D1 review fix, D2 migration+runner, D4 presign ledger, D3 rfq reorder, D7 integration test + fix, `ci` postgres service, merge of `main` (3 more CI fixes), `fix(ci)` turbo passthrough, `fix(ci)` placeholder envs.
+PR #11: `fix(ci)` YAML repair, `fix(ci)` pnpm packageManager pin, `fix(ci)` drop redundant action-setup version input.
+PR #12: `docs(progress)` Harness Session 1 recovery.
+
+---
+
 ### Deferred queue — ⏰ REMIND SWAYAM AFTER SESSION 10 (his instruction, 2026-07-10)
 
 1. **Session 6 human gate:** E2E RFQ with real creds — `STORAGE_*`, `RESEND_API_KEY`,
-   `RFQ_NOTIFY_*`, `NEXT_PUBLIC_CONTACT_*` in `.env.local`; real PDF from phone
-   on 4G → email within a minute (playbook gate).
-2. **PR #4 merge** (Sessions 4+5) — human review gates listed in that section.
-3. **PR #3 merge** (Session 3 schemas) — still pending merge.
-4. §23 certification strip in RFQ rail — awaits verified CMS cert records.
-5. Capability-statement PDF on thank-you — asset doesn't exist yet.
-6. SLA "one business day" — pending client commitment.
+   `RFQ_NOTIFY_*`, `NEXT_PUBLIC_CONTACT_*`, and now also `DATABASE_URL` (Railway
+   Postgres, Session 2) in `.env.local`/Railway env; real PDF from phone on 4G
+   → email within a minute AND a row in `leads` (playbook gate).
+2. ~~**PR #4 merge** (Sessions 4+5)~~ — **done.** Verified merged (commit `eb9e0e8`), long before this check (2026-08-31).
+3. ~~**PR #3 merge** (Session 3 schemas)~~ — **done.** Verified merged (commits `5df37ea`/`d89120b`), long before this check (2026-08-31).
+4. §23 certification strip in RFQ rail — awaits verified CMS cert records. Still open, confirmed 2026-08-31 (explicit omission comment still in `request-a-quote/page.tsx`).
+5. Capability-statement PDF on thank-you — asset doesn't exist yet. Still open.
+6. SLA "one business day" — pending client commitment. Still open.
 7. Playwright E2E suite for RFQ (happy path, upload-retry, honeypot, JS-off)
-   as CI tests — browser verify was run manually this session, not committed as tests.
+   as CI tests — still missing; `apps/web/e2e/` only has `a11y.spec.ts` as of 2026-08-31.
 
 ### Known gaps / client-gated items blocking DNS cutover
 
-1. **CG-1: LCP ≤ 2.5s p75** — needs staging deployment URL + Lighthouse run
-2. **CG-2: Testimonials** — client to supply verified quotes with attribution
-3. **CG-3: RFQ E2E** — needs `STORAGE_*`, `RESEND_API_KEY`, `RFQ_NOTIFY_*` credentials
-4. Playwright E2E suite for RFQ — deferred (items 1–7 in original deferred queue)
-5. axe CI placeholder — route-level axe deferred to post-deploy QA
+1. **CG-1: LCP ≤ 2.5s p75** — a real Vercel Production deployment now exists
+   (first succeeded 2026-08-30) — the "no deployable URL" blocker is gone.
+   Still needs someone to actually run Lighthouse against it.
+2. **CG-2: Testimonials** — client to supply verified quotes with attribution. Still open, confirmed 2026-08-31 (zero `Testimonial` records in any content file).
+3. **CG-3: RFQ E2E** — needs `STORAGE_*`, `RESEND_API_KEY`, `RFQ_NOTIFY_*`, and now also `DATABASE_URL` credentials (Session 2 added the Postgres requirement).
+4. Playwright E2E suite for RFQ — still deferred (item 7 above).
+5. ~~axe CI placeholder~~ — **done.** Harness Session 1 (T3) replaced it with a real Playwright + axe-core route gate; live in `ci.yml`.
