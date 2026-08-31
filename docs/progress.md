@@ -1157,6 +1157,45 @@ pnpm build       ✓  35 routes, zero errors/warnings
 
 ---
 
+### Harness Session 1 — Test coverage (T1–T6), no design/content/routing/RFQ work
+**Status:** Complete ✅
+**Branch:** `harness/session-1-test-coverage` (off `main`, open for human review — not merged) · **Date:** 2026-08-27/28
+**Governing doc:** session brief referenced `claude/06-pre-development-integration-review.md` §19/§24 — that file doesn't exist in this repo; proceeded from the brief's own T1–T6 spec.
+
+#### What was done
+
+- **T1 — `apps/web/lib/link-integrity.test.ts`:** enumerates every route from `app/**/page.tsx`, scans every non-test `.ts/.tsx` under `apps/web` for internal `href`/`*Href` string literals, asserts each resolves to a real route or a `redirect-map.csv` source. Separately checks `sitemap.ts`, redirect destinations, and JSON-LD `BreadcrumbList` urls. Passed clean against current code; verified live by injecting then reverting a fake broken href.
+
+- **T2 — `apps/web/lib/metadata-uniqueness.test.ts`:** asserts unique title/description per route and a 60-char title budget. Found B10 (session 0) only fixed the double-suffix bug, not length — 17 of 32 titles were still over budget (up to 94 chars). Shortened all 17, keeping every sourced code/number and the full company suffix.
+
+- **T3 — `apps/web/e2e/a11y.spec.ts`:** new `@playwright/test` + `@axe-core/playwright` devDependencies (justified: the only way to get real paint-layer axe coverage — the jsdom-based `a11y.test.tsx` explicitly can't check color-contrast). Runs axe against all 32 built routes. Found 11 routes with real color-contrast violations, all the same root cause — `text-steel-500` under 4.5:1 against every background it's used on. Logged as **VG-004** in `docs/mistakes.md`; those 11 routes are tracked expected-fail (not silently fixed — sitewide token-usage bug, out of scope for a harness session). Wired into `ci.yml`, replacing the axe echo placeholder.
+
+- **T4 — `scripts/check-js-budget.mjs`:** parses `next build`'s own "First Load JS" column per route (no bundle-math reimplementation) against CLAUDE.md's 120 KB marketing / 180 KB RFQ budgets. All 31 real routes pass today (94–114 KB). LCP/CLS/INP intentionally not gated — no real hero photography yet (C-6). Wired into `ci.yml`, replacing the Lighthouse echo placeholder.
+
+- **T5 — `packages/datum-ui/src/a11y.test.tsx`:** replaced the 24-entry hand-maintained story map with `import.meta.glob('./components/*.stories.tsx', { eager: true })`. Surfaced a real order-dependent test-isolation bug (no RTL `cleanup()` between renders let a stale `[data-rfq-anchor]` node leak into MobileBottomBar's render, crashing on `IntersectionObserver` in jsdom) — fixed with `afterEach(cleanup)`.
+
+- **T6 — `packages/tokens/src/tokens.test.ts`:** replaced hand-picked contrast pairs with a generated matrix — every (text token, surface token) combination each company's semantic map can produce, 4.5:1 text / 3:1 UI-indicator floors. Below-floor pairs tracked in an `EXCEPTIONS` map (deliberate ones, plus the same VG-004 tertiary-text defect — found independently a second way). 102 tests, up from 24.
+
+- **Also fixed along the way:** cleaned up a stale `pnpm@11.10.0` vs Node 20 / pnpm-9-lockfile mismatch blocking local installs (reinstalled with pnpm 9, matching `ci.yml`'s pinned version) — not committed, environment-only.
+
+#### Gate result
+
+```
+pnpm typecheck   ✓  4/4 packages, zero errors
+pnpm lint        ✓  0 errors (pre-existing Tailwind warnings in LegalDocument.tsx, unrelated)
+pnpm test        ✓  254/254 (tokens 102, schemas 39, datum-ui 77, web 36)
+pnpm build       ✓  31 routes, zero errors/warnings
+playwright test  ✓  21 passed, 11 tracked-skip (VG-004), dry run confirms server start + browser launch
+```
+
+#### What's NOT done / deferred
+
+- The 11 routes' `text-steel-500` contrast defect (VG-004) — tracked, not fixed (out of scope for a test-harness session).
+- A pre-existing, unrelated `ci.yml` step ("Redirect map integrity") fails strict YAML parsing (PyYAML, Ruby Psych) — predates this session, logged in `docs/mistakes.md`, not touched.
+- Branch is open for human review, not merged to `main`.
+
+---
+
 ### Deferred queue — ⏰ REMIND SWAYAM AFTER SESSION 10 (his instruction, 2026-07-10)
 
 1. **Session 6 human gate:** E2E RFQ with real creds — `STORAGE_*`, `RESEND_API_KEY`,
