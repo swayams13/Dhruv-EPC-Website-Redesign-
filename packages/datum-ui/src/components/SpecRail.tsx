@@ -58,9 +58,9 @@ function RailRow({ row }: { row: SpecTableRow }): React.ReactElement {
       <dd className="font-mono text-data text-steel-950">
         {row.value}
         {row.unit && <span className="ml-1 text-helper text-steel-600">{row.unit}</span>}
-        {row.sourceNote && (
+        {row.note && (
           <span className="mt-1 block font-sans text-helper normal-case text-steel-500">
-            {row.sourceNote}
+            {row.note}
           </span>
         )}
       </dd>

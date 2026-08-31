@@ -9,8 +9,8 @@ const rows: SpecTableRow[] = [
     param: 'Shell diameter',
     value: '300 – 5,000',
     unit: 'mm',
+    note: 'DEMO figure — engineering data pending',
     provenance: 'unverified',
-    sourceNote: 'DEMO figure — engineering data pending',
   },
   { param: 'Inspection', value: 'LRS · BV · DNV · IBR', provenance: 'sourced' },
 ]
@@ -42,7 +42,7 @@ export const DesktopPrecise: Story = {
 
 export const DesktopAllSourced: Story = {
   args: {
-    rows: rows.map((r) => ({ ...r, provenance: 'sourced' as const, sourceNote: undefined })),
+    rows: rows.map((r) => ({ ...r, provenance: 'sourced' as const, note: undefined })),
     primaryCta,
     secondaryCta,
   },

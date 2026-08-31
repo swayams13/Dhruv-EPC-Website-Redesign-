@@ -70,16 +70,16 @@ describe('Product.oneLineScope', () => {
 })
 
 describe('SpecTableRow provenance (Session 6, golden page)', () => {
-  it('accepts optional provenance and sourceNote fields', () => {
+  it('accepts an optional provenance field (SpecRail reads note for the footnote)', () => {
     const row = SpecTableRow.parse({
       param: 'Shell diameter',
       value: '300 – 5,000',
       unit: 'mm',
+      note: 'DEMO figure — engineering data pending',
       provenance: 'unverified',
-      sourceNote: 'DEMO figure — engineering data pending',
     })
     expect(row.provenance).toBe('unverified')
-    expect(row.sourceNote).toBe('DEMO figure — engineering data pending')
+    expect(row.note).toBe('DEMO figure — engineering data pending')
   })
   it('rejects an invalid provenance value', () => {
     expect(() => SpecTableRow.parse({ param: 'x', value: 'y', provenance: 'confirmed' })).toThrow()
