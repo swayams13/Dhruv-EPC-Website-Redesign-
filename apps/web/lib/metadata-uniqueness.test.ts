@@ -7,6 +7,9 @@
 import { readdirSync, readFileSync } from 'node:fs'
 import { join, relative, resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
+import { productDetailPageData } from './product-detail-page-data'
+import { productCategoryIndexPageData, productCategoryListingPageData } from './product-category-pages-data'
+import type { CompanySlug } from '@vedanta/schemas'
 
 const APP_DIR = resolve(__dirname, '../app')
 const SKIP_DIRS = new Set(['node_modules', '.next', 'dist'])
@@ -32,7 +35,63 @@ function extractMetadata(file: string): { title: string | undefined; description
   return { title: titleMatch?.[1], description: descMatch?.[1] }
 }
 
-const records = pageFiles.map((file) => ({ file: relative(APP_DIR, file), ...extractMetadata(file) }))
+// VG-012 (session 5): four route files no longer carry a static `title:`
+// literal — metadata is computed per instance by generateMetadata/metadata
+// in lib/product-detail-page.tsx and lib/product-category-pages.tsx. The
+// static regex scan below can't see those; this test would otherwise report
+// every real product/category title as "missing" instead of checking it.
+// Each is expanded here into one record per real instance (every product,
+// every category, both companies) so uniqueness is checked against what
+// actually renders, not weakened to skip the dynamic routes.
+const COMPANIES: CompanySlug[] = ['dhruv-epc', 'precise-engineers']
+const DYNAMIC_FILES = new Set([
+  'dhruv-epc/products/page.tsx',
+  'precise-engineers/products/page.tsx',
+  'dhruv-epc/products/[category]/page.tsx',
+  'precise-engineers/products/[category]/page.tsx',
+  'dhruv-epc/products/[category]/[slug]/page.tsx',
+  'precise-engineers/products/[category]/[slug]/page.tsx',
+])
+
+function dynamicRecords(): { file: string; title: string | undefined; description: string | undefined }[] {
+  const out: { file: string; title: string | undefined; description: string | undefined }[] = []
+  for (const company of COMPANIES) {
+    const indexImpl = productCategoryIndexPageData(company)
+    out.push({
+      file: `${company}/products/page.tsx`,
+      title: indexImpl.metadata.title as string | undefined,
+      description: indexImpl.metadata.description as string | undefined,
+    })
+
+    const listingImpl = productCategoryListingPageData(company)
+    for (const { category } of listingImpl.generateStaticParams()) {
+      const meta = listingImpl.generateMetadata({ params: { category } })
+      out.push({
+        file: `${company}/products/[category]/page.tsx:${category}`,
+        title: meta.title as string | undefined,
+        description: meta.description as string | undefined,
+      })
+    }
+
+    const detailImpl = productDetailPageData(company)
+    for (const { category, slug } of detailImpl.generateStaticParams()) {
+      const meta = detailImpl.generateMetadata({ params: { category, slug } })
+      out.push({
+        file: `${company}/products/[category]/[slug]/page.tsx:${category}/${slug}`,
+        title: meta.title as string | undefined,
+        description: meta.description as string | undefined,
+      })
+    }
+  }
+  return out
+}
+
+const records = [
+  ...pageFiles
+    .map((file) => ({ file: relative(APP_DIR, file), ...extractMetadata(file) }))
+    .filter((r) => !DYNAMIC_FILES.has(r.file)),
+  ...dynamicRecords(),
+]
 
 describe('metadata uniqueness (VG-062)', () => {
   it('found every page route', () => {

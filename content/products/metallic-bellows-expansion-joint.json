@@ -5,39 +5,173 @@
   "oneLineScope": "Metallic bellows expansion joints to EJMA and ASME B31.3, 80 – 8,000 mm NB circular",
   "group": "expansion-joints",
   "categorySlug": "expansion-joints",
-  "industrySlugs": ["oil-gas", "refining-petrochemical", "fertilizer-chemicals", "power"],
+  "industrySlugs": [
+    "oil-gas",
+    "refining-petrochemical",
+    "fertilizer-chemicals",
+    "power"
+  ],
   "capabilitySlugs": [],
   "standardsMatrix": [],
   "specTable": [
-    { "param": "Design codes", "value": "EJMA · ASME B31.3", "note": "FEA analysis under special conditions" },
-    { "param": "Size range — circular", "value": "80 – 8,000", "unit": "mm NB" },
-    { "param": "Size range — rectangular", "value": "up to 9,000 × 5,000", "unit": "mm" },
-    { "param": "Bellows materials", "value": "SS 304/304L/316/316L/321/310, Inconel 600/625, Incoloy 800/825, Hastelloy, duplex" },
-    { "param": "Design pressure", "value": "full vacuum to 40", "unit": "bar(g)", "note": "DEMO figure — engineering data pending" },
-    { "param": "Design temperature", "value": "−100 to +900", "unit": "°C", "note": "DEMO figure — engineering data pending" },
-    { "param": "Movements", "value": "axial · lateral · angular, per EJMA design", "note": "DEMO — movement tables pending" },
-    { "param": "Cycle life", "value": "per EJMA fatigue design", "note": "DEMO — cycle-life data pending" },
-    { "param": "End connections", "value": "Weld ends, fixed & rotating flanges", "note": "DEMO — engineering data pending" }
+    {
+      "param": "Design codes",
+      "value": "EJMA · ASME B31.3",
+      "note": "FEA analysis under special conditions"
+    },
+    {
+      "param": "Size range — circular",
+      "value": "80 – 8,000",
+      "unit": "mm NB"
+    },
+    {
+      "param": "Size range — rectangular",
+      "value": "up to 9,000 × 5,000",
+      "unit": "mm"
+    },
+    {
+      "param": "Bellows materials",
+      "value": "SS 304/304L/316/316L/321/310, Inconel 600/625, Incoloy 800/825, Hastelloy, duplex"
+    },
+    {
+      "param": "Design pressure",
+      "value": "full vacuum to 40",
+      "unit": "bar(g)",
+      "note": "DEMO figure — engineering data pending"
+    },
+    {
+      "param": "Design temperature",
+      "value": "−100 to +900",
+      "unit": "°C",
+      "note": "DEMO figure — engineering data pending"
+    },
+    {
+      "param": "Movements",
+      "value": "axial · lateral · angular, per EJMA design",
+      "note": "DEMO — movement tables pending"
+    },
+    {
+      "param": "Cycle life",
+      "value": "per EJMA fatigue design",
+      "note": "DEMO — cycle-life data pending"
+    },
+    {
+      "param": "End connections",
+      "value": "Weld ends, fixed & rotating flanges",
+      "note": "DEMO — engineering data pending"
+    }
   ],
   "types": [
-    { "name": "Single", "description": "One bellows absorbing axial movement in a straight run." },
-    { "name": "Universal", "description": "Two bellows with centre spool for large lateral movement." },
-    { "name": "Tied lateral", "description": "Tie rods restrain pressure thrust; absorbs lateral offset." },
-    { "name": "Hinged", "description": "Angular rotation in one plane; used in sets of two or three." },
-    { "name": "Gimbal", "description": "Angular rotation in any plane via a gimbal ring." },
-    { "name": "Pressure-balanced elbow", "description": "Balances pressure thrust at a change of direction." },
-    { "name": "Inline pressure-balanced", "description": "Balances pressure thrust in a straight run." },
-    { "name": "Externally pressurized", "description": "Pressure applied to the bellows OD; suits high axial travel." }
+    {
+      "name": "Single",
+      "description": "One bellows absorbing axial movement in a straight run."
+    },
+    {
+      "name": "Universal",
+      "description": "Two bellows with centre spool for large lateral movement."
+    },
+    {
+      "name": "Tied lateral",
+      "description": "Tie rods restrain pressure thrust; absorbs lateral offset."
+    },
+    {
+      "name": "Hinged",
+      "description": "Angular rotation in one plane; used in sets of two or three."
+    },
+    {
+      "name": "Gimbal",
+      "description": "Angular rotation in any plane via a gimbal ring."
+    },
+    {
+      "name": "Pressure-balanced elbow",
+      "description": "Balances pressure thrust at a change of direction."
+    },
+    {
+      "name": "Inline pressure-balanced",
+      "description": "Balances pressure thrust in a straight run."
+    },
+    {
+      "name": "Externally pressurized",
+      "description": "Pressure applied to the bellows OD; suits high axial travel."
+    }
   ],
-  "materials": ["SS 304 / 304L", "SS 316 / 316L", "SS 321", "SS 310", "Inconel 600 / 625", "Incoloy 800 / 825", "Hastelloy", "Duplex"],
-  "codes": ["EJMA", "ASME B31.3"],
+  "materials": [
+    "SS 304 / 304L",
+    "SS 316 / 316L",
+    "SS 321",
+    "SS 310",
+    "Inconel 600 / 625",
+    "Incoloy 800 / 825",
+    "Hastelloy",
+    "Duplex"
+  ],
+  "codes": [
+    "EJMA",
+    "ASME B31.3"
+  ],
   "faqs": [
-    { "question": "Which design codes do you design metallic bellows expansion joints to?", "answer": "Metallic bellows expansion joints are designed and engineered to the EJMA (Expansion Joint Manufacturers Association) standards and ASME B31.3 piping code requirements. Under special conditions FEA analysis is carried out." },
-    { "question": "What size range of metallic expansion joints do you manufacture?", "answer": "Circular metallic bellows from 80 mm to 8,000 mm nominal bore, and rectangular bellows up to 9,000 mm × 5,000 mm — manufactured at the Vitthal Udyognagar works, Anand, Gujarat." },
-    { "question": "What types of metallic expansion joints do you supply?", "answer": "Single, universal, tied lateral, hinged, gimbal, pressure-balanced elbow, inline pressure-balanced and externally pressurized expansion joints — selected to absorb axial, lateral, angular or combined movements per the EJMA design method." },
-    { "question": "Which bellows materials can you work with?", "answer": "Stainless steel grades SS 304, 304L, 316, 316L, 321 and 310; nickel alloys Inconel 600 and 625, Incoloy 800 and 825, and Hastelloy; and duplex materials." },
-    { "question": "Which industry sectors do you supply expansion joints to?", "answer": "Oil & gas, refineries & petrochemicals, fertilizers, power & energy, steel, cement, ship building, cross-country pipelines, sugar, dairy, paper and the Department of Atomic Energy. Precise Engineers is an EIL-approved unit, established 1994." }
+    {
+      "question": "Which design codes do you design metallic bellows expansion joints to?",
+      "answer": "Metallic bellows expansion joints are designed and engineered to the EJMA (Expansion Joint Manufacturers Association) standards and ASME B31.3 piping code requirements. Under special conditions FEA analysis is carried out."
+    },
+    {
+      "question": "What size range of metallic expansion joints do you manufacture?",
+      "answer": "Circular metallic bellows from 80 mm to 8,000 mm nominal bore, and rectangular bellows up to 9,000 mm × 5,000 mm — manufactured at the Vitthal Udyognagar works, Anand, Gujarat."
+    },
+    {
+      "question": "What types of metallic expansion joints do you supply?",
+      "answer": "Single, universal, tied lateral, hinged, gimbal, pressure-balanced elbow, inline pressure-balanced and externally pressurized expansion joints — selected to absorb axial, lateral, angular or combined movements per the EJMA design method."
+    },
+    {
+      "question": "Which bellows materials can you work with?",
+      "answer": "Stainless steel grades SS 304, 304L, 316, 316L, 321 and 310; nickel alloys Inconel 600 and 625, Incoloy 800 and 825, and Hastelloy; and duplex materials."
+    },
+    {
+      "question": "Which industry sectors do you supply expansion joints to?",
+      "answer": "Oil & gas, refineries & petrochemicals, fertilizers, power & energy, steel, cement, ship building, cross-country pipelines, sugar, dairy, paper and the Department of Atomic Energy. Precise Engineers is an EIL-approved unit, established 1994."
+    }
   ],
   "gallery": [],
-  "relatedProjectSlugs": []
+  "relatedProjectSlugs": [],
+  "page": {
+    "metaTitle": "Metallic Bellows Expansion Joints — EJMA | Precise Engineers",
+    "metaDescription": "Single, universal, hinged, gimbal and pressure-balanced expansion joints to EJMA and ASME B31.3. 80 – 8,000 mm NB circular, 9,000 × 5,000 mm rectangular. SS, Inconel, Incoloy, Hastelloy, duplex.",
+    "breadcrumbLabel": "Metallic Bellows Expansion Joints",
+    "heroTitle": "Metallic Bellows Expansion Joints — EJMA / ASME B31.3",
+    "valueStatement": "Designed and engineered to EJMA standards and ASME B31.3 piping code — 80 to 8,000 mm NB circular and up to 9,000 × 5,000 mm rectangular, with FEA analysis under special conditions.",
+    "heroChips": [
+      "EJMA · ASME B31.3",
+      "80 – 8,000 mm NB",
+      "SS · Inconel · duplex"
+    ],
+    "certChips": [
+      "EIL Approved Vendor",
+      "ISO 9001:2015"
+    ],
+    "specCaption": "Metallic bellows expansion joint capability",
+    "materialsHeading": "Bellows materials",
+    "qaSteps": [
+      {
+        "step": "Drawing & design",
+        "caption": "EJMA design calcs, ASME B31.3; FEA under special conditions"
+      },
+      {
+        "step": "Material receipt",
+        "caption": "Mill test certificates verified against indent"
+      },
+      {
+        "step": "Forming & fabrication",
+        "caption": "Convolution forming, qualified seam welding"
+      },
+      {
+        "step": "NDT & inspection",
+        "caption": "NDT and stage inspection per code and client ITP"
+      },
+      {
+        "step": "Testing & dispatch",
+        "caption": "Witnessed testing, final dossier, dispatch"
+      }
+    ],
+    "qaClosing": "EIL-approved unit · ISO 9001:2015 certified quality management system."
+  }
 }

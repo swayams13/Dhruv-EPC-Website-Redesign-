@@ -16,7 +16,7 @@
 
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const SRC = resolve(root, 'content/redirect-map.csv')
@@ -103,4 +103,9 @@ ${entries}
   console.log(`build-redirects: compiled ${rows.length} redirects → apps/web/lib/redirects.generated.ts`)
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) main()
+// bug: naive `file://${argv[1]}` string concatenation never matches
+// import.meta.url on a path containing spaces (this repo's path does) —
+// pathToFileURL percent-encodes, so main() silently never ran. Same class of
+// bug the sibling script's header describes fixing 2026-08-30; this one
+// wasn't caught because nothing asserts the two agree at CI time (docs/mistakes.md).
+if (import.meta.url === pathToFileURL(process.argv[1]).href) main()

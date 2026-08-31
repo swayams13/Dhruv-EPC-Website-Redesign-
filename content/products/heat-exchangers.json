@@ -5,37 +5,170 @@
   "oneLineScope": "Shell & tube exchangers to ASME Sec. VIII Div. 1 & 2 and TEMA, up to 100 T",
   "group": "static-equipment",
   "categorySlug": "static-equipment",
-  "industrySlugs": ["oil-gas", "refining-petrochemical", "fertilizer-chemicals", "power"],
+  "industrySlugs": [
+    "oil-gas",
+    "refining-petrochemical",
+    "fertilizer-chemicals",
+    "power"
+  ],
   "capabilitySlugs": [],
   "standardsMatrix": [],
   "specTable": [
-    { "param": "Design codes", "value": "ASME Sec. VIII Div. 1 & 2 · TEMA", "note": "HTRI thermal design" },
-    { "param": "Types", "value": "Fixed tube-sheet, floating head, U-tube, kettle, finned tube, double pipe" },
-    { "param": "Shell diameter", "value": "300 – 4,000", "unit": "mm", "note": "DEMO figure — engineering data pending" },
-    { "param": "Tube length", "value": "up to 12,000", "unit": "mm", "note": "DEMO figure — engineering data pending" },
-    { "param": "Max unit weight", "value": "100", "unit": "T", "note": "DEMO figure — engineering data pending" },
-    { "param": "Design pressure", "value": "up to 250", "unit": "bar(g)", "note": "DEMO figure — engineering data pending" },
-    { "param": "Design temperature", "value": "−100 to +550", "unit": "°C", "note": "DEMO figure — engineering data pending" },
-    { "param": "Materials", "value": "CS, LTCS, rubber-lined CS, LAS, austenitic SS, duplex SS, high-nickel alloys" },
-    { "param": "Inspection", "value": "LRS · BV · DNV · IBR", "note": "Third-party and statutory" }
+    {
+      "param": "Design codes",
+      "value": "ASME Sec. VIII Div. 1 & 2 · TEMA",
+      "note": "HTRI thermal design"
+    },
+    {
+      "param": "Types",
+      "value": "Fixed tube-sheet, floating head, U-tube, kettle, finned tube, double pipe"
+    },
+    {
+      "param": "Shell diameter",
+      "value": "300 – 4,000",
+      "unit": "mm",
+      "note": "DEMO figure — engineering data pending"
+    },
+    {
+      "param": "Tube length",
+      "value": "up to 12,000",
+      "unit": "mm",
+      "note": "DEMO figure — engineering data pending"
+    },
+    {
+      "param": "Max unit weight",
+      "value": "100",
+      "unit": "T",
+      "note": "DEMO figure — engineering data pending"
+    },
+    {
+      "param": "Design pressure",
+      "value": "up to 250",
+      "unit": "bar(g)",
+      "note": "DEMO figure — engineering data pending"
+    },
+    {
+      "param": "Design temperature",
+      "value": "−100 to +550",
+      "unit": "°C",
+      "note": "DEMO figure — engineering data pending"
+    },
+    {
+      "param": "Materials",
+      "value": "CS, LTCS, rubber-lined CS, LAS, austenitic SS, duplex SS, high-nickel alloys"
+    },
+    {
+      "param": "Inspection",
+      "value": "LRS · BV · DNV · IBR",
+      "note": "Third-party and statutory"
+    }
   ],
   "types": [
-    { "name": "Fixed tube-sheet", "description": "Economical for clean services with low differential expansion." },
-    { "name": "Floating head", "description": "Mechanically cleanable bundle for fouling shell-side services." },
-    { "name": "U-tube", "description": "Absorbs differential expansion; suited to high-pressure tube-side duty." },
-    { "name": "Kettle type", "description": "Reboiler and vaporizer duty with vapour disengagement space." },
-    { "name": "Double pipe", "description": "Small-duty and high-pressure services; finned variants available." },
-    { "name": "Surface condenser & economiser", "description": "Power-cycle heat recovery and condensing duty." }
+    {
+      "name": "Fixed tube-sheet",
+      "description": "Economical for clean services with low differential expansion."
+    },
+    {
+      "name": "Floating head",
+      "description": "Mechanically cleanable bundle for fouling shell-side services."
+    },
+    {
+      "name": "U-tube",
+      "description": "Absorbs differential expansion; suited to high-pressure tube-side duty."
+    },
+    {
+      "name": "Kettle type",
+      "description": "Reboiler and vaporizer duty with vapour disengagement space."
+    },
+    {
+      "name": "Double pipe",
+      "description": "Small-duty and high-pressure services; finned variants available."
+    },
+    {
+      "name": "Surface condenser & economiser",
+      "description": "Power-cycle heat recovery and condensing duty."
+    }
   ],
-  "materials": ["Carbon steel", "LTCS", "Low alloy steel", "Austenitic SS", "Duplex SS", "High-nickel alloys", "Rubber-lined CS"],
-  "codes": ["ASME Sec. VIII Div. 1", "ASME Sec. VIII Div. 2", "TEMA", "IBR"],
+  "materials": [
+    "Carbon steel",
+    "LTCS",
+    "Low alloy steel",
+    "Austenitic SS",
+    "Duplex SS",
+    "High-nickel alloys",
+    "Rubber-lined CS"
+  ],
+  "codes": [
+    "ASME Sec. VIII Div. 1",
+    "ASME Sec. VIII Div. 2",
+    "TEMA",
+    "IBR"
+  ],
   "faqs": [
-    { "question": "Which design codes do you fabricate heat exchangers to?", "answer": "Heat exchangers are designed and fabricated to ASME Section VIII Division 1 and Division 2 with TEMA mechanical standards; thermal design is carried out in HTRI. The works holds ASME U and U2 Certificates of Authorization and IBR approval." },
-    { "question": "What types of shell & tube heat exchangers do you manufacture?", "answer": "Fixed tube-sheet, floating head, U-tube, kettle-type and finned-tube shell & tube exchangers, plus double-pipe exchangers, surface condensers and economisers." },
-    { "question": "What materials of construction can you work with?", "answer": "Carbon steel, low-temperature carbon steel, rubber-lined carbon steel, low alloy steel, austenitic stainless steel, duplex stainless steel and high-nickel alloys." },
-    { "question": "Which third-party inspection agencies have you worked under?", "answer": "Jobs have been executed under third-party inspection agencies including Lloyd’s Register (LRS), Bureau Veritas (BV) and DNV, and the statutory agency IBR." },
-    { "question": "Which industry sectors do you supply heat exchangers to?", "answer": "Oil & gas, refineries & petrochemicals, fertilizers, power & energy, and steel — from the Manjusar GIDC works at Vadodara, Gujarat." }
+    {
+      "question": "Which design codes do you fabricate heat exchangers to?",
+      "answer": "Heat exchangers are designed and fabricated to ASME Section VIII Division 1 and Division 2 with TEMA mechanical standards; thermal design is carried out in HTRI. The works holds ASME U and U2 Certificates of Authorization and IBR approval."
+    },
+    {
+      "question": "What types of shell & tube heat exchangers do you manufacture?",
+      "answer": "Fixed tube-sheet, floating head, U-tube, kettle-type and finned-tube shell & tube exchangers, plus double-pipe exchangers, surface condensers and economisers."
+    },
+    {
+      "question": "What materials of construction can you work with?",
+      "answer": "Carbon steel, low-temperature carbon steel, rubber-lined carbon steel, low alloy steel, austenitic stainless steel, duplex stainless steel and high-nickel alloys."
+    },
+    {
+      "question": "Which third-party inspection agencies have you worked under?",
+      "answer": "Jobs have been executed under third-party inspection agencies including Lloyd’s Register (LRS), Bureau Veritas (BV) and DNV, and the statutory agency IBR."
+    },
+    {
+      "question": "Which industry sectors do you supply heat exchangers to?",
+      "answer": "Oil & gas, refineries & petrochemicals, fertilizers, power & energy, and steel — from the Manjusar GIDC works at Vadodara, Gujarat."
+    }
   ],
   "gallery": [],
-  "relatedProjectSlugs": []
+  "relatedProjectSlugs": [],
+  "page": {
+    "metaTitle": "Shell & Tube Heat Exchangers — ASME U/U2, TEMA | Dhruv EPC",
+    "metaDescription": "Fixed tube-sheet, floating head, U-tube and kettle exchangers to ASME Sec. VIII Div. 1 & 2 and TEMA. HTRI thermal design. CS, SS, duplex and high-nickel alloys.",
+    "breadcrumbLabel": "Heat Exchangers",
+    "heroTitle": "Shell & Tube Heat Exchangers — ASME U/U2",
+    "valueStatement": "Designed and fabricated to ASME Sec. VIII Div. 1 & 2 with TEMA mechanical standards and HTRI thermal design — under ASME U and U2 Certificates of Authorization.",
+    "heroChips": [
+      "ASME Sec. VIII Div. 1 & 2",
+      "TEMA · HTRI",
+      "CS · SS · duplex · Ni alloys"
+    ],
+    "certChips": [
+      "ASME U",
+      "ASME U2",
+      "IBR",
+      "ISO 9001:2015"
+    ],
+    "specCaption": "Shell & tube heat exchanger capability",
+    "materialsHeading": "Materials of construction",
+    "qaSteps": [
+      {
+        "step": "Drawing & design",
+        "caption": "ASME Sec. VIII calcs, TEMA mechanical, HTRI thermal"
+      },
+      {
+        "step": "Material receipt",
+        "caption": "Mill test certificates verified against indent"
+      },
+      {
+        "step": "Fabrication",
+        "caption": "WPS/PQR-qualified welding, stage inspections"
+      },
+      {
+        "step": "NDT",
+        "caption": "RT/UT/PT/MT per code and client ITP"
+      },
+      {
+        "step": "Hydrotest & dispatch",
+        "caption": "Witnessed hydrotest, final dossier, dispatch"
+      }
+    ],
+    "qaClosing": "Jobs executed under LRS, BV, DNV and the statutory agency IBR."
+  }
 }

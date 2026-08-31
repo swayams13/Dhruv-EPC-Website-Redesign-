@@ -34,14 +34,14 @@ const STAMP_BY_NAME: Record<string, StampProps['code']> = {
 // §12 domain icons on the equipment grid — interim visual until the works
 // shoot supplies real card photography (2026-07-16, docs/ui-ux-review.md §5).
 const ICON_BY_HREF: Record<string, DomainIconName> = {
-  '/dhruv-epc/equipment/pressure-vessels': 'vessel',
-  '/dhruv-epc/equipment/heat-exchangers': 'exchanger',
-  '/dhruv-epc/equipment/storage-tanks': 'tank',
-  '/dhruv-epc/equipment/process-skids': 'skid',
-  '/dhruv-epc/equipment/pipe-spools': 'pipeSpool',
-  '/dhruv-epc/equipment/heavy-fabrication': 'weldTorch',
-  '/dhruv-epc/equipment/heavy-machining': 'machining',
-  '/dhruv-epc/equipment/plate-flanges': 'flange',
+  '/dhruv-epc/products/static-equipment/pressure-vessels/': 'vessel',
+  '/dhruv-epc/products/static-equipment/heat-exchangers/': 'exchanger',
+  '/dhruv-epc/products/static-equipment/storage-tanks/': 'tank',
+  '/dhruv-epc/products/skids-packages/process-skids/': 'skid',
+  '/dhruv-epc/products/skids-packages/pipe-spools/': 'pipeSpool',
+  '/dhruv-epc/products/fabrication-machining/heavy-fabrication/': 'weldTorch',
+  '/dhruv-epc/products/fabrication-machining/heavy-machining/': 'machining',
+  '/dhruv-epc/products/fabrication-machining/plate-flanges/': 'flange',
 }
 
 export default function DhruvHome() {

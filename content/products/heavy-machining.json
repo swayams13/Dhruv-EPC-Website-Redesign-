@@ -5,33 +5,146 @@
   "oneLineScope": "Large-component boring, turning and facing — up to Ø 4,000 mm on floor-type boring mills",
   "group": "fabrication-machining",
   "categorySlug": "fabrication-machining",
-  "industrySlugs": ["general"],
+  "industrySlugs": [
+    "general"
+  ],
   "capabilitySlugs": [],
   "standardsMatrix": [],
   "specTable": [
-    { "param": "Floor-type boring mill", "value": "Ø up to 4,000", "unit": "mm bore/face", "note": "DEMO figure — engineering data pending" },
-    { "param": "Vertical turning lathe", "value": "Ø up to 4,000", "unit": "mm", "note": "DEMO figure — engineering data pending" },
-    { "param": "Horizontal lathe", "value": "Ø up to 2,500 × L 10,000", "unit": "mm", "note": "DEMO figure — engineering data pending" },
-    { "param": "Heavy milling", "value": "Bed up to 3,000 × 1,500", "unit": "mm", "note": "DEMO figure — engineering data pending" },
-    { "param": "Machining types", "value": "Boring, turning, facing, threading, grooving, key-seating, drilling PCD" },
-    { "param": "Inspection", "value": "CMM and template verification of critical dimensions before dispatch" }
+    {
+      "param": "Floor-type boring mill",
+      "value": "Ø up to 4,000",
+      "unit": "mm bore/face",
+      "note": "DEMO figure — engineering data pending"
+    },
+    {
+      "param": "Vertical turning lathe",
+      "value": "Ø up to 4,000",
+      "unit": "mm",
+      "note": "DEMO figure — engineering data pending"
+    },
+    {
+      "param": "Horizontal lathe",
+      "value": "Ø up to 2,500 × L 10,000",
+      "unit": "mm",
+      "note": "DEMO figure — engineering data pending"
+    },
+    {
+      "param": "Heavy milling",
+      "value": "Bed up to 3,000 × 1,500",
+      "unit": "mm",
+      "note": "DEMO figure — engineering data pending"
+    },
+    {
+      "param": "Machining types",
+      "value": "Boring, turning, facing, threading, grooving, key-seating, drilling PCD"
+    },
+    {
+      "param": "Inspection",
+      "value": "CMM and template verification of critical dimensions before dispatch"
+    }
   ],
   "types": [
-    { "name": "Tube-sheet machining", "description": "Tube-sheet boring and drilling to TEMA tolerance for heat exchanger assembly." },
-    { "name": "Shell and flange boring", "description": "Shell-end boring and flange boring for precise mating of equipment nozzles." },
-    { "name": "Flange facing", "description": "Raised-face, flat-face and ring-type-joint facing to ASME B16.5 and B16.47 finish requirements." },
-    { "name": "Large-bore turning", "description": "Turning of vessel shells, manways and large nozzle forgings on vertical and horizontal lathes." },
-    { "name": "Weld-end preparation", "description": "Precision bevel and land preparation for thick-wall pressure pipe and nozzle welds." }
+    {
+      "name": "Tube-sheet machining",
+      "description": "Tube-sheet boring and drilling to TEMA tolerance for heat exchanger assembly."
+    },
+    {
+      "name": "Shell and flange boring",
+      "description": "Shell-end boring and flange boring for precise mating of equipment nozzles."
+    },
+    {
+      "name": "Flange facing",
+      "description": "Raised-face, flat-face and ring-type-joint facing to ASME B16.5 and B16.47 finish requirements."
+    },
+    {
+      "name": "Large-bore turning",
+      "description": "Turning of vessel shells, manways and large nozzle forgings on vertical and horizontal lathes."
+    },
+    {
+      "name": "Weld-end preparation",
+      "description": "Precision bevel and land preparation for thick-wall pressure pipe and nozzle welds."
+    }
   ],
-  "materials": ["Carbon steel", "Low alloy steel", "Austenitic SS", "Duplex SS", "High-nickel alloys", "Copper alloys"],
-  "codes": ["ASME B16.5", "ASME B16.47", "TEMA (tube-sheet tolerances)", "ASME Sec. VIII Div. 1 & 2"],
+  "materials": [
+    "Carbon steel",
+    "Low alloy steel",
+    "Austenitic SS",
+    "Duplex SS",
+    "High-nickel alloys",
+    "Copper alloys"
+  ],
+  "codes": [
+    "ASME B16.5",
+    "ASME B16.47",
+    "TEMA (tube-sheet tolerances)",
+    "ASME Sec. VIII Div. 1 & 2"
+  ],
   "faqs": [
-    { "question": "What large-component machining capability does Dhruv EPC have?", "answer": "The works holds floor-type boring mills, vertical turning lathes and horizontal lathes capable of machining components up to approximately Ø 4,000 mm — covering tube-sheets, vessel shells, large flanges and nozzle forgings." },
-    { "question": "Which tolerances can you hold on tube-sheet drilling?", "answer": "Tube-sheet drilling and boring is carried out to TEMA tolerances for heat exchanger assembly; the specific tolerance class (R, C or B) is confirmed at enquiry stage against the thermal designer's requirements." },
-    { "question": "Can you machine exotic alloys such as duplex stainless or high-nickel alloys?", "answer": "Yes — the machining shop handles carbon steel, low alloy steel, austenitic stainless steel, duplex stainless steel and high-nickel alloys; tooling and cutting parameters are selected for each material group." },
-    { "question": "What flange face finishes can you produce?", "answer": "Raised-face, flat-face and ring-type-joint (RTJ) grooves to ASME B16.5 and ASME B16.47 Series A and B finish requirements — serrated concentric or phonographic finish per ASME specification." },
-    { "question": "How does in-house machining benefit pressure vessel fabrication timescales?", "answer": "In-house machining at the same Manjusar GIDC site eliminates subcontract transport and schedule risk — tube-sheets, nozzle flanges and shell ends are machined and fit-checked against the vessel without leaving the works." }
+    {
+      "question": "What large-component machining capability does Dhruv EPC have?",
+      "answer": "The works holds floor-type boring mills, vertical turning lathes and horizontal lathes capable of machining components up to approximately Ø 4,000 mm — covering tube-sheets, vessel shells, large flanges and nozzle forgings."
+    },
+    {
+      "question": "Which tolerances can you hold on tube-sheet drilling?",
+      "answer": "Tube-sheet drilling and boring is carried out to TEMA tolerances for heat exchanger assembly; the specific tolerance class (R, C or B) is confirmed at enquiry stage against the thermal designer's requirements."
+    },
+    {
+      "question": "Can you machine exotic alloys such as duplex stainless or high-nickel alloys?",
+      "answer": "Yes — the machining shop handles carbon steel, low alloy steel, austenitic stainless steel, duplex stainless steel and high-nickel alloys; tooling and cutting parameters are selected for each material group."
+    },
+    {
+      "question": "What flange face finishes can you produce?",
+      "answer": "Raised-face, flat-face and ring-type-joint (RTJ) grooves to ASME B16.5 and ASME B16.47 Series A and B finish requirements — serrated concentric or phonographic finish per ASME specification."
+    },
+    {
+      "question": "How does in-house machining benefit pressure vessel fabrication timescales?",
+      "answer": "In-house machining at the same Manjusar GIDC site eliminates subcontract transport and schedule risk — tube-sheets, nozzle flanges and shell ends are machined and fit-checked against the vessel without leaving the works."
+    }
   ],
   "gallery": [],
-  "relatedProjectSlugs": []
+  "relatedProjectSlugs": [],
+  "page": {
+    "metaTitle": "Heavy Machining — Boring & Turning to Ø 4,000 mm | Dhruv EPC",
+    "metaDescription": "Large-component boring, turning and flange facing at the Manjusar works — tube-sheet drilling to TEMA tolerances, ASME B16.5 and B16.47 flange faces, up to approximately Ø 4,000 mm.",
+    "breadcrumbLabel": "Heavy Machining",
+    "heroTitle": "Heavy Machining — up to Ø 4,000 mm",
+    "valueStatement": "Floor-type boring mills, vertical turning lathes and horizontal lathes for tube-sheet drilling, shell boring, flange facing and large-component machining to ASME B16.5 and TEMA tolerances.",
+    "heroChips": [
+      "Boring to Ø 4,000 mm",
+      "TEMA tube-sheet tolerances",
+      "ASME B16.5 / B16.47 faces"
+    ],
+    "certChips": [
+      "ASME U",
+      "ASME U2",
+      "IBR",
+      "ISO 9001:2015"
+    ],
+    "specCaption": "Heavy machining capability",
+    "materialsHeading": "Materials of construction",
+    "qaSteps": [
+      {
+        "step": "Drawing review",
+        "caption": "Machining tolerances and interface fits reviewed and confirmed"
+      },
+      {
+        "step": "Rough machining",
+        "caption": "Centre-hole boring, facing and rough turning to near-finish dimensions"
+      },
+      {
+        "step": "Precision machining",
+        "caption": "Finish bore, face, thread, groove and drilling PCD to drawing"
+      },
+      {
+        "step": "Dimensional inspection",
+        "caption": "Critical features verified by CMM or precision template"
+      },
+      {
+        "step": "Documentation & dispatch",
+        "caption": "Material certificate, inspection record, corrosion protection and dispatch"
+      }
+    ],
+    "qaClosing": "In-house machining at the same Manjusar works as vessel fabrication — no subcontract transport or schedule risk."
+  }
 }

@@ -6,6 +6,22 @@ If the rule is general, promote it into CLAUDE.md.
 ---
 <!-- entries go below this line -->
 
+## 2026-08-31 — scripts/build-redirects.mjs's main() guard never ran on this machine
+
+**What happened:** VG-012 (dynamic product routing, session 5) needed to regenerate `apps/web/lib/redirects.generated.ts` after adding 17 rows to `content/redirect-map.csv`. `node scripts/build-redirects.mjs` exited 0 with no output and left the file untouched — silently. `LEGACY_REDIRECT_COUNT` stayed at 56 (a stale pre-session value) instead of updating to 73.
+
+**Root cause:** the entrypoint guard was `if (import.meta.url === \`file://${process.argv[1]}\`) main()` — naive string concatenation instead of `pathToFileURL(process.argv[1]).href`. `import.meta.url` percent-encodes special characters (spaces, etc.); the raw concatenation doesn't. This repo's absolute path contains spaces (`.../AI DEVELOPMENT DESPL/Vedanta Website Redesign/...`), so the two strings never matched and `main()` silently never executed, on this machine, regardless of how the script was invoked (relative or absolute argv).
+
+**Rule that prevents recurrence:** `check-redirect-map-integrity.mjs` already uses the correct `pathToFileURL` form (fixed 2026-08-30, see the CI-workflow-YAML entry above) — `build-redirects.mjs` was the sibling script nobody re-checked. Fixed here the same way. Any new Node script with an `if (import.meta.url === ...) main()` entrypoint guard must use `pathToFileURL(process.argv[1]).href`, never string concatenation — and should be exercised at least once by hand (check the file it writes actually changed) before being trusted as "wired to build," since a silently-skipped generator step produces no error, just stale output.
+
+## 2026-08-31 — link-integrity.test.ts's HREF_RE matches inside comments and template literals
+
+**What happened:** while building the session-5 dynamic product route, computed URLs assigned inline to any `...href`/`...Href`-named prop or object key (including via backtick template literals with interpolation) were misread by `lib/link-integrity.test.ts`'s `HREF_RE` as hardcoded broken-looking literals — despite that test file's own comment claiming template literals with interpolation are "intentionally not matched." They are, in fact, matched: the regex's `[^'"\`]*` capture class doesn't treat `${...}` specially. The regex also scans comments, not just live code — an explanatory code comment that happened to contain the literal text `href: '/...'` as an example was itself flagged as a broken link.
+
+**Root cause:** `HREF_RE` is a plain text-scan regex with no awareness of template-literal interpolation or comment boundaries; its own header comment overstates what it excludes.
+
+**Rule that prevents recurrence:** any newly-computed URL that would be assigned to a name ending in `href`/`Href` must go through a named helper function call (see `apps/web/lib/product-urls.ts`) rather than an inline template literal — a function call doesn't match `HREF_RE` because the character immediately after `[:=]\s*\{?\s*` isn't a quote. When writing comments near such code, avoid literal text shaped like `href: '/...'` or `href={'/...'}` even as an illustrative example — the scanner can't tell code from prose.
+
 ## 2026-07-16 — AI-generated images used as exploded-view frames (rule override)
 
 **What happened:** Gemini-generated renders (not real works photography) placed in `apps/web/public/exploded/` for all three products (heat-exchanger, pressure-vessel, expansion-joint). CLAUDE.md §Never explicitly bans AI-generated images from the site.

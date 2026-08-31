@@ -5,6 +5,8 @@
 import { readdirSync } from 'node:fs'
 import { join, relative, resolve } from 'node:path'
 import { BASE } from './site'
+import { getProductCategoriesByCompany, getProductsByCompany } from './content-loader'
+import type { CompanySlug } from '@vedanta/schemas'
 
 const APP_DIR = resolve(__dirname, '../app')
 const SKIP_DIRS = new Set(['node_modules', '.next', 'dist'])
@@ -34,7 +36,38 @@ function routeFromPageFile(file: string): string {
   return segments.length === 0 ? '/' : `/${segments.join('/')}/`
 }
 
-export const ROUTES: ReadonlySet<string> = new Set(pageFiles.map(routeFromPageFile))
+// VG-012 (session 5): the first dynamic segments this app has ever had. A
+// literal filesystem walk sees only "/{company}/products/[category]/[slug]/"
+// — the bracket segments un-substituted — which never matches a real,
+// crawlable URL. Expand them the same way generateStaticParams does, from
+// the same content source, so ROUTES always agrees with what actually
+// prerenders (mirrors the generateStaticParams pattern in
+// lib/product-detail-page.tsx / lib/product-category-pages.tsx).
+const DYNAMIC_COMPANIES: CompanySlug[] = ['dhruv-epc', 'precise-engineers']
+
+function expandDynamicRoutes(literalRoutes: string[]): string[] {
+  const out: string[] = []
+  for (const route of literalRoutes) {
+    if (!route.includes('[')) {
+      out.push(route)
+      continue
+    }
+    for (const companySlug of DYNAMIC_COMPANIES) {
+      if (route === `/${companySlug}/products/[category]/`) {
+        for (const category of getProductCategoriesByCompany(companySlug)) {
+          out.push(`/${companySlug}/products/${category.slug}/`)
+        }
+      } else if (route === `/${companySlug}/products/[category]/[slug]/`) {
+        for (const product of getProductsByCompany(companySlug)) {
+          out.push(`/${companySlug}/products/${product.categorySlug}/${product.slug}/`)
+        }
+      }
+    }
+  }
+  return out
+}
+
+export const ROUTES: ReadonlySet<string> = new Set(expandDynamicRoutes(pageFiles.map(routeFromPageFile)))
 
 // path/query/hash -> canonical trailing-slash form comparable to ROUTES.
 // trailingSlash: true (next.config) means '/foo' and '/foo/' both resolve,
