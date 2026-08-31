@@ -12,12 +12,13 @@
 // (capability matrix) instead pin the first column and scroll horizontally
 // with a visible affordance shadow — pass `columns` + `matrixRows`.
 
-export interface SpecTableRow {
-  param: string
-  value: string
-  unit?: string | undefined
-  note?: string | undefined
-}
+// SpecTableRow is the canonical Zod-inferred shape from @vedanta/schemas —
+// re-exported here (not hand-duplicated) so the CMS schema and this
+// component's prop type can never drift apart. `provenance` is a rail-only
+// mark: SpecTable itself does not render it (§15's table anatomy is
+// unchanged); SpecRail reads it off the same row data.
+export type { SpecTableRow } from '@vedanta/schemas'
+import type { SpecTableRow } from '@vedanta/schemas'
 
 export interface SpecTableMatrixRow {
   param: string

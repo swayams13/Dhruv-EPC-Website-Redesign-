@@ -67,3 +67,9 @@ export {
   type ProjectMetric,
 } from './components/ProjectCard'
 export { useRfqAnchorInView } from './components/useRfqAnchorInView'
+export {
+  SpecRailMobile,
+  SpecRailDesktop,
+  type SpecRailProps,
+  type SpecRailCta,
+} from './components/SpecRail'

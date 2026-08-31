@@ -35,7 +35,13 @@ export const SpecTableRow = z.object({
   value: z.string().min(1),
   unit: z.string().optional(),
   note: z.string().optional(),
+  // Rail-only provenance mark (Session 6, golden page). Omit entirely for
+  // products without a SpecRail yet — never default one in. SpecRail's
+  // footnote reads `note` directly — no separate rail-only caption field,
+  // so there is nothing to fall out of sync when `note` is edited.
+  provenance: z.enum(['sourced', 'unverified']).optional(),
 })
+export type SpecTableRow = z.infer<typeof SpecTableRow>
 
 export const ProductFAQ = z.object({
   question: z.string().min(1),

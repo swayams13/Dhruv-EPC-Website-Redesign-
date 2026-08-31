@@ -17,44 +17,52 @@
     {
       "param": "Design codes",
       "value": "ASME Sec. VIII Div. 1 & 2 · IBR",
-      "note": "U and U2 Certificates of Authorization held"
+      "note": "U and U2 Certificates of Authorization held",
+      "provenance": "sourced"
     },
     {
       "param": "Vessel types",
-      "value": "Separators, reactors, distillation columns, accumulators, KO drums, surge vessels"
+      "value": "Separators, reactors, distillation columns, accumulators, KO drums, surge vessels",
+      "provenance": "sourced"
     },
     {
       "param": "Shell diameter",
       "value": "300 – 5,000",
       "unit": "mm",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified"
     },
     {
       "param": "Max unit weight",
       "value": "400",
       "unit": "T",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified"
     },
     {
       "param": "Design pressure",
       "value": "FV to 300",
       "unit": "bar(g)",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified"
     },
     {
       "param": "Design temperature",
       "value": "−196 to +600",
       "unit": "°C",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified"
     },
     {
       "param": "Materials",
-      "value": "CS, LTCS, LAS, austenitic SS, duplex SS, high-nickel alloys, clad plate"
+      "value": "CS, LTCS, LAS, austenitic SS, duplex SS, high-nickel alloys, clad plate",
+      "provenance": "sourced"
     },
     {
       "param": "Inspection",
       "value": "LRS · BV · DNV · IBR",
-      "note": "Third-party and statutory"
+      "note": "Third-party and statutory",
+      "provenance": "sourced"
     }
   ],
   "types": [
