@@ -16,15 +16,25 @@ legacy_path,destination,status
 /precise-engineers/infrastructure.php,/precise-engineers/capabilities/,301
 /precise-engineers/services.php,/precise-engineers/capabilities/,301
 # Precise Engineers — products
-/precise-engineers/metallic-expansion-bellows-joint.php,/precise-engineers/products/metallic-bellows-expansion-joint/,301
-/precise-engineers/dismantling-joint.php,/precise-engineers/products/dismantling-joint/,301
-/precise-engineers/telescopic-expansion-joint.php,/precise-engineers/products/telescopic-expansion-joint/,301
-/precise-engineers/rubber-bellows.php,/precise-engineers/products/rubber-bellows/,301
-/precise-engineers/flange-adaptor.php,/precise-engineers/products/flange-adaptor/,301
-/precise-engineers/fabric-bellows.php,/precise-engineers/products/fabric-bellows/,301
-/precise-engineers/damper.php,/precise-engineers/products/damper/,301
-/precise-engineers/zero-velocity-valve.php,/precise-engineers/products/zero-velocity-valve/,301
-/precise-engineers/dual-plate-check-valve.php,/precise-engineers/products/dual-plate-check-valve/,301
+/precise-engineers/metallic-expansion-bellows-joint.php,/precise-engineers/products/expansion-joints/metallic-bellows-expansion-joint/,301
+/precise-engineers/dismantling-joint.php,/precise-engineers/products/expansion-joints/dismantling-joint/,301
+/precise-engineers/telescopic-expansion-joint.php,/precise-engineers/products/expansion-joints/telescopic-expansion-joint/,301
+/precise-engineers/rubber-bellows.php,/precise-engineers/products/expansion-joints/rubber-bellows/,301
+/precise-engineers/flange-adaptor.php,/precise-engineers/products/expansion-joints/flange-adaptor/,301
+/precise-engineers/fabric-bellows.php,/precise-engineers/products/expansion-joints/fabric-bellows/,301
+/precise-engineers/damper.php,/precise-engineers/products/flow-control/damper/,301
+/precise-engineers/zero-velocity-valve.php,/precise-engineers/products/flow-control/zero-velocity-valve/,301
+/precise-engineers/dual-plate-check-valve.php,/precise-engineers/products/flow-control/dual-plate-check-valve/,301
+# Precise Engineers — products (VG-014: /products/{slug}/ -> /products/{category}/{slug}/, no chains)
+/precise-engineers/products/metallic-bellows-expansion-joint/,/precise-engineers/products/expansion-joints/metallic-bellows-expansion-joint/,301
+/precise-engineers/products/dismantling-joint/,/precise-engineers/products/expansion-joints/dismantling-joint/,301
+/precise-engineers/products/telescopic-expansion-joint/,/precise-engineers/products/expansion-joints/telescopic-expansion-joint/,301
+/precise-engineers/products/rubber-bellows/,/precise-engineers/products/expansion-joints/rubber-bellows/,301
+/precise-engineers/products/flange-adaptor/,/precise-engineers/products/expansion-joints/flange-adaptor/,301
+/precise-engineers/products/fabric-bellows/,/precise-engineers/products/expansion-joints/fabric-bellows/,301
+/precise-engineers/products/damper/,/precise-engineers/products/flow-control/damper/,301
+/precise-engineers/products/zero-velocity-valve/,/precise-engineers/products/flow-control/zero-velocity-valve/,301
+/precise-engineers/products/dual-plate-check-valve/,/precise-engineers/products/flow-control/dual-plate-check-valve/,301
 # Precise Engineers — PDFs → proof hub
 /precise-engineers/images/certifications/Precise-Performance-Certificates1.pdf,/precise-engineers/proof/,301
 /precise-engineers/images/certifications/Precise-Performance-Certificates2.pdf,/precise-engineers/proof/,301
@@ -48,14 +58,23 @@ legacy_path,destination,status
 /dhruv-epc-solutions/services.php,/dhruv-epc/capabilities/,301
 /dhruv-epc-solutions/products.php,/dhruv-epc/,301
 # Dhruv EPC Solutions — equipment
-/dhruv-epc-solutions/heat-exchanger.php,/dhruv-epc/equipment/heat-exchangers/,301
-/dhruv-epc-solutions/pressure-vessel.php,/dhruv-epc/equipment/pressure-vessels/,301
-/dhruv-epc-solutions/storage-tank.php,/dhruv-epc/equipment/storage-tanks/,301
-/dhruv-epc-solutions/process-skid.php,/dhruv-epc/equipment/process-skids/,301
-/dhruv-epc-solutions/pipe-spool.php,/dhruv-epc/equipment/pipe-spools/,301
-/dhruv-epc-solutions/heavy-fabricated-assembly.php,/dhruv-epc/equipment/heavy-fabrication/,301
-/dhruv-epc-solutions/heavy-machined-assembly.php,/dhruv-epc/equipment/heavy-machining/,301
-/dhruv-epc-solutions/plate-flange.php,/dhruv-epc/equipment/plate-flanges/,301
+/dhruv-epc-solutions/heat-exchanger.php,/dhruv-epc/products/static-equipment/heat-exchangers/,301
+/dhruv-epc-solutions/pressure-vessel.php,/dhruv-epc/products/static-equipment/pressure-vessels/,301
+/dhruv-epc-solutions/storage-tank.php,/dhruv-epc/products/static-equipment/storage-tanks/,301
+/dhruv-epc-solutions/process-skid.php,/dhruv-epc/products/skids-packages/process-skids/,301
+/dhruv-epc-solutions/pipe-spool.php,/dhruv-epc/products/skids-packages/pipe-spools/,301
+/dhruv-epc-solutions/heavy-fabricated-assembly.php,/dhruv-epc/products/fabrication-machining/heavy-fabrication/,301
+/dhruv-epc-solutions/heavy-machined-assembly.php,/dhruv-epc/products/fabrication-machining/heavy-machining/,301
+/dhruv-epc-solutions/plate-flange.php,/dhruv-epc/products/fabrication-machining/plate-flanges/,301
+# Dhruv EPC Solutions — equipment (VG-014: /equipment/{slug}/ -> /products/{category}/{slug}/, no chains)
+/dhruv-epc/equipment/heat-exchangers/,/dhruv-epc/products/static-equipment/heat-exchangers/,301
+/dhruv-epc/equipment/pressure-vessels/,/dhruv-epc/products/static-equipment/pressure-vessels/,301
+/dhruv-epc/equipment/storage-tanks/,/dhruv-epc/products/static-equipment/storage-tanks/,301
+/dhruv-epc/equipment/process-skids/,/dhruv-epc/products/skids-packages/process-skids/,301
+/dhruv-epc/equipment/pipe-spools/,/dhruv-epc/products/skids-packages/pipe-spools/,301
+/dhruv-epc/equipment/heavy-fabrication/,/dhruv-epc/products/fabrication-machining/heavy-fabrication/,301
+/dhruv-epc/equipment/heavy-machining/,/dhruv-epc/products/fabrication-machining/heavy-machining/,301
+/dhruv-epc/equipment/plate-flanges/,/dhruv-epc/products/fabrication-machining/plate-flanges/,301
 # Dhruv EPC Solutions — no-equivalent pages → Dhruv home
 # ponytail: base-frame/reactor/distillation-column/air-receiver have no new route; /dhruv-epc/ is the best landing
 /dhruv-epc-solutions/base-frame.php,/dhruv-epc/,301
