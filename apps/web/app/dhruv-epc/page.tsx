@@ -1,5 +1,5 @@
 // Dhruv EPC home — Datum §19 (home hero, graphite + stats band), §16 cards,
-// §20 trust, §21.9 RFQ band. Content from lib/content/dhruv-epc (Zod-parsed).
+// §20 trust, §21.9 RFQ band. Content from lib/content-loader (JSON-backed, Zod-parsed).
 import type { Metadata } from 'next'
 import {
   CertificationCard,
@@ -11,13 +11,12 @@ import {
 } from '@vedanta/datum-ui'
 import { buildLocalBusiness } from '@vedanta/schemas'
 import { RFQBand } from '../../components/RFQBand'
-import {
-  dhruvCertifications,
-  dhruvEntity,
-  dhruvEquipment,
-  dhruvStats,
-  dhruvWhatsappHref,
-} from '../../lib/content/dhruv-epc'
+import { getCertifications, getEntity, whatsappHref } from '../../lib/content-loader'
+import { dhruvEquipment, dhruvStats } from '../../lib/site-data'
+
+const dhruvEntity = getEntity('dhruv-epc')
+const dhruvCertifications = getCertifications('dhruv-epc')
+const dhruvWhatsappHref = whatsappHref(dhruvEntity)
 
 export const metadata: Metadata = {
   title: 'Dhruv EPC Solutions — ASME U/U2 Fabricator, Vadodara',

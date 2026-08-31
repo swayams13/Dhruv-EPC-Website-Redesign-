@@ -1,0 +1,36 @@
+{
+  "companySlug": "precise-engineers",
+  "slug": "telescopic-expansion-joint",
+  "name": "Telescopic Expansion Joints",
+  "oneLineScope": "Slip-type telescopic expansion joints to ASME B31.3, 50 – 1,200 mm NB axial traverse",
+  "group": "expansion-joints",
+  "categorySlug": "expansion-joints",
+  "industrySlugs": ["refining-petrochemical"],
+  "capabilitySlugs": [],
+  "standardsMatrix": [],
+  "specTable": [
+    { "param": "Size range", "value": "50 – 1,200", "unit": "mm NB", "note": "DEMO figure — engineering data pending" },
+    { "param": "Axial traverse", "value": "25 – 300", "unit": "mm", "note": "DEMO figure — engineering data pending" },
+    { "param": "Design pressure", "value": "up to 16", "unit": "bar(g)", "note": "DEMO figure — engineering data pending" },
+    { "param": "Design temperature", "value": "up to +350", "unit": "°C", "note": "DEMO figure — engineering data pending" },
+    { "param": "Design code", "value": "ASME B31.3" },
+    { "param": "Sealing system", "value": "Graphite packing · PTFE packing · live-loaded" },
+    { "param": "MOC", "value": "CS (IS 2062) · SS 304 · SS 316", "note": "DEMO — full MOC list pending" },
+    { "param": "End connections", "value": "Weld ends · flanged (ANSI / BS 4504)", "note": "DEMO — engineering data pending" }
+  ],
+  "types": [
+    { "name": "Single-slip", "description": "One sliding element; compact and suited to moderate axial movement in steam and hot-water mains." },
+    { "name": "Double-slip", "description": "Two sliding elements with central spool; doubles the available axial traverse for longer pipe runs." }
+  ],
+  "materials": ["Carbon steel (IS 2062)", "SS 304", "SS 316"],
+  "codes": ["ASME B31.3"],
+  "faqs": [
+    { "question": "What is a telescopic expansion joint?", "answer": "A telescopic (slip-type) expansion joint consists of a sleeve that slides inside an outer barrel to absorb axial pipe movement. Graphite or PTFE packing seals the annular gap, making it suitable for steam, hot-water and process piping where axial traverse is large." },
+    { "question": "What size range of telescopic expansion joints do you manufacture?", "answer": "Size range and traverse data are pending confirmation from engineering. Contact Precise Engineers with your line size, operating pressure, temperature and required traverse for a project-specific quotation." },
+    { "question": "What sealing systems are available?", "answer": "Graphite packing, PTFE packing and live-loaded seal arrangements are available depending on temperature and cyclic-service requirements. Live-loaded seals maintain constant packing compression as the bellows cycles." },
+    { "question": "What design code governs telescopic expansion joints?", "answer": "ASME B31.3 Process Piping governs the piping-stress analysis and pressure-containment design of telescopic expansion joints supplied by Precise Engineers." },
+    { "question": "Which industries use telescopic expansion joints?", "answer": "Steam distribution, district heating, hot-oil piping and process plants in refining and petrochemical service are the primary applications. Precise Engineers is an EIL-approved unit, ISO 9001:2015 certified, established 1994." }
+  ],
+  "gallery": [],
+  "relatedProjectSlugs": []
+}

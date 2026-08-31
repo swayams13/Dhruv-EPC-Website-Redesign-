@@ -4,8 +4,13 @@ import { ChevronDown, MobileBottomBar, ProductHero, SpecTable } from '@vedanta/d
 import { buildBreadcrumbList, buildFAQPage, buildProduct } from '@vedanta/schemas'
 import { RFQBand } from '../../../../components/RFQBand'
 import { AnchorRailDesktop, AnchorRailMobile } from '../../../../components/AnchorRail'
-import { dhruvEntity, dhruvPhoneHref, dhruvWhatsappHref, pressureVessels } from '../../../../lib/content/dhruv-epc'
+import { getEntity, getProduct, phoneHref, whatsappHref } from '../../../../lib/content-loader'
 import { BASE } from '../../../../lib/site'
+
+const dhruvEntity = getEntity('dhruv-epc')
+const dhruvPhoneHref = phoneHref(dhruvEntity)
+const dhruvWhatsappHref = whatsappHref(dhruvEntity)
+const pressureVessels = getProduct('dhruv-epc', 'pressure-vessels')
 
 export const metadata: Metadata = {
   title: 'Pressure Vessels — ASME Sec. VIII, U/U2 Stamped | Dhruv EPC',

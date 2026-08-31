@@ -4,13 +4,13 @@ import Link from 'next/link'
 import { MobileBottomBar, PageHero, SpecTable } from '@vedanta/datum-ui'
 import { buildBreadcrumbList } from '@vedanta/schemas'
 import { RFQBand } from '../../../components/RFQBand'
-import {
-  preciseEntity,
-  precisePhoneHref,
-  preciseWhatsappHref,
-  preciseProducts,
-} from '../../../lib/content/precise-engineers'
+import { getEntity, phoneHref, whatsappHref } from '../../../lib/content-loader'
+import { preciseProducts } from '../../../lib/site-data'
 import { BASE } from '../../../lib/site'
+
+const preciseEntity = getEntity('precise-engineers')
+const precisePhoneHref = phoneHref(preciseEntity)
+const preciseWhatsappHref = whatsappHref(preciseEntity)
 
 export const metadata: Metadata = {
   title: 'Capabilities — Size Ranges, Codes & MOC | Precise Engineers',

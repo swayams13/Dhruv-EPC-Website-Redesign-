@@ -1,0 +1,37 @@
+{
+  "companySlug": "precise-engineers",
+  "slug": "rubber-bellows",
+  "name": "Rubber Bellows",
+  "oneLineScope": "Elastomeric expansion joints for vibration isolation and movement, 25 – 2,000 mm NB",
+  "group": "expansion-joints",
+  "categorySlug": "expansion-joints",
+  "industrySlugs": ["water-infrastructure", "power"],
+  "capabilitySlugs": [],
+  "standardsMatrix": [],
+  "specTable": [
+    { "param": "Size range", "value": "25 – 2,000", "unit": "mm NB", "note": "DEMO figure — engineering data pending" },
+    { "param": "Design pressure", "value": "full vacuum to 10", "unit": "bar(g)", "note": "DEMO figure — engineering data pending" },
+    { "param": "Design temperature", "value": "−20 to +120", "unit": "°C", "note": "DEMO figure — engineering data pending" },
+    { "param": "Axial movement", "value": "±25 – ±75", "unit": "mm", "note": "DEMO — movement tables pending" },
+    { "param": "Elastomer types", "value": "EPDM · NBR · Neoprene · Natural rubber · Hypalon" },
+    { "param": "Arch configuration", "value": "Single arch · dual arch · wide arch" },
+    { "param": "End connections", "value": "Flanged (ANSI B16.1 · BS 4504 · DIN 2501) · grooved · threaded" }
+  ],
+  "types": [
+    { "name": "Single arch", "description": "One arch for moderate axial and lateral movement in compact spaces." },
+    { "name": "Dual arch", "description": "Two arches for greater combined axial, lateral and angular capability." },
+    { "name": "Wide arch", "description": "Wide-profile arch for maximum axial movement in a single element." },
+    { "name": "Reducers", "description": "Concentric or eccentric rubber bellows reducers for pipe-size transitions." }
+  ],
+  "materials": ["EPDM", "NBR (Nitrile)", "Neoprene", "Natural rubber", "Hypalon"],
+  "codes": ["BS 6129", "ASME B31.3"],
+  "faqs": [
+    { "question": "What types of movement can rubber bellows absorb?", "answer": "Rubber expansion joints absorb axial compression and extension, lateral offset and angular rotation simultaneously, making them ideal for vibration isolation at pump and compressor connections and for accommodating thermal movement in piping systems." },
+    { "question": "Which elastomer should I specify?", "answer": "EPDM is preferred for water, steam and mild chemicals; NBR for oil and fuel service; Neoprene for weather resistance and mild acids; Hypalon for oxidising chemicals. Contact Precise Engineers with your medium, temperature and pressure for an elastomer recommendation." },
+    { "question": "What size range of rubber expansion joints do you supply?", "answer": "Size range and pressure/movement capability data are pending confirmation from engineering. Precise Engineers supplies rubber bellows for pump stations, water treatment, power generation and process plant service." },
+    { "question": "Are rubber bellows available with flanged ends?", "answer": "Yes. Flanged ends to ANSI B16.1, BS 4504 or DIN 2501 are standard. Grooved and threaded ends are also available for specific applications." },
+    { "question": "What quality standard covers your rubber expansion joints?", "answer": "Precise Engineers is ISO 9001:2015 certified and an EIL-approved unit. Rubber expansion joints are designed to BS 6129 and ASME B31.3 requirements. Full material traceability and test records are supplied with each item." }
+  ],
+  "gallery": [],
+  "relatedProjectSlugs": []
+}

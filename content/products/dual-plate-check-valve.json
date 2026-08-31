@@ -1,0 +1,39 @@
+{
+  "companySlug": "precise-engineers",
+  "slug": "dual-plate-check-valve",
+  "name": "Dual Plate Check Valves",
+  "oneLineScope": "Wafer and lug dual plate check valves to API 594, ASME Class 150 – 600, 50 – 900 mm NB",
+  "group": "flow-control",
+  "categorySlug": "flow-control",
+  "industrySlugs": ["general"],
+  "capabilitySlugs": [],
+  "standardsMatrix": [],
+  "specTable": [
+    { "param": "Size range", "value": "50 – 900", "unit": "mm NB", "note": "DEMO figure — engineering data pending" },
+    { "param": "Pressure class", "value": "ASME 150 · 300 · 600" },
+    { "param": "Design standard", "value": "API 594" },
+    { "param": "Face-to-face", "value": "API 594 · ASME B16.10" },
+    { "param": "Body MOC", "value": "WCB · CF8M (SS 316) · CF8 (SS 304) · LCC · WC6" },
+    { "param": "Plate/disc MOC", "value": "SS 316 · SS 304 · Duplex" },
+    { "param": "Spring material", "value": "SS 316 · Inconel 625" },
+    { "param": "Seat", "value": "Metal-to-metal · PTFE · Buna-N soft seat" },
+    { "param": "End type", "value": "Wafer · lug" }
+  ],
+  "types": [
+    { "name": "Wafer type", "description": "Sandwiched between flanges; lightest and most compact for in-line non-return duty." },
+    { "name": "Lug type", "description": "Threaded lugs allow end-of-line use or removal without disturbing adjacent piping." },
+    { "name": "Metal-seated", "description": "For high-temperature, high-pressure or erosive service where soft seats are unsuitable." },
+    { "name": "Soft-seated", "description": "PTFE or Buna-N seating for tight shut-off on clean services." }
+  ],
+  "materials": ["WCB (carbon steel)", "CF8M (SS 316)", "CF8 (SS 304)", "LCC low-temp carbon steel", "WC6 chrome-moly"],
+  "codes": ["API 594", "ASME B16.34", "ASME B16.10"],
+  "faqs": [
+    { "question": "What is a dual plate check valve?", "answer": "A dual plate check valve uses two spring-loaded semicircular plates hinged on a central pin to allow forward flow and close rapidly against reverse flow. The split-plate design halves closing travel versus a single-disc swing check, greatly reducing water-hammer severity on pump shut-off." },
+    { "question": "What are the advantages over a swing check valve?", "answer": "Dual plate check valves are shorter and lighter (API 594 face-to-face is far less than swing-check equivalents), close faster to limit reverse-flow surge, and can be installed in any orientation — horizontal, vertical upward or vertical downward." },
+    { "question": "What pressure classes are available?", "answer": "ASME Class 150, 300 and 600. Engineering data are pending; contact Precise Engineers with your line pressure, temperature and medium for the correct body and trim selection." },
+    { "question": "Which standard governs dual plate check valves?", "answer": "Design, testing and dimensions to API 594. Face-to-face per ASME B16.10. Pressure-temperature ratings per ASME B16.34." },
+    { "question": "What body and trim materials are available?", "answer": "Body in WCB, CF8M, CF8, LCC or WC6. Plates in SS 316 or SS 304; springs in SS 316 or Inconel 625 for high-temperature service. Precise Engineers is ISO 9001:2015 certified and EIL approved." }
+  ],
+  "gallery": [],
+  "relatedProjectSlugs": []
+}

@@ -5,8 +5,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Header, MobileDrawer } from '@vedanta/datum-ui'
-import { dhruvEquipment } from '../../lib/content/dhruv-epc'
-import { preciseProducts } from '../../lib/content/precise-engineers'
+import { dhruvEquipment, preciseProducts } from '../../lib/site-data'
 
 const GROUPS = [
   {

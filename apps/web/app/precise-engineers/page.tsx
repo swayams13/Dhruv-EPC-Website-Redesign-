@@ -1,7 +1,7 @@
 // Precise Engineers home — Datum §19 (home hero, graphite + stats band),
 // §16 cards, §20 trust, §21.9 RFQ band. Blue law: variant="rfq" is the only
-// flex-filled element per view. Content from lib/content/precise-engineers
-// (Zod-parsed).
+// flex-filled element per view. Content from lib/content-loader
+// (JSON-backed, Zod-parsed).
 import type { Metadata } from 'next'
 import {
   CertificationCard,
@@ -13,13 +13,12 @@ import {
 } from '@vedanta/datum-ui'
 import { buildLocalBusiness } from '@vedanta/schemas'
 import { RFQBand } from '../../components/RFQBand'
-import {
-  preciseCertifications,
-  preciseEntity,
-  preciseProducts,
-  preciseStats,
-  preciseWhatsappHref,
-} from '../../lib/content/precise-engineers'
+import { getCertifications, getEntity, whatsappHref } from '../../lib/content-loader'
+import { preciseProducts, preciseStats } from '../../lib/site-data'
+
+const preciseEntity = getEntity('precise-engineers')
+const preciseCertifications = getCertifications('precise-engineers')
+const preciseWhatsappHref = whatsappHref(preciseEntity)
 
 export const metadata: Metadata = {
   title: 'Precise Engineers — EJMA Bellows & Expansion Joints, Anand',

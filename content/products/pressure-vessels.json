@@ -1,0 +1,40 @@
+{
+  "companySlug": "dhruv-epc",
+  "slug": "pressure-vessels",
+  "name": "Pressure Vessels",
+  "oneLineScope": "Reactors, columns and drums to ASME Sec. VIII Div. 1 & 2 — U/U2 stamped works",
+  "group": "static-equipment",
+  "categorySlug": "static-equipment",
+  "industrySlugs": ["oil-gas", "refining-petrochemical", "fertilizer-chemicals", "power"],
+  "capabilitySlugs": [],
+  "standardsMatrix": [],
+  "specTable": [
+    { "param": "Design codes", "value": "ASME Sec. VIII Div. 1 & 2 · IBR", "note": "U and U2 Certificates of Authorization held" },
+    { "param": "Vessel types", "value": "Separators, reactors, distillation columns, accumulators, KO drums, surge vessels" },
+    { "param": "Shell diameter", "value": "300 – 5,000", "unit": "mm", "note": "DEMO figure — engineering data pending" },
+    { "param": "Max unit weight", "value": "400", "unit": "T", "note": "DEMO figure — engineering data pending" },
+    { "param": "Design pressure", "value": "FV to 300", "unit": "bar(g)", "note": "DEMO figure — engineering data pending" },
+    { "param": "Design temperature", "value": "−196 to +600", "unit": "°C", "note": "DEMO figure — engineering data pending" },
+    { "param": "Materials", "value": "CS, LTCS, LAS, austenitic SS, duplex SS, high-nickel alloys, clad plate" },
+    { "param": "Inspection", "value": "LRS · BV · DNV · IBR", "note": "Third-party and statutory" }
+  ],
+  "types": [
+    { "name": "Separators", "description": "Two- and three-phase separators for oil & gas and process streams." },
+    { "name": "Reactors", "description": "Fixed-bed and slurry reactors with internal support grids per client datasheets." },
+    { "name": "Distillation columns", "description": "Trayed and packed columns with manway and nozzle layout per process datasheet." },
+    { "name": "Accumulators & reflux drums", "description": "Horizontal and vertical drum designs per ASME and client specifications." },
+    { "name": "Knock-out & surge drums", "description": "Inlet and interstage KO drums for compressor protection in oil & gas service." },
+    { "name": "IBR vessels", "description": "Boiler-quality vessels fabricated under Indian Boiler Regulations by IBR-approved welders." }
+  ],
+  "materials": ["Carbon steel", "LTCS", "Low alloy steel (1.25Cr–2.25Cr)", "Austenitic SS (304/316/321)", "Duplex SS", "High-nickel alloys", "Clad plate (SS or duplex over CS)"],
+  "codes": ["ASME Sec. VIII Div. 1", "ASME Sec. VIII Div. 2", "IBR"],
+  "faqs": [
+    { "question": "What stamps does Dhruv EPC hold for pressure vessel fabrication?", "answer": "The Manjusar works holds ASME U and U2 Certificates of Authorization and IBR approval — covering ASME Section VIII Division 1 and Division 2 pressure vessels including IBR-governed boiler-quality equipment." },
+    { "question": "What types of pressure vessels do you fabricate?", "answer": "Separators (two- and three-phase), fixed-bed reactors, distillation columns, accumulators, reflux drums, knock-out drums and surge vessels — horizontal and vertical orientations — to ASME Sec. VIII Div. 1 & 2." },
+    { "question": "Which materials of construction are available for pressure vessels?", "answer": "Carbon steel, low-temperature carbon steel (LTCS), low alloy steels (1.25Cr through 2.25Cr), austenitic stainless steel (304/316/321), duplex stainless steel, high-nickel alloys, and clad plate (stainless or duplex over carbon steel backing)." },
+    { "question": "Which third-party inspection agencies have inspected your pressure vessel jobs?", "answer": "Jobs have been executed under Lloyd's Register (LRS), Bureau Veritas (BV), DNV and the statutory agency IBR — the same agency portfolio as the heat exchanger and IBR-vessel business." },
+    { "question": "What sectors do you supply pressure vessels to?", "answer": "Oil & gas, refineries & petrochemicals, fertilizers, power & energy, and the steel industry — from the Manjusar GIDC works at Vadodara, Gujarat." }
+  ],
+  "gallery": [],
+  "relatedProjectSlugs": []
+}

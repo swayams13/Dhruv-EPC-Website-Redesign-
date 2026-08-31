@@ -5,7 +5,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Header, MobileDrawer } from '@vedanta/datum-ui'
-import { dhruvEquipment, dhruvPhoneHref, dhruvWhatsappHref } from '../../lib/content/dhruv-epc'
+import { dhruvEquipment } from '../../lib/site-data'
 
 const GROUPS = [
   { label: 'Static Equipment', items: dhruvEquipment['static-equipment'] },
@@ -18,7 +18,7 @@ const LINKS = [
   { label: 'Proof', href: '/dhruv-epc/proof' },
 ]
 
-export function DhruvChrome() {
+export function DhruvChrome({ phoneHref, whatsappHref }: { phoneHref: string; whatsappHref: string }) {
   const [drawerOpen, setDrawerOpen] = useState(false)
 
   return (
@@ -33,8 +33,8 @@ export function DhruvChrome() {
         }))}
         capabilityRail={{ label: 'Max sizes, materials & codes', href: '/dhruv-epc/capabilities' }}
         links={LINKS}
-        phoneHref={dhruvPhoneHref}
-        whatsappHref={dhruvWhatsappHref}
+        phoneHref={phoneHref}
+        whatsappHref={whatsappHref}
         rfqHref="/request-a-quote?company=dhruv"
         onMenuOpen={() => setDrawerOpen(true)}
       />

@@ -38,3 +38,8 @@ storybook-static/
 graphify-out/
 _incoming-exploded/
 _to_delete-*/
+
+# VG-011 snapshot harness — routes-baseline/ is checked in, this transient
+# compare output is not
+apps/web/__snapshots__/routes/
+apps/web/__snapshots__/.compare-tmp/

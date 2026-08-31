@@ -4,8 +4,13 @@ import { ChevronDown, MobileBottomBar, ProductHero, SpecTable } from '@vedanta/d
 import { buildBreadcrumbList, buildFAQPage, buildProduct } from '@vedanta/schemas'
 import { RFQBand } from '../../../../components/RFQBand'
 import { AnchorRailDesktop, AnchorRailMobile } from '../../../../components/AnchorRail'
-import { dhruvEntity, dhruvPhoneHref, dhruvWhatsappHref, pipeSpools } from '../../../../lib/content/dhruv-epc'
+import { getEntity, getProduct, phoneHref, whatsappHref } from '../../../../lib/content-loader'
 import { BASE } from '../../../../lib/site'
+
+const dhruvEntity = getEntity('dhruv-epc')
+const dhruvPhoneHref = phoneHref(dhruvEntity)
+const dhruvWhatsappHref = whatsappHref(dhruvEntity)
+const pipeSpools = getProduct('dhruv-epc', 'pipe-spools')
 
 export const metadata: Metadata = {
   title: 'Pipe Spools — ASME B31.3, NDT-Covered, NPS ½–48 | Dhruv EPC',

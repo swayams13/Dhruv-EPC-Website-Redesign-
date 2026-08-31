@@ -1,0 +1,37 @@
+{
+  "companySlug": "precise-engineers",
+  "slug": "fabric-bellows",
+  "name": "Fabric Bellows",
+  "oneLineScope": "Fabric expansion joints for hot flue-gas ducting, rectangular ducts up to 6,000 × 4,000 mm",
+  "group": "expansion-joints",
+  "categorySlug": "expansion-joints",
+  "industrySlugs": ["power", "refining-petrochemical"],
+  "capabilitySlugs": [],
+  "standardsMatrix": [],
+  "specTable": [
+    { "param": "Duct size — circular", "value": "up to 6,000", "unit": "mm dia.", "note": "DEMO figure — engineering data pending" },
+    { "param": "Duct size — rectangular", "value": "up to 6,000 × 4,000", "unit": "mm", "note": "DEMO figure — engineering data pending" },
+    { "param": "Design temperature", "value": "ambient to +1,000", "unit": "°C", "note": "DEMO figure — engineering data pending" },
+    { "param": "Media", "value": "Flue gas · hot air · particulate-laden gas · mild chemical fumes" },
+    { "param": "Fabric layup", "value": "E-glass woven · ceramic fibre · PTFE-coated glass · silicone-coated glass" },
+    { "param": "Frame MOC", "value": "MS · SS 304 · SS 316" },
+    { "param": "Axial movement", "value": "per layup and bellows width", "note": "DEMO — project-specific design" }
+  ],
+  "types": [
+    { "name": "E-glass woven", "description": "Standard layup for low-to-medium temperature flue-gas and hot-air ducting up to ~250 °C." },
+    { "name": "Ceramic fibre", "description": "Multi-layer ceramic blanket layup for high-temperature service above 500 °C." },
+    { "name": "PTFE-coated glass", "description": "Chemical-resistant layup for gas streams with acid condensates." },
+    { "name": "Silicone-coated glass", "description": "Flexible high-temperature layup for boiler and ESP ducting." }
+  ],
+  "materials": ["E-glass woven fabric", "Ceramic fibre blanket", "PTFE-coated fibreglass", "Silicone-coated fibreglass"],
+  "codes": ["ASME B31.3"],
+  "faqs": [
+    { "question": "What are fabric expansion joints used for?", "answer": "Fabric expansion joints (fabric bellows) are used in large flue-gas and hot-air ducting at power stations, cement plants, steel plants and refineries. They absorb thermal expansion, vibration and misalignment in duct runs where metallic bellows would be impractical due to duct size or temperature." },
+    { "question": "What temperature range can fabric expansion joints handle?", "answer": "Temperature capability depends on the fabric layup. E-glass woven suits service to around 250 °C; ceramic fibre layups extend this above 1,000 °C. Precise Engineers selects the layup after reviewing operating temperature, gas composition and cyclic duty." },
+    { "question": "What duct sizes do you manufacture fabric bellows for?", "answer": "Fabric expansion joints are fabricated for circular and rectangular ducts. Size data are pending confirmation from engineering — contact Precise Engineers with your duct cross-section and operating conditions for a project assessment." },
+    { "question": "What is the clamping frame material?", "answer": "The clamping frame is mild steel, SS 304 or SS 316, selected to suit operating temperature and corrosion environment. Frame and fabric are supplied as a complete assembly ready for site installation." },
+    { "question": "Are fabric bellows suitable for acidic flue-gas service?", "answer": "Yes. PTFE-coated fibreglass layups are specified for gas streams with acid dew-point condensation, such as sulphur-bearing flue gas from oil-fired boilers. Precise Engineers is ISO 9001:2015 certified and EIL approved." }
+  ],
+  "gallery": [],
+  "relatedProjectSlugs": []
+}

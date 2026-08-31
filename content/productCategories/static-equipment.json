@@ -1,0 +1,7 @@
+{
+  "slug": "static-equipment",
+  "companySlug": "dhruv-epc",
+  "name": "Static Equipment",
+  "oneLineScope": "Pressure vessels, heat exchangers and storage tanks to ASME Sec. VIII Div. 1 & 2, up to 400 T",
+  "productSlugs": ["heat-exchangers", "pressure-vessels", "storage-tanks"]
+}

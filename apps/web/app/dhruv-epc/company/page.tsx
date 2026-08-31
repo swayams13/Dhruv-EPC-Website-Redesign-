@@ -1,17 +1,17 @@
 // Dhruv EPC /company — plan §3.3 (about, works, careers).
-// Layout provides chrome + footer. Content from lib/content/dhruv-epc
-// (Zod-parsed singletons). Careers renders an honest mailto — no fabricated
+// Layout provides chrome + footer. Content from lib/content-loader
+// (JSON-backed, Zod-parsed singletons). Careers renders an honest mailto — no fabricated
 // openings (no invented claims per CLAUDE.md).
 import type { Metadata } from 'next'
 import { MobileBottomBar, PageHero, StatBand } from '@vedanta/datum-ui'
 import { buildBreadcrumbList, buildLocalBusiness } from '@vedanta/schemas'
 import { RFQBand } from '../../../components/RFQBand'
-import {
-  dhruvEntity,
-  dhruvPhoneHref,
-  dhruvStats,
-  dhruvWhatsappHref,
-} from '../../../lib/content/dhruv-epc'
+import { getEntity, phoneHref, whatsappHref } from '../../../lib/content-loader'
+import { dhruvStats } from '../../../lib/site-data'
+
+const dhruvEntity = getEntity('dhruv-epc')
+const dhruvPhoneHref = phoneHref(dhruvEntity)
+const dhruvWhatsappHref = whatsappHref(dhruvEntity)
 
 export const metadata: Metadata = {
   title: 'Company — About, Works & Careers | Dhruv EPC',

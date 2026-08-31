@@ -4,8 +4,13 @@ import { ChevronDown, MobileBottomBar, ProductHero, SpecTable } from '@vedanta/d
 import { buildBreadcrumbList, buildFAQPage, buildProduct } from '@vedanta/schemas'
 import { RFQBand } from '../../../../components/RFQBand'
 import { AnchorRailDesktop, AnchorRailMobile } from '../../../../components/AnchorRail'
-import { flangeAdaptor, preciseEntity, precisePhoneHref, preciseWhatsappHref } from '../../../../lib/content/precise-engineers'
+import { getEntity, getProduct, phoneHref, whatsappHref } from '../../../../lib/content-loader'
 import { BASE } from '../../../../lib/site'
+
+const preciseEntity = getEntity('precise-engineers')
+const precisePhoneHref = phoneHref(preciseEntity)
+const preciseWhatsappHref = whatsappHref(preciseEntity)
+const flangeAdaptor = getProduct('precise-engineers', 'flange-adaptor')
 
 export const metadata: Metadata = {
   title: 'Flange Adaptors — Pipe-Flange Couplings | Precise Engineers',

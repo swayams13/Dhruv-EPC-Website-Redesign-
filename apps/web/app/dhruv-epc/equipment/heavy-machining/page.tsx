@@ -4,8 +4,13 @@ import { ChevronDown, MobileBottomBar, ProductHero, SpecTable } from '@vedanta/d
 import { buildBreadcrumbList, buildFAQPage, buildProduct } from '@vedanta/schemas'
 import { RFQBand } from '../../../../components/RFQBand'
 import { AnchorRailDesktop, AnchorRailMobile } from '../../../../components/AnchorRail'
-import { dhruvEntity, dhruvPhoneHref, dhruvWhatsappHref, heavyMachining } from '../../../../lib/content/dhruv-epc'
+import { getEntity, getProduct, phoneHref, whatsappHref } from '../../../../lib/content-loader'
 import { BASE } from '../../../../lib/site'
+
+const dhruvEntity = getEntity('dhruv-epc')
+const dhruvPhoneHref = phoneHref(dhruvEntity)
+const dhruvWhatsappHref = whatsappHref(dhruvEntity)
+const heavyMachining = getProduct('dhruv-epc', 'heavy-machining')
 
 export const metadata: Metadata = {
   title: 'Heavy Machining — Boring & Turning to Ø 4,000 mm | Dhruv EPC',

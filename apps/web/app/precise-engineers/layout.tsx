@@ -6,7 +6,11 @@ import Link from 'next/link'
 import { Footer } from '@vedanta/datum-ui'
 import { PreciseChrome } from '../../components/precise/PreciseChrome'
 import { StickyQuoteChip } from '../../components/StickyQuoteChip'
-import { preciseEntity, preciseWhatsappHref } from '../../lib/content/precise-engineers'
+import { getEntity, phoneHref, whatsappHref } from '../../lib/content-loader'
+
+const preciseEntity = getEntity('precise-engineers')
+const precisePhoneHref = phoneHref(preciseEntity)
+const preciseWhatsappHref = whatsappHref(preciseEntity)
 
 const FOOTER_COLUMNS = [
   {
@@ -38,7 +42,7 @@ const FOOTER_COLUMNS = [
 export default function PreciseLayout({ children }: { children: React.ReactNode }) {
   return (
     <div data-company="precise">
-      <PreciseChrome />
+      <PreciseChrome phoneHref={precisePhoneHref} whatsappHref={preciseWhatsappHref} />
       {children}
       <Footer
         entity={preciseEntity}

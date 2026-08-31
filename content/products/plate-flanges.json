@@ -1,0 +1,38 @@
+{
+  "companySlug": "dhruv-epc",
+  "slug": "plate-flanges",
+  "name": "Plate Flanges & Base Frames",
+  "oneLineScope": "Plate flanges to ASME B16.5 and ASME B16.47 Series A & B, plus machined equipment base frames",
+  "group": "fabrication-machining",
+  "categorySlug": "fabrication-machining",
+  "industrySlugs": ["general"],
+  "capabilitySlugs": [],
+  "standardsMatrix": [],
+  "specTable": [
+    { "param": "Flange standards", "value": "ASME B16.5 · ASME B16.47 Series A (MSS SP-44) & B (API 605)" },
+    { "param": "Size range", "value": "NPS 2 to NPS 60", "note": "DEMO figure — engineering data pending" },
+    { "param": "Pressure classes", "value": "ASME 150 to 2,500", "note": "DEMO figure — engineering data pending" },
+    { "param": "Flange types", "value": "Weld-neck, slip-on, blind, spectacle, ring-type-joint, long-weld-neck" },
+    { "param": "Face types", "value": "Raised face, flat face, RTJ groove, tongue-and-groove" },
+    { "param": "Materials", "value": "CS, LTCS, LAS, austenitic SS, duplex SS" },
+    { "param": "Inspection", "value": "Dimensional report per ASME B16.5 / B16.47 before dispatch" }
+  ],
+  "types": [
+    { "name": "Weld-neck flanges", "description": "Long-tapered hub for high-pressure and fatigue service per ASME B16.5 and B16.47." },
+    { "name": "Slip-on flanges", "description": "Low-cost flanges for moderate-pressure utility and process services." },
+    { "name": "Blind flanges", "description": "Blank closures for vessel nozzles, column top and line terminations." },
+    { "name": "Spectacle blinds", "description": "Figure-8 blinds for positive line isolation during maintenance — plate-cut and machined." },
+    { "name": "Equipment base frames", "description": "Machined sole plates, base frames and levelling pads for equipment installation." }
+  ],
+  "materials": ["Carbon steel (ASTM A105)", "LTCS (ASTM A350 LF2)", "Low alloy steel (ASTM A182 F11/F22)", "Austenitic SS (ASTM A182 F304/F316)", "Duplex SS (ASTM A182 F51)"],
+  "codes": ["ASME B16.5", "ASME B16.47 Series A & B", "MSS SP-44", "API 605"],
+  "faqs": [
+    { "question": "What flange standards does Dhruv EPC fabricate to?", "answer": "Plate flanges are fabricated to ASME B16.5 (NPS ½ – NPS 24) and ASME B16.47 Series A (MSS SP-44) and Series B (API 605) for large-bore flanges above NPS 24 — covering all pressure classes from ASME 150 through 2,500." },
+    { "question": "What types of plate flanges do you supply?", "answer": "Weld-neck, slip-on, blind, long-weld-neck, spectacle blinds and ring-type-joint (RTJ) flanges — all plate-cut from certified plate material, rough-bored and finish-machined to ASME dimensional and face-finish tolerances." },
+    { "question": "Which materials are available for plate flanges?", "answer": "Carbon steel (ASTM A105 equivalent), low-temperature carbon steel (A350 LF2), low alloy steels (A182 F11/F22), austenitic stainless steel (A182 F304/F316) and duplex stainless steel (A182 F51)." },
+    { "question": "Can you fabricate spectacle blinds for line isolation?", "answer": "Yes — figure-8 spectacle blinds and blank-and-spacer sets are plate-cut, drilled and machined to the customer's piping class; face finish matches the connected flange standard." },
+    { "question": "What are equipment base frames and why machine them in-house?", "answer": "Sole plates, base frames and levelling pads are machined flat and parallel at the Manjusar works before dispatch — in-house machining ensures co-planarity of bearing surfaces, critical for rotating-equipment alignment and vibration performance." }
+  ],
+  "gallery": [],
+  "relatedProjectSlugs": []
+}

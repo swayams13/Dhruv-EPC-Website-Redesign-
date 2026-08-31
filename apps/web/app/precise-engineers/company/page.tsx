@@ -1,17 +1,17 @@
 // Precise Engineers /company — plan §3.2 (about, works, careers).
-// Layout provides chrome + footer. Content from lib/content/precise-engineers
-// (Zod-parsed singletons). Careers renders an honest mailto — no fabricated
+// Layout provides chrome + footer. Content from lib/content-loader
+// (JSON-backed, Zod-parsed singletons). Careers renders an honest mailto — no fabricated
 // openings (no invented claims per CLAUDE.md).
 import type { Metadata } from 'next'
 import { MobileBottomBar, PageHero, StatBand } from '@vedanta/datum-ui'
 import { buildBreadcrumbList, buildLocalBusiness } from '@vedanta/schemas'
 import { RFQBand } from '../../../components/RFQBand'
-import {
-  preciseEntity,
-  precisePhoneHref,
-  preciseStats,
-  preciseWhatsappHref,
-} from '../../../lib/content/precise-engineers'
+import { getEntity, phoneHref, whatsappHref } from '../../../lib/content-loader'
+import { preciseStats } from '../../../lib/site-data'
+
+const preciseEntity = getEntity('precise-engineers')
+const precisePhoneHref = phoneHref(preciseEntity)
+const preciseWhatsappHref = whatsappHref(preciseEntity)
 
 export const metadata: Metadata = {
   title: 'Company — About, Works & Careers | Precise Engineers',

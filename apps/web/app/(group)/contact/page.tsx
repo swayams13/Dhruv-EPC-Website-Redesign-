@@ -7,10 +7,12 @@ import type { Metadata } from 'next'
 import { PageHero } from '@vedanta/datum-ui'
 import type { EntityRecord } from '@vedanta/schemas'
 import { buildBreadcrumbList, buildLocalBusiness } from '@vedanta/schemas'
-import { dhruvEntity } from '../../../lib/content/dhruv-epc'
+import { getEntity } from '../../../lib/content-loader'
 import { telHref } from '../../../lib/format'
-import { groupEntity } from '../../../lib/content/group'
-import { preciseEntity } from '../../../lib/content/precise-engineers'
+
+const dhruvEntity = getEntity('dhruv-epc')
+const groupEntity = getEntity('group')
+const preciseEntity = getEntity('precise-engineers')
 
 export const metadata: Metadata = {
   title: 'Contact — Vedanta Group',

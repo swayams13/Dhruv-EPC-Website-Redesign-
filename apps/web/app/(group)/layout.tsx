@@ -4,7 +4,9 @@
 import Link from 'next/link'
 import { Footer } from '@vedanta/datum-ui'
 import { GroupChrome } from '../../components/group/GroupChrome'
-import { groupEntity } from '../../lib/content/group'
+import { getEntity } from '../../lib/content-loader'
+
+const groupEntity = getEntity('group')
 
 const FOOTER_COLUMNS = [
   {

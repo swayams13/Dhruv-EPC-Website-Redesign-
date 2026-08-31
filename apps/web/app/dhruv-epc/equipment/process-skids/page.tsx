@@ -4,8 +4,13 @@ import { ChevronDown, MobileBottomBar, ProductHero, SpecTable } from '@vedanta/d
 import { buildBreadcrumbList, buildFAQPage, buildProduct } from '@vedanta/schemas'
 import { RFQBand } from '../../../../components/RFQBand'
 import { AnchorRailDesktop, AnchorRailMobile } from '../../../../components/AnchorRail'
-import { dhruvEntity, dhruvPhoneHref, dhruvWhatsappHref, processSkids } from '../../../../lib/content/dhruv-epc'
+import { getEntity, getProduct, phoneHref, whatsappHref } from '../../../../lib/content-loader'
 import { BASE } from '../../../../lib/site'
+
+const dhruvEntity = getEntity('dhruv-epc')
+const dhruvPhoneHref = phoneHref(dhruvEntity)
+const dhruvWhatsappHref = whatsappHref(dhruvEntity)
+const processSkids = getProduct('dhruv-epc', 'process-skids')
 
 export const metadata: Metadata = {
   title: 'Process Skids — ASME B31.3, FAT-Tested | Dhruv EPC',
