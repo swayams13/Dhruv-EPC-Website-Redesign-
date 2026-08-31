@@ -1,0 +1,7 @@
+{
+  "slug": "skids-packages",
+  "companySlug": "dhruv-epc",
+  "name": "Skids & Packages",
+  "oneLineScope": "Skid-mounted process packages and pipe spools to ASME B31.3, NPS ½ to NPS 48",
+  "productSlugs": ["process-skids", "pipe-spools"]
+}
