@@ -29,6 +29,7 @@ export {
 } from './components/SpecTable'
 export { ProductCard, type ProductCardProps } from './components/ProductCard'
 export { CategoryCard, type CategoryCardProps } from './components/CategoryCard'
+export { IndustryCard, type IndustryCardProps } from './components/IndustryCard'
 export { Breadcrumbs, type BreadcrumbsProps, type BreadcrumbItem } from './components/Breadcrumbs'
 export {
   Header,
