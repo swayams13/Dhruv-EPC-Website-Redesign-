@@ -254,3 +254,44 @@ ran — it only lists checks that *reported*, and a parse failure reports
 nothing (no red X appears there; you have to check `gh run list` /
 `gh run view` directly). When asked to verify CI status, check the
 Actions run itself, not just the PR checks list.
+
+## 2026-09-01 — Session 7 manual verify: two pre-existing bugs found, out of scope, not fixed
+
+**What happened:** Manual browser spot-check of the Session 7 golden-page
+rollout (design/session-7-template-rollout) surfaced two defects neither
+introduced nor touched by any task in this session:
+
+1. `content/products/storage-tanks.json` — `page.heroTitle` is literally
+   `"Storage Tanks &amp; Air Receivers"` (the HTML entity as raw text),
+   while the sibling fields `name`, `metaTitle`, and `breadcrumbLabel` in
+   the same file correctly use a plain `&`. React doesn't decode entities
+   in text content, so the H1 renders the literal string `&amp;` on the
+   live page. Confirmed via `git log --follow -p` that this predates
+   Session 7 — the field was written this way in the Session 5 content
+   migration and no Session 7 task (4-10, which only added `rail`/
+   `provenance` keys to `specTable` rows) touched `page.heroTitle`.
+
+2. Keyboard-tabbing to the `ProductHero` "Request a quote" button
+   (`packages/datum-ui/src/components/ProductHero.tsx` or wherever that
+   button lives — not confirmed by file, only by browser behavior) showed
+   no visible `:focus-visible` ring in a screenshot after 6 Tab presses on
+   `/dhruv-epc/products/static-equipment/pressure-vessels/`. Not
+   conclusively isolated (could be a focus-landed-elsewhere false
+   negative rather than a missing ring) and this component predates
+   Session 7 entirely — no task in this plan touches `ProductHero` or its
+   RFQ button.
+
+**Root cause:** (1) a content-authoring typo from an earlier session,
+undetected because nothing renders/tests raw entity text; (2) unconfirmed
+— needs a real keyboard-focus trace (devtools `:focus` inspection, not a
+screenshot guess) to know whether it's a missing ring or a mis-click.
+
+**Rule:** Neither is fixed here — per CLAUDE.md scope discipline, an
+unrelated bug found mid-task gets logged, not fixed inline. Next session
+touching `content/products/storage-tanks.json` should replace
+`heroTitle`'s `&amp;` with a plain `&`, and grep all other 16 product
+JSON files' `page.heroTitle`/`page.metaTitle`/`page.valueStatement`
+fields for the same `&amp;`/`&lt;`/`&gt;`/`&quot;` double-escaping
+pattern rather than assuming storage-tanks is the only instance. Next
+session touching `ProductHero` should confirm the focus-visible ring
+question with devtools, not a screenshot.
