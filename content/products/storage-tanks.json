@@ -16,37 +16,49 @@
     {
       "param": "Design codes",
       "value": "API 650 (storage tanks) · ASME Sec. VIII Div. 1 (air receivers)",
-      "note": "DEMO-PLACEHOLDER: API 650 unverified against vedantagroup.net"
+      "note": "DEMO-PLACEHOLDER: API 650 unverified against vedantagroup.net",
+      "provenance": "unverified"
     },
     {
       "param": "Tank types",
-      "value": "Fixed-cone-roof, open-top, shop-fabricated process tanks, air receivers"
+      "value": "Fixed-cone-roof, open-top, shop-fabricated process tanks, air receivers",
+      "provenance": "sourced",
+      "rail": true
     },
     {
       "param": "Tank diameter",
       "value": "up to 20,000",
       "unit": "mm",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Tank height",
       "value": "up to 15,000",
       "unit": "mm",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Design pressure (receivers)",
       "value": "up to 25",
       "unit": "bar(g)",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Materials",
-      "value": "Carbon steel, SS 304/316, rubber-lined CS"
+      "value": "Carbon steel, SS 304/316, rubber-lined CS",
+      "provenance": "sourced"
     },
     {
       "param": "Inspection",
-      "value": "Third-party per client ITP"
+      "value": "Third-party per client ITP",
+      "provenance": "sourced",
+      "rail": true
     }
   ],
   "types": [
