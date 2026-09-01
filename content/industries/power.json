@@ -1,0 +1,43 @@
+{
+  "slug": "power",
+  "name": "Power",
+  "oneLineScope": "7 sourced products across Dhruv EPC and Precise Engineers serve Power plant equipment needs.",
+  "requirements": "CONTENT REQUIRED — 150-200 word description of what Power plant equipment must meet (corrosion regime, cyclic duty, code obligations), sourced from Vedanta engineering.",
+  "applications": [
+    "CONTENT REQUIRED — list specific Power plant applications sourced from Vedanta engineering"
+  ],
+  "engineeringConsiderations": "CONTENT REQUIRED — corrosion regime, cyclic duty, and code obligations specific to Power, sourced from Vedanta engineering.",
+  "productSlugs": [
+    "damper",
+    "fabric-bellows",
+    "heat-exchangers",
+    "metallic-bellows-expansion-joint",
+    "pressure-vessels",
+    "process-skids",
+    "rubber-bellows"
+  ],
+  "capabilitySlugs": [],
+  "companySlugs": [
+    "dhruv-epc",
+    "precise-engineers"
+  ],
+  "faqs": [
+    {
+      "question": "What equipment does Vedanta Group supply for the Power sector?",
+      "answer": "CONTENT REQUIRED — answer pending sourced sector narrative from Vedanta engineering (which products, which codes, why they fit this sector's duty)."
+    },
+    {
+      "question": "What corrosion and material considerations apply to Power equipment?",
+      "answer": "CONTENT REQUIRED — corrosion regime and material-of-construction guidance for this sector, sourced from Vedanta engineering."
+    },
+    {
+      "question": "What codes and standards govern Power projects Vedanta Group has executed?",
+      "answer": "CONTENT REQUIRED — code/standard obligations specific to this sector, sourced from Vedanta engineering."
+    },
+    {
+      "question": "Has Vedanta Group completed projects in the Power sector?",
+      "answer": "CONTENT REQUIRED — project evidence (case studies, client references) for this sector, pending sign-off."
+    }
+  ],
+  "contentComplete": false
+}
