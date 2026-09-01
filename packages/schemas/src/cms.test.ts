@@ -90,6 +90,22 @@ describe('SpecTableRow provenance (Session 6, golden page)', () => {
   })
 })
 
+describe('SpecTableRow rail flag (Session 7, template rollout)', () => {
+  it('accepts an optional rail boolean, independent of provenance', () => {
+    const row = SpecTableRow.parse({ param: 'x', value: 'y', rail: true })
+    expect(row.rail).toBe(true)
+  })
+
+  it('defaults to undefined when omitted (no rail row implied)', () => {
+    const row = SpecTableRow.parse({ param: 'x', value: 'y' })
+    expect(row.rail).toBeUndefined()
+  })
+
+  it('rejects a non-boolean rail value', () => {
+    expect(() => SpecTableRow.parse({ param: 'x', value: 'y', rail: 'yes' })).toThrow()
+  })
+})
+
 describe('Testimonial attribution gate', () => {
   const base = { companySlug: 'dhruv-epc' as const, quote: 'Excellent quality.' }
   it('blocks publish when attnCompany is missing', () => {

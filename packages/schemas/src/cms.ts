@@ -40,6 +40,11 @@ export const SpecTableRow = z.object({
   // footnote reads `note` directly — no separate rail-only caption field,
   // so there is nothing to fall out of sync when `note` is edited.
   provenance: z.enum(['sourced', 'unverified']).optional(),
+  // Rail-row selection (Session 7, template rollout). true = this row is
+  // one of the "key figures" shown in SpecRail's sidebar. Independent of
+  // `provenance` — a row can be rail-worthy and either sourced or
+  // unverified. Omit for products without a SpecRail yet.
+  rail: z.boolean().optional(),
 })
 export type SpecTableRow = z.infer<typeof SpecTableRow>
 
