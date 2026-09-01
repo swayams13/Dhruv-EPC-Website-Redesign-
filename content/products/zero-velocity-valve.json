@@ -15,33 +15,42 @@
       "param": "Size range",
       "value": "80 – 1,200",
       "unit": "mm NB",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Pressure class",
       "value": "PN 10 · PN 16",
-      "note": "DEMO — pressure table pending"
+      "note": "DEMO — pressure table pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Design standard",
-      "value": "IS 14845"
+      "value": "IS 14845",
+      "provenance": "sourced"
     },
     {
       "param": "MOC — body",
       "value": "CI (IS 210) · DI (IS 1865) · CS (IS 2062)",
-      "note": "DEMO — MOC selection pending"
+      "note": "DEMO — MOC selection pending",
+      "provenance": "unverified"
     },
     {
       "param": "MOC — internals",
-      "value": "SS 304 disc and seat"
+      "value": "SS 304 disc and seat",
+      "provenance": "sourced"
     },
     {
       "param": "Operation",
-      "value": "Hydraulically automatic — no external power required"
+      "value": "Hydraulically automatic — no external power required",
+      "provenance": "sourced"
     },
     {
       "param": "Application",
-      "value": "Water-hammer protection on pumping mains"
+      "value": "Water-hammer protection on pumping mains",
+      "provenance": "sourced"
     }
   ],
   "types": [
