@@ -132,7 +132,7 @@ export function RFQBand({
 
 - [ ] **Step 3: Typecheck**
 
-Run: `pnpm --filter web typecheck`
+Run: `pnpm --filter @vedanta/web typecheck`
 Expected: no new errors. `dhruv-epc/page.tsx` and `precise-engineers/page.tsx` still pass `company` + `whatsappHref` positionally-compatible (now-optional props accept required-shaped call sites unchanged).
 
 - [ ] **Step 4: Commit**
@@ -1024,7 +1024,7 @@ export default function ProjectsIndexPage() {
 
 - [ ] **Step 3: Typecheck**
 
-Run: `pnpm --filter web typecheck`
+Run: `pnpm --filter @vedanta/web typecheck`
 Expected: zero errors.
 
 - [ ] **Step 4: Commit**
@@ -1138,7 +1138,7 @@ export function GroupChrome({ megaPanelColumns }: { megaPanelColumns: MegaPanelC
 
 - [ ] **Step 2: Typecheck**
 
-Run: `pnpm --filter web typecheck`
+Run: `pnpm --filter @vedanta/web typecheck`
 Expected: an error at this point is expected and correct — `(group)/layout.tsx` still renders `<GroupChrome />` with no props (Task 8 fixes this next). Confirm the error is specifically "Property 'megaPanelColumns' is missing" and nothing else, then proceed to Task 8.
 
 - [ ] **Step 3: Commit**
@@ -1259,12 +1259,12 @@ export default function GroupLayout({ children }: { children: React.ReactNode })
 
 - [ ] **Step 2: Typecheck**
 
-Run: `pnpm --filter web typecheck`
+Run: `pnpm --filter @vedanta/web typecheck`
 Expected: zero errors — the Task 7 gap is now closed.
 
 - [ ] **Step 3: Run the full web test suite**
 
-Run: `pnpm --filter web test`
+Run: `pnpm --filter @vedanta/web test`
 Expected: `link-integrity.test.ts` passes (`/industries`, `/capabilities`,
 `/about`, `/dhruv-epc`, `/precise-engineers` all resolve to real routes
 already; `/projects` now resolves via Task 6's new page; category/product
@@ -1560,7 +1560,7 @@ correctly against `bg-steel-50` before committing (Step 2 covers this).
 
 - [ ] **Step 2: Manual visual check of the stats band on its new light ground**
 
-Run: `pnpm --filter web dev` and open `/` in a browser. Confirm `StatBand`
+Run: `pnpm --filter @vedanta/web dev` and open `/` in a browser. Confirm `StatBand`
 without `onDark` renders with sufficient contrast against `bg-steel-50` —
 if it does not, check `StatBand.tsx`'s own light/dark variant logic
 (`packages/datum-ui/src/components/StatBand.tsx`) for the correct prop; do
@@ -1569,7 +1569,7 @@ right prop" check against an existing, already-built component.
 
 - [ ] **Step 3: Typecheck, lint, unit test**
 
-Run: `pnpm --filter web typecheck && pnpm --filter web lint && pnpm --filter web test`
+Run: `pnpm --filter @vedanta/web typecheck && pnpm --filter @vedanta/web lint && pnpm --filter @vedanta/web test`
 Expected: zero errors. `link-integrity.test.ts`'s href scan covers the
 literal `/dhruv-epc`, `/precise-engineers` hrefs in `DOORS` (unchanged from
 before, already passing); `metadata-uniqueness.test.ts` sees the
@@ -1605,7 +1605,7 @@ pnpm build
 
 - [ ] **Step 2: Manual browser checks (per CLAUDE.md's UI-change requirements)**
 
-With `pnpm --filter web dev` running, on the group home (`/`) and any page
+With `pnpm --filter @vedanta/web dev` running, on the group home (`/`) and any page
 using `GroupChrome`:
 1. Tab through the full Products mega-panel with keyboard only — confirm
    focus lands on the first category link on open, Tab cycles within the
