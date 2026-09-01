@@ -27,6 +27,10 @@ export {
   type SpecTableRow,
   type SpecTableMatrixRow,
 } from './components/SpecTable'
+export {
+  CapabilityEnvelopeTable,
+  type CapabilityEnvelopeTableProps,
+} from './components/CapabilityEnvelopeTable'
 export { ProductCard, type ProductCardProps } from './components/ProductCard'
 export { CategoryCard, type CategoryCardProps } from './components/CategoryCard'
 export { IndustryCard, type IndustryCardProps } from './components/IndustryCard'
