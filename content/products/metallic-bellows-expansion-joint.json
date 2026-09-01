@@ -17,48 +17,61 @@
     {
       "param": "Design codes",
       "value": "EJMA · ASME B31.3",
-      "note": "FEA analysis under special conditions"
+      "note": "FEA analysis under special conditions",
+      "provenance": "sourced"
     },
     {
       "param": "Size range — circular",
       "value": "80 – 8,000",
-      "unit": "mm NB"
+      "unit": "mm NB",
+      "provenance": "sourced",
+      "rail": true
     },
     {
       "param": "Size range — rectangular",
       "value": "up to 9,000 × 5,000",
-      "unit": "mm"
+      "unit": "mm",
+      "provenance": "sourced",
+      "rail": true
     },
     {
       "param": "Bellows materials",
-      "value": "SS 304/304L/316/316L/321/310, Inconel 600/625, Incoloy 800/825, Hastelloy, duplex"
+      "value": "SS 304/304L/316/316L/321/310, Inconel 600/625, Incoloy 800/825, Hastelloy, duplex",
+      "provenance": "sourced"
     },
     {
       "param": "Design pressure",
       "value": "full vacuum to 40",
       "unit": "bar(g)",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Design temperature",
       "value": "−100 to +900",
       "unit": "°C",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Movements",
       "value": "axial · lateral · angular, per EJMA design",
-      "note": "DEMO — movement tables pending"
+      "note": "DEMO — movement tables pending",
+      "provenance": "unverified"
     },
     {
       "param": "Cycle life",
       "value": "per EJMA fatigue design",
-      "note": "DEMO — cycle-life data pending"
+      "note": "DEMO — cycle-life data pending",
+      "provenance": "unverified"
     },
     {
       "param": "End connections",
       "value": "Weld ends, fixed & rotating flanges",
-      "note": "DEMO — engineering data pending"
+      "note": "DEMO — engineering data pending",
+      "provenance": "unverified"
     }
   ],
   "types": [
