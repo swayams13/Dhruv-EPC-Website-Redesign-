@@ -13,33 +13,44 @@
   "specTable": [
     {
       "param": "Flange standards",
-      "value": "ASME B16.5 · ASME B16.47 Series A (MSS SP-44) & B (API 605)"
+      "value": "ASME B16.5 · ASME B16.47 Series A (MSS SP-44) & B (API 605)",
+      "provenance": "sourced"
     },
     {
       "param": "Size range",
       "value": "NPS 2 to NPS 60",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Pressure classes",
       "value": "ASME 150 to 2,500",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Flange types",
-      "value": "Weld-neck, slip-on, blind, spectacle, ring-type-joint, long-weld-neck"
+      "value": "Weld-neck, slip-on, blind, spectacle, ring-type-joint, long-weld-neck",
+      "provenance": "sourced",
+      "rail": true
     },
     {
       "param": "Face types",
-      "value": "Raised face, flat face, RTJ groove, tongue-and-groove"
+      "value": "Raised face, flat face, RTJ groove, tongue-and-groove",
+      "provenance": "sourced"
     },
     {
       "param": "Materials",
-      "value": "CS, LTCS, LAS, austenitic SS, duplex SS"
+      "value": "CS, LTCS, LAS, austenitic SS, duplex SS",
+      "provenance": "sourced"
     },
     {
       "param": "Inspection",
-      "value": "Dimensional report per ASME B16.5 / B16.47 before dispatch"
+      "value": "Dimensional report per ASME B16.5 / B16.47 before dispatch",
+      "provenance": "sourced",
+      "rail": true
     }
   ],
   "types": [
