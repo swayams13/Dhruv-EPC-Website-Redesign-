@@ -15,43 +15,56 @@
       "param": "Size range",
       "value": "50 – 1,200",
       "unit": "mm NB",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Axial traverse",
       "value": "25 – 300",
       "unit": "mm",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Design pressure",
       "value": "up to 16",
       "unit": "bar(g)",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Design temperature",
       "value": "up to +350",
       "unit": "°C",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Design code",
-      "value": "ASME B31.3"
+      "value": "ASME B31.3",
+      "provenance": "sourced"
     },
     {
       "param": "Sealing system",
-      "value": "Graphite packing · PTFE packing · live-loaded"
+      "value": "Graphite packing · PTFE packing · live-loaded",
+      "provenance": "sourced",
+      "rail": true
     },
     {
       "param": "MOC",
       "value": "CS (IS 2062) · SS 304 · SS 316",
-      "note": "DEMO — full MOC list pending"
+      "note": "DEMO — full MOC list pending",
+      "provenance": "unverified"
     },
     {
       "param": "End connections",
       "value": "Weld ends · flanged (ANSI / BS 4504)",
-      "note": "DEMO — engineering data pending"
+      "note": "DEMO — engineering data pending",
+      "provenance": "unverified"
     }
   ],
   "types": [
