@@ -295,3 +295,49 @@ fields for the same `&amp;`/`&lt;`/`&gt;`/`&quot;` double-escaping
 pattern rather than assuming storage-tanks is the only instance. Next
 session touching `ProductHero` should confirm the focus-visible ring
 question with devtools, not a screenshot.
+
+## 2026-09-01 — Session 7 SDD loop: a per-task review ruling was itself wrong, caught only by the final whole-branch review
+
+**What happened:** During the precise-engineers content batch (Tasks 11-19),
+a per-task reviewer flagged 3 files (damper.json "Types", rubber-bellows.json
+"Arch configuration", telescopic-expansion-joint.json "Sealing system") for
+railing a 3-item categorical row, reading the plan's rail-selection rule as
+"never rail a 3+-item list, full stop." I (the controller) accepted that
+finding and dispatched a fix stripping `rail: true` from all three. That fix
+was itself wrong: the plan's actual text permits exactly ONE categorical
+"types/variant" row in the rail regardless of item count, and only excludes
+long Materials/Design-codes-style enumerations — the dhruv-epc batch (done
+first, by a different dispatch) had already correctly railed six-and-seven
+item "types" rows (pressure-vessels "Vessel types", heat-exchangers "Types",
+plate-flanges "Flange types", process-skids "Skid types", heavy-machining
+"Machining types") under that exact reading. My fix silently created a
+cross-batch inconsistency: dhruv-epc rails were 4-6 rows deep, precise-
+engineers rails were 2-3 rows deep, as a procedural artifact of my own wrong
+ruling — not a real content difference. Neither the per-task reviewer nor I
+caught it at the time, because a per-task review only ever sees one file's
+diff — the inconsistency is only visible comparing across the whole branch.
+The final whole-branch review (dispatched on a more capable model, after all
+22 tasks were done) caught it, plus a second, more clear-cut miss it traced
+to the same root cause: dual-plate-check-valve.json's `sourced` 3-item
+"Pressure class" row was left unrailed while a materially identical row in
+zero-velocity-valve.json was railed.
+
+**Root cause:** accepting a per-task reviewer's finding at face value
+without checking it against the plan's own text closely enough — the
+reviewer's phrasing ("3+-item list rows... violating the ban") was broader
+than what the plan actually banned (only Materials/Design-codes-style
+enumerations, with an explicit one-categorical-row exception). A controller
+ruling on a review finding carries the same obligation to verify against
+the spec that a review finding itself does — "the reviewer said so" is not
+sufficient grounds to rule against your own plan's stated exception.
+
+**Rule:** When a per-task reviewer's finding cites a rule from the plan,
+re-read the plan's exact wording (not just the reviewer's paraphrase) before
+ruling — especially when the rule has a named exception, since a reviewer
+restating "the general rule" can silently drop the exception. Cross-batch
+consistency for any rule with subjective judgment calls (item counts,
+selection thresholds, etc.) is real risk surface that per-task review
+structurally cannot catch — a final whole-branch review is not optional
+ceremony for a multi-batch rollout, it is where exactly this class of drift
+gets caught. Budget for it, and dispatch it on a capable-enough model to
+actually compare across the branch, not just diff-scan the tail commit.
