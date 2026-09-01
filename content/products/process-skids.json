@@ -16,41 +16,54 @@
   "specTable": [
     {
       "param": "Piping code",
-      "value": "ASME B31.3 · ASME B31.1 (where applicable)"
+      "value": "ASME B31.3 · ASME B31.1 (where applicable)",
+      "provenance": "sourced"
     },
     {
       "param": "Structural standard",
-      "value": "IS 2062 / ASTM A36 structural steel"
+      "value": "IS 2062 / ASTM A36 structural steel",
+      "provenance": "sourced"
     },
     {
       "param": "Skid types",
-      "value": "Heat-transfer, filtration, metering, chemical-dosing, separator, wellhead"
+      "value": "Heat-transfer, filtration, metering, chemical-dosing, separator, wellhead",
+      "provenance": "sourced",
+      "rail": true
     },
     {
       "param": "Max skid dimensions",
       "value": "L 12,000 × W 4,500 × H 6,000",
       "unit": "mm",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Max lift weight",
       "value": "80",
       "unit": "T",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Piping class",
       "value": "ANSI 150 to 2,500",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "FAT",
-      "value": "Factory Acceptance Test performed at Manjusar works before dispatch"
+      "value": "Factory Acceptance Test performed at Manjusar works before dispatch",
+      "provenance": "sourced"
     },
     {
       "param": "Inspection",
       "value": "LRS · BV · DNV · IBR",
-      "note": "Third-party per client ITP"
+      "note": "Third-party per client ITP",
+      "provenance": "sourced",
+      "rail": true
     }
   ],
   "types": [
