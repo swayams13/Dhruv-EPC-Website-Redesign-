@@ -4,10 +4,15 @@ import { resolve } from 'node:path'
 import {
   getEntity,
   getProduct,
+  getProductBySlug,
   getProductsByCompany,
   getCertifications,
   getApprovals,
   getProductCategory,
+  getIndustries,
+  getIndustry,
+  getCapabilities,
+  getCapability,
   phoneHref,
   whatsappHref,
 } from './content-loader'
@@ -62,6 +67,42 @@ describe('content-loader', () => {
     expect(allProducts.every((p) => p.standardsMatrix.length === 0)).toBe(true)
   })
 
+  it('getProductBySlug resolves across both companies', () => {
+    expect(getProductBySlug('heat-exchangers')?.companySlug).toBe('dhruv-epc')
+    expect(getProductBySlug('rubber-bellows')?.companySlug).toBe('precise-engineers')
+    expect(getProductBySlug('does-not-exist')).toBeUndefined()
+  })
+
+  // Session 8 (VG-020/021): every Industry/Capability record this session
+  // ships is a content-gated placeholder — contentComplete defaults false,
+  // and every record must still clear its schema ship gate (Industry
+  // productSlugs.min(2), Capability envelope.min(1)) even as a placeholder.
+  it('parses every Industry record and keeps the ≥2-product ship gate', () => {
+    const industries = getIndustries()
+    expect(industries.length).toBeGreaterThan(0)
+    expect(industries.every((i) => i.productSlugs.length >= 2)).toBe(true)
+    expect(industries.every((i) => i.contentComplete === false)).toBe(true)
+    expect(getIndustry('oil-gas')?.name).toBe('Oil & Gas')
+    expect(getIndustry('does-not-exist')).toBeUndefined()
+  })
+
+  it("every Industry's productSlugs resolve to a real Product", () => {
+    for (const industry of getIndustries()) {
+      for (const slug of industry.productSlugs) {
+        expect(getProductBySlug(slug), `${industry.slug} -> ${slug}`).toBeDefined()
+      }
+    }
+  })
+
+  it('parses every Capability record and keeps the envelope ship gate', () => {
+    const capabilities = getCapabilities()
+    expect(capabilities.length).toBeGreaterThan(0)
+    expect(capabilities.every((c) => c.envelope.length >= 1)).toBe(true)
+    expect(capabilities.every((c) => c.contentComplete === false)).toBe(true)
+    expect(getCapability('heavy-fabrication')?.name).toBe('Heavy Fabrication')
+    expect(getCapability('does-not-exist')).toBeUndefined()
+  })
+
   it('phoneHref/whatsappHref derive tel:/wa.me hrefs from an EntityRecord', () => {
     const dhruv = getEntity('dhruv-epc')
     expect(phoneHref(dhruv)).toBe(`tel:${dhruv.phones[0]}`)
@@ -101,6 +142,41 @@ describe('content-loader', () => {
       // including the new bad fixture — content-loader reads its directory
       // once at module load, so re-importing with a cache-busting query is
       // the only way to re-trigger that load in the same test process.
+      await expect(import(/* @vite-ignore */ `./content-loader?bust=${Date.now()}`)).rejects.toThrow(
+        /failed schema validation/,
+      )
+    })
+
+    // Session 8 (VG-020): integration-level check of the ≥2-product ship
+    // gate cms.test.ts already unit-tests on the schema directly — this
+    // confirms the loader enforces it too, at the content-directory level.
+    const badIndustryPath = resolve(__dirname, '../../../content/industries/__invalid-test-fixture.json')
+
+    afterEach(() => {
+      rmSync(badIndustryPath, { force: true })
+    })
+
+    it('throws when an Industry record has fewer than two products', async () => {
+      writeFileSync(
+        badIndustryPath,
+        JSON.stringify({
+          slug: 'invalid-test-fixture',
+          name: 'Bad Industry',
+          oneLineScope: 'Serves 1 product',
+          requirements: 'x',
+          applications: [],
+          engineeringConsiderations: 'x',
+          productSlugs: ['heat-exchangers'],
+          capabilitySlugs: [],
+          companySlugs: ['dhruv-epc'],
+          faqs: [
+            { question: 'q1', answer: 'a1' },
+            { question: 'q2', answer: 'a2' },
+            { question: 'q3', answer: 'a3' },
+            { question: 'q4', answer: 'a4' },
+          ],
+        }),
+      )
       await expect(import(/* @vite-ignore */ `./content-loader?bust=${Date.now()}`)).rejects.toThrow(
         /failed schema validation/,
       )
