@@ -54,9 +54,10 @@ export function IndustryCard({
   const thin = projectCount === 0
   const servedByLabel = servedBy.map((w) => WORKS_LABEL[w]).join(' · ')
   const projectLabel = thin ? 'Coming soon' : `${projectCount} ${projectCount === 1 ? 'project' : 'projects'}`
-  // steel-950 focus ring on every ground — never var(--accent-focus) here (§03).
-  const focusRing =
-    'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-steel-950'
+  // Never var(--accent-focus) here (§03). On dark grounds, use steel-50 for visible contrast; on light, steel-950.
+  const focusRing = onDark
+    ? 'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-steel-50'
+    : 'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-steel-950'
 
   if (compact) {
     const surfaceText = onDark ? 'text-steel-50' : 'text-steel-950'
