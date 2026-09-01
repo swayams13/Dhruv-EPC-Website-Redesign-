@@ -1,0 +1,46 @@
+{
+  "slug": "testing-inspection",
+  "name": "Testing & Inspection",
+  "companySlugs": [
+    "dhruv-epc",
+    "precise-engineers"
+  ],
+  "equipmentList": [
+    "CONTENT REQUIRED — equipment/machine list for Testing & Inspection sourced from Vedanta engineering"
+  ],
+  "envelope": [
+    {
+      "param": "Size / capacity range",
+      "value": "CONTENT REQUIRED",
+      "note": "Sourced envelope figure needed from Vedanta engineering"
+    },
+    {
+      "param": "Process standards / tolerances",
+      "value": "CONTENT REQUIRED",
+      "note": "Sourced tolerance and code data needed from Vedanta engineering"
+    }
+  ],
+  "standards": [
+    "CONTENT REQUIRED — standards list for Testing & Inspection sourced from Vedanta engineering"
+  ],
+  "productSlugs": [],
+  "faqs": [
+    {
+      "question": "What size or capacity range does the Testing & Inspection capability cover?",
+      "answer": "CONTENT REQUIRED — sourced envelope figures (size range, tolerance, capacity) needed from Vedanta engineering."
+    },
+    {
+      "question": "What equipment and machinery support the Testing & Inspection capability?",
+      "answer": "CONTENT REQUIRED — equipment/machine list sourced from Vedanta engineering."
+    },
+    {
+      "question": "What standards govern Testing & Inspection work at Vedanta Group?",
+      "answer": "CONTENT REQUIRED — standards list sourced from Vedanta engineering."
+    },
+    {
+      "question": "Which products are built using the Testing & Inspection capability?",
+      "answer": "CONTENT REQUIRED — product linkage pending sourced confirmation from Vedanta engineering."
+    }
+  ],
+  "contentComplete": false
+}

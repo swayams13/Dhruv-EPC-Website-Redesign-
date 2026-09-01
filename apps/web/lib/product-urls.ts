@@ -28,3 +28,19 @@ export function productHref(companySlug: CompanySlug, categorySlug: string, slug
 export function rfqHref(rfqCompany: 'dhruv' | 'precise', equipment?: string): string {
   return equipment ? `/request-a-quote?company=${rfqCompany}&equipment=${equipment}` : `/request-a-quote?company=${rfqCompany}`
 }
+
+export function industriesIndexHref(): string {
+  return '/industries'
+}
+
+export function industryHref(slug: string): string {
+  return `/industries/${slug}`
+}
+
+export function capabilitiesIndexHref(): string {
+  return '/capabilities'
+}
+
+export function capabilityHref(slug: string): string {
+  return `/capabilities/${slug}`
+}

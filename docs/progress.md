@@ -1545,3 +1545,97 @@ manual browser   ✓  375px + 1440px verified live (Chrome automation):
   copied to the other 16 products.
 - 768px viewport and `prefers-reduced-motion` were not manually verified
   this session.
+
+### Session 25 — Industry/Capability entity expansion (VG-020/021)
+**Status:** Complete ✅ — awaiting push + PR (not yet done, see below)
+**Branch:** `content/session-8-industries-capabilities` · **Date:** 2026-09-01
+**Governing specs:** `docs/01-final-implementation-blueprint-v2.md` §10
+(Industry), §11 (Capability)
+
+#### Scope
+
+Session 4/7 deliberately left Industry and Capability as engineering-only —
+draft `industrySlugs` strings on `Product`, no real Industry/Capability
+content records, no capability-envelope engineering data anywhere in the
+repo. This session builds the full engineering (schema, routes, gates,
+component) but ships every content record as a clearly-marked
+`CONTENT REQUIRED` placeholder behind `noindex` + sitemap exclusion, per
+the same no-fabrication rule this whole session sequence has held to.
+
+#### What was done
+
+- **Schema:** `Industry.contentComplete` / `Capability.contentComplete`
+  (`packages/schemas/src/cms.ts`, default `false`) — the one field that
+  gates a record into the sitemap and out of `noindex`.
+- **`CapabilityEnvelopeTable`** (`packages/datum-ui`) — thin wrapper over
+  `SpecTable`'s engineering density, not a new table implementation.
+- **Routes:** `/industries` + `/industries/[slug]`, `/capabilities` +
+  `/capabilities/[slug]` (new, under `(group)/` — steel-only, no company
+  accent). Distinct from the existing hand-written `/{company}/capabilities/`
+  prose pages, untouched. `routes.ts`/`sitemap.ts`/
+  `metadata-uniqueness.test.ts` all extended to cover the two new dynamic
+  routes, same pattern as the existing product/category dynamic routes.
+- **Content:** 5 Industry records (oil-gas, refining-petrochemical,
+  fertilizer-chemicals, power, water-infrastructure), each with real
+  `productSlugs` carried forward from Session 4/7's `industrySlugs` tags —
+  clears the ≥2-product ship gate with genuine evidence, not a fabricated
+  minimum. 8 Capability records per blueprint §11's candidate list;
+  `heavy-fabrication`/`heavy-machining` link to the matching dhruv-epc
+  Product of the same name, `bellows-forming` to Precise Engineers' three
+  bellows products (flagged as an unconfirmed grouping in the checklist).
+  All narrative/envelope fields are instructive `CONTENT REQUIRED`
+  placeholders — no invented sector narrative or engineering figures.
+- **`docs/content-needed-industries-capabilities.md`** — the actual
+  content deliverable: per-record list of exactly what's missing.
+
+**Not shipped:** `pharmaceutical` industry (blueprint §10's 6th candidate)
+— zero Product records currently carry that industry tag, so no
+placeholder can even clear the ≥2-product ship gate honestly. Flagged in
+the checklist for engineering to tag products first.
+
+#### Verify
+
+```
+pnpm typecheck   ✓  zero errors
+pnpm lint        ✓  zero new warnings (pre-existing LegalDocument.tsx
+                    Tailwind-order warnings, unrelated to this session)
+pnpm test        ✓  51/51 web tests pass; only the pre-existing
+                    DATABASE_URL-gated RFQ integration test fails
+                    (unrelated infra requirement, tracked separately)
+pnpm build       ✓  zero errors/warnings; 76 routes generated including
+                    5 industry + 8 capability detail pages, all within
+                    the ≤120 kB marketing JS budget (103 kB)
+manual           ✓  confirmed via .next output: noindex meta renders on
+                    every new route, sitemap.xml carries zero /industries
+                    or /capabilities entries, CONTENT REQUIRED placeholder
+                    text renders visibly on a sample page
+```
+
+#### Deviations / flagged (none silent)
+
+1. Breadcrumb JSON-LD URLs on the two `[slug]` detail pages are built with
+   inline `href`-builder function calls (`industryHref(slug)` etc.)
+   assigned to local `const`s before `buildBreadcrumbList()`, rather than
+   inline in the call — `link-integrity.test.ts`'s regex-based
+   `BREADCRUMB_CALL_RE`/`URL_FIELD_RE` scan can't evaluate a function call
+   inside a template literal and reported a false positive on first run.
+   The routes themselves are correct (verified manually against
+   `routes.ts`'s dynamic-route expansion); the indirection just moves the
+   URL construction outside what the static scanner can see, the same
+   blind spot the existing `lib/product-detail-page.tsx` factory pattern
+   already has for the exact same reason (file lives in `lib/`, outside
+   the `app/**/page.tsx` scan).
+2. `bellows-forming`'s `productSlugs` link (metallic-bellows-expansion-
+   joint, rubber-bellows, fabric-bellows) is a reasonable grouping of
+   already-published products, not a sourced fact — flagged for
+   confirmation in the checklist, not presented as verified.
+
+#### Requires human review before push/PR
+
+- **Not yet pushed to remote / no PR opened** — branch committed locally
+  only, per this session's "ask before push/PR" default (the repo's own
+  CLAUDE.md pre-authorizes branch+PR as the standing workflow, but opening
+  a PR is a shared/visible action outside this session's explicit scope).
+- `docs/content-needed-industries-capabilities.md` — hand this to whoever
+  at Vedanta has the sourced sector narrative and envelope figures before
+  any of these 13 records can flip `contentComplete` to `true`.

@@ -1,0 +1,40 @@
+{
+  "slug": "oil-gas",
+  "name": "Oil & Gas",
+  "oneLineScope": "4 sourced products across Dhruv EPC and Precise Engineers serve Oil & Gas plant equipment needs.",
+  "requirements": "CONTENT REQUIRED — 150-200 word description of what Oil & Gas plant equipment must meet (corrosion regime, cyclic duty, code obligations), sourced from Vedanta engineering.",
+  "applications": [
+    "CONTENT REQUIRED — list specific Oil & Gas plant applications sourced from Vedanta engineering"
+  ],
+  "engineeringConsiderations": "CONTENT REQUIRED — corrosion regime, cyclic duty, and code obligations specific to Oil & Gas, sourced from Vedanta engineering.",
+  "productSlugs": [
+    "heat-exchangers",
+    "metallic-bellows-expansion-joint",
+    "pressure-vessels",
+    "process-skids"
+  ],
+  "capabilitySlugs": [],
+  "companySlugs": [
+    "dhruv-epc",
+    "precise-engineers"
+  ],
+  "faqs": [
+    {
+      "question": "What equipment does Vedanta Group supply for the Oil & Gas sector?",
+      "answer": "CONTENT REQUIRED — answer pending sourced sector narrative from Vedanta engineering (which products, which codes, why they fit this sector's duty)."
+    },
+    {
+      "question": "What corrosion and material considerations apply to Oil & Gas equipment?",
+      "answer": "CONTENT REQUIRED — corrosion regime and material-of-construction guidance for this sector, sourced from Vedanta engineering."
+    },
+    {
+      "question": "What codes and standards govern Oil & Gas projects Vedanta Group has executed?",
+      "answer": "CONTENT REQUIRED — code/standard obligations specific to this sector, sourced from Vedanta engineering."
+    },
+    {
+      "question": "Has Vedanta Group completed projects in the Oil & Gas sector?",
+      "answer": "CONTENT REQUIRED — project evidence (case studies, client references) for this sector, pending sign-off."
+    }
+  ],
+  "contentComplete": false
+}

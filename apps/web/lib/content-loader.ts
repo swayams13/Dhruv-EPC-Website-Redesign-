@@ -10,6 +10,8 @@ import {
   Certification,
   Approval,
   ProductCategory,
+  Industry,
+  Capability,
   type CompanySlug,
 } from '@vedanta/schemas'
 // Non-CMS page-decoration data has no fs dependency of its own — kept in a
@@ -52,6 +54,8 @@ const products = loadDir('products', Product)
 const productCategories = loadDir('productCategories', ProductCategory)
 const certifications = loadDir('certifications', Certification)
 const approvals = loadDir('approvals', Approval)
+const industries = loadDir('industries', Industry)
+const capabilities = loadDir('capabilities', Capability)
 
 export function getEntity(companySlug: CompanySlug): EntityRecord {
   const found = entities.find((e) => e.companySlug === companySlug)
@@ -85,6 +89,26 @@ export function getProductCategory(slug: string): ProductCategory {
 
 export function getProductCategoriesByCompany(companySlug: CompanySlug): ProductCategory[] {
   return productCategories.filter((c) => c.companySlug === companySlug)
+}
+
+export function getProductBySlug(slug: string): Product | undefined {
+  return products.find((p) => p.slug === slug)
+}
+
+export function getIndustries(): Industry[] {
+  return industries
+}
+
+export function getIndustry(slug: string): Industry | undefined {
+  return industries.find((i) => i.slug === slug)
+}
+
+export function getCapabilities(): Capability[] {
+  return capabilities
+}
+
+export function getCapability(slug: string): Capability | undefined {
+  return capabilities.find((c) => c.slug === slug)
 }
 
 // Zod guarantees phones.min(1) — same derivation as the old per-company

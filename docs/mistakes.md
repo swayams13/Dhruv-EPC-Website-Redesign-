@@ -375,3 +375,37 @@ structurally cannot catch — a final whole-branch review is not optional
 ceremony for a multi-batch rollout, it is where exactly this class of drift
 gets caught. Budget for it, and dispatch it on a capable-enough model to
 actually compare across the branch, not just diff-scan the tail commit.
+
+## 2026-09-01 — Session 8: IndustryCard opacity-wrapper contrast bug found + fixed; VG-004 spread to new routes
+
+**What happened:** building `/industries` (VG-020) exercised
+`IndustryCard`'s `thin` (zero-project) state for the first time in a real,
+axe-audited route — Session 7 added the component but no page ever
+rendered it live. That state wrapped its text in an `opacity-60`/`opacity-70`
+div for a "washed out" look. Opacity blends the *whole* subtree toward
+whatever's behind it, so no token choice underneath it could reach 4.5:1 —
+even `steel-700` (9.94:1 solid) only blended to ~4.3:1 at 70% opacity
+against `steel-50`. Confirmed via manual luminance-ratio computation, not
+guessed. Fixed in `packages/datum-ui/src/components/IndustryCard.tsx`: both
+`thin` branches (light + dark) dropped the wrapper opacity and moved to
+solid tokens verified ≥4.5:1 (`steel-600` on `steel-50`, `steel-400` on
+`steel-900`) — de-emphasis now comes from token choice, not opacity.
+
+**Same bug elsewhere, not fixed (logged, not inline per CLAUDE.md scope
+discipline):** `CategoryCard.tsx`'s `thin` branches (`opacity-60`/
+`opacity-70`) and `IndustryCard.tsx`'s `compact` + thin branch
+(`opacity-60`) use the identical pattern. Neither is exercised by an
+axe-audited route yet, so CI stays green, but the same fix (drop opacity,
+pick a compliant solid token) applies whenever one is.
+
+**Separately:** the new `(group)/industries` and `(group)/capabilities`
+routes share `GroupChrome`'s header, which is the already-tracked VG-004
+(`text-steel-500` on the dark header, 3.8:1) — not a new bug. All 15 new
+routes added to `e2e/a11y.spec.ts`'s `KNOWN_FAILURES` alongside the
+existing VG-004 entries.
+
+**Rule:** never use CSS opacity to dim text for a "muted" visual state —
+compute the actual blended contrast first (or just don't use opacity on
+text at all) and pick a token that's compliant on its own. An opacity
+wrapper can make an already-compliant token non-compliant even when the
+token itself would pass at full strength.

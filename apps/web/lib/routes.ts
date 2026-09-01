@@ -5,7 +5,7 @@
 import { readdirSync } from 'node:fs'
 import { join, relative, resolve } from 'node:path'
 import { BASE } from './site'
-import { getProductCategoriesByCompany, getProductsByCompany } from './content-loader'
+import { getCapabilities, getIndustries, getProductCategoriesByCompany, getProductsByCompany } from './content-loader'
 import type { CompanySlug } from '@vedanta/schemas'
 
 const APP_DIR = resolve(__dirname, '../app')
@@ -50,6 +50,16 @@ function expandDynamicRoutes(literalRoutes: string[]): string[] {
   for (const route of literalRoutes) {
     if (!route.includes('[')) {
       out.push(route)
+      continue
+    }
+    // Session 8 (VG-020/021): group-scope dynamic routes, not company-scoped
+    // — checked once per route, outside the company loop below.
+    if (route === '/industries/[slug]/') {
+      for (const industry of getIndustries()) out.push(`/industries/${industry.slug}/`)
+      continue
+    }
+    if (route === '/capabilities/[slug]/') {
+      for (const capability of getCapabilities()) out.push(`/capabilities/${capability.slug}/`)
       continue
     }
     for (const companySlug of DYNAMIC_COMPANIES) {

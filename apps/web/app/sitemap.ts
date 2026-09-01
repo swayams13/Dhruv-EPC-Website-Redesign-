@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next'
-import { getEntity, getProductCategoriesByCompany, getProductsByCompany } from '../lib/content-loader'
+import { getCapabilities, getEntity, getIndustries, getProductCategoriesByCompany, getProductsByCompany } from '../lib/content-loader'
 import { BASE } from '../lib/site'
 import type { CompanySlug } from '@vedanta/schemas'
 
@@ -52,6 +52,27 @@ export default function sitemap(): MetadataRoute.Sitemap {
       // honest rather than borrowing the company's, which would claim a
       // revision that didn't happen.
       entries.push(w(`${base}/products/${product.categorySlug}/${product.slug}/`, now))
+    }
+  }
+
+  // Session 8 (VG-020/021): content-gated — a record only enters the
+  // sitemap once contentComplete is true (docs/content-needed-industries-
+  // capabilities.md). The index route itself only ships once at least one
+  // underlying record is complete, matching its own robots gate
+  // (industry-capability-pages-data.ts).
+  const completeIndustries = getIndustries().filter((i) => i.contentComplete)
+  if (completeIndustries.length > 0) {
+    entries.push(w('/industries/', now, 0.7))
+    for (const industry of completeIndustries) {
+      entries.push(w(`/industries/${industry.slug}/`, now))
+    }
+  }
+
+  const completeCapabilities = getCapabilities().filter((c) => c.contentComplete)
+  if (completeCapabilities.length > 0) {
+    entries.push(w('/capabilities/', now, 0.7))
+    for (const capability of completeCapabilities) {
+      entries.push(w(`/capabilities/${capability.slug}/`, now))
     }
   }
 

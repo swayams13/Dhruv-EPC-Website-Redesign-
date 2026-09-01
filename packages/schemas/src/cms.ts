@@ -233,6 +233,10 @@ export const Industry = z.object({
   capabilitySlugs: z.array(z.string()),
   companySlugs: z.array(CompanySlug),
   faqs: z.array(ProductFAQ).min(4, 'FAQ block requires 4–6 Q&As (GEO surface — Datum §21)').max(6),
+  // Session 8 (VG-020/021): gates a record out of the sitemap and behind
+  // noindex until real narrative/engineering copy replaces the placeholder
+  // text — flipping this to true is the one-line change that ships the page.
+  contentComplete: z.boolean().default(false),
 })
 export type Industry = z.infer<typeof Industry>
 
@@ -245,6 +249,8 @@ export const Capability = z.object({
   standards: z.array(z.string()),
   productSlugs: z.array(z.string()),
   faqs: z.array(ProductFAQ).min(4, 'FAQ block requires 4–6 Q&As (GEO surface — Datum §21)').max(6),
+  // Session 8 (VG-020/021): see Industry.contentComplete — same gate.
+  contentComplete: z.boolean().default(false),
 })
 export type Capability = z.infer<typeof Capability>
 

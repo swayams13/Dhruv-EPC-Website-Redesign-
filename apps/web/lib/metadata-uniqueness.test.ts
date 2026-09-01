@@ -9,6 +9,12 @@ import { join, relative, resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { productDetailPageData } from './product-detail-page-data'
 import { productCategoryIndexPageData, productCategoryListingPageData } from './product-category-pages-data'
+import {
+  capabilityDetailPageData,
+  capabilityIndexMetadata,
+  industryDetailPageData,
+  industryIndexMetadata,
+} from './industry-capability-pages-data'
 import type { CompanySlug } from '@vedanta/schemas'
 
 const APP_DIR = resolve(__dirname, '../app')
@@ -51,6 +57,13 @@ const DYNAMIC_FILES = new Set([
   'precise-engineers/products/[category]/page.tsx',
   'dhruv-epc/products/[category]/[slug]/page.tsx',
   'precise-engineers/products/[category]/[slug]/page.tsx',
+  // Session 8 (VG-020/021): index metadata comes from a called function
+  // (industryIndexMetadata()/capabilityIndexMetadata()), not a `title:`
+  // object literal — same reason the product routes above are dynamic.
+  '(group)/industries/page.tsx',
+  '(group)/industries/[slug]/page.tsx',
+  '(group)/capabilities/page.tsx',
+  '(group)/capabilities/[slug]/page.tsx',
 ])
 
 function dynamicRecords(): { file: string; title: string | undefined; description: string | undefined }[] {
@@ -83,6 +96,40 @@ function dynamicRecords(): { file: string; title: string | undefined; descriptio
       })
     }
   }
+
+  // Session 8 (VG-020/021) — group-scope, not per-company.
+  const industryIndex = industryIndexMetadata()
+  out.push({
+    file: '(group)/industries/page.tsx',
+    title: industryIndex.title as string | undefined,
+    description: industryIndex.description as string | undefined,
+  })
+  const industryDetail = industryDetailPageData()
+  for (const { slug } of industryDetail.generateStaticParams()) {
+    const meta = industryDetail.generateMetadata({ params: { slug } })
+    out.push({
+      file: `(group)/industries/[slug]/page.tsx:${slug}`,
+      title: meta.title as string | undefined,
+      description: meta.description as string | undefined,
+    })
+  }
+
+  const capabilityIndex = capabilityIndexMetadata()
+  out.push({
+    file: '(group)/capabilities/page.tsx',
+    title: capabilityIndex.title as string | undefined,
+    description: capabilityIndex.description as string | undefined,
+  })
+  const capabilityDetail = capabilityDetailPageData()
+  for (const { slug } of capabilityDetail.generateStaticParams()) {
+    const meta = capabilityDetail.generateMetadata({ params: { slug } })
+    out.push({
+      file: `(group)/capabilities/[slug]/page.tsx:${slug}`,
+      title: meta.title as string | undefined,
+      description: meta.description as string | undefined,
+    })
+  }
+
   return out
 }
 

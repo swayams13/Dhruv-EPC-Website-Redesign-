@@ -83,14 +83,20 @@ export function IndustryCard({
 
   if (onDark) {
     if (thin) {
+      // Session 8 axe finding: an opacity-based "washed out" wrapper caps
+      // the max achievable contrast for any token underneath it — steel-700
+      // (the darkest available) only blends to ~4.3:1 against this bg at
+      // opacity-60/70, short of the 4.5:1 floor. De-emphasis has to come
+      // from token choice alone (steel-400 vs. the active card's steel-50/
+      // steel-300), never from opacity on text.
       return (
-        <div className="block h-full rounded-sm border border-steel-800 bg-steel-900 p-6 opacity-60">
-          <span aria-hidden className="font-mono text-helper text-steel-600">{index}</span>
+        <div className="block h-full rounded-sm border border-steel-800 bg-steel-900 p-6">
+          <span aria-hidden className="font-mono text-helper text-steel-400">{index}</span>
           <Heading level={headingLevel} className="mt-2 font-display text-h3 font-semibold text-steel-400">
             {name}
           </Heading>
-          <p className="mt-2 text-sm text-steel-600">{servedByLabel}</p>
-          <p className="mt-4 font-mono text-helper text-steel-600">{projectLabel}</p>
+          <p className="mt-2 text-sm text-steel-400">{servedByLabel}</p>
+          <p className="mt-4 font-mono text-helper text-steel-400">{projectLabel}</p>
         </div>
       )
     }
@@ -111,13 +117,13 @@ export function IndustryCard({
 
   if (thin) {
     return (
-      <div className="block h-full rounded-sm border border-steel-200 bg-steel-50 p-6 opacity-70">
-        <span aria-hidden className="font-mono text-helper text-steel-400">{index}</span>
-        <Heading level={headingLevel} className="mt-2 font-display text-h3 font-semibold text-steel-500">
+      <div className="block h-full rounded-sm border border-steel-200 bg-steel-50 p-6">
+        <span aria-hidden className="font-mono text-helper text-steel-600">{index}</span>
+        <Heading level={headingLevel} className="mt-2 font-display text-h3 font-semibold text-steel-600">
           {name}
         </Heading>
-        <p className="mt-2 text-sm text-steel-500">{servedByLabel}</p>
-        <p className="mt-4 font-mono text-helper text-steel-500">{projectLabel}</p>
+        <p className="mt-2 text-sm text-steel-600">{servedByLabel}</p>
+        <p className="mt-4 font-mono text-helper text-steel-600">{projectLabel}</p>
       </div>
     )
   }
