@@ -16,37 +16,49 @@
       "param": "Size range",
       "value": "25 – 2,000",
       "unit": "mm NB",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Design pressure",
       "value": "full vacuum to 10",
       "unit": "bar(g)",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Design temperature",
       "value": "−20 to +120",
       "unit": "°C",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Axial movement",
       "value": "±25 – ±75",
       "unit": "mm",
-      "note": "DEMO — movement tables pending"
+      "note": "DEMO — movement tables pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Elastomer types",
-      "value": "EPDM · NBR · Neoprene · Natural rubber · Hypalon"
+      "value": "EPDM · NBR · Neoprene · Natural rubber · Hypalon",
+      "provenance": "sourced"
     },
     {
       "param": "Arch configuration",
-      "value": "Single arch · dual arch · wide arch"
+      "value": "Single arch · dual arch · wide arch",
+      "provenance": "sourced",
+      "rail": true
     },
     {
       "param": "End connections",
-      "value": "Flanged (ANSI B16.1 · BS 4504 · DIN 2501) · grooved · threaded"
+      "value": "Flanged (ANSI B16.1 · BS 4504 · DIN 2501) · grooved · threaded",
+      "provenance": "sourced"
     }
   ],
   "types": [
