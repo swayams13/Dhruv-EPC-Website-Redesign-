@@ -13,39 +13,51 @@
   "specTable": [
     {
       "param": "Structural standard",
-      "value": "IS 2062 · ASTM A36 · IS 800"
+      "value": "IS 2062 · ASTM A36 · IS 800",
+      "provenance": "sourced"
     },
     {
       "param": "Welding standard",
-      "value": "AWS D1.1 · IS 816 · WPS/PQR-qualified welders"
+      "value": "AWS D1.1 · IS 816 · WPS/PQR-qualified welders",
+      "provenance": "sourced"
     },
     {
       "param": "Fabrication types",
-      "value": "Pipe racks, equipment structures, module frames, duct assemblies, pressure equipment"
+      "value": "Pipe racks, equipment structures, module frames, duct assemblies, pressure equipment",
+      "provenance": "sourced",
+      "rail": true
     },
     {
       "param": "Max unit weight",
       "value": "200",
       "unit": "T",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Max plate thickness",
       "value": "up to 200",
       "unit": "mm",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "NDT",
-      "value": "UT · MT · PT on critical structural welds per ITP"
+      "value": "UT · MT · PT on critical structural welds per ITP",
+      "provenance": "sourced"
     },
     {
       "param": "Surface preparation",
-      "value": "Blast to SA 2½, primer and finish coating to client spec"
+      "value": "Blast to SA 2½, primer and finish coating to client spec",
+      "provenance": "sourced"
     },
     {
       "param": "Inspection",
-      "value": "Third-party per client ITP"
+      "value": "Third-party per client ITP",
+      "provenance": "sourced",
+      "rail": true
     }
   ],
   "types": [
