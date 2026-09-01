@@ -15,33 +15,45 @@
       "param": "Floor-type boring mill",
       "value": "Ø up to 4,000",
       "unit": "mm bore/face",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Vertical turning lathe",
       "value": "Ø up to 4,000",
       "unit": "mm",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Horizontal lathe",
       "value": "Ø up to 2,500 × L 10,000",
       "unit": "mm",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Heavy milling",
       "value": "Bed up to 3,000 × 1,500",
       "unit": "mm",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Machining types",
-      "value": "Boring, turning, facing, threading, grooving, key-seating, drilling PCD"
+      "value": "Boring, turning, facing, threading, grooving, key-seating, drilling PCD",
+      "provenance": "sourced",
+      "rail": true
     },
     {
       "param": "Inspection",
-      "value": "CMM and template verification of critical dimensions before dispatch"
+      "value": "CMM and template verification of critical dimensions before dispatch",
+      "provenance": "sourced",
+      "rail": true
     }
   ],
   "types": [
