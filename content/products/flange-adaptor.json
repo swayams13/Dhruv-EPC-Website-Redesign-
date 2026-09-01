@@ -15,29 +15,37 @@
       "param": "Size range",
       "value": "50 – 1,200",
       "unit": "mm NB",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Design pressure",
       "value": "up to PN 16",
-      "note": "DEMO — full pressure table pending"
+      "note": "DEMO — full pressure table pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Pipe OD tolerance",
       "value": "OD-specific per pipe schedule",
-      "note": "DEMO — pipe OD table pending"
+      "note": "DEMO — pipe OD table pending",
+      "provenance": "unverified"
     },
     {
       "param": "Flange standard",
-      "value": "ANSI B16.1 · BS 4504 · DIN 2501"
+      "value": "ANSI B16.1 · BS 4504 · DIN 2501",
+      "provenance": "sourced"
     },
     {
       "param": "MOC — body",
-      "value": "Ductile iron · CS · SS 304 · SS 316"
+      "value": "Ductile iron · CS · SS 304 · SS 316",
+      "provenance": "sourced"
     },
     {
       "param": "Seal",
-      "value": "EPDM · NBR · Neoprene"
+      "value": "EPDM · NBR · Neoprene",
+      "provenance": "sourced"
     }
   ],
   "types": [
