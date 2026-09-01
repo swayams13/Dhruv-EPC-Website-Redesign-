@@ -6,6 +6,11 @@
 // (heat-exchangers, metallic-bellows-expansion-joint) — this session does
 // not redesign the product page (see session brief scoping note).
 //
+// As of Session 7, this factory renders every product — both companies —
+// through the single golden layout introduced in Session 6 for Pressure
+// Vessels (SpecRail sidebar + Inspection record section). There is no more
+// forked/legacy render path.
+//
 // Each of the two thin app/{company}/products/[category]/[slug]/page.tsx
 // files re-exports generateStaticParams/generateMetadata/default from the
 // object this factory returns — Next.js only requires those bindings to
@@ -23,7 +28,7 @@ import {
   SpecTable,
 } from '@vedanta/datum-ui'
 import { buildBreadcrumbList, buildFAQPage, buildProduct } from '@vedanta/schemas'
-import type { CompanySlug, Product, EntityRecord, ProductCategory } from '@vedanta/schemas'
+import type { CompanySlug } from '@vedanta/schemas'
 import { RFQBand } from '../components/RFQBand'
 import { AnchorRailDesktop, AnchorRailMobile } from '../components/AnchorRail'
 import {
@@ -43,35 +48,9 @@ const SECTIONS = [
   { id: 'types', label: 'Types & configurations' },
   { id: 'materials-codes', label: 'Materials & codes' },
   { id: 'fabrication-qa', label: 'Fabrication & QA' },
-  { id: 'faq', label: 'FAQ' },
-]
-
-// Golden page (Session 6) — Pressure Vessels only. Not generalized on purpose:
-// this is a one-product early return so the design can be reviewed once
-// before Session 7 replicates the pattern to the other 16 products. Do not
-// add a second slug to GOLDEN_PAGE_SLUGS in this session.
-const GOLDEN_PAGE_SLUGS = new Set(['pressure-vessels'])
-
-const GOLDEN_SECTIONS = [
-  { id: 'specifications', label: 'Specifications' },
-  { id: 'types', label: 'Types & configurations' },
-  { id: 'materials-codes', label: 'Materials & codes' },
-  { id: 'fabrication-qa', label: 'Fabrication & QA' },
   { id: 'inspection-record', label: 'Inspection record' },
   { id: 'faq', label: 'FAQ' },
 ]
-
-// Rail carries the single-value "key figures" only — the two multi-value rows
-// (Design codes, Materials) stay in the main SpecTable body where a list reads
-// better than a cramped rail row. See SpecRail.tsx's inferred-spec note.
-const RAIL_PARAMS = new Set([
-  'Vessel types',
-  'Shell diameter',
-  'Max unit weight',
-  'Design pressure',
-  'Design temperature',
-  'Inspection',
-])
 
 // Fallback QA strip for a product that hasn't been given page.qaSteps yet —
 // generic enough not to invent a claim, specific enough not to look broken.
@@ -83,27 +62,19 @@ const GENERIC_QA_STEPS = [
   { step: 'Testing & dispatch', caption: 'Witnessed testing, final dossier, dispatch' },
 ]
 
-// Golden page (Session 6) — Pressure Vessels only. A deliberate one-product
-// fork of Page() below: same hero/breadcrumb/JSON-LD wiring, same "types",
-// "materials-codes", "fabrication-qa", "faq" sections verbatim, plus a
-// SpecRail sidebar and a new "Inspection record" section wired to the
-// existing (previously unused) ApprovalsMatrix/CertificationCard components
-// and the existing content/approvals + content/certifications records — no
-// new content entities were needed for this section (see PR description).
-function PressureVesselsGoldenPage({
-  product,
-  entity,
-  category,
-  rfqCompany,
-}: {
-  product: Product
-  entity: EntityRecord
-  category: ProductCategory | undefined
-  rfqCompany: 'dhruv' | 'precise'
-}): ReactElement {
-  const page = product.page
-  const railRows = product.specTable.filter((r) => RAIL_PARAMS.has(r.param))
-  // LRS/BV/DNV — the third-party inspection agencies the "Inspection record"
+export function productDetailPage(companySlug: CompanySlug) {
+  const { generateStaticParams, generateMetadata } = productDetailPageData(companySlug)
+
+  function Page({ params }: { params: { category: string; slug: string } }): ReactElement {
+    const product = findProduct(companySlug, params.category, params.slug)
+    if (!product) notFound()
+
+    const entity = getEntity(companySlug)
+    const category = getProductCategoriesByCompany(companySlug).find((c) => c.slug === product.categorySlug)
+    const rfqCompany = companyRfqSlug(companySlug)
+    const page = product.page
+    const railRows = product.specTable.filter((r) => r.rail === true)
+    // LRS/BV/DNV — the third-party inspection agencies the "Inspection record"
   // band names. IBR (statutory) is already a Certification, rendered below.
   const approvals = getApprovals(product.companySlug).filter(
     (a) => a.entityClass === 'TPIA' && a.category === 'Third-party inspection',
@@ -156,7 +127,7 @@ function PressureVesselsGoldenPage({
         }}
       />
 
-      <AnchorRailMobile sections={GOLDEN_SECTIONS} />
+      <AnchorRailMobile sections={SECTIONS} />
       <SpecRailMobile rows={railRows} />
 
       <div className="mx-auto grid max-w-wide grid-cols-1 gap-8 px-6 py-12 lg:grid-cols-12">
@@ -289,7 +260,7 @@ function PressureVesselsGoldenPage({
             alone rather than edited, since that component is shared by all
             17 products. */}
         <div className="hidden lg:col-span-4 lg:block">
-          <AnchorRailDesktop sections={GOLDEN_SECTIONS} />
+          <AnchorRailDesktop sections={SECTIONS} />
           <SpecRailDesktop
             rows={railRows}
             primaryCta={{ label: 'Request a quote', href: rfqHref(rfqCompany, product.slug) }}
@@ -309,188 +280,6 @@ function PressureVesselsGoldenPage({
       />
     </main>
   )
-}
-
-export function productDetailPage(companySlug: CompanySlug) {
-  const { generateStaticParams, generateMetadata } = productDetailPageData(companySlug)
-
-  function Page({ params }: { params: { category: string; slug: string } }): ReactElement {
-    const product = findProduct(companySlug, params.category, params.slug)
-    if (!product) notFound()
-
-    const entity = getEntity(companySlug)
-    const category = getProductCategoriesByCompany(companySlug).find((c) => c.slug === product.categorySlug)
-    const rfqCompany = companyRfqSlug(companySlug)
-    const page = product.page
-
-    // Golden page — Session 6. See GOLDEN_PAGE_SLUGS comment above.
-    if (companySlug === 'dhruv-epc' && GOLDEN_PAGE_SLUGS.has(product.slug)) {
-      return (
-        <PressureVesselsGoldenPage
-          product={product}
-          entity={entity}
-          category={category}
-          rfqCompany={rfqCompany}
-        />
-      )
-    }
-
-    const breadcrumbs = [
-      { label: companyLabel(companySlug), href: companyHref(companySlug) },
-      { label: 'Products', href: productsIndexHref(companySlug) },
-      ...(category ? [{ label: category.name, href: categoryHref(companySlug, category.slug) }] : []),
-      { label: page?.breadcrumbLabel ?? product.name },
-    ]
-
-    const canonicalPath = productHref(companySlug, product.categorySlug, product.slug)
-    const jsonLd = [
-      buildProduct(product, entity),
-      buildFAQPage(product.faqs),
-      buildBreadcrumbList([
-        { name: companyLabel(companySlug), url: `${BASE}${companyHref(companySlug)}` },
-        { name: 'Products', url: `${BASE}${productsIndexHref(companySlug)}` },
-        ...(category
-          ? [{ name: category.name, url: `${BASE}${categoryHref(companySlug, category.slug)}` }]
-          : []),
-        { name: page?.breadcrumbLabel ?? product.name, url: `${BASE}${canonicalPath}` },
-      ]),
-    ]
-
-    const qaSteps = page?.qaSteps && page.qaSteps.length > 0 ? page.qaSteps : GENERIC_QA_STEPS
-
-    return (
-      <main>
-        {jsonLd.map((ld) => (
-          <script
-            key={ld['@type']}
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }}
-          />
-        ))}
-
-        <ProductHero
-          breadcrumbs={breadcrumbs}
-          title={page?.heroTitle ?? product.name}
-          valueStatement={page?.valueStatement ?? product.oneLineScope}
-          chips={page?.heroChips && page.heroChips.length > 0 ? page.heroChips : product.codes.slice(0, 3)}
-          specHref="#specifications"
-          {...(page?.certChips && page.certChips.length > 0 ? { certChips: page.certChips } : {})}
-          rfq={{
-            label: 'Request a quote',
-            href: rfqHref(rfqCompany, product.slug),
-          }}
-        />
-
-        <AnchorRailMobile sections={SECTIONS} />
-
-        <div className="mx-auto grid max-w-wide grid-cols-1 gap-8 px-6 py-12 lg:grid-cols-12">
-          <div className="flex flex-col gap-16 lg:col-span-8">
-            <section id="specifications" aria-labelledby="spec-heading">
-              <h2 id="spec-heading" className="font-display text-h3 font-medium text-steel-950">
-                Specifications
-              </h2>
-              <div className="mt-6">
-                <SpecTable rows={product.specTable} caption={page?.specCaption ?? `${product.name} capability`} />
-              </div>
-            </section>
-
-            <section id="types" aria-labelledby="types-heading">
-              <h2 id="types-heading" className="font-display text-h3 font-medium text-steel-950">
-                Types &amp; configurations
-              </h2>
-              <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
-                {product.types.map((t) => (
-                  <div key={t.name} className="rounded-sm border border-steel-200 bg-white p-6">
-                    <h3 className="text-h4 font-medium text-steel-950">{t.name}</h3>
-                    <p className="mt-2 text-sm text-steel-700">{t.description}</p>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            <section id="materials-codes" aria-labelledby="moc-heading">
-              <h2 id="moc-heading" className="font-display text-h3 font-medium text-steel-950">
-                Materials &amp; codes
-              </h2>
-              <h3 className="mt-6 text-xs font-medium uppercase tracking-caption text-steel-600">
-                {page?.materialsHeading ?? 'Materials of construction'}
-              </h3>
-              <ul className="mt-3 flex flex-wrap gap-2">
-                {product.materials.map((m) => (
-                  <li
-                    key={m}
-                    className="rounded-sm border border-steel-200 bg-steel-50 px-3 py-1 font-mono text-helper text-steel-700"
-                  >
-                    {m}
-                  </li>
-                ))}
-              </ul>
-              <h3 className="mt-6 text-xs font-medium uppercase tracking-caption text-steel-600">
-                Design codes
-              </h3>
-              <ul className="mt-3 flex flex-wrap gap-2">
-                {product.codes.map((c) => (
-                  <li
-                    key={c}
-                    className="rounded-sm border border-steel-200 bg-steel-50 px-3 py-1 font-mono text-helper text-steel-700"
-                  >
-                    {c}
-                  </li>
-                ))}
-              </ul>
-            </section>
-
-            <section id="fabrication-qa" aria-labelledby="qa-heading">
-              <h2 id="qa-heading" className="font-display text-h3 font-medium text-steel-950">
-                Fabrication &amp; QA
-              </h2>
-              <ol className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
-                {qaSteps.map((s, i) => (
-                  <li key={s.step} className="rounded-sm border border-steel-200 bg-white p-4">
-                    <span className="font-mono text-h3 font-light leading-none text-steel-300">{i + 1}</span>
-                    <h3 className="mt-1 text-sm font-medium text-steel-950">{s.step}</h3>
-                    <p className="mt-1 text-helper text-steel-600">{s.caption}</p>
-                  </li>
-                ))}
-              </ol>
-              {page?.qaClosing && <p className="mt-4 text-helper text-steel-600">{page.qaClosing}</p>}
-            </section>
-
-            <section id="faq" aria-labelledby="faq-heading">
-              <h2 id="faq-heading" className="font-display text-h3 font-medium text-steel-950">
-                Frequently asked questions
-              </h2>
-              <div className="mt-6 flex flex-col divide-y divide-steel-200 border-y border-steel-200">
-                {product.faqs.map((faq) => (
-                  <details key={faq.question} className="group py-4">
-                    <summary className="flex min-h-row cursor-pointer list-none items-center justify-between gap-4 text-data font-medium text-steel-950 [&::-webkit-details-marker]:hidden">
-                      {faq.question}
-                      <span
-                        aria-hidden
-                        className="text-steel-500 transition-transform duration-instant ease-standard group-open:rotate-180"
-                      >
-                        <ChevronDown size={20} />
-                      </span>
-                    </summary>
-                    <p className="mt-3 max-w-content text-sm text-steel-700">{faq.answer}</p>
-                  </details>
-                ))}
-              </div>
-            </section>
-          </div>
-
-          <AnchorRailDesktop sections={SECTIONS} />
-        </div>
-
-        <RFQBand company={rfqCompany} equipment={product.slug} whatsappHref={whatsappHref(entity)} />
-
-        <MobileBottomBar
-          phoneHref={phoneHref(entity)}
-          whatsappHref={whatsappHref(entity)}
-          rfqHref={rfqHref(rfqCompany)}
-        />
-      </main>
-    )
   }
 
   return { generateStaticParams, generateMetadata, Page }
