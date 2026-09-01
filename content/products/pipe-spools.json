@@ -13,34 +13,43 @@
   "specTable": [
     {
       "param": "Piping code",
-      "value": "ASME B31.3 · ASME B31.1"
+      "value": "ASME B31.3 · ASME B31.1",
+      "provenance": "sourced"
     },
     {
       "param": "Size range",
       "value": "NPS ½ to NPS 48",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Wall thickness",
       "value": "SCH 10 to SCH 160 / XXS",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Materials",
-      "value": "CS, LTCS, LAS, austenitic SS, duplex SS, high-nickel alloys"
+      "value": "CS, LTCS, LAS, austenitic SS, duplex SS, high-nickel alloys",
+      "provenance": "sourced"
     },
     {
       "param": "Welding standard",
-      "value": "WPS/PQR to ASME Sec. IX · heat number traceability maintained"
+      "value": "WPS/PQR to ASME Sec. IX · heat number traceability maintained",
+      "provenance": "sourced"
     },
     {
       "param": "NDT",
       "value": "RT · UT · PT · MT per ITP",
-      "note": "NDT-covered per [source: vedantagroup.net]"
+      "note": "NDT-covered per [source: vedantagroup.net]",
+      "provenance": "sourced"
     },
     {
       "param": "Testing",
-      "value": "Hydrotest or pneumatic per ASME B31.3 design pressure"
+      "value": "Hydrotest or pneumatic per ASME B31.3 design pressure",
+      "provenance": "sourced"
     }
   ],
   "types": [
