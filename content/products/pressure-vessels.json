@@ -23,35 +23,40 @@
     {
       "param": "Vessel types",
       "value": "Separators, reactors, distillation columns, accumulators, KO drums, surge vessels",
-      "provenance": "sourced"
+      "provenance": "sourced",
+      "rail": true
     },
     {
       "param": "Shell diameter",
       "value": "300 – 5,000",
       "unit": "mm",
       "note": "DEMO figure — engineering data pending",
-      "provenance": "unverified"
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Max unit weight",
       "value": "400",
       "unit": "T",
       "note": "DEMO figure — engineering data pending",
-      "provenance": "unverified"
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Design pressure",
       "value": "FV to 300",
       "unit": "bar(g)",
       "note": "DEMO figure — engineering data pending",
-      "provenance": "unverified"
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Design temperature",
       "value": "−196 to +600",
       "unit": "°C",
       "note": "DEMO figure — engineering data pending",
-      "provenance": "unverified"
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Materials",
@@ -62,7 +67,8 @@
       "param": "Inspection",
       "value": "LRS · BV · DNV · IBR",
       "note": "Third-party and statutory",
-      "provenance": "sourced"
+      "provenance": "sourced",
+      "rail": true
     }
   ],
   "types": [
