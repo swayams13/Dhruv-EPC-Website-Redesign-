@@ -296,6 +296,40 @@ pattern rather than assuming storage-tanks is the only instance. Next
 session touching `ProductHero` should confirm the focus-visible ring
 question with devtools, not a screenshot.
 
+**Resolution (2026-09-01):**
+1. `&amp;` fix — grepped all 17 product JSON files for `&amp;`/`&lt;`/
+   `&gt;`/`&quot;`; found TWO instances, not one — `storage-tanks.json`
+   and `plate-flanges.json` (`page.heroTitle`: `"Plate Flanges &amp; Base
+   Frames..."`, same pattern, same root cause). Both fixed to a plain `&`,
+   matching their own sibling `metaTitle`/`breadcrumbLabel` fields.
+2. Focus-visible ring — **not a real bug; closing without a code change.**
+   Traced to `apps/web/app/globals.css`'s `:focus-visible { outline: 2px
+   solid var(--accent-focus, ...); outline-offset: 2px }`. `--accent-focus`
+   equals `--accent` for both companies (Dhruv `#AA3833` = `#AA3833`,
+   Precise `#0E6BA8` = `#0E6BA8`) — same hue as the RFQ button's own fill.
+   But `outline-offset: 2px` draws the ring 2px *outside* the button's
+   border box, onto the surrounding section background (`steel-50` /
+   `steel-950`), never overlapping the button's own fill — so "same color
+   as the fill" does not make it invisible; it renders as accent-color on
+   a light/dark neutral background, which already has validated contrast
+   elsewhere in the token system. This is a different situation from the
+   IndustryCard incident above, where the ring color nearly matched the
+   *surrounding* background, not just a same-element fill.
+   Attempted to confirm visually via the claude-in-chrome browser tool
+   (both simulated Tab-key presses and a direct `element.focus()` call);
+   `document.activeElement` stayed `<body>` in both cases, and
+   `document.hasFocus()` returned `false` with `document.visibilityState:
+   "hidden"` — this automation session's browser tab never has real OS-
+   level window focus, so keyboard-focus behavior cannot be observed
+   through it at all. The original "no visible ring" screenshot in the
+   entry above was almost certainly this same limitation (focus never
+   reached the page), not a missing ring. **Rule:** `:focus-visible`
+   checks in this environment need a real interactive browser session (a
+   human driving it, or a headed Playwright run with an actual OS window)
+   — the claude-in-chrome tool cannot grant a tab real window focus, so
+   `document.hasFocus()`/`document.activeElement` are the first things to
+   check before trusting *any* keyboard-focus screenshot taken through it.
+
 ## 2026-09-01 — Session 7 SDD loop: a per-task review ruling was itself wrong, caught only by the final whole-branch review
 
 **What happened:** During the precise-engineers content batch (Tasks 11-19),
