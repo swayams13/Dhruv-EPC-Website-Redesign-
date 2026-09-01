@@ -1413,3 +1413,135 @@ redirect runtime ✓  manually verified via next start: exact CSV-stored
    old files' JSX**, not re-authored — every hero/QA/meta string is
    byte-identical to what shipped before this session, so this is data
    migration, not new copy.
+
+---
+
+### Session 23 — Golden page: Pressure Vessels (SpecRail + inspection record)
+**Status:** Complete ✅ — merged to `main`
+**Branch:** `design/session-6-golden-page` · **Date:** 2026-08-31
+**Governing specs:** `docs/design-docs/Vedanta Component Specs.html`,
+`docs/design-docs/Vedanta Product Page Directions.html` (direction 1c,
+"Structured Hybrid") — copied into the repo this session, see below
+**Merged:** PR #20 merged to `main` as `df0e443` (2026-08-31), CI green
+(Lint · Typecheck · Test · Accessibility · Performance). Branch deleted
+(local + remote) after merge.
+
+#### Scope
+
+New product-page design (rail, provenance, inspection record) for exactly
+one product — Dhruv EPC's Pressure Vessels — held to one product on
+purpose, for design review before Session 24 replicates the pattern to
+the other 16.
+
+#### Blocker found and resolved before building
+
+The two named spec files, plus `01-final-implementation-blueprint-v2.md`,
+existed only in `~/Downloads`, not in the repo — despite CLAUDE.md naming
+them as checked-in source of truth. Copied into `docs/design-docs/` and
+`docs/` as this branch's first commit. Decoded `Vedanta Component Specs.html`
+(a design-tool bundler export, not static HTML) and found it specs
+`CategoryCard`/`IndustryCard` only — **not** a golden-page component.
+`Vedanta Product Page Directions.html`'s winning direction only *names*
+`SpecRail`/`SectionNav`/`CapabilityEnvelopeTable` in a one-line footnote,
+with no prop table, states, or per-company variant spec. Surfaced to the
+human before building (CLAUDE.md ambiguity protocol); approved direction:
+infer a minimal `SpecRail` shape from the mockup captions and flag it
+explicitly, rather than invent a confident-looking shape silently.
+
+#### What was done
+
+- **`SpecRail`** (`SpecRailMobile` / `SpecRailDesktop`, `packages/datum-ui`)
+  — new component: sticky "Key figures" sidebar (desktop, `lg:` 1024px+) /
+  static block above the grid (mobile, no CTA — `MobileBottomBar` owns RFQ
+  at that width). Each row can carry a ✓ sourced / ▲ unverified provenance
+  mark (new `Check`/`Triangle` glyphs) with a footnote. Header comment
+  documents the inference chain verbatim for reviewers. Reuses `Button`
+  (`variant="rfq"`/`"secondary"`) and the existing `[data-rfq-anchor]` /
+  `useRfqAnchorInView` yield contract — no new RFQ-visibility logic.
+- **`SpecTableRow.provenance`** — new optional field on the shared Zod
+  schema (`packages/schemas/src/cms.ts`) and re-exported (not
+  hand-duplicated — see review fix below) into `packages/datum-ui`'s
+  `SpecTable`. Additive only; the other 16 products' `SpecTable` rendering
+  is unaffected.
+- **"Inspection record" section** — discovered `ApprovalsMatrix` and
+  `CertificationCard` (built Session 4/5, never wired into any page) already
+  cover exactly this need, backed by existing `content/approvals/` and
+  `content/certifications/` records for `dhruv-epc`. Wired them into the
+  golden page instead of building a duplicate `ProvenanceMark`/
+  `InspectionRecord` component — no new content entities needed.
+- **`apps/web/lib/product-detail-page.tsx`** — single
+  `slug === 'pressure-vessels'` early return inside `Page()`, branching to
+  a new `PressureVesselsGoldenPage` function in the same file. Every other
+  product continues through the untouched original code path — provable
+  by code inspection, not just testing, and confirmed by re-running the
+  route-level axe suite against `heat-exchangers` and `dismantling-joint`
+  as spot checks (unchanged, pass clean).
+- **Content** — `content/products/pressure-vessels.json`'s 8 `specTable`
+  rows now carry `provenance`: 4 `sourced` (already-live data), 4
+  `unverified` (the existing `"DEMO figure — engineering data pending"`
+  rows) — SpecRail's footnote reads the existing `note` field directly, no
+  duplicate caption field.
+- **Stories + a11y** — `SpecRail.stories.tsx` covers desktop, no-secondary-
+  CTA, Precise accent, all-sourced, and mobile states; picked up
+  automatically by the T5 axe auto-glob (89/89 datum-ui tests pass).
+
+#### Code review fix (before Session 24)
+
+Requested review of `SpecRail.tsx` found two duplication risks and both
+were fixed on this branch before merge:
+1. `SpecTableRow` was independently hand-declared in both
+   `packages/schemas/src/cms.ts` (Zod) and
+   `packages/datum-ui/src/components/SpecTable.tsx` (plain TS interface) —
+   datum-ui already depends on `@vedanta/schemas` for other types
+   (`ApprovalsMatrix`), so `SpecTable.tsx` now re-exports the schema's
+   type instead of redeclaring it.
+2. A `sourceNote` field duplicated `note` verbatim in every unverified row
+   with nothing keeping them in sync — removed; `SpecRail` reads `note`
+   directly.
+
+#### Gate result
+
+```
+pnpm typecheck   ✓  4/4 packages, zero errors
+pnpm lint        ✓  0 errors (2 pre-existing warnings in an untouched
+                    file, apps/web/app/(group)/legal/LegalDocument.tsx)
+pnpm test        ✓  all pass except the pre-existing DATABASE_URL-gated
+                    RFQ integration test (tracked since PR #15/#18,
+                    unrelated to this session) — schemas 67/67,
+                    datum-ui a11y 89/89, content-loader 10/10
+pnpm build       ✓  zero errors/warnings; pressure-vessels route 904 B /
+                    94.9 kB First Load JS (≤120 kB marketing budget ✓)
+route axe        ✓  zero violations on pressure-vessels; heat-exchangers
+                    and dismantling-joint spot-checked unchanged
+manual browser   ✓  375px + 1440px verified live (Chrome automation):
+                    rail + provenance marks + inspection-record section
+                    render correctly, mobile rail has no CTA, single
+                    accent-filled RFQ element at both widths. 768px and
+                    reduced-motion were not separately screenshotted —
+                    flagged for Session 24 to check before generalizing.
+```
+
+#### Deviations / flagged (none silent)
+
+1. `SpecRail`'s exact prop shape, states, and the 6-row "key figures"
+   curation (excludes the two multi-value rows, Design codes/Materials)
+   are inferred, not specced — needs design review before Session 24.
+2. The mobile-collapse breakpoint reuses the existing `lg` (1024px)
+   threshold `AnchorRailDesktop` already uses — the spec gives no exact
+   px value for the rail's own collapse point.
+3. `AnchorRailDesktop` + `SpecRailDesktop` share one `lg:col-span-4`
+   wrapper div (rather than two separate grid children, which would
+   overflow the 12-column grid) so their independent `sticky top-24` boxes
+   share a scroll ancestor and stack correctly — verified empirically in a
+   real browser, not reasoned out on paper.
+4. `CapabilityEnvelopeTable` and `SectionNav` were not built —
+   `SectionNav` already existed as `AnchorRailMobile`/`AnchorRailDesktop`;
+   `CapabilityEnvelopeTable` has even less spec detail than SpecRail and
+   isn't part of this session's expected set.
+
+#### Requires human review before Session 24
+
+- `SpecRail.tsx`'s inferred shape (deviation 1) — confirm before it's
+  copied to the other 16 products.
+- 768px viewport and `prefers-reduced-motion` were not manually verified
+  this session.
