@@ -15,30 +15,38 @@
       "param": "Size range",
       "value": "50 – 1,200",
       "unit": "mm NB",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Pressure rating",
       "value": "PN 10 · PN 16 · PN 25",
-      "note": "DEMO — full pressure table pending"
+      "note": "DEMO — full pressure table pending",
+      "provenance": "unverified"
     },
     {
       "param": "Adjustment length",
       "value": "±25 – ±150",
       "unit": "mm",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Flange standard",
-      "value": "ANSI B16.1 · BS 4504 · DIN 2501"
+      "value": "ANSI B16.1 · BS 4504 · DIN 2501",
+      "provenance": "sourced"
     },
     {
       "param": "MOC — body",
-      "value": "Ductile iron · CS · SS 304 · SS 316"
+      "value": "Ductile iron · CS · SS 304 · SS 316",
+      "provenance": "sourced"
     },
     {
       "param": "Seal",
-      "value": "EPDM · NBR · Neoprene ring gasket"
+      "value": "EPDM · NBR · Neoprene ring gasket",
+      "provenance": "sourced"
     }
   ],
   "types": [
