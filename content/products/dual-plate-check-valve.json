@@ -15,39 +15,50 @@
       "param": "Size range",
       "value": "50 – 900",
       "unit": "mm NB",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Pressure class",
-      "value": "ASME 150 · 300 · 600"
+      "value": "ASME 150 · 300 · 600",
+      "provenance": "sourced"
     },
     {
       "param": "Design standard",
-      "value": "API 594"
+      "value": "API 594",
+      "provenance": "sourced"
     },
     {
       "param": "Face-to-face",
-      "value": "API 594 · ASME B16.10"
+      "value": "API 594 · ASME B16.10",
+      "provenance": "sourced"
     },
     {
       "param": "Body MOC",
-      "value": "WCB · CF8M (SS 316) · CF8 (SS 304) · LCC · WC6"
+      "value": "WCB · CF8M (SS 316) · CF8 (SS 304) · LCC · WC6",
+      "provenance": "sourced"
     },
     {
       "param": "Plate/disc MOC",
-      "value": "SS 316 · SS 304 · Duplex"
+      "value": "SS 316 · SS 304 · Duplex",
+      "provenance": "sourced"
     },
     {
       "param": "Spring material",
-      "value": "SS 316 · Inconel 625"
+      "value": "SS 316 · Inconel 625",
+      "provenance": "sourced"
     },
     {
       "param": "Seat",
-      "value": "Metal-to-metal · PTFE · Buna-N soft seat"
+      "value": "Metal-to-metal · PTFE · Buna-N soft seat",
+      "provenance": "sourced"
     },
     {
       "param": "End type",
-      "value": "Wafer · lug"
+      "value": "Wafer · lug",
+      "provenance": "sourced",
+      "rail": true
     }
   ],
   "types": [
