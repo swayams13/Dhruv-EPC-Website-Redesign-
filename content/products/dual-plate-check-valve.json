@@ -22,7 +22,8 @@
     {
       "param": "Pressure class",
       "value": "ASME 150 · 300 · 600",
-      "provenance": "sourced"
+      "provenance": "sourced",
+      "rail": true
     },
     {
       "param": "Design standard",

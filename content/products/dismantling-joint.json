@@ -23,7 +23,8 @@
       "param": "Pressure rating",
       "value": "PN 10 · PN 16 · PN 25",
       "note": "DEMO — full pressure table pending",
-      "provenance": "unverified"
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Adjustment length",
