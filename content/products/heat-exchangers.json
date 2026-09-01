@@ -17,50 +17,65 @@
     {
       "param": "Design codes",
       "value": "ASME Sec. VIII Div. 1 & 2 · TEMA",
-      "note": "HTRI thermal design"
+      "note": "HTRI thermal design",
+      "provenance": "sourced"
     },
     {
       "param": "Types",
-      "value": "Fixed tube-sheet, floating head, U-tube, kettle, finned tube, double pipe"
+      "value": "Fixed tube-sheet, floating head, U-tube, kettle, finned tube, double pipe",
+      "provenance": "sourced",
+      "rail": true
     },
     {
       "param": "Shell diameter",
       "value": "300 – 4,000",
       "unit": "mm",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Tube length",
       "value": "up to 12,000",
       "unit": "mm",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified"
     },
     {
       "param": "Max unit weight",
       "value": "100",
       "unit": "T",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Design pressure",
       "value": "up to 250",
       "unit": "bar(g)",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Design temperature",
       "value": "−100 to +550",
       "unit": "°C",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Materials",
-      "value": "CS, LTCS, rubber-lined CS, LAS, austenitic SS, duplex SS, high-nickel alloys"
+      "value": "CS, LTCS, rubber-lined CS, LAS, austenitic SS, duplex SS, high-nickel alloys",
+      "provenance": "sourced"
     },
     {
       "param": "Inspection",
       "value": "LRS · BV · DNV · IBR",
-      "note": "Third-party and statutory"
+      "note": "Third-party and statutory",
+      "provenance": "sourced",
+      "rail": true
     }
   ],
   "types": [
