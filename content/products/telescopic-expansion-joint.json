@@ -51,8 +51,7 @@
     {
       "param": "Sealing system",
       "value": "Graphite packing · PTFE packing · live-loaded",
-      "provenance": "sourced",
-      "rail": true
+      "provenance": "sourced"
     },
     {
       "param": "MOC",

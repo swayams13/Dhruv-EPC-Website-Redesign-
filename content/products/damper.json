@@ -14,8 +14,7 @@
     {
       "param": "Types",
       "value": "Louver (multi-blade) · butterfly (single-blade) · guillotine (slide-gate)",
-      "provenance": "sourced",
-      "rail": true
+      "provenance": "sourced"
     },
     {
       "param": "Duct size — circular",

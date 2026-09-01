@@ -52,8 +52,7 @@
     {
       "param": "Arch configuration",
       "value": "Single arch · dual arch · wide arch",
-      "provenance": "sourced",
-      "rail": true
+      "provenance": "sourced"
     },
     {
       "param": "End connections",
