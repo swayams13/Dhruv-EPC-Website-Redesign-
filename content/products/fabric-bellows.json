@@ -16,31 +16,40 @@
       "param": "Duct size — circular",
       "value": "up to 6,000",
       "unit": "mm dia.",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Duct size — rectangular",
       "value": "up to 6,000 × 4,000",
       "unit": "mm",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Design temperature",
       "value": "ambient to +1,000",
       "unit": "°C",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Media",
-      "value": "Flue gas · hot air · particulate-laden gas · mild chemical fumes"
+      "value": "Flue gas · hot air · particulate-laden gas · mild chemical fumes",
+      "provenance": "sourced"
     },
     {
       "param": "Fabric layup",
-      "value": "E-glass woven · ceramic fibre · PTFE-coated glass · silicone-coated glass"
+      "value": "E-glass woven · ceramic fibre · PTFE-coated glass · silicone-coated glass",
+      "provenance": "sourced"
     },
     {
       "param": "Frame MOC",
-      "value": "MS · SS 304 · SS 316"
+      "value": "MS · SS 304 · SS 316",
+      "provenance": "sourced"
     },
     {
       "param": "Axial movement",
