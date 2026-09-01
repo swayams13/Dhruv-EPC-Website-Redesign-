@@ -74,11 +74,11 @@ export function productDetailPage(companySlug: CompanySlug) {
     const rfqCompany = companyRfqSlug(companySlug)
     const page = product.page
     const railRows = product.specTable.filter((r) => r.rail === true)
-    // LRS/BV/DNV — the third-party inspection agencies the "Inspection record"
-    // band names. IBR (statutory) is already a Certification, rendered below.
-    const approvals = getApprovals(product.companySlug).filter(
-      (a) => a.entityClass === 'TPIA' && a.category === 'Third-party inspection',
-    )
+    // All approvals for the company — TPIA (Dhruv: LRS/BV/DNV) plus any
+    // PSU/EPC approved-vendor records (Precise). ApprovalsMatrix groups by
+    // entityClass and renders nothing for empty groups, so this is additive
+    // per company. IBR (statutory) is already a Certification, rendered below.
+    const approvals = getApprovals(product.companySlug)
     const certifications = getCertifications(product.companySlug)
 
     const breadcrumbs = [
@@ -208,7 +208,7 @@ export function productDetailPage(companySlug: CompanySlug) {
                 Inspection record
               </h2>
               <div className="mt-6">
-                <ApprovalsMatrix approvals={approvals} caption="Third-party inspection agencies" />
+                <ApprovalsMatrix approvals={approvals} caption="Approvals & third-party inspection" />
               </div>
               <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2">
                 {certifications.map((c) => (
