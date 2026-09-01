@@ -13,25 +13,33 @@
   "specTable": [
     {
       "param": "Types",
-      "value": "Louver (multi-blade) · butterfly (single-blade) · guillotine (slide-gate)"
+      "value": "Louver (multi-blade) · butterfly (single-blade) · guillotine (slide-gate)",
+      "provenance": "sourced",
+      "rail": true
     },
     {
       "param": "Duct size — circular",
       "value": "up to 3,000",
       "unit": "mm dia.",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Duct size — rectangular",
       "value": "up to 4,000 × 3,000",
       "unit": "mm",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Design temperature",
       "value": "ambient to +600",
       "unit": "°C",
-      "note": "DEMO figure — engineering data pending"
+      "note": "DEMO figure — engineering data pending",
+      "provenance": "unverified",
+      "rail": true
     },
     {
       "param": "Leakage class",
@@ -40,11 +48,13 @@
     },
     {
       "param": "Actuation",
-      "value": "Manual · electric · pneumatic · hydraulic"
+      "value": "Manual · electric · pneumatic · hydraulic",
+      "provenance": "sourced"
     },
     {
       "param": "Frame MOC",
-      "value": "MS · SS 304 · SS 316 · Corten"
+      "value": "MS · SS 304 · SS 316 · Corten",
+      "provenance": "sourced"
     }
   ],
   "types": [
