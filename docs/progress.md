@@ -4087,3 +4087,68 @@ Phase 25's actual canvas review (including the explicit "split hero vs.
 live `1a`/`1b` markup" side-by-side the plan calls for), decide whether
 the two open findings block merge or land as fast-follows, then merge.
 This agent session cannot self-close Phase 25.
+
+---
+
+### Session 34 (continued) — both Phase 25 blockers fixed
+
+Per explicit human request ("fix above both issues"), both findings
+from Phases 22/23 are now resolved:
+
+1. **Header logo/nav overlap at 768px** — `Header.tsx`'s main-row
+   breakpoint moved from `md` (768px) to `lg` (1024px). Confirmed clean
+   at 768px (hamburger, no overlap) and no regression at 1024px, on all
+   3 chromes. `docs/mistakes.md`.
+2. **VG-004 dark-ground contrast** — turned out to be three related
+   instances, not one: `ProductCard`/`CategoryCard`/`IndustryCard`'s
+   `onDark` captions (bare `text-steel-500`/`600` → `text-steel-400`),
+   Header's utility-bar links (`text-white/66` — a missing Tailwind
+   opacity-scale step, silently compiling to nothing), and one straggler
+   caption on the group homepage's door cards. All fixed; `docs/
+   mistakes.md` has the full writeup for each.
+
+Verified via axe against every route in `ROUTES`: **52/53 now pass**
+(was ~30/53 skipped under `KNOWN_FAILURES`). The one remaining skip
+(`/request-a-quote/thank-you/`) is a distinct, pre-existing, already-
+separately-tracked issue from session 1 (steel-400 on a *light* card),
+not part of either fix — left alone, not silently expanded into.
+`a11y.spec.ts`'s `KNOWN_FAILURES` reduced from 22 entries to 1
+accordingly.
+
+#### Gate result
+
+```
+pnpm typecheck           ✓ 4/4 packages, zero errors
+pnpm lint                ✓ 0 errors (2 pre-existing warnings, unrelated)
+pnpm test (root + 
+  datum-ui package)      ✓ 55/55 web (pre-existing DB-gated test still
+                           fails, as every session) + 125/125 datum-ui
+pnpm build               ✓ clean, full rebuild (rm -rf .next first —
+                           see the text-white/66 mistakes.md entry for
+                           why a stale build cache mattered here)
+e2e/a11y.spec.ts         ✓ 52 passed, 1 skipped
+e2e/golden-page-rollout  ✓ 18/18 (72 passed, 1 skipped incl. a11y run
+                           together)
+snapshot:baseline +
+  snapshot:compare       ✓ regenerated (content intentionally changed),
+                           53/53 byte-identical
+```
+
+#### Visual verification (real browser, prod server)
+
+- 768px: Group/Dhruv/Precise headers all show clean hamburger layout,
+  logo on one line, no overlap.
+- 1024px: full desktop nav renders correctly on Precise (spot check),
+  no regression.
+- Group homepage "Products." panel (HomeHero dark type panel):
+  CategoryCard/ProductCard caption text now clearly legible against the
+  dark ground.
+- Group homepage "Two specialized works" door cards: group-label
+  caption now legible.
+
+Commits (3, per CLAUDE.md's one-concern-per-commit): Header breakpoint
+fix, VG-004 dark-ground contrast fix (5 files), test/tracking update
+(a11y.spec.ts + snapshot baseline).
+
+**Not pushed yet.** Phase 25 (human sign-off) is otherwise unblocked —
+no known open findings remain from this session's work.

@@ -6,7 +6,42 @@ If the rule is general, promote it into CLAUDE.md.
 ---
 <!-- entries go below this line -->
 
-## 2026-09-02 — VG-004 has moved: Header's contrast bug is fixed, ProductCard's `onDark` captions are the new instance
+## 2026-09-03 — Header utility-bar text-white/66: another missing opacity-scale step (RESOLVED same day)
+
+**What happened:** while re-verifying the VG-004 dark-ground contrast
+fix (see below), axe still flagged `/`, `/about/`, `/industries/*`,
+`/capabilities/*`, and every other GroupChrome-only route with a
+`color-contrast` violation on `<a href="/dhruv-epc">Dhruv EPC
+Solutions</a>` — the utility-bar company-switcher link. Computed style:
+`color: rgb(26, 30, 34)` (steel-950) against `bg-steel-900` — 1.12:1,
+effectively invisible — despite `Header.tsx` line 154's className
+plainly reading `text-white/66`. `document.styleSheets` search
+confirmed no `.text-white\/66` rule existed anywhere in the built CSS
+at all — the class silently compiled to nothing, so the link fell back
+to its inherited default text color.
+
+**Root cause:** identical failure mode to the already-documented 72/82/
+92 opacity steps in `packages/tokens/src/tailwind.ts` (see its own
+comment block, in place since an earlier phase) — Tailwind's color
+opacity modifier (`/NN`) only recognizes percentages explicitly
+registered in the theme's `opacity` scale; `66` was never added, even
+though the pattern for adding missing steps was already established
+and commented in the same file. A `pnpm build` that reused a stale
+`.next` cache also initially masked the fix — after adding `66: '.66'`
+to the scale, the first rebuild still didn't emit the rule; only a full
+`rm -rf apps/web/.next node_modules/.cache/turbo` rebuild picked it up.
+
+**Resolved same day:** added `66: '.66'` to `tailwind.ts`'s `opacity`
+extension, following the exact pattern already used for 60/72/82/88/92.
+Confirmed `.text-white\/66{color:hsla(0,0%,100%,.66)}` now emits in the
+built CSS, and the link is legible against `bg-steel-900`.
+
+**Rule that prevents recurrence:** general rule already existed
+("Tailwind's opacity modifier only recognizes its own preset percentage
+steps") but wasn't checked against every `/NN` usage in the codebase
+when it was written — a `grep -rn "text-\|border-\|bg-" -E '/(6[0-9]|7[0-9]|8[0-9]|9[0-9])"' packages/datum-ui apps/web` sweep against `tailwind.ts`'s registered `opacity` keys would catch the next one before axe does. Also: when a Tailwind/CSS-generation fix doesn't seem to take effect, suspect the build cache before the fix itself — `rm -rf .next` before concluding a config change didn't work.
+
+## 2026-09-02 — VG-004 has moved: Header's contrast bug is fixed, ProductCard's `onDark` captions are the new instance (RESOLVED 2026-09-03)
 
 **What happened:** FINAL_IMPLEMENTATION_PLAN.md Phase 23 requires
 re-checking VG-004's status after the Header rewrite (Phase 5) — its
@@ -51,7 +86,22 @@ color. A prop that changes the ground should be treated as changing
 *every* text token's contrast requirement, not just the ones the author
 happened to think of.
 
-## 2026-09-02 — Header.tsx: logo lockup overlaps primary nav at the exact 768px (`md`) breakpoint
+**Resolved 2026-09-03:** swapped `text-steel-500`/`text-steel-600` for
+`text-steel-400` on every `onDark` caption in `ProductCard.tsx`,
+`CategoryCard.tsx`, and `IndustryCard.tsx` (the same sibling-component
+bug existed in all three, same phase, same fix). While verifying, found
+two more instances of the identical dark-ground pattern: Header's
+utility-bar links used `text-white/66`, an opacity step never
+registered in the Tailwind preset (silently compiled to nothing — see
+its own write-up below); and the group homepage's "Two specialized
+works" door cards had one straggler `text-steel-600` caption
+inconsistent with its own sibling tokens. Fixed both. Verified via axe
+against every route: 52/53 pass (was ~30/53 skipped under
+`KNOWN_FAILURES`); the one remaining skip is the unrelated, pre-existing
+`/request-a-quote/thank-you/` one-off (steel-400 on a *light* steel-50
+card — a different root cause, still open).
+
+## 2026-09-02 — Header.tsx: logo lockup overlaps primary nav at the exact 768px (`md`) breakpoint (RESOLVED 2026-09-03)
 
 **What happened:** FINAL_IMPLEMENTATION_PLAN.md Phase 22 (responsive
 validation) requires a visual pass at 320/375/390/768/1024/1440px. At
@@ -89,6 +139,14 @@ layout switch (mobile → desktop nav) must be visually checked at
 exactly the breakpoint's minimum width (768px for `md`, not just
 "768 and up" sampled at 1024/1440) — the tightest fit is always at the
 boundary, not in the middle of the range.
+
+**Resolved 2026-09-03:** moved the main-row breakpoint from `md`
+(768px) to `lg` (1024px) — the hamburger/MobileDrawer path already
+handles any width below its breakpoint correctly, so widening its
+range was the fix, not shrinking the logo or nav content (which would
+have needed new arbitrary values). Confirmed clean at 768px (hamburger,
+no overlap) on all 3 chromes and no regression at 1024px (full desktop
+nav still renders correctly).
 
 ## 2026-09-02 — apps/web/scripts/snapshot-routes.mjs's ROUTES list is stale post-VG-012 (RESOLVED 2026-09-02, Phase 24)
 
