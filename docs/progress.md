@@ -2260,3 +2260,129 @@ visual check     ✓ temporary scratch route, 3 companies x 4 sizes + emblem-
   gets wired into `Header.tsx`'s `logo` slot — first real end-to-end check
   of the lockup inside the actual site chrome, not just the scratch
   preview.
+
+### Session 32 — Phase 5: Header + utility strip
+**Status:** Complete ✅ — committed locally, not pushed.
+**Branch:** `feat/real-company-logos` · **Date:** 2026-09-02
+**Governing specs:** `docs/FINAL_IMPLEMENTATION_PLAN.md` Phase 5,
+`docs/VEDANTA_DESIGN_DECISIONS.md` Decision 3 (mega-panel evidence confirms
+the header dark→white background change is already locked),
+`VEDANTA_DESIGN_IMPLEMENTATION_NOTES.md` §2.1/§2.0
+
+#### What was done
+
+- **`packages/tokens/src/tailwind.ts`** — `height.header`/`header-scrolled`
+  72px/60px → **91px/76px**, per §2.1's size ladder. Not a new token key,
+  a value correction already authorized by the locked spec chain (same
+  class as Phase 2's `fontSize` clamp regeneration) — no §26 design-review
+  event needed.
+- **`apps/web/app/globals.css`** — `.exploded-scrub`'s `top`/`max-height`
+  60px → 76px, same commit as the header height change per the file's own
+  standing coupling comment (and Decision 6).
+- **`Header.tsx`** — the biggest single change:
+  - Main bar: `bg-steel-950` → `bg-white border-steel-200`.
+  - Logo slot: `logo: React.ReactNode` → `logo: (scrolled: boolean) =>
+    React.ReactNode`, so the Phase-4 `Logo` component can size itself
+    (58px full bar / 44px scrolled, §2.0's ladder) instead of being a
+    static asset. Dropped the `bg-steel-50 px-3 py-2` "light chip" wrapper
+    — that existed only because the old raw-PNG logos were opaque rasters
+    needing a light surface on the always-dark header; `Logo.tsx`'s
+    trimmed/transparent emblem needs no chip on a white bar.
+  - Nav links + menu trigger: `text-steel-200` → `text-body font-semibold
+    text-steel-500`, hover `text-steel-950`; chevron → `text-accent`
+    (§2.1's exact spec).
+  - WhatsApp/phone icon buttons and the mobile hamburger: recolored from
+    dark-bg-appropriate `steel-300`/`steel-50` to `steel-500`/`steel-950`
+    — not explicit in §2.1's prose, but a mechanical necessity once the
+    bar is white (the old colors would be invisible or near-invisible on
+    white). Flagged as inferred, not spec-quoted.
+  - RFQ button: `size="compact"` (static) → `size={scrolled ? 'compact' :
+    'default'}` — h-12/h-compact swap per §2.1.
+  - `data-chrome="dark"` moved off the (now light) `<header>` onto two
+    places: the utility strip (unchanged surface, per the plan's own
+    "Data-chrome: utility strip already correct, unchanged" note) **and**
+    a new wrapping `<div>` around the mega-menu dropdown (both the legacy
+    grid and `MegaPanel`) — neither is named in the plan's data-chrome
+    coverage table, but both still render `bg-steel-950` this phase (their
+    retheme is Phase 6, `MegaPanel.tsx` + "Header.tsx legacy grid"), so
+    leaving them off `data-chrome="dark"` would have shipped a real
+    WCAG 1.4.11 focus-ring regression for one phase. Verified live: a
+    plain wrapping `<div>` (no `position`) doesn't disturb the dropdown's
+    `absolute` positioning against the fixed `<header>`.
+- **`apps/web/components/{group,dhruv,precise}/*Chrome.tsx`** — replaced
+  the raw `next/image` logo calls with `logo={(scrolled) => <Logo
+  company="..." size={scrolled ? 'header-scrolled' : 'header'} priority
+  />}`. Dropped the now-unused `Image` import in all three.
+- **`Header.stories.tsx`** — mechanical fixup for the `logo` prop's new
+  function signature (3 args changed `<span>...</span>` to `() =>
+  <span>...</span>`), otherwise untouched.
+
+#### Deliberately not touched this phase
+
+- The mega-menu panel's own background/color/border (`MegaPanel.tsx`,
+  `Header.tsx`'s legacy grid content) — that retheme is explicitly Phase 6
+  in `FINAL_IMPLEMENTATION_PLAN.md` ("Files: MegaPanel.tsx, Header.tsx
+  legacy grid"). The dropdown stays dark this commit; see the
+  `data-chrome` note above for how its focus rings were kept correct in
+  the interim.
+- Company-route utility bars (the "← Vedanta Group of Companies" +
+  address/phone strip §2.1 describes for Dhruv/Precise routes) —
+  `DhruvChrome`/`PreciseChrome` still pass no `utilityBar` prop, unchanged
+  from before this phase. `FINAL_IMPLEMENTATION_PLAN.md`'s Phase 5 file
+  list doesn't call for new utility-bar content, only for wiring `<Logo/>`
+  and the header rebuild; adding new copy/data there would be scope creep
+  beyond what Phase 5 authorizes. Flagged for a future decision-resolution
+  pass if the human wants that content live.
+- `Button.tsx` itself — untouched (that's Phase 8); only consumed its
+  existing `default`/`compact` size variants from Header.tsx.
+
+#### Gate result
+
+```
+pnpm typecheck   ✓ 4/4 packages, zero errors
+pnpm lint        ✓ 0 errors (2 pre-existing warnings, LegalDocument.tsx,
+                   unrelated)
+pnpm test        ✓ tokens 96/96, schemas 70/70, datum-ui 107/107, web
+                   55/55; only the pre-existing DATABASE_URL-gated RFQ
+                   route test fails, as in every prior session
+pnpm build       ✓ 77 routes, zero errors/warnings, First Load JS
+                   unchanged (94.9 kB group/Dhruv/Precise homepages —
+                   well under the 120 KB marketing budget)
+visual check     ✓ real browser (group homepage + a Dhruv product page),
+(manual browser)   1440px + 375px: white header renders correctly at
+                   full-height (91px) and scrolled-compressed (76px,
+                   smaller logo + compact RFQ button) states; mega-menu
+                   opens correctly (still dark, as expected pre-Phase-6);
+                   hamburger icon now visible against white at mobile
+                   width (previously would have been white-on-white).
+                   Keyboard focus verified via computed `outline` style,
+                   not just visually: light-bar elements (nav links, RFQ
+                   button, WhatsApp icon) ring in `#AA3833` (default
+                   accent); utility-strip and mega-menu-dropdown elements
+                   ring in `#DC8D89` (accent-dark) — confirming the
+                   `data-chrome="dark"` rebind lands exactly where the
+                   still-dark surfaces are and nowhere else.
+```
+
+#### Deviations / flagged (none silent)
+
+1. WhatsApp/phone icon button and hamburger colors on the new white bar
+   are inferred (`steel-500`/`steel-950` hover pattern, matching the new
+   nav-link convention) — §2.1's prose doesn't name these explicitly.
+2. `data-chrome="dark"` was kept on the mega-menu dropdown wrapper even
+   though the plan's data-chrome coverage table only names the utility
+   strip for this phase — see "What was done" above. This is a
+   contrast-regression-avoidance necessity, not a spec deviation; Phase 6
+   will make it moot once the dropdown itself goes light.
+3. Company-route utility bars (§2.1's "← Vedanta Group of Companies" +
+   address/phone content for Dhruv/Precise) not implemented — out of
+   Phase 5's declared file scope. See "Deliberately not touched" above.
+
+#### Requires human review before Phase 6
+
+- Confirm the two flagged inferences (icon/hamburger colors, the
+  extra `data-chrome="dark"` wrapper) are acceptable, or replace once
+  Phase 6 retthemes the mega-menu panel.
+- Decide whether the company-route utility bar content belongs in a
+  future phase or is out of scope entirely — not resolved by any existing
+  decision document.
