@@ -3318,3 +3318,8 @@ itself is wrong.
 - Note for whoever picks up Phase 12 (`ProductHero`): expect the same
   `.next`/Storybook-cache staleness after touching `tailwind.ts` — clear
   both proactively rather than debugging from scratch a third time.
+
+**Pushed to origin (2026-09-02):** `feat/real-company-logos` is up to
+date with origin through this commit — Phases 5–11 are all on the remote
+branch now, nothing left local-only. Next session picks up at Phase 12
+(`ProductHero`).
