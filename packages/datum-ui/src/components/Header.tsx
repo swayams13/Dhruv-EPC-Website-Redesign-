@@ -1,7 +1,7 @@
 'use client'
 // Header — Datum §17, extended §4/§14.3 (Session 9, VG-051).
-// Phase 5 (IMPLEMENTATION_NOTES §2.1): main bar is now light — always
-// fixed, bg-white / border-steel-200 chrome, h-header 91px → h-header-scrolled
+// Phase 5 (IMPLEMENTATION_NOTES §2.1): main bar is light — always fixed,
+// bg-white / border-steel-200 chrome, h-header 91px → h-header-scrolled
 // 76px. Scroll threshold 40px (was innerHeight): compresses header after
 // minimal scroll. phoneHref / whatsappHref are optional — GroupChrome omits
 // them.
@@ -14,11 +14,10 @@
 // two-row structure in the spacer div below, so the two heights can never
 // drift out of sync — no calc(), no new token.
 //
-// data-chrome="dark": the main bar is white now, so it no longer sits on
-// the outer <header>. It stays on the utility strip (bg-steel-900,
-// unchanged) and on the menu-dropdown wrapper below — both are still dark
-// surfaces this phase; the dropdown's own bg-steel-950 retheme is Phase 6
-// (MegaPanel.tsx / Header.tsx's legacy grid), not this one.
+// data-chrome="dark": only the utility strip (bg-steel-900) is still a dark
+// surface. The legacy mega-menu grid and MegaPanel went light in Phase 6
+// (Decision 3) along with the main bar, so neither carries data-chrome —
+// their focus rings use the default accent, same as the rest of the page.
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Button } from './Button'
@@ -224,64 +223,60 @@ export function Header({
           </button>
         </div>
 
-        {/* Still a dark surface this phase (Phase 6 retheme pending) — see the
-            data-chrome note at the top of this file. */}
-        <div data-chrome="dark">
-          {hasMegaPanel ? (
-            <MegaPanel
-              id="datum-mega-menu"
-              open={menuOpen}
-              onClose={closeMenu}
-              triggerRef={triggerRef}
-              columns={megaPanel!}
-            />
-          ) : (
-            <div
-              id="datum-mega-menu"
-              hidden={!menuOpen}
-              className="absolute inset-x-0 top-full border-b border-steel-50/10 bg-steel-950 shadow-overlay"
-            >
-              <div className={`mx-auto grid max-w-wide ${legacyGridColsClass} gap-8 px-6 py-8`}>
-                {(menuGroups ?? []).map((group) => (
-                  <div key={group.label}>
-                    <p className="font-mono text-xs font-medium uppercase tracking-caption text-accent">
-                      {group.label}
-                    </p>
-                    <ul className="mt-3">
-                      {group.items.map((item) => (
-                        <li key={item.href}>
-                          <a
-                            href={item.href}
-                            className="-mx-2 block rounded-sm px-2 py-2 transition-colors duration-instant hover:bg-steel-800"
-                          >
-                            <span className="block text-data font-medium text-steel-100">
-                              {item.name}
-                            </span>
-                            <span className="block text-helper text-steel-500">{item.scope}</span>
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-                {/* capability rail — "can you build mine?" is the question behind every menu open */}
-                {capabilityRail && (
-                  <div className="border-l border-steel-700/50 pl-8">
-                    <a
-                      href={capabilityRail.href}
-                      className="group flex items-center gap-2 text-data font-medium text-accent-dark transition-colors duration-instant hover:text-accent"
-                    >
-                      {capabilityRail.label}
-                      <span className="transition-transform duration-instant ease-standard motion-safe:group-hover:translate-x-1">
-                        <ArrowRight size={16} />
-                      </span>
-                    </a>
-                  </div>
-                )}
-              </div>
+        {hasMegaPanel ? (
+          <MegaPanel
+            id="datum-mega-menu"
+            open={menuOpen}
+            onClose={closeMenu}
+            triggerRef={triggerRef}
+            columns={megaPanel!}
+          />
+        ) : (
+          <div
+            id="datum-mega-menu"
+            hidden={!menuOpen}
+            className="absolute inset-x-0 top-full border-t border-steel-200 bg-white shadow-overlay"
+          >
+            <div className={`mx-auto grid max-w-wide ${legacyGridColsClass} gap-8 px-6 py-8`}>
+              {(menuGroups ?? []).map((group) => (
+                <div key={group.label}>
+                  <p className="font-mono text-xs font-medium uppercase tracking-caption text-accent">
+                    {group.label}
+                  </p>
+                  <ul className="mt-3">
+                    {group.items.map((item) => (
+                      <li key={item.href}>
+                        <a
+                          href={item.href}
+                          className="-mx-2 block rounded-sm px-2 py-2 transition-colors duration-instant hover:bg-steel-100"
+                        >
+                          <span className="block text-data font-medium text-steel-950">
+                            {item.name}
+                          </span>
+                          <span className="block text-helper text-steel-500">{item.scope}</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+              {/* capability rail — "can you build mine?" is the question behind every menu open */}
+              {capabilityRail && (
+                <div className="border-l border-steel-200 pl-8">
+                  <a
+                    href={capabilityRail.href}
+                    className="group flex items-center gap-2 text-data font-medium text-accent-text transition-colors duration-instant hover:text-accent-text-hover"
+                  >
+                    {capabilityRail.label}
+                    <span className="transition-transform duration-instant ease-standard motion-safe:group-hover:translate-x-1">
+                      <ArrowRight size={16} />
+                    </span>
+                  </a>
+                </div>
+              )}
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </header>
     </div>
   )

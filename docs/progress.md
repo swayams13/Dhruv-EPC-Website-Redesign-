@@ -2386,3 +2386,108 @@ visual check     ✓ real browser (group homepage + a Dhruv product page),
 - Decide whether the company-route utility bar content belongs in a
   future phase or is out of scope entirely — not resolved by any existing
   decision document.
+
+### Session 33 — Phase 6: MegaPanel retheme
+**Status:** Complete ✅ — committed locally, not pushed.
+**Branch:** `feat/real-company-logos` · **Date:** 2026-09-02
+**Governing specs:** `docs/FINAL_IMPLEMENTATION_PLAN.md` Phase 6,
+`docs/VEDANTA_DESIGN_DECISIONS.md` Decision 3 (mega panel, including its
+`[correction pass]` restrictions), `VEDANTA_DESIGN_IMPLEMENTATION_NOTES.md`
+§2.1's mega-panel paragraph
+
+#### Reading Decision 3 precisely — it overrides part of §2.1's prose
+
+§2.1 says group labels go "from `text-caption text-accent` to `text-h4
+text-steel-950` with a 3px `bg-accent` rule under them." Decision 3's
+`[correction pass]` explicitly narrows this: **no new typographic scale,
+weight, size, or decorative element may be introduced**, and names the
+mega-panel's company-label caption specifically as needing "a color-token
+remap only, nothing else" — i.e. keep the existing `font-mono text-xs
+uppercase tracking-caption` structure, just fix its color for the new white
+surface. Followed Decision 3 (the later, LOCKED, more specific document)
+over §2.1's own superseded language here, same as Phase 2/5 precedent for
+resolving spec-vs-spec conflicts.
+
+Computed which colors actually needed remapping rather than guessing:
+`steel-400` (the old company-label-caption color) is ~2.4:1 on white — fails
+outright. `steel-500` (the legacy grid's `item.scope` color, already in
+place) is 4.94:1 on white — already passes, confirming Decision 3's "most
+values substitute automatically" claim is literally true for that one, while
+being false for `steel-400` specifically. Landed on `text-steel-600`
+(6.33:1) for both the MegaPanel company-label caption and confirmed the
+already-used `text-steel-500` needed no change — matched against the
+established light-surface caption convention already used by `SpecTable`,
+`SpecRail`, `CertificationCard`, `ApprovalsMatrix`, and every company `/page.tsx`'s
+contact `<dt>` (all `text-steel-600`), per the ambiguity protocol's
+"check how an existing component solved this" step.
+
+#### What was done
+
+- **`MegaPanel.tsx`** — `bg-steel-950` → `bg-white`, `border-b
+  border-steel-50/10` → `border-t border-steel-200`, `shadow-overlay`
+  unchanged (already the approved token). Company-label caption `text-steel-400`
+  → `text-steel-600` (structure untouched, color-only per Decision 3).
+  Category links `text-steel-100` → `text-steel-950`, `hover:bg-steel-800`
+  → `hover:bg-steel-100`. Product links `text-steel-400` → `text-steel-600`,
+  same hover flip, `hover:text-steel-100` → `hover:text-steel-950`. "All
+  products →" link: `text-accent-dark hover:text-accent` (the dark-surface
+  accent alias) → `text-accent-text hover:text-accent-text-hover` (the
+  light-surface alias — matches `Button.tsx`'s `link` variant and
+  `CertificationCard.tsx`'s existing convention). Zero changes to the
+  `useEffect` focus-trap/ESC/outside-click logic, zero new props, zero
+  structural changes — verified `MegaPanel.test.tsx`'s interaction
+  contract still passes unmodified.
+- **`Header.tsx`'s legacy grid** (Dhruv/Precise `menuGroups` dropdown) —
+  identical background/border/hover-surface treatment. Group label
+  (`text-accent`) and item scope (`text-steel-500`) needed **no** color
+  change — both already pass on white (6.32:1 and 4.94:1 respectively),
+  confirming Decision 3's "value substitution, not hierarchy change" claim
+  for these two. Item name `text-steel-100` → `text-steel-950`,
+  `hover:bg-steel-800` → `hover:bg-steel-100`. Capability rail divider
+  `border-steel-700/50` → `border-steel-200`; its link recolored the same
+  `accent-dark` → `accent-text` way as MegaPanel's "All products" link.
+- **`Header.tsx`'s `data-chrome="dark"` wrapper removed** — Phase 5 had
+  wrapped the still-dark dropdown in `<div data-chrome="dark">` specifically
+  to keep its focus rings correct until this phase. Now that the dropdown
+  is white, that wrapper would incorrectly rebind `--accent-focus` to the
+  pale `accent-dark` step on a light surface — a regression in the opposite
+  direction. Removed it; both dropdown variants now correctly fall through
+  to the page's default accent-focus rule, same as every other light
+  surface. Updated the file's top comment accordingly (only the utility
+  strip still carries `data-chrome="dark"`).
+
+#### Gate result
+
+```
+pnpm typecheck   ✓ 4/4 packages, zero errors
+pnpm lint        ✓ 0 errors (2 pre-existing warnings, LegalDocument.tsx,
+                   unrelated)
+pnpm test        ✓ datum-ui 107/107 (MegaPanel.test.tsx unmodified and
+                   passing — confirms the interaction contract survived
+                   the retheme untouched, satisfying Decision 3's hard
+                   constraint)
+pnpm build       ✓ 77 routes, zero errors/warnings, First Load JS unchanged
+visual check     ✓ real browser, group homepage (MegaPanel) + Dhruv
+(manual browser)   homepage (legacy grid): both dropdowns render white
+                   with the border-t seam against the header, group/company
+                   labels and item text all legible, "All products →" /
+                   capability-rail links in the light-surface accent.
+                   Keyboard focus verified via real Tab/Enter navigation
+                   (not programmatic `.focus()` — that call bypasses
+                   Chrome's `:focus-visible` heuristic after a preceding
+                   mouse click and gave a false-negative reading before
+                   this was caught): the accent-colored ring renders
+                   correctly on dropdown items in both variants.
+```
+
+#### Deviations / flagged (none silent)
+
+1. Icon/hamburger colors flagged after Phase 5 are unaffected by this
+   phase (out of MegaPanel/legacy-grid scope) — still open, unchanged.
+2. Company-route utility bar content (flagged after Phase 5) — still not
+   implemented, still out of scope for the phases done so far.
+
+#### Requires human review before Phase 7
+
+- Nothing new from this phase. The two items flagged after Phase 5 remain
+  open (see above).
