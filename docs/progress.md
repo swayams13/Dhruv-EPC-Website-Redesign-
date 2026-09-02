@@ -3442,3 +3442,84 @@ visual check     ✓ real browser: /dhruv-epc/products/static-equipment/
 
 **Not pushed yet — commit is local to `feat/real-company-logos`.** Next
 session picks up at Phase 13 (group homepage `HomeHero` adoption).
+
+---
+
+### Session 33 — Phases 13/14/15: homepage `HomeHero` adoption
+
+**Per FINAL_IMPLEMENTATION_PLAN.md.**
+
+**Discovery before writing anything:** Phase 9's own commit (`26529b7`)
+already touched `dhruv-epc/page.tsx` and `precise-engineers/page.tsx` as a
+*mechanical necessity* — both already called `<HomeHero>` live before Hero
+C existed, so rewriting the component's prop contract without fixing its
+two real call sites would have broken typecheck. Reading both files
+confirmed they already satisfy Phase 14 and Phase 15 in full:
+`variant="split"`, real breadcrumb (`Home → <Company>`), real eyebrow/
+headline/subhead copy, RFQ + secondary CTA pair, `StatBand` already a
+standalone sibling section matching `(group)/page.tsx`'s existing wrapper.
+No `statsOverlay` string in either file. Precise's flex-blue accent comes
+free from `data-company="precise"` on its `layout.tsx` (unedited) — no
+company-specific code needed. **Phases 14 and 15 required no new code**;
+re-verified against the plan's own requirements rather than assumed done
+from the comment alone.
+
+#### What was done (Phase 13 — the one real gap)
+
+- **`(group)/page.tsx`** — replaced the bespoke inline hero section
+  (`bg-steel-900` band with a plain eyebrow/H1/subhead, no CTA, no photo
+  panel) with `<HomeHero variant="split">`, carrying the same copy
+  forward verbatim (eyebrow, headline, subhead unchanged) plus the two
+  pieces the old hero never had: an RFQ CTA (`/request-a-quote`) and a
+  secondary CTA (`View products` → `#products`, a new anchor id added to
+  the products section — same pattern as Dhruv's `#equipment`/Precise's
+  `#products` sections). No `breadcrumb` prop — the group home is the
+  top-level page, which per Decision 2's own derivation (panel height
+  keyed off breadcrumb presence) also correctly selects the 600px height,
+  not 560px.
+- Verified `statsOverlay` does not appear anywhere in the diff (`git diff
+  | grep -i statsoverlay` — no match).
+- `StatBand`'s existing standalone wrapper below the hero was untouched —
+  it already matched Decision 2's "never overlaid on the photo" model
+  before this phase.
+
+#### Gate result
+
+```
+pnpm typecheck   ✓ 4/4 packages, zero errors
+pnpm lint        ✓ 0 errors (2 pre-existing warnings, unrelated)
+pnpm test        ✓ tokens 96/96, schemas 70/70, datum-ui 125/125, web
+                   55/55; only the pre-existing DATABASE_URL-gated RFQ
+                   test fails
+pnpm build       ✓ clean rebuild, 77 routes, zero errors/warnings
+visual check     ✓ real browser: / (group home) — 47/53 split hero, no
+(manual browser)   breadcrumb, hatch placeholder photo panel, DatumRule
+                   visible, CTA pair rendering, "View products" anchor
+                   present. /precise-engineers — breadcrumb "Home →
+                   Precise Engineers," flex-blue (not amber) on eyebrow,
+                   accent rule, RFQ button and DatumRule tick — confirms
+                   Phase 15's accent scoping works with zero code changes
+                   this session, inherited entirely from Phase 9.
+```
+
+#### Deviations / flagged (none silent)
+
+1. Phases 14/15 required no code changes — pre-satisfied by Phase 9's own
+   mechanical fix to the two files, re-verified against each phase's
+   actual requirements (not assumed from the docstring's own "Phase
+   9/13-15" comment).
+2. Precise's exact split-hero height (560px, by symmetry with Dhruv) and
+   photo crop remain unverified against a canvas instance — same open
+   item the plan itself flags in Phase 15, unchanged by this session
+   since no code needed touching.
+
+#### Requires human review before Phase 16
+
+- Confirm the group home's new secondary CTA ("View products" → `#products`)
+  and RFQ target (`/request-a-quote`, no `?company=` query param, unlike
+  Dhruv/Precise's company-scoped links) are the intended targets — no
+  source specifies group-home CTA copy explicitly, inferred from the
+  Dhruv/Precise precedent's own pattern.
+
+**Not pushed yet.** Next session picks up at Phase 16 (remaining
+`PageHero` consumers).

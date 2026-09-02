@@ -9,6 +9,7 @@ import {
   Button,
   CategoryCard,
   CertificationCard,
+  HomeHero,
   IndustryCard,
   StatBand,
   type StampProps,
@@ -83,24 +84,23 @@ export default function GroupHome() {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganization(groupEntity)) }}
         />
 
-        {/* §14.2 item 1 — hero, what the group manufactures, stated with a figure */}
-        <section className="bg-steel-900">
-          <div className="mx-auto max-w-wide px-6 pb-16 pt-24">
-            <p className="text-xs font-medium text-steel-400">
-              ASME U &amp; U2 · IBR · EIL Approved · ISO 9001:2015
-            </p>
-            <h1 className="mt-4 max-w-content font-display text-display-xl font-medium text-steel-50">
-              Vedanta Group — precision fabrication and flow-control engineering since 1994.
-            </h1>
-            <p className="mt-6 max-w-content text-body-lg text-steel-400">
-              Two specialized works in Gujarat: static equipment to ASME Sec. VIII at Vadodara,
-              and expansion joints to EJMA at Anand — one group, one quality system.
-            </p>
-          </div>
-        </section>
+        {/* §14.2 item 1 — hero, what the group manufactures, stated with a
+            figure. Hero C split hero (Decision 2, Phase 13) — the group
+            home is the top-level page, so it carries no breadcrumb (600px
+            panel height, per Decision 2's own derivation from breadcrumb
+            presence). No photo/dimensionLabel wired yet — same deferred
+            works-photography/ExplodedSequence state as Dhruv/Precise. */}
+        <HomeHero
+          variant="split"
+          eyebrow="ASME U & U2 · IBR · EIL Approved · ISO 9001:2015"
+          headline="Vedanta Group — precision fabrication and flow-control engineering since 1994."
+          subhead="Two specialized works in Gujarat: static equipment to ASME Sec. VIII at Vadodara, and expansion joints to EJMA at Anand — one group, one quality system."
+          rfq={{ label: 'Request a quote', href: '/request-a-quote' }}
+          secondary={{ label: 'View products', href: '#products' }}
+        />
 
         {/* §14.2 item 2 — products by category, the primary entry */}
-        <section aria-labelledby="products-heading" className="bg-steel-900">
+        <section id="products" aria-labelledby="products-heading" className="bg-steel-900">
           <div className="mx-auto max-w-wide px-6 pb-24">
             <h2 id="products-heading" className="font-display text-h1 font-medium text-steel-50">
               Products.
