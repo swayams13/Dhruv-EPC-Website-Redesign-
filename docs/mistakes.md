@@ -435,3 +435,38 @@ not as a follow-up. `pnpm test` alone will not catch this: the real
 browser-painted axe gate only runs in CI (`playwright test`), so a new
 group route's PR can show fully green local checks and still fail CI on
 this exact, entirely predictable gap.
+
+## 2026-09-02 — Dhruv/Precise nav asymmetry: orphaned /company page, and a footer sibling gap left unfixed
+
+**What happened:** user reported the Dhruv EPC and Precise Engineers
+header navs "look different." Investigation (see PR fixing
+`DhruvChrome.tsx`) found two separate causes: (1) `Header.tsx`'s legacy
+mega-menu grid was hardcoded `grid-cols-4`, sized for Dhruv's 3 equipment
+groups + capability rail — Precise's 2 groups + rail left a dead 4th
+column; (2) `DhruvChrome.tsx`'s `LINKS` array never linked
+`/dhruv-epc/company`, a fully-built page (110 lines, real metadata),
+while `PreciseChrome.tsx` links its equivalent `/precise-engineers/company`
+— so Dhruv's primary nav had one fewer item than Precise's. Both fixed
+in the same PR (grid sized to actual column count; `Company` added to
+Dhruv's `LINKS`).
+
+**Left unfixed, out of scope for that PR:** `apps/web/app/dhruv-epc/layout.tsx`'s
+`FOOTER_COLUMNS` "Company" heading lists only `Vedanta Group` + `Contact` —
+it's missing the `About` → `/dhruv-epc/company` entry that
+`precise-engineers/layout.tsx`'s footer has. Same orphaned-page root
+cause, different location; not fixed because the user's report scoped to
+the header nav specifically (CLAUDE.md scope discipline — one concern per
+commit).
+
+**Rule:** when a page exists under a company route but isn't linked from
+that company's header LINKS array, check the sibling company's footer
+`FOOTER_COLUMNS` too — this codebase's two-chrome-per-company pattern
+(Header LINKS + Footer columns, duplicated per company rather than
+derived from a shared route table) means an orphaned-page bug reliably
+shows up in more than one nav surface at once. Fix or ticket both, don't
+assume fixing the header caught it.
+
+**Resolution (2026-09-02):** user asked for the footer gap to be closed
+too. Added `{ label: 'About', href: '/dhruv-epc/company' }` as the first
+entry in `dhruv-epc/layout.tsx`'s `FOOTER_COLUMNS` "Company" column,
+matching `precise-engineers/layout.tsx`'s existing order exactly.
