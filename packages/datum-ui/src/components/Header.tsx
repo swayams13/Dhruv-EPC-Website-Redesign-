@@ -18,6 +18,16 @@
 // surface. The legacy mega-menu grid and MegaPanel went light in Phase 6
 // (Decision 3) along with the main bar, so neither carries data-chrome —
 // their focus rings use the default accent, same as the rest of the page.
+//
+// Main-row breakpoint is `lg` (1024px), not `md` (768px) — fixed 2026-09-02
+// (docs/mistakes.md). At 768px the logo lockup + nav links + icons + RFQ
+// button genuinely don't fit on one row (measured: needs >1200px of content
+// width vs. ~720px available); `md:flex` caused the logo to wrap and
+// visually collide with the nav trigger. The hamburger/MobileDrawer path
+// already handles any width below its breakpoint correctly, so widening its
+// range to <1024px (instead of <768px) is the fix, not shrinking content.
+// The utility bar (company-switcher strip) stays at `md` — it's short text,
+// confirmed not part of this bug.
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Button } from './Button'
@@ -62,7 +72,7 @@ export interface HeaderProps {
   phoneHref?: string
   whatsappHref?: string
   rfqHref: string
-  /** Opens the MobileDrawer (hamburger, <768px) */
+  /** Opens the MobileDrawer (hamburger, <1024px) */
   onMenuOpen?: () => void
   className?: never
 }
@@ -160,7 +170,7 @@ export function Header({
             {logo(scrolled)}
           </a>
 
-          <nav aria-label="Primary" className="hidden h-full items-center gap-8 md:flex">
+          <nav aria-label="Primary" className="hidden h-full items-center gap-8 lg:flex">
             <button
               ref={triggerRef}
               type="button"
@@ -187,7 +197,7 @@ export function Header({
             ))}
           </nav>
 
-          <div className="hidden items-center gap-2 md:flex">
+          <div className="hidden items-center gap-2 lg:flex">
             {whatsappHref && (
               <a
                 href={whatsappHref}
@@ -217,7 +227,7 @@ export function Header({
             type="button"
             aria-label="Open menu"
             onClick={onMenuOpen}
-            className="flex h-compact w-compact items-center justify-center rounded-sm text-steel-950 md:hidden"
+            className="flex h-compact w-compact items-center justify-center rounded-sm text-steel-950 lg:hidden"
           >
             <Menu />
           </button>
