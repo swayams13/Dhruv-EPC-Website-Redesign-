@@ -32,6 +32,7 @@ const FOOTER_COLUMNS = [
   {
     heading: 'Company',
     links: [
+      { label: 'About', href: '/dhruv-epc/company' },
       { label: 'Vedanta Group', href: '/' },
       { label: 'Contact', href: '/contact' },
     ],

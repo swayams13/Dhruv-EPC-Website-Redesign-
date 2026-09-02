@@ -465,3 +465,8 @@ that company's header LINKS array, check the sibling company's footer
 derived from a shared route table) means an orphaned-page bug reliably
 shows up in more than one nav surface at once. Fix or ticket both, don't
 assume fixing the header caught it.
+
+**Resolution (2026-09-02):** user asked for the footer gap to be closed
+too. Added `{ label: 'About', href: '/dhruv-epc/company' }` as the first
+entry in `dhruv-epc/layout.tsx`'s `FOOTER_COLUMNS` "Company" column,
+matching `precise-engineers/layout.tsx`'s existing order exactly.
