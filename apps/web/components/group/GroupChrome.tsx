@@ -1,39 +1,40 @@
 'use client'
-// Group nav chrome — Header + MobileDrawer for the (group) route layout.
-// Shows both companies' product lines in the mega-menu.
-// phoneHref / whatsappHref omitted: no single group-level contact line.
+// Group nav chrome — Header + MobileDrawer wiring for the (group) route
+// layout. Session 9 (VG-051): primary nav restructured to Products ·
+// Industries · Capabilities · Projects · Company; company switching moved
+// out of primary nav into the utility bar. megaPanelColumns is built
+// server-side in (group)/layout.tsx from real ProductCategory/Product
+// content (content-loader.ts does node:fs reads and can't be imported
+// into this 'use client' component directly).
 import { useState } from 'react'
 import Link from 'next/link'
-import { Header, MobileDrawer } from '@vedanta/datum-ui'
-import { dhruvEquipment, preciseProducts } from '../../lib/site-data'
-
-const GROUPS = [
-  {
-    label: 'Dhruv EPC Solutions — Static Equipment',
-    items: [
-      ...dhruvEquipment['static-equipment'],
-      ...dhruvEquipment['skids-packages'],
-    ],
-  },
-  {
-    label: 'Dhruv EPC Solutions — Fabrication & Machining',
-    items: dhruvEquipment['fabrication-machining'],
-  },
-  {
-    label: 'Precise Engineers — Flexible Elements',
-    items: [
-      ...preciseProducts['expansion-joints'],
-      ...preciseProducts['flow-control'],
-    ],
-  },
-]
+import { Header, MobileDrawer, type MegaPanelColumn } from '@vedanta/datum-ui'
+import { projectsIndexHref } from '../../lib/product-urls'
 
 const LINKS = [
-  { label: 'About', href: '/about' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'Industries', href: '/industries' },
+  { label: 'Capabilities', href: '/capabilities' },
+  { label: 'Projects', href: projectsIndexHref() },
+  { label: 'Company', href: '/about' },
 ]
 
-export function GroupChrome() {
+const UTILITY_BAR = [
+  { label: 'Dhruv EPC Solutions', href: '/dhruv-epc' },
+  { label: 'Precise Engineers', href: '/precise-engineers' },
+]
+
+// Mobile drawer keeps the two accordion groups from megaPanelColumns
+// (category-level, matching the desktop panel) plus the same 4 flat
+// links, plus the company-switch links the utility bar has no mobile
+// equivalent for.
+function drawerGroups(megaPanelColumns: MegaPanelColumn[]) {
+  return megaPanelColumns.map((column) => ({
+    label: column.companyLabel,
+    items: column.categories.map((c) => ({ label: c.name, href: c.href })),
+  }))
+}
+
+export function GroupChrome({ megaPanelColumns }: { megaPanelColumns: MegaPanelColumn[] }) {
   const [drawerOpen, setDrawerOpen] = useState(false)
 
   return (
@@ -51,23 +52,17 @@ export function GroupChrome() {
         }
         homeHref="/"
         menuLabel="Products"
-        menuGroups={GROUPS.map((g) => ({
-          label: g.label,
-          items: g.items.map(({ name, scope, href }) => ({ name, scope, href })),
-        }))}
-        capabilityRail={{ label: 'Two works · ASME U/U2 · EJMA certified', href: '/about' }}
+        megaPanel={megaPanelColumns}
         links={LINKS}
+        utilityBar={UTILITY_BAR}
         rfqHref="/request-a-quote"
         onMenuOpen={() => setDrawerOpen(true)}
       />
       <MobileDrawer
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
-        groups={GROUPS.map((g) => ({
-          label: g.label,
-          items: g.items.map(({ name, href }) => ({ label: name, href })),
-        }))}
-        links={LINKS}
+        groups={drawerGroups(megaPanelColumns)}
+        links={[...LINKS, ...UTILITY_BAR]}
         rfqHref="/request-a-quote"
         linkComponent={Link}
       />
