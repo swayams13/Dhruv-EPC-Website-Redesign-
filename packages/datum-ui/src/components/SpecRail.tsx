@@ -19,9 +19,15 @@
 //
 // §2.7 (Phase 8): gains the DatumRule tick device at the top of the box, and
 // its caption is "Envelope at a glance" (was "Key figures") — ref `1c`.
+//
+// Phase 12: `DimensionLabel` joins `DatumRule` here — the §11 signature
+// moment (line draws, tick drops, dimension counts up) moved off
+// `ProductHero` onto this rail per IMPLEMENTATION_NOTES §2.2/§2.7, so it
+// now labels real spec-rail data instead of decorating the hero.
 
 import { Button } from './Button'
 import { DatumRule } from './DatumRule'
+import { DimensionLabel } from './DimensionLabel'
 import { Check, Triangle } from './glyphs'
 import type { SpecTableRow } from './SpecTable'
 
@@ -34,6 +40,8 @@ export interface SpecRailProps {
   rows: SpecTableRow[]
   primaryCta: SpecRailCta
   secondaryCta?: SpecRailCta
+  /** True dimension counted up by the §11 signature moment, e.g. "Ø 3,600 mm" */
+  dimensionLabel?: string
   className?: never
 }
 
@@ -99,11 +107,22 @@ function CtaRow({
 /** Static block placed BEFORE the content grid, hidden on lg+. No CTA buttons —
     MobileBottomBar (already rendered globally) owns RFQ at this width, per the
     360px mockup caption ("RFQ moves to a bottom bar"). */
-export function SpecRailMobile({ rows }: { rows: SpecTableRow[] }): React.ReactElement {
+export function SpecRailMobile({
+  rows,
+  dimensionLabel,
+}: {
+  rows: SpecTableRow[]
+  dimensionLabel?: string
+}): React.ReactElement {
   return (
     <div className="mx-auto max-w-wide px-6 lg:hidden">
       <div className="mt-6 rounded-sm border border-steel-200 bg-white p-6">
-        <DatumRule />
+        {dimensionLabel && (
+          <div className="pb-2">
+            <DimensionLabel label={dimensionLabel} animate />
+          </div>
+        )}
+        <DatumRule animate />
         <p className="mt-4 text-xs font-medium uppercase tracking-caption text-steel-600">Envelope at a glance</p>
         <dl className="mt-3">
           {rows.map((row) => (
@@ -123,10 +142,16 @@ export function SpecRailDesktop({
   rows,
   primaryCta,
   secondaryCta,
+  dimensionLabel,
 }: SpecRailProps): React.ReactElement {
   return (
     <div className="sticky top-24 mt-6 hidden rounded-sm border border-steel-200 bg-white p-6 lg:block">
-      <DatumRule />
+      {dimensionLabel && (
+        <div className="pb-2">
+          <DimensionLabel label={dimensionLabel} animate />
+        </div>
+      )}
+      <DatumRule animate />
       <p className="mt-4 text-xs font-medium uppercase tracking-caption text-steel-600">Envelope at a glance</p>
       <dl className="mt-3">
         {rows.map((row) => (

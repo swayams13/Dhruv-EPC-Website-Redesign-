@@ -3323,3 +3323,122 @@ itself is wrong.
 date with origin through this commit — Phases 5–11 are all on the remote
 branch now, nothing left local-only. Next session picks up at Phase 12
 (`ProductHero`).
+
+---
+
+### Session 33 — Phase 12: ProductHero rebuild
+
+**Per FINAL_IMPLEMENTATION_PLAN.md Phase 12 / IMPLEMENTATION_NOTES §2.2, §2.7.**
+
+Unlike Phase 11's `PageHero` (component-only, not wired to a live route),
+`ProductHero` is imported directly by `apps/web/lib/product-detail-page.tsx`
+— the shared factory behind all 17 live product routes across both
+companies. This phase's changes are live on every one of them the moment
+it merges.
+
+#### What was done
+
+- **`ProductHero.tsx`** — split into two sections. The hero band becomes
+  photo-as-ground: `absolute inset-0 object-cover` (or the §4.2 hatch
+  placeholder, same pattern as PageHero, when no `photo` is passed — true
+  for all 17 real consumers today, verified by reading
+  `product-detail-page.tsx`), `var(--overlay-hero)` scrim (the **plain**
+  hero scrim — not PageHero's `--overlay-hero-interior`, per
+  IMPLEMENTATION_NOTES §2.2's explicit distinction and PageHero's own
+  docstring flagging itself as the "interior" consumer), full breadcrumb
+  trail on the photo (reusing `Breadcrumbs`' `onDark` variant, same "→
+  accent-dark" device as PageHero/HomeHero), 64×2px accent rule, H1 at
+  `text-display` (56px — Decision 2's exact `align="lower-left"` value,
+  not `text-display-xl`). `data-chrome="dark"` on the content layer for
+  the same breadcrumb-focus-ring reason as PageHero (not in the plan's own
+  coverage table, same mechanical-necessity call as Phase 11). Below the
+  photo: the retained light `bg-steel-50` band, unchanged in kind, now
+  carrying only the value statement, spec chips, cert chips and RFQ
+  button — the eyebrow/subhead/CTA-pair slots from the general hero
+  anatomy don't apply here (no source specifies them for the lower-left
+  product tier; the existing prop interface never had them either).
+- **`DatumRule`/`DimensionLabel` moved off the hero onto `SpecRail`** —
+  the signature moment "labels real data instead of decorating the hero"
+  per §2.2's own words. `SpecRail.tsx` (`SpecRailDesktop`/`SpecRailMobile`)
+  gains an optional `dimensionLabel` prop, rendered above the `DatumRule`
+  it already carries from Phase 8, both now `animate`d (the move makes
+  the rail the "product hero" for signature-moment purposes, so the
+  `animate?: boolean` JSDoc's own "product/home heroes only" scope
+  includes it). No real product record supplies a dimension figure yet
+  (`ProductPage`/`Product` schemas have no such field) — same "prop
+  exists, no live consumer wires it yet" state `photo` was already in on
+  both `PageHero` and this component, not a new gap.
+- **`ExplodedSequence` JSDoc guard** added to `photo`, identical wording
+  and reasoning to PageHero's (Decision 6) — this hero's fixed-min-height
+  photo-ground pattern is exactly where the guard matters.
+- **`min-h-page-hero*` tokens reused**, not duplicated — PageHero's own
+  Phase-11 docstring already calls out "same family as ProductHero,
+  centered rather than lower-left," so a second `min-h-product-hero*` set
+  would be exactly the premature-abstraction-avoidance CLAUDE.md warns
+  against in the other direction (unnecessary duplication, not unnecessary
+  abstraction).
+- **Stories updated**: `ProductHero.stories.tsx`'s two fixtures drop
+  `dimensionLabel` (prop removed from this component); `SpecRail.stories.tsx`'s
+  `Desktop` story gains it instead, using the same `'Ø 3,600 mm'` value
+  ProductHero's old Dhruv fixture carried, so the visual moment isn't lost
+  from Storybook coverage, just relocated to match the component that now
+  owns it.
+- **`product-detail-page.tsx` — verified, not edited.** Its `<ProductHero>`
+  call already omits `photo`/(the now-removed) `dimensionLabel`; its
+  `<SpecRailDesktop>`/`<SpecRailMobile>` calls correctly don't pass the new
+  optional `dimensionLabel` either, since no product record has one. Prop
+  names/shapes for everything it does pass are unchanged.
+
+#### Gate result
+
+```
+pnpm typecheck   ✓ 4/4 packages, zero errors
+pnpm lint        ✓ 0 errors (2 pre-existing warnings, LegalDocument.tsx,
+                   unrelated — carried over from every prior phase)
+pnpm test        ✓ datum-ui 125/125, schemas 70/70, tokens 96/96, web
+                   55/55; only the pre-existing DATABASE_URL-gated RFQ
+                   integration test fails (unrelated, same as every
+                   prior phase)
+pnpm build       ✓ clean rebuild, 77 routes incl. all 17 product-detail
+                   routes both companies, zero errors/warnings, product
+                   route First Load JS unchanged (95.6 kB)
+visual check     ✓ real browser: /dhruv-epc/products/static-equipment/
+(manual browser)   heat-exchangers (a live route, untouched by this
+                   commit beyond the shared component) now renders the
+                   photo-as-ground hero automatically — hatch
+                   placeholder (no photo asset in this product's data),
+                   breadcrumb trail "Dhruv EPC → Products → Static
+                   Equipment → Heat Exchangers" on the photo in the
+                   correct accent-dark separator treatment, accent rule,
+                   white H1 at the smaller (text-display) size. Scrolled
+                   to confirm the light bg-steel-50 band below carries
+                   value statement, spec chips (mono, anchor-linking into
+                   #specifications), cert chips, RFQ button — visually
+                   distinct two-band composition, matching §2.2's split.
+                   Scrolled further to confirm SpecRail's "ENVELOPE AT A
+                   GLANCE" caption and DatumRule tick render correctly in
+                   the sticky sidebar (no DimensionLabel shown — correct,
+                   this product has no dimension figure in its data).
+```
+
+#### Deviations / flagged (none silent)
+
+1. `data-chrome="dark"` added despite not being in the plan's own
+   coverage table — same class of mechanical necessity as Phase 11's
+   identical deviation on PageHero.
+2. `dimensionLabel` on `SpecRail` has no live data source yet (schema gap,
+   not a Phase 12 scope item) — flagged the same way `photo` already was.
+3. Carried over, still open: everything from Phase 9/10/11's entries
+   above.
+
+#### Requires human review before Phase 13
+
+- Confirm `var(--overlay-hero)` (plain, not `-interior`) is the correct
+  scrim for ProductHero — inferred from IMPLEMENTATION_NOTES §2.2's own
+  wording and PageHero's docstring, not independently re-verified against
+  a canvas instance of `1c`.
+- Confirm the DatumRule/DimensionLabel relocation onto SpecRail reads as
+  the intended "signature moment," not as a missing hero flourish.
+
+**Not pushed yet — commit is local to `feat/real-company-logos`.** Next
+session picks up at Phase 13 (group homepage `HomeHero` adoption).
