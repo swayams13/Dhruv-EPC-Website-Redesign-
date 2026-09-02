@@ -3574,5 +3574,31 @@ shared component (carried forward unchanged).
 **Not pushed yet.** Next session picks up at Phase 17 (product-detail
 shared-surface integration check).
 
-**Not pushed yet.** Next session picks up at Phase 16 (remaining
-`PageHero` consumers).
+---
+
+### Session 33 — Phase 17: product-detail shared-surface integration check
+
+**Per FINAL_IMPLEMENTATION_PLAN.md Phase 17 — verification only, no files
+expected to change; `product-detail-page.tsx` itself isn't edited here.**
+
+Confirmed on `/dhruv-epc/products/static-equipment/pressure-vessels`
+(the plan's named route) that the rebuilt `ProductHero` (Phase 12) and
+the existing `AnchorRailDesktop`/`SpecRailDesktop` sticky-stacking still
+compose correctly on a real page:
+
+- Photo-ground hero renders above the two-column content grid with no
+  layout break at the hero/grid boundary.
+- Scrolled through the Specifications → Types & configurations section
+  boundary — `SpecRailDesktop`'s sticky box (`DatumRule` tick, "ENVELOPE
+  AT A GLANCE" caption, spec rows) tracks the scroll correctly alongside
+  the `lg:col-span-8` content column, no overlap with `AnchorRailDesktop`
+  above it, no visual break introduced by Phase 12's hero restructure.
+- No horizontal overflow at this viewport.
+
+#### Deviations / flagged
+
+None — this phase confirms Phase 8's and Phase 12's independent work
+still composes; no gap found.
+
+**Not pushed yet.** Next session picks up at Phase 18 (product detail:
+Types & Configurations).
