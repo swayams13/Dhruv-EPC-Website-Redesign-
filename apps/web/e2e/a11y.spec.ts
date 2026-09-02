@@ -36,6 +36,9 @@ const KNOWN_FAILURES: Record<string, string> = {
   '/capabilities/heat-treatment/': 'VG-004',
   '/capabilities/surface-treatment/': 'VG-004',
   '/capabilities/testing-inspection/': 'VG-004',
+  // Session 9 (VG-050/051): new /projects stub route inherits the same
+  // GroupChrome header VG-004 already tracks — not a new bug.
+  '/projects/': 'VG-004',
 }
 
 for (const route of ROUTES) {
