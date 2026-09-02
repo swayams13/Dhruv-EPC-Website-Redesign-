@@ -7,9 +7,9 @@
 // content (content-loader.ts does node:fs reads and can't be imported
 // into this 'use client' component directly).
 import { useState } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { Header, MobileDrawer, type MegaPanelColumn } from '@vedanta/datum-ui'
+import { Logo } from '../Logo'
 import { projectsIndexHref } from '../../lib/product-urls'
 
 const LINKS = [
@@ -41,16 +41,9 @@ export function GroupChrome({ megaPanelColumns }: { megaPanelColumns: MegaPanelC
   return (
     <>
       <Header
-        logo={
-          <Image
-            src="/logos/vedanta-group.png"
-            alt="Vedanta Group of Companies"
-            width={200}
-            height={179}
-            className="h-8 w-auto"
-            priority
-          />
-        }
+        logo={(scrolled) => (
+          <Logo company="group" size={scrolled ? 'header-scrolled' : 'header'} priority />
+        )}
         homeHref="/"
         menuLabel="Products"
         megaPanel={megaPanelColumns}

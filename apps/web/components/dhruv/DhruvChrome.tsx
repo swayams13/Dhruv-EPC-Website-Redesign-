@@ -3,9 +3,9 @@
 // Menu content comes from the seeded equipment list; entity contact from the
 // EntityRecord (never hard-coded — CLAUDE.md).
 import { useState } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { Header, MobileDrawer } from '@vedanta/datum-ui'
+import { Logo } from '../Logo'
 import { dhruvEquipment } from '../../lib/site-data'
 
 const GROUPS = [
@@ -26,16 +26,9 @@ export function DhruvChrome({ phoneHref, whatsappHref }: { phoneHref: string; wh
   return (
     <>
       <Header
-        logo={
-          <Image
-            src="/logos/dhruv-epc.png"
-            alt="Dhruv EPC Solutions Pvt. Ltd."
-            width={555}
-            height={160}
-            className="h-8 w-auto"
-            priority
-          />
-        }
+        logo={(scrolled) => (
+          <Logo company="dhruv-epc" size={scrolled ? 'header-scrolled' : 'header'} priority />
+        )}
         homeHref="/dhruv-epc"
         menuLabel="Equipment"
         menuGroups={GROUPS.map((g) => ({

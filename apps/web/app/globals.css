@@ -74,7 +74,7 @@
    reflow (CLS), no wrong-frame flash. Baseline (narrow viewports, reduced
    motion, no-JS): static fully-exploded frame, normal hero-photo footprint.
    md+ with motion permitted: the scrubbed stack pins inside a tall track.
-   The 60px sticky offset mirrors h-header-scrolled in the Tailwind preset —
+   The 76px sticky offset mirrors h-header-scrolled in the Tailwind preset —
    the header is fixed and always compressed by the time the band pins; if
    the header heights ever change, this value must move with them. */
 .exploded-track {
@@ -93,8 +93,8 @@
   .exploded-scrub {
     display: block;
     position: sticky;
-    top: 60px; /* h-header-scrolled — fixed header clearance */
-    max-height: calc(100vh - 60px); /* short laptop viewports: keep the band fully visible */
+    top: 76px; /* h-header-scrolled — fixed header clearance */
+    max-height: calc(100vh - 76px); /* short laptop viewports: keep the band fully visible */
   }
 }
 

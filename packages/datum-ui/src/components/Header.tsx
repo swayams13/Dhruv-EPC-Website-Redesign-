@@ -1,10 +1,10 @@
 'use client'
 // Header — Datum §17, extended §4/§14.3 (Session 9, VG-051).
-// Phase 1.1: dark nav — always fixed, solid steel-950 chrome. Scroll
-// threshold 40px (was innerHeight): compresses header to 60px after
-// minimal scroll. Gradient-over-hero effect deferred to Phase 2 (requires
-// hero co-ordination). phoneHref / whatsappHref are optional — GroupChrome
-// omits them.
+// Phase 5 (IMPLEMENTATION_NOTES §2.1): main bar is now light — always
+// fixed, bg-white / border-steel-200 chrome, h-header 91px → h-header-scrolled
+// 76px. Scroll threshold 40px (was innerHeight): compresses header after
+// minimal scroll. phoneHref / whatsappHref are optional — GroupChrome omits
+// them.
 //
 // utilityBar / megaPanel (Session 9): both optional and additive. When
 // megaPanel is set it replaces the legacy menuGroups grid (group nav only —
@@ -13,6 +13,12 @@
 // fixed <header>; its height is reserved by mirroring the exact same
 // two-row structure in the spacer div below, so the two heights can never
 // drift out of sync — no calc(), no new token.
+//
+// data-chrome="dark": the main bar is white now, so it no longer sits on
+// the outer <header>. It stays on the utility strip (bg-steel-900,
+// unchanged) and on the menu-dropdown wrapper below — both are still dark
+// surfaces this phase; the dropdown's own bg-steel-950 retheme is Phase 6
+// (MegaPanel.tsx / Header.tsx's legacy grid), not this one.
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Button } from './Button'
@@ -38,8 +44,9 @@ export interface HeaderNavLink {
 }
 
 export interface HeaderProps {
-  /** Logo lockup */
-  logo: React.ReactNode
+  /** Logo lockup — receives the scrolled/compressed state so the caller can
+   *  size it correctly (58px full-height bar / 44px scrolled bar, §2.0). */
+  logo: (scrolled: boolean) => React.ReactNode
   homeHref: string
   /** Mega-menu trigger label — "Equipment" (Dhruv) / "Products" (Precise/Group) */
   menuLabel: string
@@ -129,20 +136,18 @@ export function Header({
 
       <header
         ref={headerRef}
-        // data-chrome='dark': rebinds --accent-focus to the -dark accent step so
-        // focus rings clear 3:1 on the steel-950 bar (globals.css §25, v1.2).
-        // Covers both rows below.
-        data-chrome="dark"
-        className={`fixed inset-x-0 top-0 z-40 bg-steel-950 border-b border-steel-50/10 ${scrolled ? 'shadow-raised' : ''}`}
+        className={`fixed inset-x-0 top-0 z-40 bg-white border-b border-steel-200 ${scrolled ? 'shadow-raised' : ''}`}
       >
         {hasUtilityBar && (
-          <div className="hidden border-b border-steel-50/10 bg-steel-900 md:block">
-            <div className="mx-auto flex h-8 max-w-wide items-center justify-end gap-6 px-6 text-helper text-steel-400">
+          // data-chrome='dark': rebinds --accent-focus to the -dark accent step so
+          // focus rings clear 3:1 on this dark strip (globals.css §25, v1.2).
+          <div data-chrome="dark" className="hidden border-b border-steel-50/10 bg-steel-900 md:block">
+            <div className="mx-auto flex h-8 max-w-wide items-center justify-end gap-6 px-6 text-helper text-white/66">
               {utilityBar!.map((u) => (
                 <a
                   key={u.href}
                   href={u.href}
-                  className="transition-colors duration-instant ease-standard hover:text-steel-50"
+                  className="transition-colors duration-instant ease-standard hover:text-white"
                 >
                   {u.label}
                 </a>
@@ -153,14 +158,7 @@ export function Header({
 
         <div className={`mx-auto flex ${rowHeight} max-w-wide items-center justify-between gap-6 px-6`}>
           <a href={homeHref} className="flex items-center">
-            {/* logo assets are raster marks on an opaque light background (real
-                lockup files, not vector) — a light chip keeps them legible on
-                the always-dark header instead of compositing onto steel-950
-                directly. Same "raster logo needs a light surface" rule
-                ClientWall.tsx already applies to client logos. */}
-            <span className="flex items-center rounded-sm bg-steel-50 px-3 py-2">
-              {logo}
-            </span>
+            {logo(scrolled)}
           </a>
 
           <nav aria-label="Primary" className="hidden h-full items-center gap-8 md:flex">
@@ -170,11 +168,11 @@ export function Header({
               aria-expanded={menuOpen}
               aria-controls="datum-mega-menu"
               onClick={() => setMenuOpen((v) => !v)}
-              className="flex h-full items-center gap-1 text-data font-medium text-steel-200"
+              className="flex h-full items-center gap-1 text-body font-semibold text-steel-500 transition-colors duration-instant ease-standard hover:text-steel-950"
             >
               {menuLabel}
               <span
-                className={`text-steel-500 transition-transform duration-instant ease-standard ${menuOpen ? 'rotate-180' : ''}`}
+                className={`text-accent transition-transform duration-instant ease-standard ${menuOpen ? 'rotate-180' : ''}`}
               >
                 <ChevronDown size={16} />
               </span>
@@ -183,7 +181,7 @@ export function Header({
               <a
                 key={l.href}
                 href={l.href}
-                className="flex h-full items-center text-data font-medium text-steel-200"
+                className="flex h-full items-center text-body font-semibold text-steel-500 transition-colors duration-instant ease-standard hover:text-steel-950"
               >
                 {l.label}
               </a>
@@ -195,7 +193,7 @@ export function Header({
               <a
                 href={whatsappHref}
                 aria-label="Chat on WhatsApp"
-                className="flex h-compact w-compact items-center justify-center rounded-sm text-steel-300 transition-colors duration-instant hover:bg-steel-800 hover:text-steel-50"
+                className="flex h-compact w-compact items-center justify-center rounded-sm text-steel-500 transition-colors duration-instant hover:bg-steel-100 hover:text-steel-950"
               >
                 <WhatsApp size={20} />
               </a>
@@ -204,13 +202,13 @@ export function Header({
               <a
                 href={phoneHref}
                 aria-label="Call us"
-                className="flex h-compact w-compact items-center justify-center rounded-sm text-steel-300 transition-colors duration-instant hover:bg-steel-800 hover:text-steel-50"
+                className="flex h-compact w-compact items-center justify-center rounded-sm text-steel-500 transition-colors duration-instant hover:bg-steel-100 hover:text-steel-950"
               >
                 <Phone size={20} />
               </a>
             )}
             <span className={contentRfqInView ? 'invisible' : undefined}>
-              <Button variant="rfq" size="compact" href={rfqHref}>
+              <Button variant="rfq" size={scrolled ? 'compact' : 'default'} href={rfqHref}>
                 Request a quote
               </Button>
             </span>
@@ -220,66 +218,70 @@ export function Header({
             type="button"
             aria-label="Open menu"
             onClick={onMenuOpen}
-            className="flex h-compact w-compact items-center justify-center rounded-sm text-steel-50 md:hidden"
+            className="flex h-compact w-compact items-center justify-center rounded-sm text-steel-950 md:hidden"
           >
             <Menu />
           </button>
         </div>
 
-        {hasMegaPanel ? (
-          <MegaPanel
-            id="datum-mega-menu"
-            open={menuOpen}
-            onClose={closeMenu}
-            triggerRef={triggerRef}
-            columns={megaPanel!}
-          />
-        ) : (
-          <div
-            id="datum-mega-menu"
-            hidden={!menuOpen}
-            className="absolute inset-x-0 top-full border-b border-steel-50/10 bg-steel-950 shadow-overlay"
-          >
-            <div className={`mx-auto grid max-w-wide ${legacyGridColsClass} gap-8 px-6 py-8`}>
-              {(menuGroups ?? []).map((group) => (
-                <div key={group.label}>
-                  <p className="font-mono text-xs font-medium uppercase tracking-caption text-accent">
-                    {group.label}
-                  </p>
-                  <ul className="mt-3">
-                    {group.items.map((item) => (
-                      <li key={item.href}>
-                        <a
-                          href={item.href}
-                          className="-mx-2 block rounded-sm px-2 py-2 transition-colors duration-instant hover:bg-steel-800"
-                        >
-                          <span className="block text-data font-medium text-steel-100">
-                            {item.name}
-                          </span>
-                          <span className="block text-helper text-steel-500">{item.scope}</span>
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-              {/* capability rail — "can you build mine?" is the question behind every menu open */}
-              {capabilityRail && (
-                <div className="border-l border-steel-700/50 pl-8">
-                  <a
-                    href={capabilityRail.href}
-                    className="group flex items-center gap-2 text-data font-medium text-accent-dark transition-colors duration-instant hover:text-accent"
-                  >
-                    {capabilityRail.label}
-                    <span className="transition-transform duration-instant ease-standard motion-safe:group-hover:translate-x-1">
-                      <ArrowRight size={16} />
-                    </span>
-                  </a>
-                </div>
-              )}
+        {/* Still a dark surface this phase (Phase 6 retheme pending) — see the
+            data-chrome note at the top of this file. */}
+        <div data-chrome="dark">
+          {hasMegaPanel ? (
+            <MegaPanel
+              id="datum-mega-menu"
+              open={menuOpen}
+              onClose={closeMenu}
+              triggerRef={triggerRef}
+              columns={megaPanel!}
+            />
+          ) : (
+            <div
+              id="datum-mega-menu"
+              hidden={!menuOpen}
+              className="absolute inset-x-0 top-full border-b border-steel-50/10 bg-steel-950 shadow-overlay"
+            >
+              <div className={`mx-auto grid max-w-wide ${legacyGridColsClass} gap-8 px-6 py-8`}>
+                {(menuGroups ?? []).map((group) => (
+                  <div key={group.label}>
+                    <p className="font-mono text-xs font-medium uppercase tracking-caption text-accent">
+                      {group.label}
+                    </p>
+                    <ul className="mt-3">
+                      {group.items.map((item) => (
+                        <li key={item.href}>
+                          <a
+                            href={item.href}
+                            className="-mx-2 block rounded-sm px-2 py-2 transition-colors duration-instant hover:bg-steel-800"
+                          >
+                            <span className="block text-data font-medium text-steel-100">
+                              {item.name}
+                            </span>
+                            <span className="block text-helper text-steel-500">{item.scope}</span>
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+                {/* capability rail — "can you build mine?" is the question behind every menu open */}
+                {capabilityRail && (
+                  <div className="border-l border-steel-700/50 pl-8">
+                    <a
+                      href={capabilityRail.href}
+                      className="group flex items-center gap-2 text-data font-medium text-accent-dark transition-colors duration-instant hover:text-accent"
+                    >
+                      {capabilityRail.label}
+                      <span className="transition-transform duration-instant ease-standard motion-safe:group-hover:translate-x-1">
+                        <ArrowRight size={16} />
+                      </span>
+                    </a>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </header>
     </div>
   )
