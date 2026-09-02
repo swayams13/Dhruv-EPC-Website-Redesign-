@@ -3700,3 +3700,43 @@ visual check     ✓ real browser: /dhruv-epc/products/static-equipment/
    rank CANVAS above the unrevised prose notes.
 
 **Not pushed yet.** Next session picks up at Phase 20 (FAQ retheme).
+
+---
+
+### Session 33 — Phase 20: FAQ retheme (verification only) — FINAL_IMPLEMENTATION_PLAN.md complete through Phase 20
+
+**Per FINAL_IMPLEMENTATION_PLAN.md Phase 20: "Token retheme only — schema/
+JSON-LD/accordion mechanism untouched."** IMPLEMENTATION_NOTES has no
+`faq` citation anywhere (`grep -i faq` — zero matches), same "no cited
+device, already token-complete" situation as Phase 18.
+
+Read `product-detail-page.tsx`'s `id="faq"` section (lines 232–249):
+`divide-steel-200 border-y border-steel-200`, `text-data font-medium
+text-steel-950` question, `text-steel-500` chevron, `text-sm
+text-steel-700` answer — all named Datum tokens, correctly carrying
+Phase 1/2's cascade, matching the FAQ's sibling sections' conventions.
+Verified live in the browser: `#faq` on a real product route renders
+correctly (steel-200 dividers, correct type), and clicked a question to
+confirm the native `<details>`/`<summary>` accordion mechanism and
+chevron rotation both still work — the schema/JSON-LD/accordion
+mechanism is untouched, per the plan's own instruction.
+
+#### Deviations / flagged
+
+None. No code change made; nothing to commit.
+
+---
+
+## FINAL_IMPLEMENTATION_PLAN.md: Phases 12–20 complete
+
+All nine phases (12 ProductHero, 13–15 homepage HomeHero adoption, 16
+remaining PageHero consumers, 17 shared-surface integration check, 18
+Types & Configurations, 19 Fabrication & QA, 20 FAQ) are committed on
+`feat/real-company-logos`, none pushed to origin yet. Phases 21–25
+(remaining category-route cascade, responsive validation, a11y/SEO/
+performance validation, snapshot finalization, final visual QA/human
+sign-off) remain, per the plan's own Implementation Order.
+
+**Not pushed yet.** Next session picks up at Phase 21 (product/category
+routes — remaining cascade), or push this branch first if the human
+wants Phases 12–20 reviewed before continuing.
