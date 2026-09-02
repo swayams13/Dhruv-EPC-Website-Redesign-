@@ -101,8 +101,9 @@ export function Footer({
           opacity-modifier engine can't decompose a bare `var(--accent)`
           reference into channels the way it can a literal hex token like
           `steel-50`. The notes' rgba value is Group/Dhruv's accent read
-          directly off that canvas instance, not a scoped brand-red like
-          Logo.tsx's logoRed. Exact width/height and the "concentric"
+          directly off that canvas instance, not a scoped, company-invariant
+          brand-red like Logo.tsx's dedicated logo-only red constant (D-11's
+          two-red system). Exact width/height and the "concentric"
           nesting gap for the left pair aren't in the notes — only
           position/color/radius/opacity are — sized here at a plausible
           corner-bracket scale; flagged in docs/progress.md. Hidden below

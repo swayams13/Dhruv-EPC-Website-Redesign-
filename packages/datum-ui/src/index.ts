@@ -3,6 +3,7 @@
 // upload dropzone → spec table → cards → nav → footer → hero → trust
 
 export { Stamp, type StampProps } from './components/Stamp'
+export { Seal, type SealProps } from './components/Seal'
 // ChevronDown: opened to the barrel 2026-07-17 so product-page FAQ accordions
 // can use the shared §12 glyph instead of the platform-variable ⌄ text glyph.
 export { ChevronDown } from './components/glyphs'

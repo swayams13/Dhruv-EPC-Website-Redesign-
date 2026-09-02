@@ -27,11 +27,12 @@ for (const { company, slug, href } of PRODUCTS) {
     await page.goto(href)
     await page.waitForLoadState('networkidle')
 
-    // SpecRail — desktop sidebar heading. The identical heading also renders
-    // in the mobile SpecRail block (lg:hidden, earlier in DOM order), so at
+    // SpecRail — desktop sidebar heading ("Envelope at a glance" per §2.7,
+    // Phase 8 — was "Key figures"). The identical heading also renders in
+    // the mobile SpecRail block (lg:hidden, earlier in DOM order), so at
     // this test's default desktop viewport we must filter to the visible
     // instance rather than take .first() by DOM order.
-    await expect(page.locator('p:visible', { hasText: 'Key figures' })).toBeVisible()
+    await expect(page.locator('p:visible', { hasText: 'Envelope at a glance' })).toBeVisible()
 
     // At least one rail row actually has a value — not an empty <dl>. Same
     // mobile/desktop duplication as above: scope to the visible copy.

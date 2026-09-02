@@ -2677,3 +2677,184 @@ an amend, per this repo's own rule to always create new commits.
 6. Responsive hide behavior (`hidden md:block`, right bracket `lg:block`)
    implemented per §3's table but not re-verified with a live narrow-
    viewport screenshot this pass — see the note above.
+
+### Session 35 — Phase 8: shared cards/buttons/forms/certification components
+**Status:** Complete ✅ — committed locally, not pushed.
+**Branch:** `feat/real-company-logos` · **Date:** 2026-09-02
+**Governing specs:** `docs/FINAL_IMPLEMENTATION_PLAN.md` Phase 8,
+`VEDANTA_DESIGN_IMPLEMENTATION_NOTES.md` §2.3 (Button), §2.4 (ProductCard/
+CategoryCard), §2.5 (Stamp/Seal), §2.7 (SpecTable/SpecRail/StatBand/
+CertificationCard), §2.9 (the accent rule, formalized)
+
+#### Scoping: which of the 13 named files actually needed code changes
+
+Read all 13 files before touching any of them, per the loop's Discover
+step. Four — `Input.tsx`, `Select.tsx`, `Textarea.tsx`, `FieldShell.tsx` —
+aren't mentioned anywhere in IMPLEMENTATION_NOTES §2's component-change
+sections and already reference pure Datum tokens (`border-steel-300`,
+`focus:border-accent`, `text-signal-error`) with nothing arbitrary or
+hard-coded; verified by inspection, zero code changes. `AnchorRail.tsx`
+and `ApprovalsMatrix.tsx` are the same — the plan's own text calls
+`AnchorRail` "token cascade only," and `ApprovalsMatrix` isn't named in
+§2 at all despite being in the file list; both already token-clean.
+
+#### What actually changed
+
+- **`Button.tsx`** (§2.3) — label size `text-data` (15px) → `text-body`
+  (16px), in all three places it appeared (`box`, and both `link`
+  variants — light and onDark — which don't use `box` since they render
+  inline, not boxed). Everything else (heights, hover-deepen, press-
+  translate, loading-lock) already correct, confirmed unchanged.
+- **`ProductCard.tsx`** (§2.4) — the biggest single change in this phase:
+  - Affordance: bare `<ArrowRight/>` → "Learn More ↗" (`text-body
+    font-semibold`, `text-accent` light / `text-accent-dark` onDark,
+    matching the established light-surface-vs-dark-surface accent-alias
+    convention from every other component this session touched). Factored
+    into a shared `Affordance` sub-component since it now renders
+    identically in three places (photo, no-photo, and the new spec
+    layout).
+  - Hover: light variant `hover:border-steel-400` → `hover:border-accent
+    hover:shadow-hover`. onDark already had `hover:border-accent`
+    (unchanged) — left its hover as border-only, since a shadow reads as
+    an odd elevation cue on a dark card and §2.4 only describes this for
+    the light "1i" instance.
+  - New `layout="spec"` variant (ref `1j`): 3px accent top border, a
+    3-row spec `<dl>`, and a mono `index` string. Purely additive —
+    `layout` defaults to `'photo'`, so every existing call site is
+    unaffected; `specRows`/`index` are the caller's responsibility since
+    this component has no CMS/schema knowledge. Not wired into any live
+    page this phase (no consumer passes `layout="spec"` yet) — validated
+    via two new Storybook stories (`SpecLayout`/`SpecLayoutDark`) instead,
+    same "build now, wire later, validate via Storybook" pattern Phase 4
+    established for `Logo.tsx`.
+- **`CategoryCard.tsx`** (§2.9) — tier-rule bar `h-1 w-8` (4px×32px) → 3px
+  height via inline `style` (no Tailwind height token gives exactly 3px;
+  same reasoning as Logo.tsx's size ladder), across all 4 render paths
+  (onDark thin/normal, light thin/normal). Re-read §2.4's "moves to a
+  border-top on the spec layout so the two devices don't collide" and
+  concluded "it" refers to keeping the two tiers' accent devices visually
+  distinct (bar vs. border-top), not literally converting CategoryCard's
+  own bar into a border-top — §2.9's formalized table lists both under
+  one "32×3px" row, confirming CategoryCard's own bar stays a bar, just
+  corrected to the exact height.
+- **`Seal.tsx`** (new, §2.5) — the scalloped-rosette vector, copied the
+  16-lobe SVG path verbatim. Closed `size: 120 | 72 | 44` union (not an
+  arbitrary number) matching Logo.tsx's own named-rungs precedent — this
+  is a fixed brand-asset ladder, not a scalable primitive. `code` typed as
+  `StampProps['code']` (imported, not duplicated) so Seal and Stamp can
+  never drift on which codes are valid. Barrel-exported right after
+  `Stamp`. New `Seal.stories.tsx` (size ladder, floor rung, full 120px
+  with issuer) since this is the one genuinely new component in this
+  phase and has no other consumer to validate it against yet beyond
+  CertificationCard's 72px usage.
+- **`CertificationCard.tsx`** (§2.7) — swapped `<Stamp code={stampCode}/>`
+  for `<Seal code={stampCode} size={72}/>`; "View certificate" link
+  gained the "↗". Prop name `stampCode` left unchanged (still accurately
+  describes what it identifies — a certification code — even though the
+  rendering component changed; renaming would be a breaking API change
+  for zero semantic gain).
+- **`SpecTable.tsx`** (§2.7) — row hover `hover:bg-steel-100` →
+  `hover:bg-steel-50` (steel-100 is also the header row's own background,
+  so the old hover made a hovered row read as identical to the header).
+  Applied to both the parameter-mode `rowLine` constant and the
+  comparative-matrix mode's sticky pinned-column hover shade, which had
+  its own separate `group-hover:bg-steel-100` needing the same fix for
+  the pinned cell and the rest of the hovered row to match.
+- **`SpecRail.tsx`** (§2.7) — added `<DatumRule/>` (already-existing
+  component, reused not reimplemented) to the top of both
+  `SpecRailMobile`/`SpecRailDesktop` boxes; caption "Key figures" →
+  "Envelope at a glance" in both. Caught and fixed a downstream break:
+  `apps/web/e2e/golden-page-rollout.spec.ts` asserted the literal old
+  caption text was visible on every one of the 17 golden product pages —
+  updated the assertion rather than leaving a Playwright regression for
+  CI to catch later.
+- **`StatBand.tsx`** (§2.7) — label gained `font-mono` (spec says "label
+  mono uppercase tracked"; the mono class was missing even though
+  uppercase/tracking-caption were already present). Added `border-l-2
+  pl-5` per `<li>`, reusing the already-computed `rule` variable (which
+  already branches steel-800/steel-200 for onDark/light) rather than
+  hardcoding the spec's literal `border-steel-200` — that literal would
+  have been invisible on the onDark variant, same class of fix as
+  several onDark-contrast corrections earlier this session.
+
+#### A real regression caught by the test suite, not by inspection
+
+`pnpm --filter @vedanta/web test` failed on
+`lib/logo-consumer-boundary.test.ts` — its regex-based Decision-1
+enforcement (`logoRed` may only appear in `Logo.tsx`) flagged
+`Footer.tsx`. Not a new violation from this phase: it was **my own
+comment**, written during the Phase 7 bracket-linework follow-up two
+sessions ago, that used the literal word "logoRed" in prose while
+explaining why the bracket color isn't a scoped brand-red. The test
+doesn't distinguish prose from code — correctly so, per Decision 1's
+literal "no other component file may reference... logoRed" wording.
+Reworded the comment to describe the concept without the literal
+identifier. Included in this phase's commit since Phase 8's own test run
+is what caught it.
+
+#### A real, pre-existing bug found and NOT fixed (logged instead)
+
+Verifying in Storybook, its accessibility addon flagged `text-accent` at
+3.15:1 contrast — foreground `#F0670F` (amber). Traced to
+`packages/datum-ui/.storybook/preview.css`, a hand-maintained "mirror" of
+`globals.css` that was never updated when the accent migrated amber → red
+at v1.2 (confirmed by checking an untouched pre-existing story,
+`Button/Rfq Dhruv`, which shows the identical stale amber). Out of Phase
+8's file scope and predates this session entirely — logged to
+`docs/mistakes.md` with the fix path for whenever Storybook infra is
+actually in scope, and cross-checked every real Phase 8 visual change
+against the actual Next.js dev server instead, where the accent renders
+correctly everywhere.
+
+#### Gate result
+
+```
+pnpm typecheck   ✓ 4/4 packages, zero errors
+pnpm lint        ✓ 0 errors (2 pre-existing warnings, LegalDocument.tsx,
+                   unrelated)
+pnpm test        ✓ datum-ui 113/113 (up from 107 — new components picked
+                   up by the axe auto-glob and passing), web 55/55 after
+                   the logo-consumer-boundary fix; only the pre-existing
+                   DATABASE_URL-gated RFQ route test fails
+pnpm build       ✓ 77 routes, zero errors/warnings, First Load JS unchanged
+visual check     ✓ real browser (not Storybook, see above) across five
+(manual browser)   routes: Certifications (`/dhruv-epc/proof`) — Seal
+                   renders correctly at 72px, real IBM Plex Mono (confirmed
+                   Storybook's serif fallback was also an environment
+                   artifact, not a Seal bug, by checking Stamp.tsx's own
+                   unmodified story showing the same serif issue); a
+                   product page — DatumRule + "Envelope at a glance" render
+                   on both mobile and desktop SpecRail, SpecTable row-hover
+                   class confirmed via computed style; group homepage —
+                   StatBand's border-l-2 + mono labels render, Button's
+                   16px label confirmed via computed style; a category page
+                   — ProductCard's "Learn More →" affordance and its
+                   hover state (accent border + shadow) confirmed via real
+                   mouse hover, screenshot shows both. ProductCard's new
+                   `layout="spec"` variant checked via Storybook (its only
+                   validation surface — no live consumer yet), renders
+                   correctly per spec.
+```
+
+#### Deviations / flagged (none silent)
+
+1. `ProductCardSpecRow`/`index` props for `layout="spec"` are additive and
+   unwired — no page passes them yet. Matches the file list's own scope
+   (ProductCard.tsx only, not its consumer pages).
+2. `CertificationCard`'s `stampCode` prop name left as-is despite now
+   feeding a `Seal`, not a `Stamp` — a rename would break the public API
+   for no semantic gain (see "What actually changed" above).
+3. Storybook's `preview.css` accent-color drift — real, pre-existing,
+   logged to `docs/mistakes.md`, not fixed (out of scope).
+
+#### Requires human review before Phase 9
+
+- Confirm `ProductCard`'s `layout="spec"` visual treatment (3px border,
+  3-row `<dl>`, mono index) before it's wired into any real product page.
+- Confirm `Seal.tsx`'s 120px issuer-line layout — the only rung with no
+  live consumer yet, validated in Storybook only.
+- Decide whether/when to resync `packages/datum-ui/.storybook/preview.css`
+  against `globals.css` (see `docs/mistakes.md`, 2026-09-02 entry).
+- Carried over, still open: icon/hamburger colors and company-route
+  utility bar content (Phase 5), the two bracket-linework sizing
+  inferences (Phase 7 follow-up).

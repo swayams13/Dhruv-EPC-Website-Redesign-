@@ -1,9 +1,10 @@
 // Button — Datum §13
 // The Amber Law: variant="rfq" is the ONLY accent-filled element; max one per view.
-// Heights 48px default / 40px compact; radius 2px machined edge; Inter 500 15px,
-// verb-first sentence case. Hover deepens one step (100ms); pressed deepens two +
-// translates down 1px (the only vertical movement); loading locks width;
-// disabled = steel-200 fill / steel-400 text, never hidden.
+// Heights 48px default / 40px compact; radius 2px machined edge; 16px label
+// (§2.3, v1.3 — was 15px), verb-first sentence case. Hover deepens one step
+// (100ms); pressed deepens two + translates down 1px (the only vertical
+// movement); loading locks width; disabled = steel-200 fill / steel-400 text,
+// never hidden.
 // Focus ring comes from the global :focus-visible rule (§25) — never suppressed here.
 
 export interface ButtonProps {
@@ -23,7 +24,9 @@ export interface ButtonProps {
   className?: never // components accept no className — theming is CSS-var scope
 }
 
-const box = 'inline-flex items-center justify-center gap-2 rounded-sm px-6 font-medium text-data'
+// Label size text-data (15px) -> text-body (16px), §2.3 — matches the
+// client's measured button.
+const box = 'inline-flex items-center justify-center gap-2 rounded-sm px-6 font-medium text-body'
 const press = 'active:translate-y-px'
 const tick = 'transition-colors duration-instant ease-standard'
 
@@ -34,7 +37,7 @@ const variantClass: Record<ButtonProps['variant'], string> = {
   secondary: `${box} ${press} ${tick} border border-steel-300 bg-transparent text-steel-950 hover:border-steel-400 disabled:border-steel-200 disabled:hover:border-steel-200`,
   ghost: `${box} ${press} ${tick} bg-transparent text-steel-700 hover:bg-steel-100 disabled:hover:bg-transparent`,
   // inline navigation within prose — no box, no height
-  link: `${tick} inline font-medium text-data text-accent-text hover:text-accent-text-hover hover:underline`,
+  link: `${tick} inline font-medium text-body text-accent-text hover:text-accent-text-hover hover:underline`,
 }
 
 // §13 graphite inversion: Primary → white fill / carbon text. Secondary border/text
@@ -45,7 +48,7 @@ const onDarkClass: Partial<Record<ButtonProps['variant'], string>> = {
   primary: `${box} ${press} ${tick} bg-white text-steel-950 hover:bg-steel-100 active:bg-steel-200 disabled:hover:bg-steel-200`,
   secondary: `${box} ${press} ${tick} border border-steel-600 bg-transparent text-steel-50 hover:border-steel-400 disabled:border-steel-200 disabled:hover:border-steel-200`,
   // accent-dark is the light-surface accent for dark backgrounds (arc-300/flex-300 per company)
-  link: `${tick} inline font-medium text-data text-accent-dark hover:text-accent hover:underline`,
+  link: `${tick} inline font-medium text-body text-accent-dark hover:text-accent hover:underline`,
 }
 
 const disabledFill = 'disabled:bg-steel-200 disabled:text-steel-400'

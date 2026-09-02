@@ -1,12 +1,14 @@
 // CertificationCard — Datum §20/§22.
-// Stamp mark + full credential name + scope statement in plain words
-// ("Authorized to fabricate ASME Sec. VIII Div. 2 pressure vessels") +
-// issuer + validity + "View certificate" opening the artifact.
+// Seal mark (§2.5/§2.7 — swapped from the Stamp tile, 72px rung) + full
+// credential name + scope statement in plain words ("Authorized to
+// fabricate ASME Sec. VIII Div. 2 pressure vessels") + issuer + validity +
+// "View certificate ↗" opening the artifact.
 // A credential without scope and provenance is decoration (Principle 5);
 // the scope line is what turns a logo into an answer. The CMS schema
 // (Certification) enforces the scope statement at publish time.
 
-import { Stamp, type StampProps } from './Stamp'
+import { Seal } from './Seal'
+import type { StampProps } from './Stamp'
 
 export interface CertificationCardProps {
   /** Credential stamp mark (§12) — omitted for credentials without a stamp */
@@ -42,7 +44,7 @@ export function CertificationCard({
     <div className="flex h-full flex-col rounded-sm border border-steel-200 bg-white p-6">
       <div className="flex items-start justify-between gap-4">
         <h3 className="font-display text-h4 font-semibold text-steel-950">{name}</h3>
-        {stampCode && <Stamp code={stampCode} />}
+        {stampCode && <Seal code={stampCode} size={72} />}
       </div>
       {/* prose voice, not the mono-reserved data step (§5.2) */}
       <p className="mt-3 text-sm text-steel-700">{scopeStatement}</p>
@@ -68,7 +70,7 @@ export function CertificationCard({
             href={artifactUrl}
             className="text-data font-medium text-accent-text transition-colors duration-instant hover:text-accent-text-hover hover:underline"
           >
-            View certificate
+            View certificate ↗
           </a>
         </p>
       )}

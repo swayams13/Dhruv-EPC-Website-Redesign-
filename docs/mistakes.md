@@ -480,3 +480,39 @@ assume fixing the header caught it.
 too. Added `{ label: 'About', href: '/dhruv-epc/company' }` as the first
 entry in `dhruv-epc/layout.tsx`'s `FOOTER_COLUMNS` "Company" column,
 matching `precise-engineers/layout.tsx`'s existing order exactly.
+
+## 2026-09-02 — Storybook's preview.css has stale, pre-v1.2 accent values (amber, not the current red)
+
+**What happened:** while verifying Phase 8's ProductCard/Button changes in
+Storybook, its built-in accessibility addon flagged a contrast violation
+on `text-accent` — foreground `#F0670F` (amber) against white, 3.15:1,
+failing 4.5:1. Traced it to `packages/datum-ui/.storybook/preview.css`,
+which the file's own header comment admits is a hand-maintained "mirror
+of apps/web/app/globals.css... Storybook-only copy: the app owns the
+canonical file." That mirror was never updated when the accent migrated
+amber → brand red (`#AA3833`) at v1.2 (session predating this one) —
+confirmed by checking an untouched, pre-existing story
+(`Button/Rfq Dhruv`) and finding it renders the same stale amber. Also
+found `[data-company='group']`'s accent logic has fully diverged from
+`globals.css` (Storybook: a monochrome steel-based scheme; the real app:
+brand-500 red, same as Dhruv) — this drift predates v1.2 too and is
+larger than just the color migration.
+
+**Why not fixed here:** out of Phase 8's declared file scope
+(`FINAL_IMPLEMENTATION_PLAN.md`'s Phase 8 file list is 13 named
+components, not Storybook infrastructure) and the user's task was to
+implement Phases 6–8, not audit tooling. Verified the real behavior
+separately in the actual Next.js dev server (not Storybook) for every
+Phase 8 change, where the accent renders correctly — Storybook's stale
+copy doesn't affect production, only the fidelity of Storybook-based
+visual checks going forward.
+
+**Rule:** don't trust Storybook's accessibility-addon contrast readings
+for accent-colored elements without cross-checking a real route in the
+actual app first — `preview.css`'s copy of the company accent scopes can
+silently drift from `globals.css` (the canonical source) since nothing
+enforces the two staying in sync. If a future session has "fix Storybook
+infra" or "Phase X: design-system tooling" in scope, resync
+`preview.css`'s three `[data-company]` blocks against `globals.css`
+line-for-line rather than patching the accent value alone — the `group`
+company's whole accent formula needs it, not just amber→red.

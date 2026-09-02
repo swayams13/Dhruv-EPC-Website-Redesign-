@@ -16,8 +16,12 @@
 // per CLAUDE.md's ambiguity protocol step 2 ("check how an existing component solved
 // the same problem — consistency > novelty"). Flagged in the PR as a design-review
 // item: confirm this shape before it's replicated to other products in Session 7.
+//
+// §2.7 (Phase 8): gains the DatumRule tick device at the top of the box, and
+// its caption is "Envelope at a glance" (was "Key figures") — ref `1c`.
 
 import { Button } from './Button'
+import { DatumRule } from './DatumRule'
 import { Check, Triangle } from './glyphs'
 import type { SpecTableRow } from './SpecTable'
 
@@ -99,7 +103,8 @@ export function SpecRailMobile({ rows }: { rows: SpecTableRow[] }): React.ReactE
   return (
     <div className="mx-auto max-w-wide px-6 lg:hidden">
       <div className="mt-6 rounded-sm border border-steel-200 bg-white p-6">
-        <p className="text-xs font-medium uppercase tracking-caption text-steel-600">Key figures</p>
+        <DatumRule />
+        <p className="mt-4 text-xs font-medium uppercase tracking-caption text-steel-600">Envelope at a glance</p>
         <dl className="mt-3">
           {rows.map((row) => (
             <RailRow key={row.param} row={row} />
@@ -121,7 +126,8 @@ export function SpecRailDesktop({
 }: SpecRailProps): React.ReactElement {
   return (
     <div className="sticky top-24 mt-6 hidden rounded-sm border border-steel-200 bg-white p-6 lg:block">
-      <p className="text-xs font-medium uppercase tracking-caption text-steel-600">Key figures</p>
+      <DatumRule />
+      <p className="mt-4 text-xs font-medium uppercase tracking-caption text-steel-600">Envelope at a glance</p>
       <dl className="mt-3">
         {rows.map((row) => (
           <RailRow key={row.param} row={row} />
