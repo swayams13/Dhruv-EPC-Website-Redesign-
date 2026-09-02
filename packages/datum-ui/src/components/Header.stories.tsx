@@ -87,3 +87,56 @@ export const Precise: Story = {
   },
   decorators: [withCompany('precise')],
 }
+
+const groupMegaPanel = [
+  {
+    companyLabel: 'Dhruv EPC Solutions',
+    categories: [
+      {
+        name: 'Static Equipment',
+        href: '/dhruv-epc/products/static-equipment',
+        products: [
+          { name: 'Pressure Vessels', href: '/dhruv-epc/products/static-equipment/pressure-vessels' },
+          { name: 'Heat Exchangers', href: '/dhruv-epc/products/static-equipment/heat-exchangers' },
+        ],
+      },
+    ],
+    allProductsHref: '/dhruv-epc/products',
+    allProductsLabel: 'All Dhruv EPC products →',
+  },
+  {
+    companyLabel: 'Precise Engineers',
+    categories: [
+      {
+        name: 'Expansion Joints',
+        href: '/precise-engineers/products/expansion-joints',
+        products: [
+          { name: 'Metallic Bellows', href: '/precise-engineers/products/expansion-joints/metallic-bellows-expansion-joint' },
+        ],
+      },
+    ],
+    allProductsHref: '/precise-engineers/products',
+    allProductsLabel: 'All Precise Engineers products →',
+  },
+]
+
+export const Group: Story = {
+  args: {
+    logo: <span className="font-display text-h4 font-extrabold">VEDANTA</span>,
+    homeHref: '/',
+    menuLabel: 'Products',
+    megaPanel: groupMegaPanel,
+    links: [
+      { label: 'Industries', href: '#industries' },
+      { label: 'Capabilities', href: '#capabilities' },
+      { label: 'Projects', href: '#projects' },
+      { label: 'Company', href: '#company' },
+    ],
+    utilityBar: [
+      { label: 'Dhruv EPC Solutions', href: '#dhruv-epc' },
+      { label: 'Precise Engineers', href: '#precise-engineers' },
+    ],
+    rfqHref: '/request-a-quote',
+  },
+  decorators: [withCompany('group')],
+}
