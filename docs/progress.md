@@ -1639,3 +1639,159 @@ manual           ✓  confirmed via .next output: noindex meta renders on
 - `docs/content-needed-industries-capabilities.md` — hand this to whoever
   at Vedanta has the sourced sector narrative and envelope figures before
   any of these 13 records can flip `contentComplete` to `true`.
+
+---
+
+### Session 26 — Group nav restructure + group home rebuild (VG-050/051)
+**Status:** Complete ✅ — merged
+**Branch:** `design/session-9-group-home-nav` → merged to `main` (PR #23)
+**Date:** 2026-09-02
+**Governing specs:** `docs/01-final-implementation-blueprint-v2.md` §4
+(navigation), §14.2 (home section order), §14.3 (new components)
+
+#### Scope
+
+The group home led with the two company "doors" and the primary nav's
+mega-menu was a single flat grid — the group's org chart, not the buyer's
+question (products/industries first, company is a disambiguation step).
+This session restructures the primary nav to Products · Industries ·
+Capabilities · Projects · Company with company switching moved into a new
+utility bar, and rebuilds the group home's section order to match §14.2.
+Executed task-by-task via subagent-driven development (fresh implementer +
+task review per task, plus a final whole-branch review + one fix wave).
+
+#### What was done
+
+- **`MegaPanel`** (`packages/datum-ui`) — new component: two columns by
+  company, `ProductCategory` as headings, top 4 products per category,
+  "All products →" per column. Keyboard-trapped (Tab cycles inside while
+  open, focus lands on the first link on open, ESC closes and restores
+  focus to the trigger) — mirrors `MobileDrawer`'s proven trap pattern.
+  Group-nav only; Dhruv EPC/Precise Engineers subsites keep their existing
+  single-grid mega-menu, untouched.
+- **`Header.tsx`** — two new optional, additive props: `megaPanel`
+  (replaces the legacy grid when set) and `utilityBar` (a second row
+  stacked above the main bar inside the same fixed `<header>`, sized
+  entirely from Tailwind's standard scale — no `calc()`, no new design
+  token; the reserved scroll-space spacer mirrors the same two-row
+  structure so it can't drift out of sync). `menuGroups`/`capabilityRail`
+  made optional; Dhruv/Precise call sites unchanged.
+- **`GroupChrome.tsx`** — rewired to the 5-item nav; mobile drawer's
+  groups now mirror the mega-panel's categories per company, plus the two
+  company-switch links (no mobile equivalent of the utility bar).
+- **`/projects`** — real stub route (not a 404), `noindex`, states plainly
+  that the actual Project system (blueprint §8) is a separate future
+  session gated on real project records that don't exist yet.
+- **`(group)/page.tsx`** rebuilt to §14.2's order: hero → products by
+  category (real `ProductCategory`/`Product` content) → industries served
+  (conditional on `contentComplete`, currently absent — 0 industries
+  qualify yet) → proof band (stats + certifications) → selected projects
+  (omitted entirely, not rendered empty — no `getProjects()` exists) → the
+  two companies (demoted, now with a visible explanatory heading) → RFQ.
+- **`RFQBand`** widened — `company`/`whatsappHref` now optional, for the
+  group's company-less RFQ closer.
+
+#### Verify
+
+```
+pnpm typecheck   ✓  zero errors
+pnpm lint        ✓  zero new warnings (same pre-existing LegalDocument.tsx
+                    warnings as every prior session, unrelated)
+pnpm test        ✓  all unit/integration suites pass except the
+                    pre-existing DATABASE_URL-gated RFQ test (unrelated)
+pnpm build       ✓  zero errors; / is 94.8 kB First Load JS (well under
+                    the 120 kB marketing budget); /projects present as a
+                    static route
+manual           ✓  live-browser keyboard walkthrough: mega-panel Tab
+                    wrap + ESC/focus-restore confirmed working exactly as
+                    the unit test asserts; mobile drawer accordions +
+                    company links; 320px no horizontal scroll; exactly
+                    one accent-filled element per view; industries section
+                    genuinely absent on the live page
+CI               ✓  GitHub Actions axe-core (real-browser) gate — see
+                    deviation #3 below for the one real finding it caught
+```
+
+#### Deviations / flagged (none silent)
+
+1. `MegaPanel`'s focus trap (Tab cannot escape to the rest of the page
+   while open, only ESC exits) is unlike the WAI-ARIA APG "disclosure
+   navigation" pattern its own first draft comment claimed to match — the
+   trap itself is exactly what this session's brief required
+   ("keyboard-navigable, focus-trapped, closeable with ESC"), so the
+   comment was corrected rather than the trap weakened. Worth a second
+   look if this doesn't match user expectations in practice.
+2. With content still gated (0 industries/capabilities `contentComplete`,
+   no Project system), 3 of the 5 new primary nav items — Industries,
+   Capabilities, Projects — currently point at `noindex` placeholder
+   pages. Each page's gating is individually correct; whether to ship the
+   restructured nav now versus wait for more content is a launch-
+   readiness call, not something fixed in code — flagged explicitly in
+   the PR for an explicit decision rather than letting it happen as a
+   side effect of merging.
+3. **CI caught something local checks couldn't:** the GitHub Actions
+   real-browser axe-core gate (`apps/web/e2e/a11y.spec.ts`, Playwright
+   against a painted page) failed on the new `/projects` route on first
+   push — not a new bug, but the already-tracked `VG-004` `GroupChrome`
+   header contrast defect every other group route is already exempted
+   from in that spec's `KNOWN_FAILURES` list. `/projects` simply hadn't
+   been added to it yet. Fixed by adding it, following Session 25's exact
+   precedent for its own 15 new routes. See the dedicated 2026-09-02 entry
+   in `docs/mistakes.md` — the rule: any new `(group)/` route must be
+   added to `KNOWN_FAILURES` in the same PR that adds the route, since
+   `pnpm test` alone (jsdom, no paint layer) cannot catch this class of
+   gap before CI does.
+4. A genuine, unrelated pre-flight fix: the plan's verify commands used
+   `pnpm --filter web`, but the actual package name is `@vedanta/web` —
+   caught and corrected before any task ran, via the same scan process
+   this deviations list is documenting.
+
+#### Requires human review
+
+- **Launch-readiness go/no-go** on deviation #2 above — not a code
+  change, a decision.
+- The mega-panel focus-trap-vs-disclosure-pattern tension (deviation #1)
+  — revisit if real keyboard users report friction.
+
+#### Post-merge check (2026-09-02) — launch-readiness noindex state, confirmed against `main`
+
+Verified directly against `content/industries/*.json` and
+`content/capabilities/*.json` on `main`: 0 of 5 industries and 0 of 8
+capabilities carry `contentComplete: true`. So today, 3 of the 5 primary
+nav items (Industries, Capabilities, Projects) lead to `noindex` pages;
+Products and Company are real and indexable. Every industry/capability
+record is schema-valid (clears its ship gate) but every reader-facing
+field is a visible `CONTENT REQUIRED` placeholder — nothing fabricated,
+nothing indexed. Flipping `contentComplete` to `true` per record is a
+one-field change with no code required; the page publishes itself into
+the sitemap automatically.
+
+**Pending — content sourcing, priority-ranked by existing product
+evidence (not remaining word count, which is identical across all 13
+records):**
+
+- [ ] Industries — `power` (7 linked products) and
+      `refining-petrochemical` (7 linked products): richest existing
+      product evidence to write the sector story from.
+- [ ] Industries — `fertilizer-chemicals` (5 products), then `oil-gas`
+      and `water-infrastructure` (4 products each — `oil-gas` has more
+      cross-referenceable existing marketing copy than
+      `water-infrastructure`).
+- [ ] Capabilities — `bellows-forming` (3 linked products, Precise
+      Engineers): needs a sign-off on the existing metallic/rubber/fabric
+      bellows grouping, not new writing.
+- [ ] Capabilities — `heavy-fabrication` and `heavy-machining` (1 linked
+      product each, Dhruv EPC): narrow, well-scoped, direct 1:1 product
+      match.
+- [ ] Capabilities — `design-engineering`, `heat-treatment`,
+      `surface-treatment`, `testing-inspection`, `welding` (0 linked
+      products each): **blocked on a tagging decision before writing can
+      start** — engineering needs to decide which Product records each
+      of these cross-cutting capabilities actually covers.
+- [ ] `docs/content-needed-industries-capabilities.md` has the full
+      per-record field list (requirements, applications, engineering
+      considerations, 4–6 FAQs) — hand this to whoever at Vedanta owns
+      sourcing.
+- [ ] Launch-readiness go/no-go itself (see above) — ship the restructured
+      nav now with placeholder destinations, or hold until some content
+      is real.
