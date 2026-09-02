@@ -44,3 +44,7 @@ export function capabilitiesIndexHref(): string {
 export function capabilityHref(slug: string): string {
   return `/capabilities/${slug}`
 }
+
+export function projectsIndexHref(): string {
+  return '/projects'
+}
