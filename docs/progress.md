@@ -3602,3 +3602,43 @@ still composes; no gap found.
 
 **Not pushed yet.** Next session picks up at Phase 18 (product detail:
 Types & Configurations).
+
+---
+
+### Session 33 — Phase 18: product detail — Types & Configurations (verification only)
+
+**Per FINAL_IMPLEMENTATION_PLAN.md Phase 18.** No source (IMPLEMENTATION_NOTES,
+the canvas map, the coverage matrix) specifies a new device or structural
+change for this section beyond "token retheme" — re-read the spec per
+CLAUDE.md's ambiguity protocol step 1 and found no `1c`-cited detail for
+`types` specifically, unlike Phase 19's explicit "5th accent-rule
+instance" instruction.
+
+Read `apps/web/lib/product-detail-page.tsx`'s `id="types"` section
+(lines 144–156): it already resolves entirely through named Datum tokens
+— `rounded-sm border border-steel-200 bg-white p-6` cards, `text-h4
+font-medium text-steel-950` card headings, `font-display text-h3
+font-medium text-steel-950` section heading (identical pattern to every
+other section on this page — Specifications, Materials & codes,
+Fabrication & QA, Inspection record, FAQ all share it, so changing only
+`types`'s heading treatment would break internal consistency, not fix
+it). `steel-200`/`steel-950`/`steel-700` already carry Phase 1's cool-ramp
+values; `text-h4`/`text-h3` already carry Phase 2's type scale — both by
+cascade, not by anything this phase needs to touch. `product.types` data,
+the `id="types"` anchor, and card ordering are all already preserved
+(unedited). Confirmed rendering live in the Phase 17 browser check above
+(`/dhruv-epc/products/static-equipment/pressure-vessels`'s Types &
+configurations grid — Separators/Reactors/Distillation columns/
+Accumulators cards, correct steel-200 borders and type).
+
+Per CLAUDE.md's "no drive-by refactors, no unrequested abstractions":
+inventing a structural change here with no citation would be exactly the
+scope creep the workflow warns against — this section was already
+retheme-complete before this phase began.
+
+#### Deviations / flagged
+
+None. No code change made; nothing to commit.
+
+**Not pushed yet.** Next session picks up at Phase 19 (product detail:
+Fabrication & QA).
