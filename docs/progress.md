@@ -3974,3 +3974,83 @@ test-redirects.mjs      ✓ all 73 redirects verified (real prod server)
 finalization) or Phase 5 (header 768px fix) / Phase 8 (ProductCard
 `onDark` caption contrast fix) if the human wants either finding
 triaged first.
+
+---
+
+### Session 34 — Phase 24: snapshot finalization
+
+**Per FINAL_IMPLEMENTATION_PLAN.md Phase 24:** "confirmation pass —
+every prior phase already committed its own baseline update... any diff
+here signals an earlier phase's snapshot commit was incomplete."
+`snapshot:baseline` + `snapshot:compare`, expected clean.
+
+Running the harness as-is reproduced the same pre-existing, repeatedly-
+logged failure (Phases 1/21/22, `docs/mistakes.md`): `snapshot-routes.mjs`'s
+hardcoded `ROUTES` array is still the pre-VG-012 flat URL list, 17/30
+missing, exit 1. Unlike the earlier phases, Phase 24's own purpose —
+"confirmation pass," "signals an earlier phase's snapshot commit was
+incomplete" — assumes a *working* harness; a broken harness can't
+confirm anything. Per CLAUDE.md ("if code and spec disagree, the spec
+wins") and this file's own prior recommendation (Session 34, Phase 21
+entry: "Recommend Phase 24 either fix the ROUTES array or formally
+retire the harness"), fixed it here rather than deferring a fourth time.
+
+#### What was done
+
+- **`apps/web/scripts/snapshot-routes.mjs`** rewritten: instead of a
+  hand-maintained `ROUTES` array (a second route enumeration that drifts
+  from `apps/web/lib/routes.ts`/`app/**/page.tsx` the moment either
+  changes — exactly what happened at VG-012), it now walks
+  `.next/server/app` for every `.html` file and snapshots all of them.
+  No route list to keep in sync, ever again — solved structurally per
+  the "rule that prevents recurrence" already written for this bug.
+- **`apps/web/scripts/compare-snapshots.mjs`**: only the top-of-file
+  comment changed (baseline is now "re-anchored per-phase," not "frozen
+  pre-migration, never touched again" — the old framing was accurate for
+  its one-time VG-011 use but wrong for a plan that expects "Snapshot:
+  regenerate and commit" every phase). No logic change — it was already
+  a generic directory diff.
+- **`__snapshots__/routes-baseline/`** regenerated fresh: 53 routes (up
+  from 30) — every currently-prerendered route, company-scoped dynamic
+  segments included. The 30 pre-VG-012 files this replaces could never
+  again produce a real diff once those exact URLs stopped existing
+  (deleted routes, not changed content) — re-anchoring, not just
+  patching, was the correct fix; a byte-patch to the old array would
+  have left the *baseline content itself* still pre-VG-012.
+
+#### Gate result
+
+```
+pnpm snapshot:baseline   ✓ 53 routes snapshotted
+pnpm snapshot:compare    ✓ 53/53 byte-identical (within documented
+                           tolerance — build-hashed asset refs, RSC
+                           chunk-manifest payload, hydration-id attrs)
+pnpm typecheck           ✓ 4/4 packages, zero errors
+pnpm lint                ✓ 0 errors (2 pre-existing warnings, unrelated)
+pnpm test                ✓ 55/55 (pre-existing DATABASE_URL-gated RFQ
+                           test still fails, as every prior session)
+```
+
+`pnpm build` not re-run separately — the snapshot commands above already
+required and used a fresh build.
+
+#### Deviations / flagged (none silent)
+
+1. This phase touched files beyond its own literal scope ("Tests:
+   `snapshot:baseline` + `snapshot:compare` — expected clean") — the
+   plan didn't anticipate the harness itself being broken going in. Per
+   the ambiguity protocol (spec is ambiguous on "what if the confirmation
+   tool doesn't work" → check precedent → this file's own prior
+   recommendation already named this exact fix as the right call for
+   this exact phase) rather than silently faking a clean pass or
+   deferring a fourth time. Full incident writeup, now marked RESOLVED,
+   in `docs/mistakes.md`.
+2. The two still-open findings from Phases 22/23 (Header 768px overlap,
+   ProductCard `onDark` caption contrast) remain unfixed — neither is
+   this phase's concern; both are logged and routed to Phase 5 / Phase 8
+   respectively.
+
+**Not pushed yet.** Next session picks up at Phase 25 (final visual
+QA — human sign-off, exit criterion is explicit human approval, not
+something an agent session can close itself) — or triage the Phase 5 /
+Phase 8 findings first if the human prefers.

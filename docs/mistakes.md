@@ -90,13 +90,17 @@ exactly the breakpoint's minimum width (768px for `md`, not just
 "768 and up" sampled at 1024/1440) — the tightest fit is always at the
 boundary, not in the middle of the range.
 
+## 2026-09-02 — apps/web/scripts/snapshot-routes.mjs's ROUTES list is stale post-VG-012 (RESOLVED 2026-09-02, Phase 24)
+
 **What happened:** FINAL_IMPLEMENTATION_PLAN.md Phase 1 (token foundations, cool-ramp remap) requires "Snapshot: regenerate and commit" after the token change. Running `node apps/web/scripts/snapshot-routes.mjs` against a fresh `pnpm build` reports 17/30 routes missing and exits 1.
 
 **Root cause:** `snapshot-routes.mjs`'s hardcoded `ROUTES` array still lists the pre-VG-012 URLs (`/dhruv-epc/equipment/heat-exchangers`, `/precise-engineers/products/metallic-bellows-expansion-joint`, …). Session 22 (VG-012, dynamic product routing) moved every product page to `/{company}/products/{category}/{slug}/` and deleted the old flat routes, but never updated this script — it was written and last touched in Session 21 (PR #18), one session before the routing change that broke it.
 
-**Decision, this session:** left unfixed. Regenerating the ROUTES list is a mechanical fix but belongs to whichever session next needs a working content/route snapshot — not folded into a token-only Phase 1 diff, per this file's own scope-discipline rule (log unrelated bugs, don't fix inline). Phase 1's snapshot-regeneration requirement was substituted with a manual visual smoke check instead (Header, Hero, Button, Card, form field, Footer, spec surface — desktop + mobile) — see progress.md Session 28.
+**Decision, at the time:** left unfixed across Phases 1/21/22 — a mechanical fix, but out of scope for those phases' own file lists, per this file's own scope-discipline rule (log unrelated bugs, don't fix inline). Each of those sessions substituted a manual visual smoke check instead.
 
-**Rule that prevents recurrence:** any session that changes route structure (new dynamic segments, moved/renamed paths) must grep `apps/web/scripts/snapshot-routes.mjs`'s `ROUTES` array and `apps/web/lib/routes.ts` in the same commit — both are hand-maintained route enumerations that silently rot when only `app/**/page.tsx` changes.
+**Resolved 2026-09-02 (Phase 24, "Snapshot finalization"):** the plan's own Phase 24 purpose ("confirmation pass... any diff here signals an earlier phase's snapshot commit was incomplete") made this the natural point to fix it — the plan wins over the harness's own frozen-baseline framing per CLAUDE.md's "if code and spec disagree, the spec wins." Rewrote `snapshot-routes.mjs` to auto-discover every `.html` file under `.next/server/app` instead of hand-maintaining a second route list, and regenerated `__snapshots__/routes-baseline/` fresh (53 routes, up from 30) as the new anchor — the old pre-VG-012 baseline could never again produce a meaningful diff once those URLs stopped existing. `pnpm snapshot:baseline && pnpm snapshot:compare` now report 53/53 byte-identical.
+
+**Rule that prevents recurrence:** solved structurally, not procedurally — the script no longer has a second, hand-maintained route list to drift from `apps/web/lib/routes.ts` or `app/**/page.tsx`. It derives routes from the same build output it snapshots.
 
 ## 2026-08-31 — scripts/build-redirects.mjs's main() guard never ran on this machine
 
