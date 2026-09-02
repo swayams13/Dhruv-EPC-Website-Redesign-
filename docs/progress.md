@@ -4054,3 +4054,36 @@ required and used a fresh build.
 QA — human sign-off, exit criterion is explicit human approval, not
 something an agent session can close itself) — or triage the Phase 5 /
 Phase 8 findings first if the human prefers.
+
+---
+
+### Session 34 — Phase 25: final visual QA — BLOCKED on human sign-off
+
+**Per FINAL_IMPLEMENTATION_PLAN.md Phase 25:** "Purpose: human sign-off
+against the live canvas, section by section... **Exit criterion:**
+explicit human sign-off before merge."
+
+This phase's exit criterion is explicit human approval by definition —
+not a gate an agent session can run and self-certify. Per CLAUDE.md
+("Never mark a task complete with failing or skipped verification"),
+this is reported as a blocker for the human, not marked done.
+
+**What's ready for review:** Phases 12–24 are all committed on
+`feat/real-company-logos` (not pushed). Two open findings from this
+session need a decision before/alongside sign-off:
+
+1. **Header logo/nav overlap at exactly 768px** (all 3 chromes) — routes
+   to Phase 5. `docs/mistakes.md` 2026-09-02.
+2. **ProductCard `onDark` caption contrast** (VG-004, moved location) —
+   routes to Phase 8. `docs/mistakes.md` 2026-09-02.
+
+Everything else verified clean this session: typecheck/lint/test/build,
+route axe (32 passing / 23 known-skipped, VG-004 re-triaged), JS budget,
+redirect integrity (map + runtime), snapshot harness (rebuilt, 53/53
+byte-identical against a fresh baseline).
+
+**Not pushed yet.** Recommend: push the branch for the human to do
+Phase 25's actual canvas review (including the explicit "split hero vs.
+live `1a`/`1b` markup" side-by-side the plan calls for), decide whether
+the two open findings block merge or land as fast-follows, then merge.
+This agent session cannot self-close Phase 25.
