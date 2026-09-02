@@ -3521,5 +3521,58 @@ visual check     ✓ real browser: / (group home) — 47/53 split hero, no
   source specifies group-home CTA copy explicitly, inferred from the
   Dhruv/Precise precedent's own pattern.
 
+---
+
+### Session 33 — Phase 16: remaining `PageHero` consumers (verification only)
+
+**Per FINAL_IMPLEMENTATION_PLAN.md Phase 16 — no files expected to change.**
+Phase 11 kept `PageHero`'s exact pre-existing prop interface
+(`breadcrumbs`/`eyebrow`/`title`/`lead`/`photo`), so all 15 real call
+sites (`grep -rl "PageHero" apps/web/app` — 8 in Phase 11's own fixture
+set + these 7) already compiled and rendered correctly the moment that
+phase's commit landed; typecheck confirmed this explicitly in Phase 11's
+own gate result. This phase is the plan's own cross-check that the 7
+consumers Phase 11 didn't build fixtures for — `precise-engineers/proof`,
+`precise-engineers/capabilities`, `(group)/capabilities/[slug]`,
+`(group)/industries`, `(group)/industries/[slug]`, `dhruv-epc/proof`,
+`dhruv-epc/capabilities` — actually render correctly with real production
+data, not just compile.
+
+#### What was done
+
+No production files changed. Visual verification only, real dev server:
+
+```
+/dhruv-epc/proof                    ✓ photo-ground hero, breadcrumb,
+                                       eyebrow "Due diligence", H1, lead
+/dhruv-epc/capabilities             ✓ same, real capability copy
+/precise-engineers/proof            ✓ same, flex-blue breadcrumb/rule
+                                       (confirms accent scoping works on
+                                       a 7th PageHero consumer, not just
+                                       the two homepages from Phase 15)
+/precise-engineers/capabilities     ✓ same, flex-blue
+/industries                         ✓ index page, group steel accent
+/industries/oil-gas                 ✓ [slug] route, placeholder-content
+                                       banner unrelated to this phase
+/capabilities/design-engineering    ✓ [slug] route, same placeholder
+                                       banner; keyboard-tabbed through to
+                                       the FAQ accordion below the hero —
+                                       visible focus ring on both the nav
+                                       and the first FAQ item, confirming
+                                       :focus-visible survives past the
+                                       hero on this route
+```
+
+All 7 confirmed working with zero code changes — Phase 11's unchanged
+prop contract already covered them.
+
+#### Deviations / flagged
+
+None. Nothing to flag beyond what Phase 11 already flagged for the
+shared component (carried forward unchanged).
+
+**Not pushed yet.** Next session picks up at Phase 17 (product-detail
+shared-surface integration check).
+
 **Not pushed yet.** Next session picks up at Phase 16 (remaining
 `PageHero` consumers).
