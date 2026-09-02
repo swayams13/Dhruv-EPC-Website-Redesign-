@@ -82,7 +82,51 @@ export function Footer({
   const stamps = entity.stampsHeld.filter(isStampCode)
 
   return (
-    <footer>
+    <footer className="relative overflow-hidden">
+      {/* Bracket linework (§2.6, ref `1l`) — accent corner fragments echoing
+          the client's own footer device; decorative only, aria-hidden,
+          capped at three (§2.6's own "never more than three"). Positioned
+          relative to the same max-w-wide content box every zone uses below,
+          bleeding past its edge by design — `overflow-hidden` on <footer>
+          (which spans the full viewport) clips that bleed safely at the
+          viewport edge instead of ever creating horizontal scroll, since
+          the notes' literal px offsets alone would overflow on any
+          viewport narrower than max-w-wide + 2×46px. Border color is
+          `color-mix(var(--accent) NN%, transparent)`, not a hardcoded
+          rgba(170,56,51,...) literal despite "red" in the name — so this
+          device follows each route's own --accent (blue on Precise), same
+          as every other component. It has to be inline `style`, not a
+          Tailwind class: `border-accent/50` compiles to nothing (silently
+          dropped, verified against the build output) because Tailwind's
+          opacity-modifier engine can't decompose a bare `var(--accent)`
+          reference into channels the way it can a literal hex token like
+          `steel-50`. The notes' rgba value is Group/Dhruv's accent read
+          directly off that canvas instance, not a scoped brand-red like
+          Logo.tsx's logoRed. Exact width/height and the "concentric"
+          nesting gap for the left pair aren't in the notes — only
+          position/color/radius/opacity are — sized here at a plausible
+          corner-bracket scale; flagged in docs/progress.md. Hidden below
+          md (§3's responsive table: costs horizontal room, reads as
+          clutter below that); the right one additionally hidden below lg
+          per the same table's "left pair only" tablet row. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-y-0 left-1/2 hidden w-full max-w-wide -translate-x-1/2 md:block"
+      >
+        <span
+          className="absolute rounded-r-lg border border-l-0"
+          style={{ left: -46, top: 56, width: 56, height: 56, borderColor: 'color-mix(in srgb, var(--accent) 50%, transparent)' }}
+        />
+        <span
+          className="absolute rounded-r-lg border border-l-0"
+          style={{ left: -46, top: 106, width: 80, height: 80, borderColor: 'color-mix(in srgb, var(--accent) 30%, transparent)' }}
+        />
+        <span
+          className="absolute hidden rounded-l-lg border border-r-0 lg:block"
+          style={{ right: -46, bottom: 96, width: 64, height: 64, borderColor: 'color-mix(in srgb, var(--accent) 40%, transparent)' }}
+        />
+      </div>
+
       {/* Zone 1 — title block proper: graphite band, mono-heavy */}
       {/* data-chrome='dark': focus rings on this band use the -dark accent step */}
       <div data-chrome="dark" className="bg-steel-900 text-steel-50">

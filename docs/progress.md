@@ -2610,3 +2610,70 @@ visual check     ✓ real browser: group homepage footer (no
   design-review pass.
 - Confirm the back-to-top control's bordered-circle treatment and the
   Zone-3 color-tier assignments read as intended.
+
+#### Follow-up (same session): the Phase 7 commit above was missing the bracket linework
+
+Re-reading `FINAL_IMPLEMENTATION_PLAN.md`'s own Phase 7 file line before
+starting Phase 8 caught a real gap: it names three things, not two —
+*"Zone 3 dark, back-to-top, bracket linework"* — and only the first two
+had been implemented. `VEDANTA_DESIGN_IMPLEMENTATION_NOTES.md` §2.6 spells
+this out: three decorative accent corner fragments ("two concentric
+rounded right-angles bleeding off the left edge... one off the right"),
+`aria-hidden`, capped at three, hidden below `md`, the right one further
+hidden below `lg` (§3's responsive table). Not authorized by Decision 4
+(which only covers Zone 3's color/back-to-top) but independently listed in
+the plan's own Phase 7 scope — added it in this same session rather than
+letting Phase 7 read as done when it wasn't.
+
+**A real bug caught mid-build, not just a missing feature:** first attempt
+used `border-accent/50` (Tailwind's opacity-modifier syntax) for the three
+translucent borders. Checked the actual compiled CSS output rather than
+trusting the lint pass — `border-accent/50` had compiled to **nothing**:
+Tailwind's opacity engine can't decompose a bare `var(--accent)` reference
+into channels the way it can a literal hex token (`steel-50/10` does
+compile, confirmed side-by-side). The elements would have rendered with no
+border at all — invisible, on every route, with a clean typecheck/lint/
+build the whole way (no error surfaces this kind of silent-drop). Fixed
+with inline `style={{ borderColor: 'color-mix(in srgb, var(--accent) NN%,
+transparent)' }}` instead, which keeps the CSS-variable reactivity (still
+turns blue on Precise) while actually compiling to real CSS. Re-verified
+against the build output this time, not just the lint pass.
+
+**Also caught before shipping:** the notes' literal `left:-46px` offset
+would overflow the viewport horizontally on any width narrower than
+`max-w-wide` + 92px (768–1023px, where "left pair only" is supposed to
+render but the content box has zero side margin to bleed into) — a direct
+conflict with CLAUDE.md's zero-horizontal-scroll requirement that the notes
+don't address. Resolved with `overflow-hidden` on `<footer>` itself (which
+spans the full viewport, unlike the max-w-wide inner boxes), so the bleed
+clips safely at the true viewport edge instead of ever creating a
+scrollbar — a standard technique for exactly this situation, not a guess.
+
+Gate re-run after the fix: typecheck/lint/test (datum-ui 107/107, web
+css-parity 18/18) all clean, build clean. Visual check in a real browser:
+group homepage at 1600px shows both fragments correctly (open on the side
+that bleeds off-edge, translucent red, rounded outer corners per spec),
+`document.documentElement.scrollWidth - clientWidth === 0` (no overflow),
+and the Precise Engineers homepage confirmed the same fragments render in
+`var(--accent)`'s blue, not a hardcoded red — proving the color-mix fix
+tracks the CSS variable correctly. The `hidden`/`md:block`/`lg:block`
+responsive classes weren't re-verified with an actual narrow-viewport
+screenshot this pass (the browser tool's `resize_window` call didn't take
+effect on the tab being tested, `innerWidth` kept reporting the previous
+size) — deferred to Phase 22's cross-cutting responsive pass rather than
+blocking on a tooling issue, since the classes themselves are the same
+`hidden md:block` pattern already proven correct elsewhere in this session
+(Header's utility bar, nav collapse).
+
+Landed as a small follow-up commit on top of the Phase 7 commit rather than
+an amend, per this repo's own rule to always create new commits.
+
+#### Deviations / flagged (bracket linework, additional to the list above)
+
+5. Exact width/height and the "concentric" nesting gap for the left pair
+   of brackets aren't in the notes (only position/color/radius/opacity
+   are) — sized at a plausible corner-bracket scale (56/80/64px), flagged
+   for visual sign-off against the live canvas when reachable.
+6. Responsive hide behavior (`hidden md:block`, right bracket `lg:block`)
+   implemented per §3's table but not re-verified with a live narrow-
+   viewport screenshot this pass — see the note above.
