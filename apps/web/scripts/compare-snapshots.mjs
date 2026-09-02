@@ -1,8 +1,13 @@
 #!/usr/bin/env node
 // Compares the CURRENT .next build output (freshly snapshotted into
-// __snapshots__/routes/) against the pre-migration baseline checked into
-// __snapshots__/routes-baseline/ (written once by snapshot-routes.mjs before
-// any content migration and never touched again).
+// __snapshots__/routes/) against the baseline checked into
+// __snapshots__/routes-baseline/ (written by snapshot-routes.mjs, updated
+// whenever a phase intentionally changes rendered output — see
+// FINAL_IMPLEMENTATION_PLAN.md's per-phase "Snapshot: regenerate and
+// commit" instruction). Re-anchored 2026-09-02 (Phase 24) to the
+// post-retheme route set — the original VG-011 baseline was permanently
+// pre-VG-012 URL structure and could never again produce a real diff
+// after routes were restructured (docs/mistakes.md).
 //
 // Tolerance (documented per VG-011 C1):
 //   1. Whitespace between tags is collapsed.
