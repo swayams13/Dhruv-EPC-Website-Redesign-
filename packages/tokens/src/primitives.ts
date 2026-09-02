@@ -49,6 +49,21 @@ export const brand = {
   700: '#66221F',  // hover/pressed for brand-600 text (10.16:1 on steel-50 ✓)
 } as const
 
+// Logo red — the wordmark's own ink colour, sampled from the supplied emblem
+// artwork (D-10). NOT the same colour as `brand` above and NOT a swap-in for
+// it: VEDANTA_DESIGN_DECISIONS.md Decision 1 (D-11) investigated both and
+// found the artifact deliberately ships them as two distinct, unrelated
+// values — `brand` is the live site's UI accent (buttons, links, focus
+// rings), `logoRed` is only the wordmark ink inside `Logo.tsx`.
+//
+// HARD CONSTRAINTS (Decision 1) — enforced by
+// apps/web/lib/logo-consumer-boundary.test.ts:
+// - consumed by Logo.tsx and nowhere else
+// - never exposed through semantic.ts
+// - never exposed through any accent.* token or tailwind.ts colors
+// - never used for buttons, links, focus rings, or generic decorative UI
+export const logoRed = '#CD0101' as const // 5.83:1 on white ✓ AA
+
 // Arc amber — RETIRED as an accent at v1.2; superseded by `brand` above.
 // Retained as a primitive only because §4.3's "amber is heat" law may still be
 // wanted for thermal/temperature signalling. Not consumed by any semantic map.

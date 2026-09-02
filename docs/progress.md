@@ -2137,3 +2137,126 @@ visual check (manual browser,        ✓ Footer's converted tagline + column
   the plan, and can proceed — but note its own stated blocker: the
   full-resolution emblem asset's provenance against the Claude Design
   project's own asset file is still unverified (carried since Session 26).
+
+### Session 31 — Phase 4: Logo / brand primitives
+**Status:** Complete ✅ — committed locally, not pushed. Emblem-asset
+blocker (open since Session 26) resolved this session.
+**Branch:** `feat/real-company-logos` · **Date:** 2026-09-02
+**Governing specs:** `docs/FINAL_IMPLEMENTATION_PLAN.md` Phase 4,
+`docs/VEDANTA_DESIGN_DECISIONS.md` Decision 1 (D-11),
+`VEDANTA_DESIGN_IMPLEMENTATION_NOTES.md` §2.0/D-10
+
+#### Blocker resolved: emblem asset provenance
+
+Sessions 26/27 left this open: the Claude Design project's
+`assets/vedanta-emblem.png` (599,728 bytes) exceeds the `read_file` MCP
+tool's 256 KiB cap, and that tool HTML-entity-escapes content as text —
+not a safe way to reconstruct exact binary PNG bytes even across chunked
+reads. No image had been supplied in this conversation either. Asked the
+human how to resolve it (three options: browser download, paste in chat, or
+skip the asset and ship `logoRed` alone) — **"download via browser"**
+chosen. `fetch()`/`XMLHttpRequest` from the project's own page (cross-origin
+to the asset's `claudeusercontent.com` host) failed, and drawing the loaded
+`<img>` to a canvas threw `tainted canvas` — both blocked by CORS, as
+expected for cross-origin image bytes. Found and clicked the Claude Design
+UI's own native "Download assets/vedanta-emblem.png" control, which
+triggered a real Chrome download (not a screenshot): **1161×995px, RGBA
+with alpha, 605,498 bytes** — exact dimension match to Session 26's
+partially-confirmed PNG header, and byte-identical (MD5) to an unexplained
+second copy already sitting in `~/Downloads` from some earlier attempt.
+Copied into `apps/web/public/brand/vedanta-emblem.png`.
+
+#### What was done
+
+- **`primitives.ts`** — `logoRed = '#CD0101'`, exactly Decision 1's locked
+  value, with the hard constraints (Logo.tsx-only, never through
+  semantic.ts, never an accent.* token) documented inline and pointed at
+  the new enforcement test. Also exported `overlay` from `index.ts` — a
+  Phase 1 omission (added the primitive, forgot the barrel export) fixed
+  here since it's the same line being edited for `logoRed`.
+- **`apps/web/components/Logo.tsx`** (new) — built in `apps/web`, not
+  `@vedanta/datum-ui`, for the same reason `ExplodedSequence` is: it needs
+  `next/image` directly, and datum-ui takes no `next` dependency.
+  `Header.tsx` already accepts an arbitrary `logo: React.ReactNode` slot, so
+  this is what gets passed into it — wiring happens in Phase 5, not here.
+  `Logo` (full lockup: emblem + two-line wordmark, `company` × `size` props,
+  the 4 named size-ladder rungs from §2.0 transcribed verbatim — not
+  re-derived from the proportion-rule prose, which doesn't reproduce the
+  table's numbers exactly) and `LogoEmblem` (mark alone, arbitrary height,
+  for the documented sub-32px case). Two spec-vs-token conflicts resolved
+  by this codebase's own established pattern (nearest existing token,
+  deviation documented in a comment) rather than a new `tailwind.ts` token:
+  line 2's `+0.03em` tracking → `tracking-wide` (0.025em, nearest); all four
+  size-ladder pixel values (font sizes, gap) → inline `style`, the same
+  device `ExplodedSequence`'s track-height already established for a
+  logo/brand constant that isn't a reusable design token.
+- **`apps/web/public/brand/vedanta-emblem.png`** (new asset) — the verified
+  file, per above.
+- **`apps/web/lib/logo-consumer-boundary.test.ts`** (new, the plan's
+  required "consumer-boundary enforcement test") — greps `packages/tokens`,
+  `packages/datum-ui`, `packages/schemas`, and `apps/web` (each walked
+  individually, not the repo root, since the repo root also holds
+  `.claude/worktrees/*` — full extra repo copies that would otherwise get
+  needlessly traversed) for `logoRed`/`#CD0101` outside the allowed 4 files;
+  separately asserts neither string appears in `semantic.ts` or
+  `tailwind.ts`. 4/4 passing.
+
+#### Isolated visual verification (component has no live consumer yet)
+
+Phase 4 explicitly builds `Logo.tsx` without wiring it anywhere (that's
+Phase 5). To actually see it render rather than trust the code by
+inspection, built a temporary scratch route
+(`app/(group)/logo-preview-scratch/page.tsx`) showing all 3 companies × all
+4 size-ladder rungs + the emblem-only variant, viewed it live in Chrome,
+confirmed proportions/colors/per-company copy ("SOLUTION" singular
+correctly not "SOLUTIONS", no full stop after "LTD") all matched §2.0
+exactly — then **deleted the scratch route** before committing, so Phase
+4's diff stays scoped to the 5 real files. Its stale generated
+`.next/types/.../logo-preview-scratch/page.ts` reference caused one
+misleading typecheck failure after deletion — cleared by removing `.next`,
+not a real regression (flagged so it doesn't read as a code bug in a
+future session's log).
+
+#### Gate result
+
+```
+pnpm typecheck   ✓ 4/4 packages, zero errors (force-run, no cache, after
+                   deleting the scratch route + cleaning .next)
+pnpm lint        ✓ 0 errors (2 pre-existing warnings, LegalDocument.tsx,
+                   unrelated) — confirms Logo.tsx's inline-style sizing
+                   sidesteps tailwindcss/no-arbitrary-value cleanly, same
+                   as ExplodedSequence's precedent
+pnpm test        ✓ tokens 96/96, schemas 70/70, datum-ui 107/107 (unaffected
+                   — Logo.tsx isn't in datum-ui), web 55/55 including the
+                   new logo-consumer-boundary suite (4/4); only the
+                   pre-existing DATABASE_URL-gated RFQ test fails, as in
+                   every prior session
+pnpm build       ✓ 77 routes (unchanged — Logo.tsx has no route consumer
+                   yet), zero errors/warnings, same First Load JS budgets
+visual check     ✓ temporary scratch route, 3 companies x 4 sizes + emblem-
+(manual browser,   only, all matching §2.0's size ladder and per-company
+1200x1400)          copy exactly; scratch route deleted before commit
+```
+
+#### Deviations / flagged (none silent)
+
+1. `tracking-wide` (0.025em) instead of the spec's literal `+0.03em` for
+   the wordmark's second line — nearest existing token, not a new one;
+   same pattern as this codebase's other spec-vs-token gaps (e.g. Session 5
+   deviation 1).
+2. Size-ladder pixel values and the emblem/wordmark gap are inline styles,
+   not Tailwind classes or new tokens — logo-lockup proportions are a
+   brand-asset constant, not reusable prose type scale, matching
+   `ExplodedSequence`'s established precedent for the same kind of value.
+3. `Logo.tsx` is unwired — no page renders it yet. This is Phase 4's
+   declared scope (Header integration is Phase 5), not an oversight.
+4. SVG asset ("ship it as vedanta-emblem.svg once vector source arrives")
+   not done — no vector source exists yet; the trimmed PNG is what §2.0
+   itself says to use until then.
+
+#### Requires human review before Phase 5
+
+- Nothing new. Phase 5 (Header + utility strip) is where `Logo.tsx` actually
+  gets wired into `Header.tsx`'s `logo` slot — first real end-to-end check
+  of the lockup inside the actual site chrome, not just the scratch
+  preview.
