@@ -1,12 +1,22 @@
 'use client'
-// Header — Datum §17.
-// Phase 1.1: dark nav — always fixed, solid steel-950 chrome. Scroll threshold
-// 40px (was innerHeight): compresses header to 60px after minimal scroll.
-// Gradient-over-hero effect deferred to Phase 2 (requires hero co-ordination).
-// phoneHref / whatsappHref are now optional — GroupChrome omits them.
+// Header — Datum §17, extended §4/§14.3 (Session 9, VG-051).
+// Phase 1.1: dark nav — always fixed, solid steel-950 chrome. Scroll
+// threshold 40px (was innerHeight): compresses header to 60px after
+// minimal scroll. Gradient-over-hero effect deferred to Phase 2 (requires
+// hero co-ordination). phoneHref / whatsappHref are optional — GroupChrome
+// omits them.
+//
+// utilityBar / megaPanel (Session 9): both optional and additive. When
+// megaPanel is set it replaces the legacy menuGroups grid (group nav only —
+// DhruvChrome/PreciseChrome keep passing menuGroups, unaffected). The
+// utility bar is a second row stacked above the main bar, inside the same
+// fixed <header>; its height is reserved by mirroring the exact same
+// two-row structure in the spacer div below, so the two heights can never
+// drift out of sync — no calc(), no new token.
 
 import { useEffect, useRef, useState } from 'react'
 import { Button } from './Button'
+import { MegaPanel, type MegaPanelColumn } from './MegaPanel'
 import { useRfqAnchorInView } from './useRfqAnchorInView'
 import { ArrowRight, ChevronDown, Menu, Phone, WhatsApp } from './glyphs'
 
@@ -31,12 +41,17 @@ export interface HeaderProps {
   /** Logo lockup */
   logo: React.ReactNode
   homeHref: string
-  /** Mega-menu trigger label — "Equipment" (Dhruv) / "Products" (Precise) */
+  /** Mega-menu trigger label — "Equipment" (Dhruv) / "Products" (Precise/Group) */
   menuLabel: string
-  menuGroups: MegaMenuGroup[]
-  /** Right rail: deep-link to Capability Matrix */
-  capabilityRail: HeaderNavLink
+  /** Legacy single-grid mega-menu. Ignored when `megaPanel` is set. */
+  menuGroups?: MegaMenuGroup[]
+  /** Two-column-by-company mega-panel (group nav, VG-051). Takes priority over menuGroups. */
+  megaPanel?: MegaPanelColumn[]
+  /** Right rail: deep-link to Capability Matrix. Rendered beside the legacy menuGroups grid only. */
+  capabilityRail?: HeaderNavLink
   links: HeaderNavLink[]
+  /** Company-switcher row above the main bar — group nav only (VG-051). */
+  utilityBar?: HeaderNavLink[]
   /** tel: link — optional; GroupChrome omits it */
   phoneHref?: string
   whatsappHref?: string
@@ -51,8 +66,10 @@ export function Header({
   homeHref,
   menuLabel,
   menuGroups,
+  megaPanel,
   capabilityRail,
   links,
+  utilityBar,
   phoneHref,
   whatsappHref,
   rfqHref,
@@ -63,6 +80,9 @@ export function Header({
   const contentRfqInView = useRfqAnchorInView()
   const headerRef = useRef<HTMLElement>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
+  const hasUtilityBar = Boolean(utilityBar && utilityBar.length > 0)
+  const hasMegaPanel = Boolean(megaPanel && megaPanel.length > 0)
+  const rowHeight = scrolled ? 'h-header-scrolled' : 'h-header'
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
@@ -74,6 +94,8 @@ export function Header({
   useEffect(() => {
     if (!menuOpen) return
     const onKey = (e: KeyboardEvent) => {
+      // MegaPanel owns its own ESC handling + focus return when active.
+      if (hasMegaPanel) return
       if (e.key === 'Escape') {
         setMenuOpen(false)
         triggerRef.current?.focus()
@@ -88,22 +110,41 @@ export function Header({
       document.removeEventListener('keydown', onKey)
       document.removeEventListener('pointerdown', onPointer)
     }
-  }, [menuOpen])
-
-  const chrome = scrolled
-    ? 'fixed h-header-scrolled bg-steel-950 shadow-raised border-b border-steel-50/10'
-    : 'fixed h-header bg-steel-950 border-b border-steel-50/10'
+  }, [menuOpen, hasMegaPanel])
 
   return (
-    <div className="relative h-header">
+    <div className="relative">
+      {/* Spacer — mirrors the fixed header's real two-row structure below so
+          reserved scroll space always matches, with no calc() and no new
+          height token. */}
+      {hasUtilityBar && <div className="hidden h-8 md:block" aria-hidden="true" />}
+      <div className={rowHeight} aria-hidden="true" />
+
       <header
         ref={headerRef}
         // data-chrome='dark': rebinds --accent-focus to the -dark accent step so
         // focus rings clear 3:1 on the steel-950 bar (globals.css §25, v1.2).
+        // Covers both rows below.
         data-chrome="dark"
-        className={`${chrome} inset-x-0 top-0 z-40`}
+        className={`fixed inset-x-0 top-0 z-40 bg-steel-950 border-b border-steel-50/10 ${scrolled ? 'shadow-raised' : ''}`}
       >
-        <div className="mx-auto flex h-full max-w-wide items-center justify-between gap-6 px-6">
+        {hasUtilityBar && (
+          <div className="hidden border-b border-steel-50/10 bg-steel-900 md:block">
+            <div className="mx-auto flex h-8 max-w-wide items-center justify-end gap-6 px-6 text-helper text-steel-400">
+              {utilityBar!.map((u) => (
+                <a
+                  key={u.href}
+                  href={u.href}
+                  className="transition-colors duration-instant ease-standard hover:text-steel-50"
+                >
+                  {u.label}
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className={`mx-auto flex ${rowHeight} max-w-wide items-center justify-between gap-6 px-6`}>
           <a href={homeHref} className="flex items-center text-steel-50">
             {logo}
           </a>
@@ -171,49 +212,60 @@ export function Header({
           </button>
         </div>
 
-        {/* Mega-menu — dark Raised panel */}
-        <div
-          id="datum-mega-menu"
-          hidden={!menuOpen}
-          className="absolute inset-x-0 top-full border-b border-steel-50/10 bg-steel-950 shadow-overlay"
-        >
-          <div className="mx-auto grid max-w-wide grid-cols-4 gap-8 px-6 py-8">
-            {menuGroups.map((group) => (
-              <div key={group.label}>
-                <p className="font-mono text-xs font-medium uppercase tracking-caption text-accent">
-                  {group.label}
-                </p>
-                <ul className="mt-3">
-                  {group.items.map((item) => (
-                    <li key={item.href}>
-                      <a
-                        href={item.href}
-                        className="-mx-2 block rounded-sm px-2 py-2 transition-colors duration-instant hover:bg-steel-800"
-                      >
-                        <span className="block text-data font-medium text-steel-100">
-                          {item.name}
-                        </span>
-                        <span className="block text-helper text-steel-500">{item.scope}</span>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-            {/* capability rail — "can you build mine?" is the question behind every menu open */}
-            <div className="border-l border-steel-700/50 pl-8">
-              <a
-                href={capabilityRail.href}
-                className="group flex items-center gap-2 text-data font-medium text-accent-dark transition-colors duration-instant hover:text-accent"
-              >
-                {capabilityRail.label}
-                <span className="transition-transform duration-instant ease-standard motion-safe:group-hover:translate-x-1">
-                  <ArrowRight size={16} />
-                </span>
-              </a>
+        {hasMegaPanel ? (
+          <MegaPanel
+            id="datum-mega-menu"
+            open={menuOpen}
+            onClose={() => setMenuOpen(false)}
+            triggerRef={triggerRef}
+            columns={megaPanel!}
+          />
+        ) : (
+          <div
+            id="datum-mega-menu"
+            hidden={!menuOpen}
+            className="absolute inset-x-0 top-full border-b border-steel-50/10 bg-steel-950 shadow-overlay"
+          >
+            <div className="mx-auto grid max-w-wide grid-cols-4 gap-8 px-6 py-8">
+              {(menuGroups ?? []).map((group) => (
+                <div key={group.label}>
+                  <p className="font-mono text-xs font-medium uppercase tracking-caption text-accent">
+                    {group.label}
+                  </p>
+                  <ul className="mt-3">
+                    {group.items.map((item) => (
+                      <li key={item.href}>
+                        <a
+                          href={item.href}
+                          className="-mx-2 block rounded-sm px-2 py-2 transition-colors duration-instant hover:bg-steel-800"
+                        >
+                          <span className="block text-data font-medium text-steel-100">
+                            {item.name}
+                          </span>
+                          <span className="block text-helper text-steel-500">{item.scope}</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+              {/* capability rail — "can you build mine?" is the question behind every menu open */}
+              {capabilityRail && (
+                <div className="border-l border-steel-700/50 pl-8">
+                  <a
+                    href={capabilityRail.href}
+                    className="group flex items-center gap-2 text-data font-medium text-accent-dark transition-colors duration-instant hover:text-accent"
+                  >
+                    {capabilityRail.label}
+                    <span className="transition-transform duration-instant ease-standard motion-safe:group-hover:translate-x-1">
+                      <ArrowRight size={16} />
+                    </span>
+                  </a>
+                </div>
+              )}
             </div>
           </div>
-        </div>
+        )}
       </header>
     </div>
   )
