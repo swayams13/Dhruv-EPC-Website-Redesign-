@@ -90,18 +90,18 @@ export function ProductCard({
         >
           <div className="p-6">
             <h3 className="font-display text-h3 font-semibold text-steel-50">{name}</h3>
-            <p className="mt-2 text-sm text-steel-500">{oneLineScope}</p>
+            <p className="mt-2 text-sm text-steel-400">{oneLineScope}</p>
             {rows.length > 0 && (
               <dl className="mt-4 space-y-2">
                 {rows.map((row) => (
                   <div key={row.label} className="flex items-baseline justify-between gap-4">
-                    <dt className="text-sm text-steel-500">{row.label}</dt>
+                    <dt className="text-sm text-steel-400">{row.label}</dt>
                     <dd className="font-mono text-data text-steel-100">{row.value}</dd>
                   </div>
                 ))}
               </dl>
             )}
-            {index && <p className="mt-4 font-mono text-helper text-steel-500">{index}</p>}
+            {index && <p className="mt-4 font-mono text-helper text-steel-400">{index}</p>}
             <Affordance onDark />
           </div>
         </a>
@@ -147,7 +147,7 @@ export function ProductCard({
             </span>
           )}
           <h3 className="font-display text-h3 font-semibold text-steel-50">{name}</h3>
-          <p className="mt-2 text-sm text-steel-500">{oneLineScope}</p>
+          <p className="mt-2 text-sm text-steel-400">{oneLineScope}</p>
           {chips && chips.length > 0 && (
             <ul className="mt-4 flex flex-wrap gap-2">
               {chips.slice(0, 3).map((chip) => (

@@ -42,8 +42,8 @@ export function CategoryCard({
         <div className="block h-full rounded-sm border border-steel-800 bg-steel-900 p-6 opacity-60">
           <span aria-hidden className="mb-4 block w-8 bg-steel-700" style={{ height: 3 }} />
           <h3 className="font-display text-h3 font-semibold text-steel-400">{name}</h3>
-          <p className="mt-2 text-sm text-steel-600">{oneLineScope}</p>
-          <p className="mt-4 font-mono text-helper text-steel-600">{countLabel}</p>
+          <p className="mt-2 text-sm text-steel-400">{oneLineScope}</p>
+          <p className="mt-4 font-mono text-helper text-steel-400">{countLabel}</p>
         </div>
       )
     }
@@ -54,7 +54,7 @@ export function CategoryCard({
       >
         <span aria-hidden className="mb-4 block w-8 bg-accent" style={{ height: 3 }} />
         <h3 className="font-display text-h3 font-semibold text-steel-50">{name}</h3>
-        <p className="mt-2 text-sm text-steel-500">{oneLineScope}</p>
+        <p className="mt-2 text-sm text-steel-400">{oneLineScope}</p>
         <div className="mt-4 flex items-center justify-between">
           <p className="font-mono text-helper text-steel-400">{countLabel}</p>
           <span className="text-steel-400 transition-transform duration-instant ease-standard group-hover:text-accent motion-safe:group-hover:translate-x-1">

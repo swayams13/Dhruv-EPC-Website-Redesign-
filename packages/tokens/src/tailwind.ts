@@ -165,8 +165,15 @@ export const datumPreset = {
       // opacity modifier only recognizes its own preset percentage steps).
       // 82: PageHero/ProductHero's unchanged body-copy opacity (§2.2,
       // Phase 11) — same missing-preset-step problem as 72/92 above.
+      // 66: Header's utility-bar company-switcher links (Session 9, VG-051)
+      // — same missing-preset-step failure, found 2026-09-03: `text-white/66`
+      // silently compiled to nothing (no CSS rule emitted at all), so the
+      // link text fell back to its inherited default color (steel-950) on
+      // the dark bg-steel-900 strip — 1.12:1 contrast, effectively
+      // invisible. docs/mistakes.md.
       opacity: {
         60: '.6',
+        66: '.66',
         72: '.72',
         82: '.82',
         88: '.88',

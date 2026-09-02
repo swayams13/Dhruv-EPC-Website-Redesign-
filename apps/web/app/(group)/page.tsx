@@ -226,7 +226,7 @@ export default function GroupHome() {
                       </li>
                     ))}
                   </ul>
-                  <p className="mt-4 text-xs font-medium text-steel-600">
+                  <p className="mt-4 text-xs font-medium text-steel-400">
                     {door.groups.join(' · ')}
                   </p>
                   <div className="mt-auto pt-8">
