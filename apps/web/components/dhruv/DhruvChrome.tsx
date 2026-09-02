@@ -5,6 +5,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Header, MobileDrawer } from '@vedanta/datum-ui'
+import { Logo } from '../Logo'
 import { dhruvEquipment } from '../../lib/site-data'
 
 const GROUPS = [
@@ -25,7 +26,9 @@ export function DhruvChrome({ phoneHref, whatsappHref }: { phoneHref: string; wh
   return (
     <>
       <Header
-        logo={<span className="font-display text-h4 font-bold">Dhruv EPC</span>}
+        logo={(scrolled) => (
+          <Logo company="dhruv-epc" size={scrolled ? 'header-scrolled' : 'header'} priority />
+        )}
         homeHref="/dhruv-epc"
         menuLabel="Equipment"
         menuGroups={GROUPS.map((g) => ({

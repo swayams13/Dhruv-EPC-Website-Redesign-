@@ -63,7 +63,7 @@ export function AnchorRailDesktop({ sections }: { sections: Section[] }) {
   return (
     <nav aria-label="On this page" className="hidden lg:col-span-4 lg:block">
       <div className="sticky top-24 rounded-sm border border-steel-200 bg-white p-6">
-        <p className="text-xs font-medium uppercase tracking-caption text-steel-600">On this page</p>
+        <p className="text-xs font-medium text-steel-600">On this page</p>
         <ul className="mt-3 flex flex-col">
           {sections.map((s) => (
             <li key={s.id}>

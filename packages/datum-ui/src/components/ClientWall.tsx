@@ -40,7 +40,7 @@ export function ClientWall({ clients }: ClientWallProps): React.ReactElement {
             )}
             <div className="mt-4 border-t border-steel-200 pt-3">
               <p className="text-sm font-medium text-steel-950">{client.name}</p>
-              <p className="mt-1 text-xs font-medium uppercase tracking-caption text-steel-500">
+              <p className="mt-1 text-xs font-medium text-steel-500">
                 {client.sector}
               </p>
             </div>

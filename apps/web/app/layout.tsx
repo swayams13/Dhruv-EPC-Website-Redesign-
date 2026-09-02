@@ -1,19 +1,18 @@
 import type { Metadata } from 'next'
-import { Archivo, IBM_Plex_Mono, IBM_Plex_Sans } from 'next/font/google'
+import { IBM_Plex_Mono, Plus_Jakarta_Sans } from 'next/font/google'
 import { BASE } from '../lib/site'
 import './globals.css'
 
-const archivo = Archivo({
+// v1.3 (2026-09-02): Archivo + IBM Plex Sans retired per
+// VEDANTA_DESIGN_DECISIONS.md D-2 — one loader now serves both display and
+// body text (net one fewer font family over the wire, not a swap-for-swap).
+// A single --font-display variable backs both tailwind.ts fontFamily.display
+// and fontFamily.sans — a second loader instance bound to --font-sans would
+// just re-embed the same font a second time.
+const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ['latin'],
-  weight: ['500', '600', '700', '800'],
+  weight: ['400', '500', '600', '700', '800'],
   variable: '--font-display',
-  display: 'swap',
-})
-
-const ibmPlexSans = IBM_Plex_Sans({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-sans',
   display: 'swap',
 })
 
@@ -43,7 +42,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${archivo.variable} ${ibmPlexSans.variable} ${ibmPlexMono.variable}`}>
+    <html lang="en" className={`${plusJakartaSans.variable} ${ibmPlexMono.variable}`}>
       <body className="bg-steel-50 font-sans text-steel-950 antialiased">
         {children}
       </body>

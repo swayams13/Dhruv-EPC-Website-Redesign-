@@ -5,7 +5,8 @@
 // finding). Header row in caption voice on
 // steel-100. Horizontal scribed rules only — no verticals, no zebra. 44px min
 // rows / 36px engineering density, 16px cell padding, numeric values
-// right-aligned. Row hover steel-100 tint only.
+// right-aligned. Row hover steel-50 tint only (§2.7 — lighter than the
+// steel-100 header, so a hovered row doesn't read as identical to it).
 //
 // Responsive (§15): parameter tables reflow to a definition list below 768px —
 // no horizontal scroll for the core spec table, ever. Wide comparative tables
@@ -37,7 +38,7 @@ export interface SpecTableProps {
 
 const headerCell = 'px-4 py-2 text-left text-xs font-medium uppercase tracking-caption text-steel-600'
 const paramCell = 'px-4 text-left text-sm font-medium text-steel-600'
-const rowLine = 'border-b border-steel-200 transition-colors duration-instant hover:bg-steel-100'
+const rowLine = 'border-b border-steel-200 transition-colors duration-instant hover:bg-steel-50'
 
 function unitNote(row: SpecTableRow): string {
   return [row.unit, row.note].filter(Boolean).join(' — ')
@@ -76,7 +77,7 @@ export function SpecTable({
           <tbody>
             {matrixRows.map((row) => (
               <tr key={row.param} className={`${rowLine} group`}>
-                <th scope="row" className={`${paramCell} ${rowH} sticky left-0 z-10 bg-white shadow-raised group-hover:bg-steel-100`}>
+                <th scope="row" className={`${paramCell} ${rowH} sticky left-0 z-10 bg-white shadow-raised group-hover:bg-steel-50`}>
                   {row.param}
                 </th>
                 {row.values.map((v, i) => (

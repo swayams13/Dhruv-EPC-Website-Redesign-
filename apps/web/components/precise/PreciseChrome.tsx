@@ -5,6 +5,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Header, MobileDrawer } from '@vedanta/datum-ui'
+import { Logo } from '../Logo'
 import { preciseProducts } from '../../lib/site-data'
 
 const GROUPS = [
@@ -24,7 +25,9 @@ export function PreciseChrome({ phoneHref, whatsappHref }: { phoneHref: string; 
   return (
     <>
       <Header
-        logo={<span className="font-display text-h4 font-bold">Precise Engineers</span>}
+        logo={(scrolled) => (
+          <Logo company="precise-engineers" size={scrolled ? 'header-scrolled' : 'header'} priority />
+        )}
         homeHref="/precise-engineers"
         menuLabel="Products"
         menuGroups={GROUPS.map((g) => ({

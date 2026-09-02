@@ -64,7 +64,7 @@ export function LegalDocument({
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
         {/* Contents rail — same pattern as the product SectionNav */}
         <nav aria-label="Document sections" className="lg:col-span-3">
-          <p className="font-mono text-xs font-medium uppercase tracking-caption text-steel-600">
+          <p className="text-xs font-medium text-steel-600">
             Contents
           </p>
           <ul className="mt-4 flex flex-col gap-2">

@@ -22,7 +22,6 @@ export const Dhruv: Story = {
       'ASME Sec. VIII Div. 1 & 2 and TEMA-class exchangers in CS, LAS, SS and duplex — fixed, floating-head and U-tube, up to 250 T.',
     chips: ['≤ 250 T', 'Ø 4,000 mm', 'CS · LAS · SS · duplex', 'ASME U/U2 · TEMA'],
     rfq: { label: 'Request a quote', href: '/request-a-quote?company=dhruv-epc' },
-    dimensionLabel: 'Ø 3,600 mm',
   },
   decorators: [withCompany('dhruv')],
 }
@@ -39,7 +38,6 @@ export const Precise: Story = {
       'Single and multi-ply bellows DN 50–6,000 in SS 304/316/321, Inconel 625 and titanium, design temperatures to 750 °C.',
     chips: ['DN 50–6,000', '≤ 750 °C', 'SS · Inconel · Ti', 'EJMA 10th'],
     rfq: { label: 'Request a quote', href: '/request-a-quote?company=precise-engineers' },
-    dimensionLabel: 'DN 2,400',
   },
   decorators: [withCompany('precise')],
 }

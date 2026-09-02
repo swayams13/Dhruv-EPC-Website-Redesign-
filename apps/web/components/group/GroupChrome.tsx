@@ -9,6 +9,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Header, MobileDrawer, type MegaPanelColumn } from '@vedanta/datum-ui'
+import { Logo } from '../Logo'
 import { projectsIndexHref } from '../../lib/product-urls'
 
 const LINKS = [
@@ -40,16 +41,9 @@ export function GroupChrome({ megaPanelColumns }: { megaPanelColumns: MegaPanelC
   return (
     <>
       <Header
-        logo={
-          <span className="flex items-baseline gap-2">
-            <span className="font-display text-h4 font-extrabold leading-none tracking-tight">
-              VEDANTA
-            </span>
-            <span className="font-mono text-logo-sub font-medium uppercase tracking-widest text-steel-500">
-              Group of Companies
-            </span>
-          </span>
-        }
+        logo={(scrolled) => (
+          <Logo company="group" size={scrolled ? 'header-scrolled' : 'header'} priority />
+        )}
         homeHref="/"
         menuLabel="Products"
         megaPanel={megaPanelColumns}

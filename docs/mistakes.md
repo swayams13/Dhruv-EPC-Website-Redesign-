@@ -6,6 +6,160 @@ If the rule is general, promote it into CLAUDE.md.
 ---
 <!-- entries go below this line -->
 
+## 2026-09-03 — Header utility-bar text-white/66: another missing opacity-scale step (RESOLVED same day)
+
+**What happened:** while re-verifying the VG-004 dark-ground contrast
+fix (see below), axe still flagged `/`, `/about/`, `/industries/*`,
+`/capabilities/*`, and every other GroupChrome-only route with a
+`color-contrast` violation on `<a href="/dhruv-epc">Dhruv EPC
+Solutions</a>` — the utility-bar company-switcher link. Computed style:
+`color: rgb(26, 30, 34)` (steel-950) against `bg-steel-900` — 1.12:1,
+effectively invisible — despite `Header.tsx` line 154's className
+plainly reading `text-white/66`. `document.styleSheets` search
+confirmed no `.text-white\/66` rule existed anywhere in the built CSS
+at all — the class silently compiled to nothing, so the link fell back
+to its inherited default text color.
+
+**Root cause:** identical failure mode to the already-documented 72/82/
+92 opacity steps in `packages/tokens/src/tailwind.ts` (see its own
+comment block, in place since an earlier phase) — Tailwind's color
+opacity modifier (`/NN`) only recognizes percentages explicitly
+registered in the theme's `opacity` scale; `66` was never added, even
+though the pattern for adding missing steps was already established
+and commented in the same file. A `pnpm build` that reused a stale
+`.next` cache also initially masked the fix — after adding `66: '.66'`
+to the scale, the first rebuild still didn't emit the rule; only a full
+`rm -rf apps/web/.next node_modules/.cache/turbo` rebuild picked it up.
+
+**Resolved same day:** added `66: '.66'` to `tailwind.ts`'s `opacity`
+extension, following the exact pattern already used for 60/72/82/88/92.
+Confirmed `.text-white\/66{color:hsla(0,0%,100%,.66)}` now emits in the
+built CSS, and the link is legible against `bg-steel-900`.
+
+**Rule that prevents recurrence:** general rule already existed
+("Tailwind's opacity modifier only recognizes its own preset percentage
+steps") but wasn't checked against every `/NN` usage in the codebase
+when it was written — a `grep -rn "text-\|border-\|bg-" -E '/(6[0-9]|7[0-9]|8[0-9]|9[0-9])"' packages/datum-ui apps/web` sweep against `tailwind.ts`'s registered `opacity` keys would catch the next one before axe does. Also: when a Tailwind/CSS-generation fix doesn't seem to take effect, suspect the build cache before the fix itself — `rm -rf .next` before concluding a config change didn't work.
+
+## 2026-09-02 — VG-004 has moved: Header's contrast bug is fixed, ProductCard's `onDark` captions are the new instance (RESOLVED 2026-09-03)
+
+**What happened:** FINAL_IMPLEMENTATION_PLAN.md Phase 23 requires
+re-checking VG-004's status after the Header rewrite (Phase 5) — its
+exact wording: "VG-004's status after the Header rewrite remains
+unknown until Phase 23." Ran axe against every route in
+`apps/web/lib/routes.ts`'s `ROUTES` (not just the ones already skipped
+in `a11y.spec.ts`'s `KNOWN_FAILURES`). Result: the *original* VG-004
+root cause — `text-steel-500` menu/caption text on the Header's dark
+utility bar and mega-menu — is gone; every route that used to fail on
+header/mega-menu contrast (`/precise-engineers/capabilities/`,
+`/precise-engineers/proof/`) is now clean and has been un-skipped in
+`a11y.spec.ts`. But every route still in `KNOWN_FAILURES` still fails —
+axe now reports a *different* node: `ProductCard.tsx`'s `onDark`
+variant renders `oneLineScope`/spec-row/index captions with a bare
+`text-steel-500` (#707070) against the card's `bg-steel-900` (#23282d)
+— 3:1, needs 4.5:1. Confirmed via zoomed axe output on `/dhruv-epc/`
+(fgColor #707070, bgColor #23282d, contrastRatio 3, expected 4.5).
+
+**Root cause:** `packages/datum-ui/src/components/ProductCard.tsx` has
+an `onDark` prop that correctly swaps some text (line 60:
+`onDark ? 'text-accent-dark' : 'text-accent'`) but the caption/spec-row/
+index text at lines 93, 98, 104, 145, 150 is unconditionally
+`text-steel-500` regardless of `onDark` — the component author branched
+the accent color but forgot to branch the caption color, so the "dark
+ground, premium industrial grid" variant (§T-2 comment) inherited the
+light-ground caption token, which fails contrast on `steel-900`.
+
+**Decision, this session:** not fixed — Phase 23's own file scope is
+"none, except `a11y.spec.ts`'s `KNOWN_FAILURES`". `KNOWN_FAILURES`
+already covers every route where this now surfaces (same route list,
+different underlying node), so no test-file change was needed for the
+still-failing routes; only the two newly-clean routes were un-skipped.
+Routes back to Phase 8 (shared cards/buttons/forms/certification
+components), which is where `ProductCard.tsx`'s `onDark` variant was
+built.
+
+**Rule that prevents recurrence:** when a component adds an `onDark`/
+inverse-ground variant, grep every `text-steel-500` (or any token whose
+contrast covenant is scoped to a light background) in that file — each
+one needs an explicit dark-ground counterpart, not just the accent
+color. A prop that changes the ground should be treated as changing
+*every* text token's contrast requirement, not just the ones the author
+happened to think of.
+
+**Resolved 2026-09-03:** swapped `text-steel-500`/`text-steel-600` for
+`text-steel-400` on every `onDark` caption in `ProductCard.tsx`,
+`CategoryCard.tsx`, and `IndustryCard.tsx` (the same sibling-component
+bug existed in all three, same phase, same fix). While verifying, found
+two more instances of the identical dark-ground pattern: Header's
+utility-bar links used `text-white/66`, an opacity step never
+registered in the Tailwind preset (silently compiled to nothing — see
+its own write-up below); and the group homepage's "Two specialized
+works" door cards had one straggler `text-steel-600` caption
+inconsistent with its own sibling tokens. Fixed both. Verified via axe
+against every route: 52/53 pass (was ~30/53 skipped under
+`KNOWN_FAILURES`); the one remaining skip is the unrelated, pre-existing
+`/request-a-quote/thank-you/` one-off (steel-400 on a *light* steel-50
+card — a different root cause, still open).
+
+## 2026-09-02 — Header.tsx: logo lockup overlaps primary nav at the exact 768px (`md`) breakpoint (RESOLVED 2026-09-03)
+
+**What happened:** FINAL_IMPLEMENTATION_PLAN.md Phase 22 (responsive
+validation) requires a visual pass at 320/375/390/768/1024/1440px. At
+exactly 768px viewport width, on all three chromes (Group, Dhruv EPC,
+Precise Engineers), the multi-line logo lockup (company name + tagline,
+e.g. "VEDANTA GROUP" / "OF COMPANIES · EST. 1994", or "DHRUV EPC" /
+"SOLUTION PVT. LTD") visually overlaps the primary nav trigger
+("Products"/"Equipment") — the nav text renders on top of / behind the
+logo's second line. On Precise Engineers the RFQ button is pushed
+entirely out of the visible header row. Confirmed via
+`window.innerWidth` + zoomed screenshot on all three routes (`/`,
+`/dhruv-epc/`, `/precise-engineers/`) at 768×900. At 1024px and above
+the same logos still wrap to 2 lines but no longer collide with nav —
+there's enough horizontal room. `document.documentElement.scrollWidth`
+stays equal to `innerWidth` throughout (no horizontal scrollbar), so
+this is a pure z-index/overlap collision, not a layout-overflow bug —
+easy to miss without an exact-768px visual check.
+
+**Root cause:** `packages/datum-ui/src/components/Header.tsx`'s desktop
+nav row (`md:flex`, active from 768px up) assumes the logo lockup and
+nav links + icons + RFQ button all fit on one row starting at exactly
+768px. The logo lockup's font size doesn't shrink at the `md` breakpoint
+specifically (it's the same size from 768px to 1024px+), so the
+narrowest width in the desktop-nav range is also the tightest fit —
+and it doesn't fit.
+
+**Decision, this session:** not fixed. Per FINAL_IMPLEMENTATION_PLAN.md
+Phase 22's own scope ("No files touched — findings route back to their
+originating phase"), this is logged here and in progress.md Session 34
+rather than edited inline. Routes back to Phase 5 (Header + utility
+strip).
+
+**Rule that prevents recurrence:** any component with a `md:`-gated
+layout switch (mobile → desktop nav) must be visually checked at
+exactly the breakpoint's minimum width (768px for `md`, not just
+"768 and up" sampled at 1024/1440) — the tightest fit is always at the
+boundary, not in the middle of the range.
+
+**Resolved 2026-09-03:** moved the main-row breakpoint from `md`
+(768px) to `lg` (1024px) — the hamburger/MobileDrawer path already
+handles any width below its breakpoint correctly, so widening its
+range was the fix, not shrinking the logo or nav content (which would
+have needed new arbitrary values). Confirmed clean at 768px (hamburger,
+no overlap) on all 3 chromes and no regression at 1024px (full desktop
+nav still renders correctly).
+
+## 2026-09-02 — apps/web/scripts/snapshot-routes.mjs's ROUTES list is stale post-VG-012 (RESOLVED 2026-09-02, Phase 24)
+
+**What happened:** FINAL_IMPLEMENTATION_PLAN.md Phase 1 (token foundations, cool-ramp remap) requires "Snapshot: regenerate and commit" after the token change. Running `node apps/web/scripts/snapshot-routes.mjs` against a fresh `pnpm build` reports 17/30 routes missing and exits 1.
+
+**Root cause:** `snapshot-routes.mjs`'s hardcoded `ROUTES` array still lists the pre-VG-012 URLs (`/dhruv-epc/equipment/heat-exchangers`, `/precise-engineers/products/metallic-bellows-expansion-joint`, …). Session 22 (VG-012, dynamic product routing) moved every product page to `/{company}/products/{category}/{slug}/` and deleted the old flat routes, but never updated this script — it was written and last touched in Session 21 (PR #18), one session before the routing change that broke it.
+
+**Decision, at the time:** left unfixed across Phases 1/21/22 — a mechanical fix, but out of scope for those phases' own file lists, per this file's own scope-discipline rule (log unrelated bugs, don't fix inline). Each of those sessions substituted a manual visual smoke check instead.
+
+**Resolved 2026-09-02 (Phase 24, "Snapshot finalization"):** the plan's own Phase 24 purpose ("confirmation pass... any diff here signals an earlier phase's snapshot commit was incomplete") made this the natural point to fix it — the plan wins over the harness's own frozen-baseline framing per CLAUDE.md's "if code and spec disagree, the spec wins." Rewrote `snapshot-routes.mjs` to auto-discover every `.html` file under `.next/server/app` instead of hand-maintaining a second route list, and regenerated `__snapshots__/routes-baseline/` fresh (53 routes, up from 30) as the new anchor — the old pre-VG-012 baseline could never again produce a meaningful diff once those URLs stopped existing. `pnpm snapshot:baseline && pnpm snapshot:compare` now report 53/53 byte-identical.
+
+**Rule that prevents recurrence:** solved structurally, not procedurally — the script no longer has a second, hand-maintained route list to drift from `apps/web/lib/routes.ts` or `app/**/page.tsx`. It derives routes from the same build output it snapshots.
+
 ## 2026-08-31 — scripts/build-redirects.mjs's main() guard never ran on this machine
 
 **What happened:** VG-012 (dynamic product routing, session 5) needed to regenerate `apps/web/lib/redirects.generated.ts` after adding 17 rows to `content/redirect-map.csv`. `node scripts/build-redirects.mjs` exited 0 with no output and left the file untouched — silently. `LEGACY_REDIRECT_COUNT` stayed at 56 (a stale pre-session value) instead of updating to 73.
@@ -470,3 +624,39 @@ assume fixing the header caught it.
 too. Added `{ label: 'About', href: '/dhruv-epc/company' }` as the first
 entry in `dhruv-epc/layout.tsx`'s `FOOTER_COLUMNS` "Company" column,
 matching `precise-engineers/layout.tsx`'s existing order exactly.
+
+## 2026-09-02 — Storybook's preview.css has stale, pre-v1.2 accent values (amber, not the current red)
+
+**What happened:** while verifying Phase 8's ProductCard/Button changes in
+Storybook, its built-in accessibility addon flagged a contrast violation
+on `text-accent` — foreground `#F0670F` (amber) against white, 3.15:1,
+failing 4.5:1. Traced it to `packages/datum-ui/.storybook/preview.css`,
+which the file's own header comment admits is a hand-maintained "mirror
+of apps/web/app/globals.css... Storybook-only copy: the app owns the
+canonical file." That mirror was never updated when the accent migrated
+amber → brand red (`#AA3833`) at v1.2 (session predating this one) —
+confirmed by checking an untouched, pre-existing story
+(`Button/Rfq Dhruv`) and finding it renders the same stale amber. Also
+found `[data-company='group']`'s accent logic has fully diverged from
+`globals.css` (Storybook: a monochrome steel-based scheme; the real app:
+brand-500 red, same as Dhruv) — this drift predates v1.2 too and is
+larger than just the color migration.
+
+**Why not fixed here:** out of Phase 8's declared file scope
+(`FINAL_IMPLEMENTATION_PLAN.md`'s Phase 8 file list is 13 named
+components, not Storybook infrastructure) and the user's task was to
+implement Phases 6–8, not audit tooling. Verified the real behavior
+separately in the actual Next.js dev server (not Storybook) for every
+Phase 8 change, where the accent renders correctly — Storybook's stale
+copy doesn't affect production, only the fidelity of Storybook-based
+visual checks going forward.
+
+**Rule:** don't trust Storybook's accessibility-addon contrast readings
+for accent-colored elements without cross-checking a real route in the
+actual app first — `preview.css`'s copy of the company accent scopes can
+silently drift from `globals.css` (the canonical source) since nothing
+enforces the two staying in sync. If a future session has "fix Storybook
+infra" or "Phase X: design-system tooling" in scope, resync
+`preview.css`'s three `[data-company]` blocks against `globals.css`
+line-for-line rather than patching the accent value alone — the `group`
+company's whole accent formula needs it, not just amber→red.

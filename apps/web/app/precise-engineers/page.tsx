@@ -9,6 +9,7 @@ import {
   type DomainIconName,
   HomeHero,
   ProductCard,
+  StatBand,
   type StampProps,
 } from '@vedanta/datum-ui'
 import { buildLocalBusiness } from '@vedanta/schemas'
@@ -56,19 +57,28 @@ export default function PreciseHome() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(buildLocalBusiness(preciseEntity)) }}
       />
 
-      {/* Exploded-view metallic bellows expansion joint in the photo slot —
-          docs/design.md, override logged in docs/decisions.md [2026-07-16].
-          Dimension label: metallic-bellows-expansion-joint spec-table max
-          circular size — sourced [vedantagroup.net], not a demo placeholder. */}
+      {/* Hero C split hero (Decision 2, Phase 9/13-15). No photo/dimensionLabel
+          wired yet — real works photography sourcing and ExplodedSequence
+          revival are both explicitly deferred (Decision 6); the hatch
+          placeholder renders in the meantime, same as the current live site. */}
       <HomeHero
+        variant="split"
+        breadcrumb={[{ label: 'Home', href: '/' }, { label: 'Precise Engineers' }]}
         eyebrow="EIL Approved · ISO 9001:2015 · V.U.Nagar, Anand"
         headline="Expansion joints to EJMA, from 80 to 8,000 mm."
         subhead="Metallic, rubber and fabric bellows in SS, Inconel, Incoloy, Hastelloy and duplex — for oil & gas, refining, fertilizers, power, steel and atomic energy."
         rfq={{ label: 'Request a quote', href: '/request-a-quote?company=precise' }}
         secondary={{ label: 'View products', href: '#products' }}
-        stats={preciseStats}
-
       />
+
+      {/* Stat band — standalone light section below the hero, never overlaid
+          on the photo (Decision 2). Matches (group)/page.tsx's existing
+          standalone-band wrapper exactly. */}
+      <section className="border-t border-steel-200 bg-steel-50">
+        <div className="mx-auto max-w-wide px-6 pt-12">
+          <StatBand stats={preciseStats} />
+        </div>
+      </section>
 
       {/* Product grid — §16 product cards, no-photo variant until the works shoot (§P-5) */}
       <section id="products" aria-labelledby="products-heading" className="bg-steel-950">

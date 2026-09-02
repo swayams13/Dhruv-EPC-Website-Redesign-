@@ -101,6 +101,33 @@ export const WithIconDark: Story = {
   decorators: [withCompany('dhruv')],
 }
 
+// layout="spec" (ref `1j`) — the no-photo device for lines the shoot doesn't
+// cover: 3px accent top border, a 3-row spec <dl>, mono position index. Not
+// wired to a live consumer yet (that's a later phase's page work).
+export const SpecLayout: Story = {
+  args: {
+    name: 'Process skids',
+    oneLineScope: 'Modular skids up to 40 T shipped assembled',
+    href: '/dhruv-epc/process-skids',
+    layout: 'spec',
+    specRows: [
+      { label: 'Max weight', value: '40 T' },
+      { label: 'Code', value: 'ASME B31.3' },
+      { label: 'Materials', value: 'CS · SS · duplex' },
+    ],
+    index: '03 / 12',
+  },
+  decorators: [withCompany('dhruv')],
+}
+
+export const SpecLayoutDark: Story = {
+  args: {
+    ...SpecLayout.args,
+    onDark: true,
+  },
+  decorators: [withCompany('dhruv')],
+}
+
 // §16 grid: 3-up desktop / 2-up tablet / 1-up mobile, 32px gaps, equal heights
 export const Grid: Story = {
   render: () => (

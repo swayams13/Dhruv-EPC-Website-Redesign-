@@ -61,10 +61,10 @@ export function IndustryCard({
 
   if (compact) {
     const surfaceText = onDark ? 'text-steel-50' : 'text-steel-950'
-    const indexText = onDark ? 'text-steel-500' : 'text-steel-400'
+    const indexText = 'text-steel-400'
     if (thin) {
       return (
-        <div className={`flex items-baseline gap-3 opacity-60 ${onDark ? 'text-steel-500' : 'text-steel-400'}`}>
+        <div className="flex items-baseline gap-3 opacity-60 text-steel-400">
           <span aria-hidden className={`font-mono text-helper ${indexText}`}>{index}</span>
           <span className="text-sm">{name}</span>
         </div>
@@ -105,11 +105,11 @@ export function IndustryCard({
         href={href}
         className={`group block h-full rounded-sm border border-steel-800 bg-steel-900 p-6 transition-colors duration-fast ease-standard hover:border-steel-500 ${focusRing}`}
       >
-        <span aria-hidden className="font-mono text-helper text-steel-500">{index}</span>
+        <span aria-hidden className="font-mono text-helper text-steel-400">{index}</span>
         <Heading level={headingLevel} className="mt-2 font-display text-h3 font-semibold text-steel-50">
           {name}
         </Heading>
-        <p className="mt-2 text-sm text-steel-500">{servedByLabel}</p>
+        <p className="mt-2 text-sm text-steel-400">{servedByLabel}</p>
         <p className="mt-4 font-mono text-helper text-steel-400">{projectLabel}</p>
       </a>
     )

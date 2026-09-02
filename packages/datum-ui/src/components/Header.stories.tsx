@@ -2,9 +2,11 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { Header } from './Header'
 import { withCompany } from '../story-helpers'
 
-// §2.2: monochrome text lockup — the real mark lands with brand assets
-const dhruvLogo = <span className="font-display text-h4 font-semibold">Dhruv EPC</span>
-const preciseLogo = <span className="font-display text-h4 font-semibold">Precise Engineers</span>
+// §2.2: monochrome text lockup — the real mark (apps/web's Logo.tsx) takes a
+// next/image dependency datum-ui can't take; Header's `logo` prop is a
+// render function so the real component can size itself off `scrolled`.
+const dhruvLogo = () => <span className="font-display text-h4 font-semibold">Dhruv EPC</span>
+const preciseLogo = () => <span className="font-display text-h4 font-semibold">Precise Engineers</span>
 
 const dhruvGroups = [
   {
@@ -122,7 +124,7 @@ const groupMegaPanel = [
 
 export const Group: Story = {
   args: {
-    logo: <span className="font-display text-h4 font-extrabold">VEDANTA</span>,
+    logo: () => <span className="font-display text-h4 font-extrabold">VEDANTA</span>,
     homeHref: '/',
     menuLabel: 'Products',
     megaPanel: groupMegaPanel,

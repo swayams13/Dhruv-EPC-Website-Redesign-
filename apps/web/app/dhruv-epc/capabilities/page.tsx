@@ -88,7 +88,7 @@ export default function DhruvCapabilitiesPage() {
         <div className="mt-8 flex flex-col gap-8">
           {(Object.entries(dhruvEquipment) as [keyof typeof dhruvEquipment, typeof dhruvEquipment[keyof typeof dhruvEquipment]][]).map(([group, items]) => (
             <div key={group}>
-              <h3 className="text-xs font-medium uppercase tracking-caption text-steel-600">
+              <h3 className="text-xs font-medium text-steel-600">
                 {GROUP_LABELS[group] ?? group}
               </h3>
               <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">

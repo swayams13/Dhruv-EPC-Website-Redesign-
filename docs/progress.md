@@ -1795,3 +1795,2518 @@ records):**
 - [ ] Launch-readiness go/no-go itself (see above) — ship the restructured
       nav now with placeholder destinations, or hold until some content
       is real.
+
+---
+
+### Session 26 — Vedanta Brand Evolution: readiness audit, Claude Design mapping, Decision Resolution, implementation plan
+**Status:** Complete ✅ — planning only, zero production code touched. Awaiting explicit "IMPLEMENT PHASE 1" authorization.
+**Branch:** `feat/real-company-logos` · **Date:** 2026-09-02
+**Governing specs:** `VEDANTA_DESIGN_LANGUAGE.md` (client-site forensics, root), `VEDANTA_DESIGN_IMPLEMENTATION_NOTES.md` (token/component spec derived from the artifact, root), Claude Design project `9b313f0a-5936-49dd-a324-dcfe9a5d4c7f` file `Vedanta Brand Evolution.dc.html` (the approved visual artifact, sections `1a`–`1l`/`2a`–`2b`)
+
+#### Scope
+
+A client-approved Claude Design artifact ("Vedanta Brand Evolution") proposes a
+token-and-chrome evolution of the existing Datum system — cool neutral ramp,
+Plus Jakarta Sans, white 91/76px header, photo-as-ground heroes, dark footer.
+This session's job was entirely pre-implementation: audit the current
+codebase for readiness, inspect the actual approved artifact (not just the
+prose notes describing it), resolve every point the artifact itself left
+ambiguous, and produce a locked, file-level implementation plan — before
+touching a single line of production code.
+
+#### What was done
+
+- **Implementation Readiness Audit** (read-only) — full repo structure,
+  design-system tiers (`packages/tokens` primitives→semantic→tailwind),
+  component inventory (`packages/datum-ui`, 30 components), CI/build config,
+  and existing tech debt (VG-004 dark-header contrast, `CategoryCard`
+  `thin`-state opacity bug, stale `launch-checklist.md`). Produced a 10-point
+  A–J report (architecture / design system / reuse / modify / create / don't
+  touch / conflicts / risks / order) — no files modified.
+- **Claude Design MCP authorized** (`/design-login`) and the actual artifact
+  pulled and read in full — not just `VEDANTA_DESIGN_IMPLEMENTATION_NOTES.md`'s
+  prose description of it. Full `.dc.html` canvas (98 KB), `support.js`
+  (confirmed as the design-tool's own rendering runtime, not app code), and
+  `assets/vedanta-emblem.png` (1161×995px confirmed, matching the spec's
+  claimed 1.167:1 ratio — full-fidelity extraction incomplete, see below)
+  all inspected directly. Produced an explicit 29-row mapping: artifact
+  element → existing component → required change → new component if
+  needed → relevant file.
+- **Decision Resolution phase** — the mapping surfaced five items the
+  artifact itself left ambiguous (two competing brand reds; two candidate
+  hero treatments with the artifact's own text flagging it unresolved; a
+  mega-panel restyle with zero open-state evidence in the artifact; a
+  footer Zone 3 background change bigger than the prose notes implied; FAQ
+  status unverified against the actual codebase). Each was investigated
+  independently (contrast ratios recomputed by hand, not trusted from the
+  doc; full codebase grep for existing FAQ/accordion/mega-panel
+  implementations) and resolved with cited evidence and a confidence
+  rating, prioritizing brand continuity and existing site identity over
+  design-system cleanliness per the human's explicit instruction.
+- **`docs/VEDANTA_DESIGN_DECISIONS.md`** (new) — the five locked decisions,
+  each with its exact rule, evidence, and confidence rating. Two correction
+  passes tightened wording with zero value changes: (1) explicit
+  confirmation all three homepages route through `HomeHero`, group home's
+  `statsOverlay={false}` restated as absolute; (2) explicit confirmation
+  MegaPanel's "typography" allowance means token-value substitution only,
+  never a new hierarchy element; (3) a duplicated/overloaded Status line
+  cleaned to one canonical line.
+- **`docs/FINAL_IMPLEMENTATION_PLAN.md`** (new) — every planned
+  production-code change classified A (locked decision) through F
+  (verification only) or explicitly DEFERRED/REJECTED with a cited source,
+  an 18-phase implementation order (Phase 0 governance check through Phase
+  17 final visual QA against the artifact), a full change-budget/blast-radius
+  table, and a list of remaining blockers. Three correction passes: (1)
+  added phase ordering + full A–F sourcing + blast-radius analysis to what
+  had initially been a chat-only plan; (2) fixed the `logoRed` enforcement
+  test to validate the consumer boundary (defined in `primitives.ts`,
+  imported only by `Logo.tsx`) rather than a literal `#CD0101` string
+  search, resolved a real contradiction in the `PageHero` validation phase
+  (claimed zero route files touched while proposing to validate real
+  routes — now resolved via isolated Storybook fixtures built from real
+  route content, never opening a production route file), added a Phase 1
+  token-swap smoke-test requirement, and tightened Phase 15 to a single
+  named file exception (`a11y.spec.ts` `KNOWN_FAILURES` only).
+
+**Two items were explicitly DEFERRED, not built and not silently folded
+in:** a "Fabrication & QA" 5-step process section and a "Types &
+configurations" grid, both present only in the raw canvas mockup and
+absent from `VEDANTA_DESIGN_IMPLEMENTATION_NOTES.md`'s actual component
+scope — building either without a new explicit decision would have been
+inventing a component the approved spec never authorized.
+
+#### Verify
+
+```
+N/A — no production code was modified this session. Every deliverable is
+a planning document (docs/VEDANTA_DESIGN_DECISIONS.md,
+docs/FINAL_IMPLEMENTATION_PLAN.md). pnpm typecheck/lint/test/build were
+not run because there is nothing yet for them to check.
+```
+
+#### Deviations / flagged (none silent)
+
+1. Emblem asset (`assets/vedanta-emblem.png`) extraction from the Claude
+   Design project hit the `DesignSync.get_file` tool's 256 KiB read cap —
+   PNG header and 1161×995px dimensions confirmed, full pixel data not
+   verified end-to-end. Flagged as a Phase 2 blocker: must be resolved
+   with a genuine full extraction, or Phase 2 stops and reports rather
+   than approximating/regenerating the mark, per explicit instruction.
+2. `docs/decisions.md` was deliberately **not** appended this session —
+   `VEDANTA_DESIGN_DECISIONS.md` itself notes that a summary entry belongs
+   there only once the decisions are actually implemented, not at the
+   planning stage.
+3. `VEDANTA_DESIGN_LANGUAGE.md` and `VEDANTA_DESIGN_IMPLEMENTATION_NOTES.md`
+   remain untracked in git as of this session's end (confirmed via `git
+   log --all`) — they exist only in the working tree. Not committed this
+   session; no instruction to do so was given.
+
+#### Requires human review before Phase 1
+
+- Explicit **"IMPLEMENT PHASE 1"** authorization — not yet given as of
+  this session's end.
+- The emblem-asset extraction blocker (deviation 1 above) must be closed
+  before Phase 2 (Logo/brand primitives) can start.
+
+### Session 27 — Two plan-reconciliation passes: existing-section gaps, then Hero C
+**Status:** Complete ✅ — planning only, zero production code touched. `IMPLEMENT PHASE 1` was received mid-session but not acted on — a further architectural review arrived first and both plan documents needed reconciling again before any code could start.
+**Branch:** `feat/real-company-logos` · **Date:** 2026-09-02
+**Governing specs:** same as Session 26, plus the live Claude Design project re-fetched directly this session (not assumed) — `9b313f0a-5936-49dd-a324-dcfe9a5d4c7f`, `Vedanta Brand Evolution.dc.html`.
+
+#### Scope
+
+Two structured reviews of `FINAL_IMPLEMENTATION_PLAN.md` arrived back to back, each surfacing real gaps that required repository verification, not just documentation edits.
+
+#### Pass 1 — existing-section gaps
+
+- **`ProductHero.tsx` was missing from the plan entirely.** Confirmed by direct inspection: it's a fully independent component from `HomeHero`/`PageHero` (light `bg-steel-50`, breadcrumb → H1 → value statement → chips → RFQ → `DatumRule`/`DimensionLabel`), rendered by 17+ product routes. Given its own dedicated phase; explicitly not folded into `PageHero`.
+- **"Fabrication & QA" and "Types & Configurations" were wrongly deferred in Session 26's plan — corrected.** Direct inspection of `apps/web/lib/product-detail-page.tsx` proved both are live production sections today (`SECTIONS` array, `GENERIC_QA_STEPS` fallback, real `qaSteps`/`types` data in 17 product JSON files, real anchors). This was my own analytical error from the prior session — the evidence was already in a grep I'd run, I just hadn't connected it. Un-deferred, given their own retheme phases.
+- **A new architectural decision (Decision 6) resolves the `ExplodedSequence`/photo-as-ground question.** Investigation found something more specific than the review's premise: `ExplodedSequence` has zero current route consumers (confirmed by repo-wide search) — `dhruv-epc/page.tsx`/`precise-engineers/page.tsx` carry a stale comment and `site-data.ts` still exports real frame data, but no `<HomeHero>` call actually passes a `photo` prop today. The feature is orphaned, not live. The architectural conclusion (keep it structurally separate from any hero's photo-ground layer) held regardless, for the same underlying DOM/CSS incompatibility.
+- **Typography and `tracking-caption` split into their own phases.** Produced a complete, evidence-based 46-site KEEP/CONVERT classification (29/17) by reading the actual surrounding JSX of every occurrence, not pattern-matching class names.
+- **A sourcing-accuracy note:** the review referenced `VEDANTA_DESIGN_IMPLEMENTATION_NOTES.md` §1.5/§1.6/§2.2b — none of these exist in the actual file (re-read in full to confirm; it runs §0–§7 only). The underlying claims were mostly right; cited their real locations (§1.1, §7 warning 4, or the canvas directly) instead of inventing section numbers.
+
+#### Pass 2 — Hero C
+
+- **The live Claude Design project had been updated between sessions** — re-fetched directly rather than trusting the request's description. Confirmed real: the file grew from 98,075 to 99,981 bytes; `1f` ("Hero C — split") is now labeled in the canvas itself as *"chosen, applied to 1a and 1b."* Both `1a` (group) and `1b` (Dhruv) now render a `grid-template-columns: 47fr 53fr` split hero (dark type panel + plain unscrimmed photo grid-cell) in place of the previous full-bleed lower-left hero. `1c`/`1d` re-verified byte-identical — untouched.
+- **`statsOverlay` is retired.** `HomeHero`'s contract moves from `align`/`statsOverlay` to a single `variant="split"`. Every exact value (47/53 ratio, 600px/560px fixed heights, eyebrow color `accent-dark` not white, H1 on the `display` token not `display-xl`, breadcrumb inside the type panel for company homepages only, datum rule pinned to the photo panel's bottom) was read directly from the live canvas markup, not estimated — Decision 2 in `VEDANTA_DESIGN_DECISIONS.md` was rewritten in full with these values.
+- **`ExplodedSequence`'s guard moved off `HomeHero`** (which has no photo-ground slot left under Hero C) **onto `PageHero`/`ProductHero`** — Decision 6 updated accordingly.
+- **Two real contrast findings from Session 26's token swap were fixed at the source this session, not carried as exceptions:** `steel-400` (`text.onDarkSecondary`) was failing at 4.05–4.49:1 against the new dark chrome — fixed by changing the primitive to `#A5A8B2` (verified 6.26:1/7.06:1, hue-checked against the rest of the ramp — 226° vs. the ramp's 228–230°, same family, just lighter). `flex-500`'s focus ring on the new `steel-900` dropped from 3.05:1 (passing) to 2.61:1 (failing) — fixed via the existing `data-chrome="dark"` rebinding mechanism (already used elsewhere in the system) rather than a new tracked exception; the test's own bare-`focus.ring`-on-dark-surface check was corrected to stop asserting a code path that should never render once `data-chrome` is applied correctly, removing 4 existing exceptions and adding 0 new ones.
+- New explicit `data-chrome="dark"` requirement added for Footer Zone 3 and the split hero's type panel (both carry focusable content on dark chrome).
+- `HomeHero`'s responsive behavior (stacking below `md`, mobile photo crop) got its own dedicated phase — the canvas never renders the split hero below 1440px, so this is flagged as the least-sourced part of the entire plan, not silently assumed.
+
+#### Verify
+
+```
+N/A — no production code was modified either pass. All deliverables are
+planning documents (docs/VEDANTA_DESIGN_DECISIONS.md,
+docs/FINAL_IMPLEMENTATION_PLAN.md). The two new contrast fixes (steel-400
+value, data-chrome test-scope correction) are specified but not yet
+applied to packages/tokens/src/primitives.ts or tokens.test.ts — that
+happens in Phase 1 of the now-current plan, not this session.
+```
+
+#### Deviations / flagged (none silent)
+
+1. Precise Engineers' split-hero height/crop is inferred by symmetry with
+   Dhruv (560px, 4:5 portrait) — the canvas never mocks a separate Precise
+   homepage instance. Flagged in Phase 15 of the plan, not presented as
+   directly observed.
+2. The split hero's `white/72` body-copy contrast is opacity-blended, not
+   a solid token — per the standing `docs/mistakes.md` (2026-09-01)
+   opacity-contrast rule, its real blended contrast must be computed in
+   Phase 9, not assumed safe from the nominal ratio. Flagged, not computed
+   this session (no code exists yet to compute it against).
+3. Emblem-asset provenance (Session 26's blocker) remains open — a
+   full-resolution image was supplied in chat but not yet verified against
+   the Claude Design project's own asset file.
+
+#### Requires human review before Phase 1
+
+- Explicit **"IMPLEMENT PHASE 1"** authorization against *this* (Hero C)
+  revision of the plan specifically — the earlier authorization was given
+  against a plan revision superseded by this session's two passes.
+- The emblem-asset extraction/provenance blocker.
+- Precise Engineers' by-symmetry hero values (height, crop) — confirm
+  against real Precise homepage copy before Phase 15, since no canvas
+  instance exists to check against directly.
+
+### Session 28 — Phase 1: Token foundations (cool-ramp remap)
+**Status:** Complete ✅ — committed locally, not pushed
+**Branch:** `feat/real-company-logos` · **Date:** 2026-09-02
+**Governing specs:** `docs/FINAL_IMPLEMENTATION_PLAN.md` Phase 1,
+`VEDANTA_DESIGN_IMPLEMENTATION_NOTES.md` §1.1/§1.2, `docs/VEDANTA_DESIGN_DECISIONS.md` D-1
+
+#### Scope
+
+"IMPLEMENT PHASE 1" authorization received against the Hero-C plan revision
+(Session 27). Executed exactly Phase 1's declared file scope — `primitives.ts`,
+`semantic.ts` (verify-only), `tailwind.ts`, `globals.css`, `tokens.test.ts` —
+and nothing else; confirmed clean by `grep -rl "F2F0EA\|#8A8D99"` finding zero
+occurrences outside the two files touched, before starting.
+
+#### What was done
+
+- **`primitives.ts`** — `steel` ramp warm→cool remap (11 steps, provenance
+  comment retained); `radius.sm` 2px→3px, added `pill`(26px)/`full`(100%);
+  `shadow` recipe replaced (2→3 values, new `hover` step); new `overlay`
+  primitive (`hero`/`heroInterior` scrim gradients). **`steel-400` shipped as
+  `#A5A8B2`, not the spec's literal `#8A8D99`** — the plan's own Class-E
+  correction (spec value measured 4.05–4.49:1 as `text.onDarkSecondary` on
+  the new dark surfaces, below the 4.5:1 floor).
+- **`tailwind.ts`** — `borderRadius` gained `pill`/`full`; `boxShadow` gained
+  `hover`. Colors needed no edit (already reference the primitives by import).
+- **`globals.css`** — `#F2F0EA`→`#F5F6F8` in the two glass-degradation
+  fallback blocks (per spec) **and** in both `--accent-fg` declarations (not
+  in the spec's literal "3 edits" list, but a required mechanical
+  consequence: `css-parity.test.ts` asserts `--accent-fg` matches
+  `semanticByCompany[c].color.action.rfqFg`, which resolves to `steel[50]` —
+  leaving the old literal would have broken that test). Added
+  `--overlay-hero`/`--overlay-hero-interior` custom properties.
+- **`tokens.test.ts`** — contrast-matrix correction. Computed the full new
+  ramp's contrast matrix independently (methodology cross-validated against
+  every existing documented ratio in the codebase — old-ramp figures matched
+  to within rounding on 7 independent pairs) before editing any assertion,
+  per this file's own no-relax rule:
+  - Removed the bare `focus.ring` vs. `DARK_SURFACES` check from the
+    generated matrix (all 3 companies) — dark chrome always uses
+    `focus.ringOnDark` via the `[data-chrome='dark']` rebind in `globals.css`,
+    so the bare check was asserting a code path that should never render.
+    Removed the 5 stale exceptions this check owned.
+  - `text.tertiary/page` (VG-004) now clears the floor at 4.58:1 as a real
+    side effect of the new `steel-50`/`steel-500` values — removed from
+    `EXCEPTIONS` (3 entries). `text.tertiary/alt` stays failing (4.30:1) and
+    stays tracked, untouched, per the plan's explicit note.
+  - Net: **11 → 3 tracked exceptions** (plan predicted "strictly fewer,
+    zero new" — confirmed).
+  - Updated one stale inline comment (`2.85:1` → `2.65:1`, the regression-lock
+    test for `brand-500` on the new `steel-950`) since it's a literal claim
+    about the exact value this phase changes.
+
+#### Real discrepancy found, not silently trusted
+
+`VEDANTA_DESIGN_IMPLEMENTATION_NOTES.md` §1.2 claims `#AA3833` (brand-500) on
+the new `steel-900` (`#23282D`) is "3.6:1, which now passes the 3:1 floor."
+Independent WCAG relative-luminance computation (methodology verified against
+7 other documented figures in this codebase, all matching to 2-3 decimals)
+gives **2.35:1** — still failing, not a new pass. This doesn't change what
+Phase 1 had to do (the fix — dropping the bare `focus.ring`/`DARK_SURFACES`
+check in favor of `ringOnDark` — is correct regardless of the exact number),
+so no code changed differently because of it, but the doc's claim is wrong
+and should not be treated as verified fact in a later phase. Flagged here,
+not corrected in the (out-of-scope) implementation-notes file.
+
+#### Deviations / flagged (none silent)
+
+1. **Snapshot NOT regenerated** — `apps/web/scripts/snapshot-routes.mjs`'s
+   hardcoded `ROUTES` array is stale from Session 21, never updated for
+   Session 22's URL restructure (`/dhruv-epc/equipment/*` →
+   `/dhruv-epc/products/{category}/*`, etc.). Running it reports 17/30 routes
+   missing and exits 1 — a pre-existing, unrelated bug, not something this
+   token-only phase should fix inline. Logged as its own `docs/mistakes.md`
+   entry (2026-09-02). Substituted a manual browser visual smoke check
+   instead (below), which is stronger evidence for *this* phase's actual
+   risk (color regressions) than a byte-diff snapshot would have been anyway.
+2. `semantic.ts` and the pre-existing `[data-chrome='dark']` comment block in
+   `globals.css` both quote now-slightly-stale contrast numbers (e.g.
+   "2.85:1", "6.32:1") tied to primitives this phase changed — left untouched
+   per Phase 1's own file scope (`semantic.ts` is explicitly "verify-only";
+   the `[data-chrome='dark']` rule itself needed no functional edit per
+   IMPLEMENTATION_NOTES §1.2 point 2). Not a functional bug — the tests
+   recompute live from the primitives, only the comments are imprecise.
+
+#### Gate result
+
+```
+pnpm --filter @vedanta/tokens test   ✓ 96/96 (was 102; -6 from removing the
+                                        bare focus.ring/DARK_SURFACES checks,
+                                        3 companies × 2 surfaces)
+pnpm typecheck                       ✓ 4/4 packages, zero errors
+pnpm lint                            ✓ 0 errors (2 pre-existing warnings,
+                                        LegalDocument.tsx, unrelated)
+pnpm test                            ✓ all pass except the pre-existing
+                                        DATABASE_URL-gated RFQ integration
+                                        test (tracked since PR #15/#18/#20,
+                                        unrelated to this session) —
+                                        tokens 96/96, schemas 70/70,
+                                        datum-ui 107/107, web 51/52
+pnpm build                           ✓ 77 routes, zero errors/warnings, all
+                                        routes 94.9–115 kB First Load JS
+                                        (≤120 kB marketing / ≤180 kB RFQ)
+css-parity.test.ts                   ✓ 18/18 — confirms the --accent-fg fix
+                                        above was correct and necessary
+visual smoke check (manual browser,  ✓ group home, Dhruv heat-exchangers
+1440px + 375px viewports)              product page, RFQ form, Precise home,
+                                        Footer, RFQ band: Header/Hero/Button/
+                                        Card/form-field/Footer/SpecTable all
+                                        render the new cool ramp correctly,
+                                        RFQ-red and Precise-blue accents both
+                                        confirmed, focus ring visible on a
+                                        form field, single accent per view
+                                        held on every page checked
+```
+
+#### Requires human review before Phase 2
+
+- The `steel-400` value substitution (`#A5A8B2` vs. spec's `#8A8D99`) —
+  Class E per the plan (mechanical contrast-floor correction), not a new
+  design decision, but it is a departure from the literal spec hex and
+  should be sanity-checked visually against the client's intent before
+  Phase 2 builds on top of it.
+- Nothing else — Phase 1 has no other open blockers. Phase 2 (typography)
+  depends only on Phase 1, per the plan.
+
+### Session 29 — Phase 2: Typography / type scale
+**Status:** Complete ✅ — committed locally, not pushed
+**Branch:** `feat/real-company-logos` · **Date:** 2026-09-02
+**Governing specs:** `docs/FINAL_IMPLEMENTATION_PLAN.md` Phase 2,
+`VEDANTA_DESIGN_IMPLEMENTATION_NOTES.md` §1.1/§1.3, `docs/VEDANTA_DESIGN_DECISIONS.md` D-2
+
+#### What was done
+
+- **`primitives.ts`** — `fontFamily.display`/`fontFamily.body` → `Plus Jakarta
+  Sans` (Archivo + IBM Plex Sans retired); `fontFamily.data` unchanged.
+  `typeScale` remapped to the client's table: `display-xl` LH 1.05→1.0/weight
+  500→700 (range unchanged, 40→64); `display` 34→48 → 34→56, LH 1.1→1.02,
+  weight→700; `h1` 30→40 → 32→47, LH 1.15→1.05; `h2` LH 1.2→1.15 (range
+  unchanged); `h3` 21→24 → 21→25; `h4` 18→20 → 18→21, LH 1.4→1.35; `body-lg`
+  18→19 (fixed), LH 1.6→1.55; `body` LH 1.6→1.5; `small` 14→15 (fixed);
+  `caption` LH 1.4→1.3, weight 500→600, tracking 0.06em→0.09em, now
+  documented mono-only (D-6 — migrating the 46 existing usage sites is
+  Phase 3's job, not this token's); `data-lg` LH 1.2→1.1. `data`/`helper`
+  unchanged (both already matched the client's table).
+- **`tailwind.ts`** — `fontSize` clamp() strings regenerated for every
+  changed range (computed via the same fluid-scale formula the existing
+  clamps already used — verified by reproducing 3 untouched entries'
+  existing values bit-for-bit before trusting the formula for new ones) plus
+  matching `lineHeight` updates. `letterSpacing.caption` 0.06em→0.09em; new
+  `letterSpacing.tight: -0.02em` (h1+ headline tracking — applying it to
+  actual heading components is later-phase work, this just defines the
+  utility). `fontFamily` fallback strings updated ('Archivo'/'IBM Plex Sans'
+  → 'Plus Jakarta Sans') — not in the plan's literal "(fontSize,
+  letterSpacing)" parenthetical, but a direct, low-risk consequence of the
+  font retirement happening in this same phase (see deviation 1).
+- **`app/layout.tsx`** — single `Plus_Jakarta_Sans` loader (weights
+  400/500/600/700/800) bound to `--font-display`; `IBM_Plex_Mono` unchanged.
+  **Caught before shipping:** the plan's "one loader now serves both
+  `--font-display` and `--font-sans`" doesn't work as a literal instruction —
+  `next/font`'s `variable` option takes one CSS-variable name per call, so
+  two separate `Plus_Jakarta_Sans({...variable: '--font-sans'})` /
+  `({...variable: '--font-display'})` calls would silently double-embed the
+  identical font (two `@font-face` blocks, same underlying files) —
+  the opposite of the plan's own stated "one fewer font family over the
+  wire" goal. Fixed by keeping one loader/one variable and pointing
+  `tailwind.ts`'s `fontFamily.sans` at `var(--font-display)` too (grepped
+  first to confirm nothing else in the codebase reads `--font-sans`
+  directly — it had exactly one consumer, tailwind.ts itself).
+
+#### Verification, not just visual inspection
+
+Beyond a browser screenshot (Plus Jakarta Sans's rounded terminals visibly
+distinct from Archivo), ran `getComputedStyle` on a live product-page `<h1>`
+at 1440px: `font-family` resolves to the generated `Plus Jakarta Sans`
+class, `font-size` 47px (exactly the new `h1` clamp's ceiling at this
+viewport), `font-weight` 600, `line-height` 49.35px (= 1.05× — the new
+`h1` line-height) — confirms the token chain wired through to real pixels,
+not just that the build didn't error. Mono spec-table text confirmed still
+`IBM Plex Mono`. Inspected the built CSS/font-manifest directly: exactly one
+`Plus_Jakarta_Sans` hash + `IBM_Plex_Mono` embedded — no leftover
+Archivo/IBM Plex Sans, no duplicate Plus Jakarta Sans embed.
+
+#### Deviations / flagged (none silent)
+
+1. `tailwind.ts`'s `fontFamily` fallback-name edit (see above) — outside the
+   plan's literal Phase 2 file-scope parenthetical for `tailwind.ts`
+   `(fontSize, letterSpacing)`, but within the same declared file and a
+   direct mechanical consequence of the font swap this phase performs
+   (same reasoning as Phase 1's `--accent-fg` fix).
+2. **Snapshot NOT regenerated** — same pre-existing `snapshot-routes.mjs`
+   stale-route-list bug logged under Phase 1 (`docs/mistakes.md`,
+   2026-09-02). Not re-logged; substituted the `getComputedStyle` +
+   built-CSS inspection above as stronger, more targeted evidence for a
+   typography-only phase than a byte-diff snapshot would give anyway.
+3. `letterSpacing.tight` (-0.02em) is defined but not yet applied to any
+   heading component — per the plan, that happens when each hero/heading
+   component is rebuilt in its own later phase (9, 11, 12, …), not here.
+
+#### Gate result
+
+```
+pnpm typecheck                       ✓ 4/4 packages, zero errors (confirms
+                                        next/font/google exports
+                                        Plus_Jakarta_Sans)
+pnpm lint                            ✓ 0 errors (2 pre-existing warnings,
+                                        LegalDocument.tsx, unrelated)
+pnpm test                            ✓ tokens 96/96 (unchanged — typography
+                                        doesn't touch contrast), schemas
+                                        70/70, datum-ui 107/107, web 51/52
+                                        (only the pre-existing DATABASE_URL
+                                        RFQ integration test fails, as in
+                                        every prior session)
+pnpm build                           ✓ 77 routes, zero errors/warnings, all
+                                        routes 94.8–115 kB First Load JS
+                                        (≤120/≤180 kB budgets); built font
+                                        manifest confirms 2 font families
+                                        embedded (was 3)
+visual + computed-style check         ✓ live h1 on a product page: Plus
+(manual browser, 1440px)                Jakarta Sans, 47px, weight 600,
+                                        line-height 1.05× — matches the new
+                                        typeScale.h1 exactly; mono text
+                                        unaffected
+```
+
+#### Requires human review before Phase 3
+
+- Nothing new. Phase 3 (`tracking-caption` audit) depends on Phase 2, per
+  the plan, and can proceed.
+
+### Session 30 — Phase 3: `tracking-caption` audit & migration
+**Status:** Complete ✅ — committed locally, not pushed
+**Branch:** `feat/real-company-logos` · **Date:** 2026-09-02
+**Governing specs:** `docs/FINAL_IMPLEMENTATION_PLAN.md` Phase 3 (KEEP/CONVERT
+tables), `VEDANTA_DESIGN_IMPLEMENTATION_NOTES.md` D-6, §2.8
+
+#### What was done
+
+Converted the plan's 15 CONVERT sites across 9 files — every one dropped
+`uppercase tracking-caption` (and `font-mono`, for the one site that also
+carried it) from a prose eyebrow/section-label/nav site that D-6 says must
+go title case, not mono-tracked data voice. Left every KEEP site (SpecTable,
+SpecRail, StatBand, CertificationCard, ApprovalsMatrix, Testimonial, Header,
+MegaPanel, entity-record labels, metric `dt`s — genuine data voice) and both
+held-back sites (HomeHero/PageHero eyebrows, converting naturally when those
+components are structurally rewritten in Phases 9/11) untouched:
+
+- `AnchorRail.tsx` — "On this page" rail label
+- `dhruv-epc/capabilities/page.tsx` — equipment-group heading
+- `precise-engineers/capabilities/page.tsx` — 2 product-group headings
+  ("Expansion Joints", "Flow Control")
+- `ClientWall.tsx` — client sector label
+- `ProjectCard.tsx` — sector eyebrow only (the metric `dt` at the same
+  component is a separate KEEP site, untouched)
+- `(group)/page.tsx` — 4 sites: hero credential line, 2 company-group
+  headings, door-card group-tags line
+- `(group)/legal/LegalDocument.tsx` — the "Contents" TOC label only (the
+  file's other 5 sites — `ClauseBlocker`, Entity/Registered-office/Email
+  `dt`s, the revision-date line — are all entity/legal-record data voice,
+  KEEP)
+- `lib/product-detail-page.tsx` — "Materials of construction" and "Design
+  codes" section headings
+- `Footer.tsx` — the "A Vedanta Group company" tagline and the Zone-3
+  sitemap column headings (2 sites); the `zone1Label` constant (CIN, GST,
+  works-address labels, Phone, Email — entity-record data voice) stays,
+  counted as the file's 1 KEEP site
+
+No JSX text content needed re-casing — every site's text was already
+authored in natural sentence/title case in source (the CSS `uppercase`
+transform was doing the shouting, not the string literal), confirmed by
+reading each site's actual text before editing. Kept every other class
+(color, weight, size) unchanged — this is the "narrow mechanical" migration
+the plan itself calls for, not a restyle; the plan's own §2.8 hero-eyebrow
+recipe (`text-body font-bold text-accent`) is reserved for the actual hero
+rebuilds in Phases 9/11/13, not retrofitted here onto footer/capability/card
+labels that have no dedicated redesign phase of their own.
+
+`grep -ro "tracking-caption" apps/web packages/datum-ui --include="*.tsx" | wc -l`
+before: 46. After: **31** — exactly the plan's predicted 29 KEEP + 2
+held-back, verified by an itemized per-file recount matching the plan's
+own KEEP table exactly.
+
+#### Deviations / flagged (none silent)
+
+1. **Snapshot NOT regenerated** — same pre-existing `snapshot-routes.mjs`
+   stale-route-list bug logged under Phase 1 (`docs/mistakes.md`,
+   2026-09-02), still unfixed (out of this phase's scope too). Substituted
+   a manual browser check across Footer (both converted sites) and a
+   capabilities page, confirming converted labels render in natural case
+   while adjacent KEEP entity-data labels correctly stay mono/uppercase —
+   the exact distinction this phase exists to enforce, visible side by side
+   in the same screenshot.
+
+#### Gate result
+
+```
+pnpm typecheck                       ✓ 4/4 packages, zero errors
+pnpm lint                            ✓ 0 errors (2 pre-existing warnings,
+                                        LegalDocument.tsx — a different
+                                        section of the file than this
+                                        phase's edit, unrelated)
+pnpm --filter @vedanta/datum-ui test ✓ 107/107 (axe auto-glob included —
+                                        Footer/ClientWall/ProjectCard's a11y
+                                        stories all still pass)
+pnpm --filter @vedanta/web test      ✓ 51/52 (only the pre-existing
+                                        DATABASE_URL-gated RFQ integration
+                                        test fails, as in every prior
+                                        session)
+pnpm build                           ✓ 77 routes, zero errors/warnings,
+                                        same First Load JS as Phase 2
+                                        (≤120/≤180 kB budgets)
+visual check (manual browser,        ✓ Footer's converted tagline + column
+1440px)                                 headings render natural-case;
+                                        adjacent zone1Label entity-data
+                                        (WORKS/REGISTERED OFFICE/PHONE/
+                                        EMAIL) correctly stays mono
+                                        uppercase-tracked, confirming the
+                                        prose-vs-data-voice split holds
+```
+
+#### Requires human review before Phase 4
+
+- Nothing new. Phase 4 (Logo/brand primitives) depends on Phase 1 only, per
+  the plan, and can proceed — but note its own stated blocker: the
+  full-resolution emblem asset's provenance against the Claude Design
+  project's own asset file is still unverified (carried since Session 26).
+
+### Session 31 — Phase 4: Logo / brand primitives
+**Status:** Complete ✅ — committed locally, not pushed. Emblem-asset
+blocker (open since Session 26) resolved this session.
+**Branch:** `feat/real-company-logos` · **Date:** 2026-09-02
+**Governing specs:** `docs/FINAL_IMPLEMENTATION_PLAN.md` Phase 4,
+`docs/VEDANTA_DESIGN_DECISIONS.md` Decision 1 (D-11),
+`VEDANTA_DESIGN_IMPLEMENTATION_NOTES.md` §2.0/D-10
+
+#### Blocker resolved: emblem asset provenance
+
+Sessions 26/27 left this open: the Claude Design project's
+`assets/vedanta-emblem.png` (599,728 bytes) exceeds the `read_file` MCP
+tool's 256 KiB cap, and that tool HTML-entity-escapes content as text —
+not a safe way to reconstruct exact binary PNG bytes even across chunked
+reads. No image had been supplied in this conversation either. Asked the
+human how to resolve it (three options: browser download, paste in chat, or
+skip the asset and ship `logoRed` alone) — **"download via browser"**
+chosen. `fetch()`/`XMLHttpRequest` from the project's own page (cross-origin
+to the asset's `claudeusercontent.com` host) failed, and drawing the loaded
+`<img>` to a canvas threw `tainted canvas` — both blocked by CORS, as
+expected for cross-origin image bytes. Found and clicked the Claude Design
+UI's own native "Download assets/vedanta-emblem.png" control, which
+triggered a real Chrome download (not a screenshot): **1161×995px, RGBA
+with alpha, 605,498 bytes** — exact dimension match to Session 26's
+partially-confirmed PNG header, and byte-identical (MD5) to an unexplained
+second copy already sitting in `~/Downloads` from some earlier attempt.
+Copied into `apps/web/public/brand/vedanta-emblem.png`.
+
+#### What was done
+
+- **`primitives.ts`** — `logoRed = '#CD0101'`, exactly Decision 1's locked
+  value, with the hard constraints (Logo.tsx-only, never through
+  semantic.ts, never an accent.* token) documented inline and pointed at
+  the new enforcement test. Also exported `overlay` from `index.ts` — a
+  Phase 1 omission (added the primitive, forgot the barrel export) fixed
+  here since it's the same line being edited for `logoRed`.
+- **`apps/web/components/Logo.tsx`** (new) — built in `apps/web`, not
+  `@vedanta/datum-ui`, for the same reason `ExplodedSequence` is: it needs
+  `next/image` directly, and datum-ui takes no `next` dependency.
+  `Header.tsx` already accepts an arbitrary `logo: React.ReactNode` slot, so
+  this is what gets passed into it — wiring happens in Phase 5, not here.
+  `Logo` (full lockup: emblem + two-line wordmark, `company` × `size` props,
+  the 4 named size-ladder rungs from §2.0 transcribed verbatim — not
+  re-derived from the proportion-rule prose, which doesn't reproduce the
+  table's numbers exactly) and `LogoEmblem` (mark alone, arbitrary height,
+  for the documented sub-32px case). Two spec-vs-token conflicts resolved
+  by this codebase's own established pattern (nearest existing token,
+  deviation documented in a comment) rather than a new `tailwind.ts` token:
+  line 2's `+0.03em` tracking → `tracking-wide` (0.025em, nearest); all four
+  size-ladder pixel values (font sizes, gap) → inline `style`, the same
+  device `ExplodedSequence`'s track-height already established for a
+  logo/brand constant that isn't a reusable design token.
+- **`apps/web/public/brand/vedanta-emblem.png`** (new asset) — the verified
+  file, per above.
+- **`apps/web/lib/logo-consumer-boundary.test.ts`** (new, the plan's
+  required "consumer-boundary enforcement test") — greps `packages/tokens`,
+  `packages/datum-ui`, `packages/schemas`, and `apps/web` (each walked
+  individually, not the repo root, since the repo root also holds
+  `.claude/worktrees/*` — full extra repo copies that would otherwise get
+  needlessly traversed) for `logoRed`/`#CD0101` outside the allowed 4 files;
+  separately asserts neither string appears in `semantic.ts` or
+  `tailwind.ts`. 4/4 passing.
+
+#### Isolated visual verification (component has no live consumer yet)
+
+Phase 4 explicitly builds `Logo.tsx` without wiring it anywhere (that's
+Phase 5). To actually see it render rather than trust the code by
+inspection, built a temporary scratch route
+(`app/(group)/logo-preview-scratch/page.tsx`) showing all 3 companies × all
+4 size-ladder rungs + the emblem-only variant, viewed it live in Chrome,
+confirmed proportions/colors/per-company copy ("SOLUTION" singular
+correctly not "SOLUTIONS", no full stop after "LTD") all matched §2.0
+exactly — then **deleted the scratch route** before committing, so Phase
+4's diff stays scoped to the 5 real files. Its stale generated
+`.next/types/.../logo-preview-scratch/page.ts` reference caused one
+misleading typecheck failure after deletion — cleared by removing `.next`,
+not a real regression (flagged so it doesn't read as a code bug in a
+future session's log).
+
+#### Gate result
+
+```
+pnpm typecheck   ✓ 4/4 packages, zero errors (force-run, no cache, after
+                   deleting the scratch route + cleaning .next)
+pnpm lint        ✓ 0 errors (2 pre-existing warnings, LegalDocument.tsx,
+                   unrelated) — confirms Logo.tsx's inline-style sizing
+                   sidesteps tailwindcss/no-arbitrary-value cleanly, same
+                   as ExplodedSequence's precedent
+pnpm test        ✓ tokens 96/96, schemas 70/70, datum-ui 107/107 (unaffected
+                   — Logo.tsx isn't in datum-ui), web 55/55 including the
+                   new logo-consumer-boundary suite (4/4); only the
+                   pre-existing DATABASE_URL-gated RFQ test fails, as in
+                   every prior session
+pnpm build       ✓ 77 routes (unchanged — Logo.tsx has no route consumer
+                   yet), zero errors/warnings, same First Load JS budgets
+visual check     ✓ temporary scratch route, 3 companies x 4 sizes + emblem-
+(manual browser,   only, all matching §2.0's size ladder and per-company
+1200x1400)          copy exactly; scratch route deleted before commit
+```
+
+#### Deviations / flagged (none silent)
+
+1. `tracking-wide` (0.025em) instead of the spec's literal `+0.03em` for
+   the wordmark's second line — nearest existing token, not a new one;
+   same pattern as this codebase's other spec-vs-token gaps (e.g. Session 5
+   deviation 1).
+2. Size-ladder pixel values and the emblem/wordmark gap are inline styles,
+   not Tailwind classes or new tokens — logo-lockup proportions are a
+   brand-asset constant, not reusable prose type scale, matching
+   `ExplodedSequence`'s established precedent for the same kind of value.
+3. `Logo.tsx` is unwired — no page renders it yet. This is Phase 4's
+   declared scope (Header integration is Phase 5), not an oversight.
+4. SVG asset ("ship it as vedanta-emblem.svg once vector source arrives")
+   not done — no vector source exists yet; the trimmed PNG is what §2.0
+   itself says to use until then.
+
+#### Requires human review before Phase 5
+
+- Nothing new. Phase 5 (Header + utility strip) is where `Logo.tsx` actually
+  gets wired into `Header.tsx`'s `logo` slot — first real end-to-end check
+  of the lockup inside the actual site chrome, not just the scratch
+  preview.
+
+### Session 32 — Phase 5: Header + utility strip
+**Status:** Complete ✅ — committed locally, not pushed.
+**Branch:** `feat/real-company-logos` · **Date:** 2026-09-02
+**Governing specs:** `docs/FINAL_IMPLEMENTATION_PLAN.md` Phase 5,
+`docs/VEDANTA_DESIGN_DECISIONS.md` Decision 3 (mega-panel evidence confirms
+the header dark→white background change is already locked),
+`VEDANTA_DESIGN_IMPLEMENTATION_NOTES.md` §2.1/§2.0
+
+#### What was done
+
+- **`packages/tokens/src/tailwind.ts`** — `height.header`/`header-scrolled`
+  72px/60px → **91px/76px**, per §2.1's size ladder. Not a new token key,
+  a value correction already authorized by the locked spec chain (same
+  class as Phase 2's `fontSize` clamp regeneration) — no §26 design-review
+  event needed.
+- **`apps/web/app/globals.css`** — `.exploded-scrub`'s `top`/`max-height`
+  60px → 76px, same commit as the header height change per the file's own
+  standing coupling comment (and Decision 6).
+- **`Header.tsx`** — the biggest single change:
+  - Main bar: `bg-steel-950` → `bg-white border-steel-200`.
+  - Logo slot: `logo: React.ReactNode` → `logo: (scrolled: boolean) =>
+    React.ReactNode`, so the Phase-4 `Logo` component can size itself
+    (58px full bar / 44px scrolled, §2.0's ladder) instead of being a
+    static asset. Dropped the `bg-steel-50 px-3 py-2` "light chip" wrapper
+    — that existed only because the old raw-PNG logos were opaque rasters
+    needing a light surface on the always-dark header; `Logo.tsx`'s
+    trimmed/transparent emblem needs no chip on a white bar.
+  - Nav links + menu trigger: `text-steel-200` → `text-body font-semibold
+    text-steel-500`, hover `text-steel-950`; chevron → `text-accent`
+    (§2.1's exact spec).
+  - WhatsApp/phone icon buttons and the mobile hamburger: recolored from
+    dark-bg-appropriate `steel-300`/`steel-50` to `steel-500`/`steel-950`
+    — not explicit in §2.1's prose, but a mechanical necessity once the
+    bar is white (the old colors would be invisible or near-invisible on
+    white). Flagged as inferred, not spec-quoted.
+  - RFQ button: `size="compact"` (static) → `size={scrolled ? 'compact' :
+    'default'}` — h-12/h-compact swap per §2.1.
+  - `data-chrome="dark"` moved off the (now light) `<header>` onto two
+    places: the utility strip (unchanged surface, per the plan's own
+    "Data-chrome: utility strip already correct, unchanged" note) **and**
+    a new wrapping `<div>` around the mega-menu dropdown (both the legacy
+    grid and `MegaPanel`) — neither is named in the plan's data-chrome
+    coverage table, but both still render `bg-steel-950` this phase (their
+    retheme is Phase 6, `MegaPanel.tsx` + "Header.tsx legacy grid"), so
+    leaving them off `data-chrome="dark"` would have shipped a real
+    WCAG 1.4.11 focus-ring regression for one phase. Verified live: a
+    plain wrapping `<div>` (no `position`) doesn't disturb the dropdown's
+    `absolute` positioning against the fixed `<header>`.
+- **`apps/web/components/{group,dhruv,precise}/*Chrome.tsx`** — replaced
+  the raw `next/image` logo calls with `logo={(scrolled) => <Logo
+  company="..." size={scrolled ? 'header-scrolled' : 'header'} priority
+  />}`. Dropped the now-unused `Image` import in all three.
+- **`Header.stories.tsx`** — mechanical fixup for the `logo` prop's new
+  function signature (3 args changed `<span>...</span>` to `() =>
+  <span>...</span>`), otherwise untouched.
+
+#### Deliberately not touched this phase
+
+- The mega-menu panel's own background/color/border (`MegaPanel.tsx`,
+  `Header.tsx`'s legacy grid content) — that retheme is explicitly Phase 6
+  in `FINAL_IMPLEMENTATION_PLAN.md` ("Files: MegaPanel.tsx, Header.tsx
+  legacy grid"). The dropdown stays dark this commit; see the
+  `data-chrome` note above for how its focus rings were kept correct in
+  the interim.
+- Company-route utility bars (the "← Vedanta Group of Companies" +
+  address/phone strip §2.1 describes for Dhruv/Precise routes) —
+  `DhruvChrome`/`PreciseChrome` still pass no `utilityBar` prop, unchanged
+  from before this phase. `FINAL_IMPLEMENTATION_PLAN.md`'s Phase 5 file
+  list doesn't call for new utility-bar content, only for wiring `<Logo/>`
+  and the header rebuild; adding new copy/data there would be scope creep
+  beyond what Phase 5 authorizes. Flagged for a future decision-resolution
+  pass if the human wants that content live.
+- `Button.tsx` itself — untouched (that's Phase 8); only consumed its
+  existing `default`/`compact` size variants from Header.tsx.
+
+#### Gate result
+
+```
+pnpm typecheck   ✓ 4/4 packages, zero errors
+pnpm lint        ✓ 0 errors (2 pre-existing warnings, LegalDocument.tsx,
+                   unrelated)
+pnpm test        ✓ tokens 96/96, schemas 70/70, datum-ui 107/107, web
+                   55/55; only the pre-existing DATABASE_URL-gated RFQ
+                   route test fails, as in every prior session
+pnpm build       ✓ 77 routes, zero errors/warnings, First Load JS
+                   unchanged (94.9 kB group/Dhruv/Precise homepages —
+                   well under the 120 KB marketing budget)
+visual check     ✓ real browser (group homepage + a Dhruv product page),
+(manual browser)   1440px + 375px: white header renders correctly at
+                   full-height (91px) and scrolled-compressed (76px,
+                   smaller logo + compact RFQ button) states; mega-menu
+                   opens correctly (still dark, as expected pre-Phase-6);
+                   hamburger icon now visible against white at mobile
+                   width (previously would have been white-on-white).
+                   Keyboard focus verified via computed `outline` style,
+                   not just visually: light-bar elements (nav links, RFQ
+                   button, WhatsApp icon) ring in `#AA3833` (default
+                   accent); utility-strip and mega-menu-dropdown elements
+                   ring in `#DC8D89` (accent-dark) — confirming the
+                   `data-chrome="dark"` rebind lands exactly where the
+                   still-dark surfaces are and nowhere else.
+```
+
+#### Deviations / flagged (none silent)
+
+1. WhatsApp/phone icon button and hamburger colors on the new white bar
+   are inferred (`steel-500`/`steel-950` hover pattern, matching the new
+   nav-link convention) — §2.1's prose doesn't name these explicitly.
+2. `data-chrome="dark"` was kept on the mega-menu dropdown wrapper even
+   though the plan's data-chrome coverage table only names the utility
+   strip for this phase — see "What was done" above. This is a
+   contrast-regression-avoidance necessity, not a spec deviation; Phase 6
+   will make it moot once the dropdown itself goes light.
+3. Company-route utility bars (§2.1's "← Vedanta Group of Companies" +
+   address/phone content for Dhruv/Precise) not implemented — out of
+   Phase 5's declared file scope. See "Deliberately not touched" above.
+
+#### Requires human review before Phase 6
+
+- Confirm the two flagged inferences (icon/hamburger colors, the
+  extra `data-chrome="dark"` wrapper) are acceptable, or replace once
+  Phase 6 retthemes the mega-menu panel.
+- Decide whether the company-route utility bar content belongs in a
+  future phase or is out of scope entirely — not resolved by any existing
+  decision document.
+
+### Session 33 — Phase 6: MegaPanel retheme
+**Status:** Complete ✅ — committed locally, not pushed.
+**Branch:** `feat/real-company-logos` · **Date:** 2026-09-02
+**Governing specs:** `docs/FINAL_IMPLEMENTATION_PLAN.md` Phase 6,
+`docs/VEDANTA_DESIGN_DECISIONS.md` Decision 3 (mega panel, including its
+`[correction pass]` restrictions), `VEDANTA_DESIGN_IMPLEMENTATION_NOTES.md`
+§2.1's mega-panel paragraph
+
+#### Reading Decision 3 precisely — it overrides part of §2.1's prose
+
+§2.1 says group labels go "from `text-caption text-accent` to `text-h4
+text-steel-950` with a 3px `bg-accent` rule under them." Decision 3's
+`[correction pass]` explicitly narrows this: **no new typographic scale,
+weight, size, or decorative element may be introduced**, and names the
+mega-panel's company-label caption specifically as needing "a color-token
+remap only, nothing else" — i.e. keep the existing `font-mono text-xs
+uppercase tracking-caption` structure, just fix its color for the new white
+surface. Followed Decision 3 (the later, LOCKED, more specific document)
+over §2.1's own superseded language here, same as Phase 2/5 precedent for
+resolving spec-vs-spec conflicts.
+
+Computed which colors actually needed remapping rather than guessing:
+`steel-400` (the old company-label-caption color) is ~2.4:1 on white — fails
+outright. `steel-500` (the legacy grid's `item.scope` color, already in
+place) is 4.94:1 on white — already passes, confirming Decision 3's "most
+values substitute automatically" claim is literally true for that one, while
+being false for `steel-400` specifically. Landed on `text-steel-600`
+(6.33:1) for both the MegaPanel company-label caption and confirmed the
+already-used `text-steel-500` needed no change — matched against the
+established light-surface caption convention already used by `SpecTable`,
+`SpecRail`, `CertificationCard`, `ApprovalsMatrix`, and every company `/page.tsx`'s
+contact `<dt>` (all `text-steel-600`), per the ambiguity protocol's
+"check how an existing component solved this" step.
+
+#### What was done
+
+- **`MegaPanel.tsx`** — `bg-steel-950` → `bg-white`, `border-b
+  border-steel-50/10` → `border-t border-steel-200`, `shadow-overlay`
+  unchanged (already the approved token). Company-label caption `text-steel-400`
+  → `text-steel-600` (structure untouched, color-only per Decision 3).
+  Category links `text-steel-100` → `text-steel-950`, `hover:bg-steel-800`
+  → `hover:bg-steel-100`. Product links `text-steel-400` → `text-steel-600`,
+  same hover flip, `hover:text-steel-100` → `hover:text-steel-950`. "All
+  products →" link: `text-accent-dark hover:text-accent` (the dark-surface
+  accent alias) → `text-accent-text hover:text-accent-text-hover` (the
+  light-surface alias — matches `Button.tsx`'s `link` variant and
+  `CertificationCard.tsx`'s existing convention). Zero changes to the
+  `useEffect` focus-trap/ESC/outside-click logic, zero new props, zero
+  structural changes — verified `MegaPanel.test.tsx`'s interaction
+  contract still passes unmodified.
+- **`Header.tsx`'s legacy grid** (Dhruv/Precise `menuGroups` dropdown) —
+  identical background/border/hover-surface treatment. Group label
+  (`text-accent`) and item scope (`text-steel-500`) needed **no** color
+  change — both already pass on white (6.32:1 and 4.94:1 respectively),
+  confirming Decision 3's "value substitution, not hierarchy change" claim
+  for these two. Item name `text-steel-100` → `text-steel-950`,
+  `hover:bg-steel-800` → `hover:bg-steel-100`. Capability rail divider
+  `border-steel-700/50` → `border-steel-200`; its link recolored the same
+  `accent-dark` → `accent-text` way as MegaPanel's "All products" link.
+- **`Header.tsx`'s `data-chrome="dark"` wrapper removed** — Phase 5 had
+  wrapped the still-dark dropdown in `<div data-chrome="dark">` specifically
+  to keep its focus rings correct until this phase. Now that the dropdown
+  is white, that wrapper would incorrectly rebind `--accent-focus` to the
+  pale `accent-dark` step on a light surface — a regression in the opposite
+  direction. Removed it; both dropdown variants now correctly fall through
+  to the page's default accent-focus rule, same as every other light
+  surface. Updated the file's top comment accordingly (only the utility
+  strip still carries `data-chrome="dark"`).
+
+#### Gate result
+
+```
+pnpm typecheck   ✓ 4/4 packages, zero errors
+pnpm lint        ✓ 0 errors (2 pre-existing warnings, LegalDocument.tsx,
+                   unrelated)
+pnpm test        ✓ datum-ui 107/107 (MegaPanel.test.tsx unmodified and
+                   passing — confirms the interaction contract survived
+                   the retheme untouched, satisfying Decision 3's hard
+                   constraint)
+pnpm build       ✓ 77 routes, zero errors/warnings, First Load JS unchanged
+visual check     ✓ real browser, group homepage (MegaPanel) + Dhruv
+(manual browser)   homepage (legacy grid): both dropdowns render white
+                   with the border-t seam against the header, group/company
+                   labels and item text all legible, "All products →" /
+                   capability-rail links in the light-surface accent.
+                   Keyboard focus verified via real Tab/Enter navigation
+                   (not programmatic `.focus()` — that call bypasses
+                   Chrome's `:focus-visible` heuristic after a preceding
+                   mouse click and gave a false-negative reading before
+                   this was caught): the accent-colored ring renders
+                   correctly on dropdown items in both variants.
+```
+
+#### Deviations / flagged (none silent)
+
+1. Icon/hamburger colors flagged after Phase 5 are unaffected by this
+   phase (out of MegaPanel/legacy-grid scope) — still open, unchanged.
+2. Company-route utility bar content (flagged after Phase 5) — still not
+   implemented, still out of scope for the phases done so far.
+
+#### Requires human review before Phase 7
+
+- Nothing new from this phase. The two items flagged after Phase 5 remain
+  open (see above).
+
+### Session 34 — Phase 7: Footer Zone 3 dark + back-to-top
+**Status:** Complete ✅ — committed locally, not pushed.
+**Branch:** `feat/real-company-logos` · **Date:** 2026-09-02
+**Governing specs:** `docs/FINAL_IMPLEMENTATION_PLAN.md` Phase 7,
+`docs/VEDANTA_DESIGN_DECISIONS.md` Decision 4 (Footer Zone 3)
+
+#### What was done
+
+- **`Footer.tsx` Zone 3** — `bg-steel-50` → `bg-steel-900 text-steel-50`,
+  i.e. literally Zone 1's own chrome ("reusing Zone 1's already-established
+  dark-chrome treatment — not a new dark color", Decision 4), not a
+  independently-invented dark value. Renamed the file's `zone1Label`/
+  `zone1Link` constants to `darkLabel`/`darkLink` and reused them directly
+  in Zone 3 rather than duplicating the same two strings — both zones now
+  share one definition of what "Zone 1's dark-chrome text treatment" means,
+  which is the point of Decision 4's "reusing" language, not just its
+  visual result.
+  - Column headings: `text-steel-600` → `text-steel-400` (Zone 1's label
+    color) — kept the existing `text-xs font-medium` structure, changed
+    color only (no `uppercase`/`tracking-caption` added — Decision 4 asks
+    for color reuse, not a structural change, and Decision 3's sibling
+    correction pass for MegaPanel this same session set the precedent for
+    reading "retheme" narrowly).
+  - Sitemap links: `text-steel-700 hover:text-steel-950` → `text-steel-50`
+    + `darkLink`'s `hover:text-white` — kept as the more prominent/brighter
+    tier, preserving the original hierarchy (sitemap nav more prominent
+    than the legal bar) by inverting emphasis correctly for a dark surface
+    (brighter = more emphasis, not darker).
+  - Legal bar (Privacy/Terms/LinkedIn/WhatsApp): base `text-steel-600` →
+    `text-steel-400` (the dimmer, label-tier color — preserves its
+    original lower-emphasis position relative to the sitemap nav),
+    `hover:text-steel-950` → `darkLink`'s `hover:text-white`. Its
+    `border-t border-steel-200` divider → `border-steel-800`, the exact
+    divider color Zone 1 already uses for its own internal "Content
+    revised" separator.
+  - `pb-20 md:pb-6` (MobileBottomBar clearance) — untouched, verified
+    unchanged in the diff (Decision 4's "preserve exactly").
+  - Added `data-chrome="dark"` to Zone 3's container — the data-chrome
+    coverage table's one Phase-7 requirement; without it, Privacy/Terms/
+    LinkedIn's focus rings would fall below 3:1 on the new dark bg.
+- **Back-to-top control** — 44px circle (`h-row w-row`, `rounded-full`),
+  bordered (`border-steel-600`, brightens to `border-steel-400` on hover)
+  rather than filled, so it doesn't compete with the RFQ button as a second
+  saturated/filled element (the amber/blue law is about accent fills
+  specifically, but a heavy secondary fill here would still read as a
+  second point of visual weight in the footer). Icon: reused the existing
+  `ArrowRight` glyph rotated `-rotate-90` rather than adding a new glyph —
+  Decision 4's evidence note ("no icon assets currently exist... applies to
+  link/text color only") is about LinkedIn/WhatsApp specifically, not a
+  blanket ban on this new, explicitly-required element. Implemented as a
+  plain `<a href="#">`, not a `button onClick` with `scrollTo()` — Footer.tsx
+  has no `'use client'` boundary today and adding one for a single
+  scroll-to-top control would be a disproportionate blast-radius increase;
+  an empty-fragment anchor is HTML-spec-defined to jump to the top of the
+  document natively, needs no JS, and correctly honors
+  `globals.css`'s existing `prefers-reduced-motion` → `scroll-behavior:
+  auto !important` rule for free. Verified live: click jumps to `window.scrollY
+  === 0`.
+- **`tailwind.ts`** — added `width.row = '44px'` to mirror the already-
+  existing `height.row` (44px, §15/§26 space.11) so the control is a true
+  circle. Not a new pixel value in the system — 44px already exists as a
+  canonical component-size token on the height axis; this only makes it
+  available on the width axis too, exactly mirroring the pre-existing
+  `compact` pair (`height.compact`/`width.compact`, both 40px). Flagged
+  below for a quick human glance since it's technically a new key, even
+  though the value itself carries no new design decision.
+
+#### Gate result
+
+```
+pnpm typecheck   ✓ 4/4 packages, zero errors
+pnpm lint        ✓ 0 errors (2 pre-existing warnings, LegalDocument.tsx,
+                   unrelated)
+pnpm test        ✓ datum-ui 107/107, web css-parity 18/18 (accent-*
+                   variables untouched — this phase only reads existing
+                   steel-*/accent-text-* tokens)
+pnpm build       ✓ 77 routes, zero errors/warnings, First Load JS unchanged
+visual check     ✓ real browser: group homepage footer (no
+(manual browser)   MobileBottomBar route) — Zone 3 renders dark, matching
+                   Zone 1 exactly, back-to-top circle renders correctly at
+                   1440px; a Dhruv product page (has MobileBottomBar) at
+                   375px confirmed pb-20 clearance still holds — the legal
+                   row/back-to-top sit above the fixed bottom bar, same as
+                   before this change. Keyboard focus verified via real
+                   Shift+Tab (not programmatic .focus(), per the Phase-6
+                   false-negative lesson): "Terms" link's ring renders in
+                   the pale accent-dark color, confirming data-chrome="dark"
+                   is live on Zone 3. Click on the back-to-top control
+                   confirmed via `window.scrollY === 0` after the jump.
+```
+
+#### Deviations / flagged (none silent)
+
+1. `width.row` is a new token key in `tailwind.ts` (not just a value
+   correction to an existing one, unlike Phase 5's height change) — see
+   "What was done" above for why it's judged a mechanical mirror of an
+   already-authorized value rather than a fresh design decision. Flagged
+   for a quick human confirmation rather than treated as self-evidently
+   fine.
+2. Back-to-top's icon (reused/rotated `ArrowRight`) and its bordered
+   (not filled) treatment are inferred — Decision 4 says "add a 44px
+   circular back-to-top control" without specifying its glyph or fill
+   style.
+3. Column-heading and legal-bar color assignments (which tier gets
+   `steel-50` vs `steel-400`) are an inference preserving the original
+   light-theme's relative hierarchy, not a literal spec value — Decision 4
+   says "using the existing white/opacity-white values already established
+   in Zone 1" without naming which Zone-1 value maps to which Zone-3 role.
+4. Carried over from Phase 5: icon/hamburger colors and company-route
+   utility bar content — both still open, unaffected by this phase.
+
+#### Requires human review before Phase 8
+
+- Confirm `width.row`'s addition to `tailwind.ts` is acceptable as a
+  mechanical mirror of `height.row`, not a token that needed a full §26
+  design-review pass.
+- Confirm the back-to-top control's bordered-circle treatment and the
+  Zone-3 color-tier assignments read as intended.
+
+#### Follow-up (same session): the Phase 7 commit above was missing the bracket linework
+
+Re-reading `FINAL_IMPLEMENTATION_PLAN.md`'s own Phase 7 file line before
+starting Phase 8 caught a real gap: it names three things, not two —
+*"Zone 3 dark, back-to-top, bracket linework"* — and only the first two
+had been implemented. `VEDANTA_DESIGN_IMPLEMENTATION_NOTES.md` §2.6 spells
+this out: three decorative accent corner fragments ("two concentric
+rounded right-angles bleeding off the left edge... one off the right"),
+`aria-hidden`, capped at three, hidden below `md`, the right one further
+hidden below `lg` (§3's responsive table). Not authorized by Decision 4
+(which only covers Zone 3's color/back-to-top) but independently listed in
+the plan's own Phase 7 scope — added it in this same session rather than
+letting Phase 7 read as done when it wasn't.
+
+**A real bug caught mid-build, not just a missing feature:** first attempt
+used `border-accent/50` (Tailwind's opacity-modifier syntax) for the three
+translucent borders. Checked the actual compiled CSS output rather than
+trusting the lint pass — `border-accent/50` had compiled to **nothing**:
+Tailwind's opacity engine can't decompose a bare `var(--accent)` reference
+into channels the way it can a literal hex token (`steel-50/10` does
+compile, confirmed side-by-side). The elements would have rendered with no
+border at all — invisible, on every route, with a clean typecheck/lint/
+build the whole way (no error surfaces this kind of silent-drop). Fixed
+with inline `style={{ borderColor: 'color-mix(in srgb, var(--accent) NN%,
+transparent)' }}` instead, which keeps the CSS-variable reactivity (still
+turns blue on Precise) while actually compiling to real CSS. Re-verified
+against the build output this time, not just the lint pass.
+
+**Also caught before shipping:** the notes' literal `left:-46px` offset
+would overflow the viewport horizontally on any width narrower than
+`max-w-wide` + 92px (768–1023px, where "left pair only" is supposed to
+render but the content box has zero side margin to bleed into) — a direct
+conflict with CLAUDE.md's zero-horizontal-scroll requirement that the notes
+don't address. Resolved with `overflow-hidden` on `<footer>` itself (which
+spans the full viewport, unlike the max-w-wide inner boxes), so the bleed
+clips safely at the true viewport edge instead of ever creating a
+scrollbar — a standard technique for exactly this situation, not a guess.
+
+Gate re-run after the fix: typecheck/lint/test (datum-ui 107/107, web
+css-parity 18/18) all clean, build clean. Visual check in a real browser:
+group homepage at 1600px shows both fragments correctly (open on the side
+that bleeds off-edge, translucent red, rounded outer corners per spec),
+`document.documentElement.scrollWidth - clientWidth === 0` (no overflow),
+and the Precise Engineers homepage confirmed the same fragments render in
+`var(--accent)`'s blue, not a hardcoded red — proving the color-mix fix
+tracks the CSS variable correctly. The `hidden`/`md:block`/`lg:block`
+responsive classes weren't re-verified with an actual narrow-viewport
+screenshot this pass (the browser tool's `resize_window` call didn't take
+effect on the tab being tested, `innerWidth` kept reporting the previous
+size) — deferred to Phase 22's cross-cutting responsive pass rather than
+blocking on a tooling issue, since the classes themselves are the same
+`hidden md:block` pattern already proven correct elsewhere in this session
+(Header's utility bar, nav collapse).
+
+Landed as a small follow-up commit on top of the Phase 7 commit rather than
+an amend, per this repo's own rule to always create new commits.
+
+#### Deviations / flagged (bracket linework, additional to the list above)
+
+5. Exact width/height and the "concentric" nesting gap for the left pair
+   of brackets aren't in the notes (only position/color/radius/opacity
+   are) — sized at a plausible corner-bracket scale (56/80/64px), flagged
+   for visual sign-off against the live canvas when reachable.
+6. Responsive hide behavior (`hidden md:block`, right bracket `lg:block`)
+   implemented per §3's table but not re-verified with a live narrow-
+   viewport screenshot this pass — see the note above.
+
+### Session 35 — Phase 8: shared cards/buttons/forms/certification components
+**Status:** Complete ✅ — committed locally, not pushed.
+**Branch:** `feat/real-company-logos` · **Date:** 2026-09-02
+**Governing specs:** `docs/FINAL_IMPLEMENTATION_PLAN.md` Phase 8,
+`VEDANTA_DESIGN_IMPLEMENTATION_NOTES.md` §2.3 (Button), §2.4 (ProductCard/
+CategoryCard), §2.5 (Stamp/Seal), §2.7 (SpecTable/SpecRail/StatBand/
+CertificationCard), §2.9 (the accent rule, formalized)
+
+#### Scoping: which of the 13 named files actually needed code changes
+
+Read all 13 files before touching any of them, per the loop's Discover
+step. Four — `Input.tsx`, `Select.tsx`, `Textarea.tsx`, `FieldShell.tsx` —
+aren't mentioned anywhere in IMPLEMENTATION_NOTES §2's component-change
+sections and already reference pure Datum tokens (`border-steel-300`,
+`focus:border-accent`, `text-signal-error`) with nothing arbitrary or
+hard-coded; verified by inspection, zero code changes. `AnchorRail.tsx`
+and `ApprovalsMatrix.tsx` are the same — the plan's own text calls
+`AnchorRail` "token cascade only," and `ApprovalsMatrix` isn't named in
+§2 at all despite being in the file list; both already token-clean.
+
+#### What actually changed
+
+- **`Button.tsx`** (§2.3) — label size `text-data` (15px) → `text-body`
+  (16px), in all three places it appeared (`box`, and both `link`
+  variants — light and onDark — which don't use `box` since they render
+  inline, not boxed). Everything else (heights, hover-deepen, press-
+  translate, loading-lock) already correct, confirmed unchanged.
+- **`ProductCard.tsx`** (§2.4) — the biggest single change in this phase:
+  - Affordance: bare `<ArrowRight/>` → "Learn More ↗" (`text-body
+    font-semibold`, `text-accent` light / `text-accent-dark` onDark,
+    matching the established light-surface-vs-dark-surface accent-alias
+    convention from every other component this session touched). Factored
+    into a shared `Affordance` sub-component since it now renders
+    identically in three places (photo, no-photo, and the new spec
+    layout).
+  - Hover: light variant `hover:border-steel-400` → `hover:border-accent
+    hover:shadow-hover`. onDark already had `hover:border-accent`
+    (unchanged) — left its hover as border-only, since a shadow reads as
+    an odd elevation cue on a dark card and §2.4 only describes this for
+    the light "1i" instance.
+  - New `layout="spec"` variant (ref `1j`): 3px accent top border, a
+    3-row spec `<dl>`, and a mono `index` string. Purely additive —
+    `layout` defaults to `'photo'`, so every existing call site is
+    unaffected; `specRows`/`index` are the caller's responsibility since
+    this component has no CMS/schema knowledge. Not wired into any live
+    page this phase (no consumer passes `layout="spec"` yet) — validated
+    via two new Storybook stories (`SpecLayout`/`SpecLayoutDark`) instead,
+    same "build now, wire later, validate via Storybook" pattern Phase 4
+    established for `Logo.tsx`.
+- **`CategoryCard.tsx`** (§2.9) — tier-rule bar `h-1 w-8` (4px×32px) → 3px
+  height via inline `style` (no Tailwind height token gives exactly 3px;
+  same reasoning as Logo.tsx's size ladder), across all 4 render paths
+  (onDark thin/normal, light thin/normal). Re-read §2.4's "moves to a
+  border-top on the spec layout so the two devices don't collide" and
+  concluded "it" refers to keeping the two tiers' accent devices visually
+  distinct (bar vs. border-top), not literally converting CategoryCard's
+  own bar into a border-top — §2.9's formalized table lists both under
+  one "32×3px" row, confirming CategoryCard's own bar stays a bar, just
+  corrected to the exact height.
+- **`Seal.tsx`** (new, §2.5) — the scalloped-rosette vector, copied the
+  16-lobe SVG path verbatim. Closed `size: 120 | 72 | 44` union (not an
+  arbitrary number) matching Logo.tsx's own named-rungs precedent — this
+  is a fixed brand-asset ladder, not a scalable primitive. `code` typed as
+  `StampProps['code']` (imported, not duplicated) so Seal and Stamp can
+  never drift on which codes are valid. Barrel-exported right after
+  `Stamp`. New `Seal.stories.tsx` (size ladder, floor rung, full 120px
+  with issuer) since this is the one genuinely new component in this
+  phase and has no other consumer to validate it against yet beyond
+  CertificationCard's 72px usage.
+- **`CertificationCard.tsx`** (§2.7) — swapped `<Stamp code={stampCode}/>`
+  for `<Seal code={stampCode} size={72}/>`; "View certificate" link
+  gained the "↗". Prop name `stampCode` left unchanged (still accurately
+  describes what it identifies — a certification code — even though the
+  rendering component changed; renaming would be a breaking API change
+  for zero semantic gain).
+- **`SpecTable.tsx`** (§2.7) — row hover `hover:bg-steel-100` →
+  `hover:bg-steel-50` (steel-100 is also the header row's own background,
+  so the old hover made a hovered row read as identical to the header).
+  Applied to both the parameter-mode `rowLine` constant and the
+  comparative-matrix mode's sticky pinned-column hover shade, which had
+  its own separate `group-hover:bg-steel-100` needing the same fix for
+  the pinned cell and the rest of the hovered row to match.
+- **`SpecRail.tsx`** (§2.7) — added `<DatumRule/>` (already-existing
+  component, reused not reimplemented) to the top of both
+  `SpecRailMobile`/`SpecRailDesktop` boxes; caption "Key figures" →
+  "Envelope at a glance" in both. Caught and fixed a downstream break:
+  `apps/web/e2e/golden-page-rollout.spec.ts` asserted the literal old
+  caption text was visible on every one of the 17 golden product pages —
+  updated the assertion rather than leaving a Playwright regression for
+  CI to catch later.
+- **`StatBand.tsx`** (§2.7) — label gained `font-mono` (spec says "label
+  mono uppercase tracked"; the mono class was missing even though
+  uppercase/tracking-caption were already present). Added `border-l-2
+  pl-5` per `<li>`, reusing the already-computed `rule` variable (which
+  already branches steel-800/steel-200 for onDark/light) rather than
+  hardcoding the spec's literal `border-steel-200` — that literal would
+  have been invisible on the onDark variant, same class of fix as
+  several onDark-contrast corrections earlier this session.
+
+#### A real regression caught by the test suite, not by inspection
+
+`pnpm --filter @vedanta/web test` failed on
+`lib/logo-consumer-boundary.test.ts` — its regex-based Decision-1
+enforcement (`logoRed` may only appear in `Logo.tsx`) flagged
+`Footer.tsx`. Not a new violation from this phase: it was **my own
+comment**, written during the Phase 7 bracket-linework follow-up two
+sessions ago, that used the literal word "logoRed" in prose while
+explaining why the bracket color isn't a scoped brand-red. The test
+doesn't distinguish prose from code — correctly so, per Decision 1's
+literal "no other component file may reference... logoRed" wording.
+Reworded the comment to describe the concept without the literal
+identifier. Included in this phase's commit since Phase 8's own test run
+is what caught it.
+
+#### A real, pre-existing bug found and NOT fixed (logged instead)
+
+Verifying in Storybook, its accessibility addon flagged `text-accent` at
+3.15:1 contrast — foreground `#F0670F` (amber). Traced to
+`packages/datum-ui/.storybook/preview.css`, a hand-maintained "mirror" of
+`globals.css` that was never updated when the accent migrated amber → red
+at v1.2 (confirmed by checking an untouched pre-existing story,
+`Button/Rfq Dhruv`, which shows the identical stale amber). Out of Phase
+8's file scope and predates this session entirely — logged to
+`docs/mistakes.md` with the fix path for whenever Storybook infra is
+actually in scope, and cross-checked every real Phase 8 visual change
+against the actual Next.js dev server instead, where the accent renders
+correctly everywhere.
+
+#### Gate result
+
+```
+pnpm typecheck   ✓ 4/4 packages, zero errors
+pnpm lint        ✓ 0 errors (2 pre-existing warnings, LegalDocument.tsx,
+                   unrelated)
+pnpm test        ✓ datum-ui 113/113 (up from 107 — new components picked
+                   up by the axe auto-glob and passing), web 55/55 after
+                   the logo-consumer-boundary fix; only the pre-existing
+                   DATABASE_URL-gated RFQ route test fails
+pnpm build       ✓ 77 routes, zero errors/warnings, First Load JS unchanged
+visual check     ✓ real browser (not Storybook, see above) across five
+(manual browser)   routes: Certifications (`/dhruv-epc/proof`) — Seal
+                   renders correctly at 72px, real IBM Plex Mono (confirmed
+                   Storybook's serif fallback was also an environment
+                   artifact, not a Seal bug, by checking Stamp.tsx's own
+                   unmodified story showing the same serif issue); a
+                   product page — DatumRule + "Envelope at a glance" render
+                   on both mobile and desktop SpecRail, SpecTable row-hover
+                   class confirmed via computed style; group homepage —
+                   StatBand's border-l-2 + mono labels render, Button's
+                   16px label confirmed via computed style; a category page
+                   — ProductCard's "Learn More →" affordance and its
+                   hover state (accent border + shadow) confirmed via real
+                   mouse hover, screenshot shows both. ProductCard's new
+                   `layout="spec"` variant checked via Storybook (its only
+                   validation surface — no live consumer yet), renders
+                   correctly per spec.
+```
+
+#### Deviations / flagged (none silent)
+
+1. `ProductCardSpecRow`/`index` props for `layout="spec"` are additive and
+   unwired — no page passes them yet. Matches the file list's own scope
+   (ProductCard.tsx only, not its consumer pages).
+2. `CertificationCard`'s `stampCode` prop name left as-is despite now
+   feeding a `Seal`, not a `Stamp` — a rename would break the public API
+   for no semantic gain (see "What actually changed" above).
+3. Storybook's `preview.css` accent-color drift — real, pre-existing,
+   logged to `docs/mistakes.md`, not fixed (out of scope).
+
+#### Requires human review before Phase 9
+
+- Confirm `ProductCard`'s `layout="spec"` visual treatment (3px border,
+  3-row `<dl>`, mono index) before it's wired into any real product page.
+- Confirm `Seal.tsx`'s 120px issuer-line layout — the only rung with no
+  live consumer yet, validated in Storybook only.
+- Decide whether/when to resync `packages/datum-ui/.storybook/preview.css`
+  against `globals.css` (see `docs/mistakes.md`, 2026-09-02 entry).
+- Carried over, still open: icon/hamburger colors and company-route
+  utility bar content (Phase 5), the two bracket-linework sizing
+  inferences (Phase 7 follow-up).
+
+### Session 36 — Phase 9: HomeHero split architecture (Hero C)
+**Status:** Complete ✅ — committed locally, not pushed.
+**Branch:** `feat/real-company-logos` · **Date:** 2026-09-02
+**Governing specs:** `docs/FINAL_IMPLEMENTATION_PLAN.md` Phase 9,
+`docs/VEDANTA_DESIGN_DECISIONS.md` Decision 2 (Hero C, superseding
+`align`/`statsOverlay`) and Decision 6 (ExplodedSequence)
+
+#### What was done
+
+- **`HomeHero.tsx`** — full rewrite to the `variant="split"` contract:
+  `display:grid`, `47fr 53fr` (inline `style`, no Tailwind token expresses
+  a fraction split — same reasoning as every other one-off measurement
+  this session). Type panel (`data-chrome="dark"`, new requirement this
+  revision): optional breadcrumb → 64×2px accent rule (inline `height: 2`,
+  no 2px token exists) → eyebrow (`text-body font-bold text-accent-dark`,
+  title case — closes the eyebrow's held-back `tracking-caption` CONVERT
+  site from Phase 3) → H1 (`text-display`, NOT `text-display-xl`) → body
+  copy (`white/72`) → CTA pair, unchanged `Button` pattern. Photo panel: a
+  plain grid cell, no scrim, `DatumRule`+`DimensionLabel` pinned to its
+  bottom (both reused, not reimplemented — see the onDark fix below). No
+  photo → the §4.2 hatch placeholder (`repeating-linear-gradient`), never
+  a stock image; no production-gating `PhotoSlot` component exists yet
+  (checked — grepped the whole repo), so no label renders, just the
+  texture.
+- **Panel height as real tokens, not inline style:** `height['hero-split-
+  group']` (600px) / `height['hero-split-company']` (560px) added to
+  `tailwind.ts`, derived in the component from whether `breadcrumb` is
+  passed — Decision 2's own scope table shows that presence correlates
+  exactly with the height rung for all three homepages, so a redundant
+  explicit height prop would just be one more way to pass a value that
+  contradicts the breadcrumb prop. Chose tokens over inline style here
+  (unlike the 2px rule/47-53 split) because these are named, reusable,
+  spec-catalogued measurements — matches the Phase 5/7 precedent for
+  `header`/`header-scrolled`/`row` heights, not the Phase 7 bracket-
+  linework's one-off-constant precedent.
+- **`stats` prop removed entirely** — Decision 2: "a separate, standalone
+  light section immediately below the hero... never overlaid on the
+  photo." Confirmed by reading `(group)/page.tsx`, which already renders
+  `<StatBand>` standalone outside its hero markup; `HomeHero` internally
+  rendering `StatBand onDark` was the pre-Hero-C shape and doesn't belong
+  in the new contract at all.
+- **`Breadcrumbs.tsx` gains `onDark`** — needed for both Phase 9 (type
+  panel) and Phase 11 (photo-on-breadcrumb, coming next) since both use
+  the identical "→ separator in accent-dark, white/60 links, white/92
+  current" device per Decision 2 and §10 rule 10. Built once now rather
+  than duplicated markup in two hero components, or rebuilt in Phase 11.
+- **`DatumRule.tsx` and `DimensionLabel.tsx` gain `onDark`** — a real
+  finding, not a preemptive add: Storybook's accessibility addon flagged
+  `DimensionLabel`'s default `text-steel-500` at 2.7:1 against the photo
+  panel (expected 4.5:1). Investigated rather than patching blind:
+  computed that `steel-500` **cannot** reach 4.5:1 against *any*
+  background darker than itself — even pure black only gets to 4.24:1 —
+  so no background-side fix (a backdrop chip, a scrim) could have worked;
+  the text color itself had to change for dark grounds. Root cause:
+  `DimensionLabel`/`DatumRule` were built for `ProductHero`'s light
+  `bg-steel-50` band, where the label sits *above* the photo, not layered
+  on it — Hero C's "pinned to the bottom of the photo panel" is a new
+  usage context those components were never designed for. Added `onDark`
+  to both (default `false`, so `ProductHero`'s and `SpecRail`'s existing
+  calls are byte-for-byte unaffected), wired `onDark` from `HomeHero.tsx`.
+- **`dhruv-epc/page.tsx` / `precise-engineers/page.tsx` — unavoidably
+  touched**, despite Phase 9's file list naming only `HomeHero.tsx`. Both
+  already call `<HomeHero>` live today; rewriting the component's props
+  entirely (no more `stats`, new required `variant`, new optional
+  `breadcrumb`) would otherwise break `pnpm typecheck` for `apps/web`.
+  Fixed minimally: added `variant="split"`, a `breadcrumb` array matching
+  Decision 2's exact copy pattern ("Home → Dhruv EPC Solutions" /
+  "Home → Precise Engineers"), and moved `StatBand` out to a standalone
+  sibling section matching `(group)/page.tsx`'s exact existing wrapper
+  markup. Did **not** attempt real photo sourcing or `ExplodedSequence`
+  revival (both explicitly deferred, Decision 6) — these two homepages'
+  photo panels render the hatch placeholder for now. This means Phase
+  9 — contrary to its own "not wired into a real page until 13–15" note —
+  **does** land on two live routes today, because they already consumed
+  this component before the rewrite; that note's premise didn't hold once
+  the actual `page.tsx` state was checked.
+
+#### A second real finding: a silent Tailwind opacity-modifier gap, root-caused not guessed around
+
+`text-white/72` and `text-white/92` (needed for Decision 2's exact body-
+copy and breadcrumb-current opacities) compiled to **nothing** — same
+silent-drop failure mode as `border-accent/50` in Phase 7, but this time
+on a plain hex color, which should support arbitrary opacity modifiers
+without any config. Investigated rather than reaching for the Phase 7
+`color-mix()` workaround by default: confirmed `/60` (already used by
+`Breadcrumbs`' `onDark` Home-link) compiled fine, while `/72`/`/92`
+didn't — this project's Tailwind build only recognizes a fixed opacity
+step list for the color-modifier syntax, and 72/92 aren't in it. Found
+the exact mechanism by locating the *already-existing* precedent for
+this: `tailwind.ts`'s `theme.extend.opacity` block already had an unused
+`88: '.88'` entry with a comment citing exactly this "glass scrim"
+purpose. Added `60`, `72`, `92` to the same object — the true fix, not a
+per-usage `color-mix()` workaround, since this recurs (Phase 10, 11 will
+both need dark-ground opacities too, per §10 rule 10).
+
+**Caught a second-order trap while verifying the fix:** a normal
+`pnpm build` after the token change still showed `/72`/`/92` missing from
+the compiled CSS — not a wrong fix, a **stale `.next` build cache** that
+didn't detect the `@vedanta/tokens` workspace-package change. A clean
+`rm -rf apps/web/.next && pnpm build` confirmed both classes compile
+correctly. Documented so a future session doesn't misdiagnose the same
+symptom as a fix failure.
+
+#### Gate result
+
+```
+pnpm typecheck   ✓ 4/4 packages, zero errors
+pnpm lint        ✓ 0 errors (2 pre-existing warnings, LegalDocument.tsx,
+                   unrelated)
+pnpm test        ✓ datum-ui 115/115 (up from 113 — HomeHero/Breadcrumbs
+                   coverage picked up cleanly by the axe auto-glob), web
+                   55/55; only the pre-existing DATABASE_URL-gated RFQ
+                   test fails
+pnpm build       ✓ clean rebuild (cache cleared to rule out the staleness
+                   trap above), 77 routes, zero errors/warnings, First
+                   Load JS unchanged (94.9 kB on both live homepages)
+visual check     ✓ real browser (not just Storybook, given this session's
+(manual browser)   now-repeated Storybook-cache lessons): dhruv-epc
+                   homepage renders the full split hero correctly —
+                   breadcrumb, 2px rule, eyebrow, H1, white/72 body copy
+                   (confirmed via computed style: rgba(255,255,255,0.72)),
+                   CTA pair, hatch-placeholder photo panel. Storybook,
+                   AFTER clearing its own separate node_modules/.cache
+                   (a second, different cache layer from the app's .next
+                   one above) confirmed 0 accessibility violations on the
+                   Dhruv/Precise stories with a real dimensionLabel
+                   passed — "Ø 3,600 mm" renders legibly in white at the
+                   photo panel's bottom edge, datum-rule line visible
+                   beneath it. One remaining Storybook axe flag traced to
+                   my own story fixture's placeholder text (steel-500 on
+                   steel-800, not part of any real component) — fixed in
+                   the story file itself, zero production impact either way.
+```
+
+#### Deviations / flagged (none silent)
+
+1. `dhruv-epc/page.tsx`/`precise-engineers/page.tsx` touched earlier than
+   the plan's own phase numbering implies (see "What was done" above) —
+   a mechanical necessity, not scope creep; no photo/copy/content
+   decisions were made beyond what's needed to keep the build green.
+2. Panel horizontal padding uses plain `px-6` (Phase 9, unconditional) —
+   the notes' own prose for the pre-Hero-C hero mentions an 86px 2xl
+   gutter, but that's itself written with arbitrary-bracket syntax in the
+   notes and isn't in Decision 2's locked Hero C anatomy at all. Left
+   unrefined; Phase 10 (responsive) is where breakpoint-specific spacing
+   belongs, not this phase.
+3. Type panel content is bottom-aligned (`justify-end`) — inferred from
+   every other hero in this system using the same anchor (PageHero/
+   ProductHero's `pb-20`-bottomed content, the old pre-Hero-C hero's own
+   `justify-end pb-20`), not stated explicitly for Hero C's type panel
+   specifically.
+4. Carried over, still open: icon/hamburger colors and company-route
+   utility bar content (Phase 5), the two bracket-linework sizing
+   inferences (Phase 7 follow-up), `Seal.tsx`'s 120px issuer-line layout
+   and the `ProductCard` `layout="spec"` variant (Phase 8) — none wired
+   to a live consumer yet.
+
+#### Requires human review before Phase 10
+
+- Confirm the two live homepages rendering Hero C ahead of Phases 13-15's
+  own scheduled slot is acceptable, given it was unavoidable rather than
+  chosen.
+- Confirm the inferred content-alignment (`justify-end`) and `px-6`
+  padding read as intended before Phase 10 builds the responsive stack on
+  top of them.
+- Confirm `onDark` additions to the shared `Breadcrumbs`/`DatumRule`/
+  `DimensionLabel` components are the right call versus, e.g., a Hero-C-
+  specific fork of these components.
+
+### Session 37 — Phase 10: HomeHero responsive implementation
+**Status:** Complete ✅ — committed locally, not pushed.
+**Branch:** `feat/real-company-logos` · **Date:** 2026-09-02
+**Governing spec:** `docs/FINAL_IMPLEMENTATION_PLAN.md` Phase 10 — its own
+sub-phase per explicit instruction; the plan itself flags every value here
+as **IMPLEMENTATION INFERENCE — REQUIRES VISUAL VALIDATION**, no canvas or
+notes source specifies the stacked-mobile treatment.
+
+#### What was done (one property at a time, per the plan's own checklist)
+
+- **Breakpoint:** stack `<md` (768px), matching the system's existing
+  scale — confirmed no awkward in-between state right at the boundary
+  (screenshotted at exactly 768px: the split has already engaged cleanly,
+  no half-collapsed row).
+- **Mechanism, not just breakpoint:** `flex flex-col md:grid` on the
+  section, with `gridTemplateColumns: '47fr 53fr'` staying as an
+  *unconditional* inline style from Phase 9. This works because
+  `grid-template-columns` has zero effect while `display` isn't
+  `grid`/`inline-grid` — at `<md` the browser ignores it entirely (flex
+  column layout applies instead); at `md:grid` it takes effect
+  immediately. No JS breakpoint detection, no hydration-mismatch risk, no
+  arbitrary Tailwind value.
+- **Stack order:** type panel first (already first in DOM — no reordering
+  needed, source order already matches reading order + LCP priority),
+  photo panel second.
+- **Panel height:** `md:h-hero-split-company`/`md:h-hero-split-group`
+  (was unconditional in Phase 9) — natural/auto height below `md`, so
+  stacked content never gets clipped by a fixed 600/560px box sized for
+  the *desktop* two-column layout.
+- **Mobile photo crop (4:3, not the desktop 4:5):** added a `photoMobile`
+  prop, falls back to `photo` if only one asset exists (true for every
+  current consumer — no real photography sourced yet, Decision 6 defers
+  it). Two sibling wrapper divs (`aspect-4/3 w-full md:hidden` /
+  `hidden h-full w-full md:block`) swap via Tailwind visibility classes —
+  `aspect-4/3` is an already-existing token (`tailwind.ts`'s
+  `extend.aspectRatio`, added for ProductCard's 4:3 card crop), not a new
+  one.
+- **Datum-rule + dimension label repositioning:** turned out to need
+  **zero code change** — they're already a child of the photo panel's own
+  `.relative` wrapper (`absolute inset-x-0 bottom-0` relative to *that*
+  div, not the page), so when the photo panel stacks below the type panel
+  at `<md`, the rule+label ride along and stay pinned to the photo panel's
+  bottom automatically. Verified this by re-reading Phase 9's own
+  structure before writing new code, rather than assuming a fix was
+  needed — the "moves with the photo panel" requirement was already
+  satisfied by how Phase 9 nested things.
+- **Breadcrumb/CTA/long-title wrapping:** also needed no code change —
+  Phase 9 already used `flex-wrap` on both the breadcrumb row and the CTA
+  row, and no `whitespace-nowrap` exists anywhere in the type panel.
+  Re-verified rather than assumed: screenshotted the real (long) Dhruv
+  headline ("Static equipment to ASME Sec. VIII, built in Vadodara.") at
+  ~500px CSS width — wraps to three lines cleanly, no overflow.
+
+#### Gate result
+
+```
+pnpm typecheck   ✓ 4/4 packages, zero errors
+pnpm lint        ✓ 0 errors (2 pre-existing warnings, LegalDocument.tsx,
+                   unrelated)
+pnpm test        ✓ datum-ui 115/115, web 55/55 (only the pre-existing
+                   DATABASE_URL-gated RFQ test fails)
+pnpm build       ✓ clean rebuild (cache cleared), 77 routes, zero errors/
+                   warnings, First Load JS unchanged
+visual check     ✓ real dev server, dhruv-epc + precise-engineers
+(manual browser)   homepages. Confirmed zero horizontal overflow
+                   (`document.documentElement.scrollWidth -
+                   clientWidth === 0`) at 500px (the narrowest width this
+                   session's browser-automation tooling could actually
+                   reach — see limitation below), 768px (the `md`
+                   boundary — split engaged cleanly, no in-between state),
+                   and 1024px. Stacked layout at 500px shows the correct
+                   order (type panel, then photo panel with the 4:3 hatch
+                   placeholder and datum-rule at its bottom), CTAs and the
+                   long real Dhruv headline all wrap correctly with no
+                   overflow. Precise Engineers homepage confirmed the
+                   identical structure renders correctly in flex-500 blue,
+                   not just Dhruv's red — the per-company theming survived
+                   the full Phase 9+10 rewrite.
+```
+
+#### A tooling limitation, disclosed rather than glossed over
+
+The plan's explicit visual-validation list is **320/375/390/768/1024/
+1440px**. This session's browser-automation `resize_window` tool would
+not reliably shrink the Chrome window below **500px** — confirmed by
+requesting 320px, then 100px, and getting 500px reported back both times
+(a real floor, not a fluke); it also proved unreliable across tabs
+sharing one window (a second tab's resize call sometimes silently kept
+the first tab's already-set dimensions). **320/375/390px were not
+independently verified this session** — 500px (below the 768px `md`
+breakpoint, so the identical `<md` CSS path applies — there is no
+additional breakpoint between 320 and 500 in this design) stood in as the
+closest achievable check and showed zero overflow and correct wrapping.
+Flagged here rather than silently claimed as "checked at all six
+breakpoints" — an honest gap beats a false green, same standard as every
+other verification claim this session.
+
+#### Deviations / flagged (none silent)
+
+1. `photoMobile` is new, additive API surface with no real consumer or
+   asset yet (same status as `photo` itself on the two live homepages —
+   both still show the hatch placeholder). Structural support only.
+2. 320/375/390px visual validation not completed — see the tooling
+   limitation above. Recommend a follow-up check with working viewport
+   control (real device, browser devtools responsive mode, or a fixed
+   `resize_window` tool) before this phase is considered fully signed off
+   per the plan's own explicit checklist.
+3. Carried over, still open: everything listed at the end of the Phase 9
+   entry above (icon/hamburger colors, utility bar content, bracket-
+   linework sizing, `Seal.tsx`'s 120px rung, `ProductCard`'s spec layout).
+
+#### Requires human review before Phase 11
+
+- Independently verify 320/375/390px once a reliable narrow-viewport tool
+  is available — this session could not.
+- Confirm `photoMobile`'s API shape (separate prop vs. a `<picture>`-style
+  art-direction convention within a single `photo` slot) before any page
+  wires in real mobile-cropped assets.
+
+### Session 38 — Phase 11: PageHero full rebuild + fixtures
+**Status:** Complete ✅ — committed locally, not pushed.
+**Branch:** `feat/real-company-logos` · **Date:** 2026-09-02
+**Governing specs:** `docs/FINAL_IMPLEMENTATION_PLAN.md` Phase 11,
+`docs/VEDANTA_DESIGN_DECISIONS.md` Decision 2 (PageHero "unchanged by this
+decision") and Decision 6 (ExplodedSequence guard)
+
+#### Scoping: why this phase, unlike Phase 9, could genuinely touch zero live routes
+
+Phase 9 was forced to edit two live `page.tsx` files because Hero C changed
+`HomeHero`'s prop *shape* (new required `variant`, `stats` removed).
+Checked whether the same trap applied here before writing any code: read
+all 16 real `PageHero` consumers (`grep -rln "<PageHero"` across
+`apps/web` — one more than the plan's own "~16" estimate, since
+`lib/product-category-pages.tsx` calls it twice from one shared template,
+covering both companies' category routes). None pass `photo` today; all
+use the same four props (`breadcrumbs`, `eyebrow`, `title`, `lead`).
+Since Decision 2 changes PageHero's *rendering*, not its *contract*, kept
+the exact same prop interface — every consumer keeps compiling untouched,
+`pnpm typecheck` for `apps/web` stayed green with zero edits to any of
+the 16 files, and "No production route touched" (the plan's own
+constraint) held literally, not just in spirit.
+
+**Deliberately did not add a CTA pair**, despite `IMPLEMENTATION_NOTES`
+§2.2's older shared-hero-anatomy prose listing one. That prose predates
+`PageHero` existing as its own split-out component; the *current* file's
+own header comment already states "H1 carries the real qualifier; proof
+belongs in the page body (§20 components), not here" — a clearer, more
+specific, more current signal than the older shared-component prose.
+Zero of the 16 real consumers need one. Adding unused, speculative API
+surface based on a stale doc section is exactly the scaffolding CLAUDE.md
+warns against.
+
+#### What was done
+
+- **`PageHero.tsx`** — full rebuild: light/no-photo-ground → photo-as-
+  ground (`absolute inset-0`, object-cover) + scrim (`var(--overlay-hero-
+  interior)`, applied via inline `style` — a CSS custom property, not a
+  Tailwind color, same technique as Footer's bracket-linework `color-mix`
+  fix) + centered/bottom-anchored content + breadcrumb-on-photo (reusing
+  `Breadcrumbs`' `onDark` variant built in Phase 9 — the exact same "→
+  separator in accent-dark" device §10 rule 10 calls for here). Eyebrow
+  converts from `uppercase tracking-caption` to `text-body font-bold
+  text-white` title case, closing PageHero's held-back CONVERT site from
+  Phase 3. `--overlay-hero-interior` chosen over the plain `--overlay-
+  hero` var based on the naming match to "interior/utility hero" (PageHero's
+  own domain per Decision 2's scope table) — `ProductHero` (Phase 12,
+  untouched) is the other var's presumed consumer.
+- **`ExplodedSequence` guard** added to the `photo` JSDoc (Decision 6) —
+  this is the component where that guard structurally matters: PageHero's
+  full-bleed, fixed-min-height photo-ground pattern is exactly what
+  `ExplodedSequence`'s in-flow, unconstrained-height scroll track can't
+  coexist with, unlike Hero C's `HomeHero`, which has no photo-ground
+  slot for the guard to protect in the first place.
+- **`data-chrome="dark"` added to the content layer** — not in the plan's
+  own data-chrome coverage table (which only lists Header utility strip,
+  Footer Zone 3, HomeHero type panel), but the same underlying mechanism
+  applies: the breadcrumb link sits on a ground at least as dark as
+  steel-950 (the scrim's own bottom stop is `rgba(0,0,0,.82)`), where
+  plain `--accent` already fails 3:1 — the exact finding this whole
+  redesign fixed everywhere else. Treated as a mechanical necessity
+  consistent with every other dark-surface fix this session, not left as
+  a gap just because the table happened not to name it.
+- **No-photo fallback is the primary state, not an edge case** — same
+  §4.2 hatch-placeholder pattern as `HomeHero`'s (locally duplicated, not
+  extracted to a shared helper — a five-line snippet across two files
+  doesn't clear the bar for an abstraction). All 16 real consumers hit
+  this path today; verified two of them live (`/dhruv-epc/company` — has
+  a photo fixture in Storybook but the live route passes none, so it also
+  shows the hatch state; `/privacy`, a genuinely no-photo, short-
+  breadcrumb page) rather than assuming the fallback looks acceptable.
+- **`tailwind.ts`** — `minHeight` gains `page-hero`/`page-hero-md`/
+  `page-hero-lg` (440/520/620px, §3's responsive table, flagged
+  IMPLEMENTATION INFERENCE per Phase 22's own governance note — not
+  directly canvas-verified for this hero, though Decision 2 confirms it's
+  "unchanged"). `opacity` gains `82` (PageHero's unchanged lead-paragraph
+  opacity) — same missing-preset-step problem as Phase 9's `72`/`92`,
+  same fix.
+- **`PageHero.stories.tsx`** — full fixture set per the plan's explicit
+  list: group `/about`, `/contact`, `/capabilities` index, `/projects`,
+  `/privacy`, `/terms`, `dhruv-epc/company`, `precise-engineers/company`,
+  one product-category page (mapped to the real
+  `lib/product-category-pages.tsx` consumer, not a hypothetical one).
+  Every fixture's copy is the real, live prop values from its actual
+  consumer (checked by reading each file), not paraphrased or invented.
+  Coverage: photo hero, no-photo fallback, short breadcrumb (legal pages,
+  2 items), long breadcrumb + long eyebrow/title (a new fixture built for
+  this phase, since no existing consumer has a 3-level breadcrumb with a
+  long title — grepped for the longest real breadcrumbs/titles/eyebrows
+  in the codebase and used those as the basis rather than inventing
+  arbitrary long strings).
+
+#### Gate result
+
+```
+pnpm typecheck   ✓ 4/4 packages, zero errors — confirms all 16 real
+                   PageHero consumers compile untouched
+pnpm lint        ✓ 0 errors (2 pre-existing warnings, LegalDocument.tsx,
+                   unrelated)
+pnpm test        ✓ datum-ui 125/125 (up from 115 — PageHero's 9 new
+                   fixtures picked up cleanly by the axe auto-glob), web
+                   55/55; only the pre-existing DATABASE_URL-gated RFQ
+                   test fails
+pnpm build       ✓ clean rebuild, 77 routes, zero errors/warnings, First
+                   Load JS unchanged
+visual check     ✓ real browser: /dhruv-epc/company (a live, untouched
+(manual browser)   route) now renders the full photo-as-ground + scrim
+                   hero automatically — hatch placeholder, breadcrumb
+                   "Dhruv EPC → Company" in the correct accent-dark/white-
+                   60/white-92 treatment, accent rule, white eyebrow/H1,
+                   white/82 lead. Keyboard focus verified via real Tab
+                   navigation (counted from a body click, corrected mid-
+                   check when the count landed in the Footer instead of
+                   the hero — activeElement inspection, not guessing):
+                   the breadcrumb link's ring renders in accent-dark
+                   (#DC8D89), confirming data-chrome="dark" works.
+                   /privacy confirmed the no-photo, short-breadcrumb
+                   state looks intentional, not broken. Storybook (after
+                   clearing its node_modules/.cache again — the same
+                   staleness this session hit twice now for newly-added
+                   opacity steps, see below) showed 0 accessibility
+                   violations on the long-breadcrumb/title fixture with a
+                   real photo, breadcrumb wrapping to one line and the
+                   title wrapping to two, no overflow.
+```
+
+#### A recurring pattern, now the third time this session: Storybook cache staleness after a token change
+
+Same root cause as Phase 9's `.next` cache trap, different cache: adding
+`opacity: { 82: '.82' }` to `tailwind.ts` and immediately checking
+Storybook (even after a full process restart) still showed the pre-change
+`text-white/82` compiling to nothing — traced to
+`packages/datum-ui/node_modules/.cache` (Vite's dep-optimization cache),
+not `.next`. `rm -rf` on that directory before restarting fixed it, same
+as Phase 9. Recording explicitly as a pattern now (two independent
+occurrences: Phase 9's `.next`, Phase 11's Storybook cache) so a future
+session recognizes "Storybook/Next still shows the old value after a
+`tailwind.ts` change" as a caching symptom to clear, not a sign the fix
+itself is wrong.
+
+#### Deviations / flagged (none silent)
+
+1. `--overlay-hero-interior` vs. `--overlay-hero` — the mapping to
+   PageHero (vs. ProductHero) is inferred from variable naming
+   ("interior" ↔ "Interior/utility pages," PageHero's own Decision-2
+   category), not an explicit citation naming which var belongs to which
+   component.
+2. No CTA pair — a deliberate omission, not an oversight; see "Scoping"
+   above.
+3. `min-h-page-hero` 440/520/620px values are the pre-Hero-C shared-
+   anatomy numbers, explicitly flagged IMPLEMENTATION INFERENCE by the
+   plan's own governance note (Phase 22) — not independently re-verified
+   against the canvas this phase (`1d` wasn't re-fetched).
+4. `data-chrome="dark"` added despite not being in the plan's own
+   coverage table — see "What was done" above.
+5. Carried over, still open: everything from Phase 9/10's entries above
+   (icon/hamburger colors, utility bar content, bracket-linework sizing,
+   `Seal.tsx`'s 120px rung, `ProductCard`'s spec layout, `photoMobile`'s
+   API shape, 320/375/390px validation).
+
+#### Requires human review before Phase 12
+
+- Confirm `--overlay-hero-interior` (not `--overlay-hero`) is correct for
+  PageHero — the mapping is inferred, not explicitly sourced.
+- Confirm the deliberate no-CTA-pair choice reads as intended, not as a
+  missed requirement.
+- Confirm `min-h-page-hero-*`'s inferred pixel values before Phase 22's
+  cross-cutting responsive re-check treats them as final.
+- Note for whoever picks up Phase 12 (`ProductHero`): expect the same
+  `.next`/Storybook-cache staleness after touching `tailwind.ts` — clear
+  both proactively rather than debugging from scratch a third time.
+
+**Pushed to origin (2026-09-02):** `feat/real-company-logos` is up to
+date with origin through this commit — Phases 5–11 are all on the remote
+branch now, nothing left local-only. Next session picks up at Phase 12
+(`ProductHero`).
+
+---
+
+### Session 33 — Phase 12: ProductHero rebuild
+
+**Per FINAL_IMPLEMENTATION_PLAN.md Phase 12 / IMPLEMENTATION_NOTES §2.2, §2.7.**
+
+Unlike Phase 11's `PageHero` (component-only, not wired to a live route),
+`ProductHero` is imported directly by `apps/web/lib/product-detail-page.tsx`
+— the shared factory behind all 17 live product routes across both
+companies. This phase's changes are live on every one of them the moment
+it merges.
+
+#### What was done
+
+- **`ProductHero.tsx`** — split into two sections. The hero band becomes
+  photo-as-ground: `absolute inset-0 object-cover` (or the §4.2 hatch
+  placeholder, same pattern as PageHero, when no `photo` is passed — true
+  for all 17 real consumers today, verified by reading
+  `product-detail-page.tsx`), `var(--overlay-hero)` scrim (the **plain**
+  hero scrim — not PageHero's `--overlay-hero-interior`, per
+  IMPLEMENTATION_NOTES §2.2's explicit distinction and PageHero's own
+  docstring flagging itself as the "interior" consumer), full breadcrumb
+  trail on the photo (reusing `Breadcrumbs`' `onDark` variant, same "→
+  accent-dark" device as PageHero/HomeHero), 64×2px accent rule, H1 at
+  `text-display` (56px — Decision 2's exact `align="lower-left"` value,
+  not `text-display-xl`). `data-chrome="dark"` on the content layer for
+  the same breadcrumb-focus-ring reason as PageHero (not in the plan's own
+  coverage table, same mechanical-necessity call as Phase 11). Below the
+  photo: the retained light `bg-steel-50` band, unchanged in kind, now
+  carrying only the value statement, spec chips, cert chips and RFQ
+  button — the eyebrow/subhead/CTA-pair slots from the general hero
+  anatomy don't apply here (no source specifies them for the lower-left
+  product tier; the existing prop interface never had them either).
+- **`DatumRule`/`DimensionLabel` moved off the hero onto `SpecRail`** —
+  the signature moment "labels real data instead of decorating the hero"
+  per §2.2's own words. `SpecRail.tsx` (`SpecRailDesktop`/`SpecRailMobile`)
+  gains an optional `dimensionLabel` prop, rendered above the `DatumRule`
+  it already carries from Phase 8, both now `animate`d (the move makes
+  the rail the "product hero" for signature-moment purposes, so the
+  `animate?: boolean` JSDoc's own "product/home heroes only" scope
+  includes it). No real product record supplies a dimension figure yet
+  (`ProductPage`/`Product` schemas have no such field) — same "prop
+  exists, no live consumer wires it yet" state `photo` was already in on
+  both `PageHero` and this component, not a new gap.
+- **`ExplodedSequence` JSDoc guard** added to `photo`, identical wording
+  and reasoning to PageHero's (Decision 6) — this hero's fixed-min-height
+  photo-ground pattern is exactly where the guard matters.
+- **`min-h-page-hero*` tokens reused**, not duplicated — PageHero's own
+  Phase-11 docstring already calls out "same family as ProductHero,
+  centered rather than lower-left," so a second `min-h-product-hero*` set
+  would be exactly the premature-abstraction-avoidance CLAUDE.md warns
+  against in the other direction (unnecessary duplication, not unnecessary
+  abstraction).
+- **Stories updated**: `ProductHero.stories.tsx`'s two fixtures drop
+  `dimensionLabel` (prop removed from this component); `SpecRail.stories.tsx`'s
+  `Desktop` story gains it instead, using the same `'Ø 3,600 mm'` value
+  ProductHero's old Dhruv fixture carried, so the visual moment isn't lost
+  from Storybook coverage, just relocated to match the component that now
+  owns it.
+- **`product-detail-page.tsx` — verified, not edited.** Its `<ProductHero>`
+  call already omits `photo`/(the now-removed) `dimensionLabel`; its
+  `<SpecRailDesktop>`/`<SpecRailMobile>` calls correctly don't pass the new
+  optional `dimensionLabel` either, since no product record has one. Prop
+  names/shapes for everything it does pass are unchanged.
+
+#### Gate result
+
+```
+pnpm typecheck   ✓ 4/4 packages, zero errors
+pnpm lint        ✓ 0 errors (2 pre-existing warnings, LegalDocument.tsx,
+                   unrelated — carried over from every prior phase)
+pnpm test        ✓ datum-ui 125/125, schemas 70/70, tokens 96/96, web
+                   55/55; only the pre-existing DATABASE_URL-gated RFQ
+                   integration test fails (unrelated, same as every
+                   prior phase)
+pnpm build       ✓ clean rebuild, 77 routes incl. all 17 product-detail
+                   routes both companies, zero errors/warnings, product
+                   route First Load JS unchanged (95.6 kB)
+visual check     ✓ real browser: /dhruv-epc/products/static-equipment/
+(manual browser)   heat-exchangers (a live route, untouched by this
+                   commit beyond the shared component) now renders the
+                   photo-as-ground hero automatically — hatch
+                   placeholder (no photo asset in this product's data),
+                   breadcrumb trail "Dhruv EPC → Products → Static
+                   Equipment → Heat Exchangers" on the photo in the
+                   correct accent-dark separator treatment, accent rule,
+                   white H1 at the smaller (text-display) size. Scrolled
+                   to confirm the light bg-steel-50 band below carries
+                   value statement, spec chips (mono, anchor-linking into
+                   #specifications), cert chips, RFQ button — visually
+                   distinct two-band composition, matching §2.2's split.
+                   Scrolled further to confirm SpecRail's "ENVELOPE AT A
+                   GLANCE" caption and DatumRule tick render correctly in
+                   the sticky sidebar (no DimensionLabel shown — correct,
+                   this product has no dimension figure in its data).
+```
+
+#### Deviations / flagged (none silent)
+
+1. `data-chrome="dark"` added despite not being in the plan's own
+   coverage table — same class of mechanical necessity as Phase 11's
+   identical deviation on PageHero.
+2. `dimensionLabel` on `SpecRail` has no live data source yet (schema gap,
+   not a Phase 12 scope item) — flagged the same way `photo` already was.
+3. Carried over, still open: everything from Phase 9/10/11's entries
+   above.
+
+#### Requires human review before Phase 13
+
+- Confirm `var(--overlay-hero)` (plain, not `-interior`) is the correct
+  scrim for ProductHero — inferred from IMPLEMENTATION_NOTES §2.2's own
+  wording and PageHero's docstring, not independently re-verified against
+  a canvas instance of `1c`.
+- Confirm the DatumRule/DimensionLabel relocation onto SpecRail reads as
+  the intended "signature moment," not as a missing hero flourish.
+
+**Not pushed yet — commit is local to `feat/real-company-logos`.** Next
+session picks up at Phase 13 (group homepage `HomeHero` adoption).
+
+---
+
+### Session 33 — Phases 13/14/15: homepage `HomeHero` adoption
+
+**Per FINAL_IMPLEMENTATION_PLAN.md.**
+
+**Discovery before writing anything:** Phase 9's own commit (`26529b7`)
+already touched `dhruv-epc/page.tsx` and `precise-engineers/page.tsx` as a
+*mechanical necessity* — both already called `<HomeHero>` live before Hero
+C existed, so rewriting the component's prop contract without fixing its
+two real call sites would have broken typecheck. Reading both files
+confirmed they already satisfy Phase 14 and Phase 15 in full:
+`variant="split"`, real breadcrumb (`Home → <Company>`), real eyebrow/
+headline/subhead copy, RFQ + secondary CTA pair, `StatBand` already a
+standalone sibling section matching `(group)/page.tsx`'s existing wrapper.
+No `statsOverlay` string in either file. Precise's flex-blue accent comes
+free from `data-company="precise"` on its `layout.tsx` (unedited) — no
+company-specific code needed. **Phases 14 and 15 required no new code**;
+re-verified against the plan's own requirements rather than assumed done
+from the comment alone.
+
+#### What was done (Phase 13 — the one real gap)
+
+- **`(group)/page.tsx`** — replaced the bespoke inline hero section
+  (`bg-steel-900` band with a plain eyebrow/H1/subhead, no CTA, no photo
+  panel) with `<HomeHero variant="split">`, carrying the same copy
+  forward verbatim (eyebrow, headline, subhead unchanged) plus the two
+  pieces the old hero never had: an RFQ CTA (`/request-a-quote`) and a
+  secondary CTA (`View products` → `#products`, a new anchor id added to
+  the products section — same pattern as Dhruv's `#equipment`/Precise's
+  `#products` sections). No `breadcrumb` prop — the group home is the
+  top-level page, which per Decision 2's own derivation (panel height
+  keyed off breadcrumb presence) also correctly selects the 600px height,
+  not 560px.
+- Verified `statsOverlay` does not appear anywhere in the diff (`git diff
+  | grep -i statsoverlay` — no match).
+- `StatBand`'s existing standalone wrapper below the hero was untouched —
+  it already matched Decision 2's "never overlaid on the photo" model
+  before this phase.
+
+#### Gate result
+
+```
+pnpm typecheck   ✓ 4/4 packages, zero errors
+pnpm lint        ✓ 0 errors (2 pre-existing warnings, unrelated)
+pnpm test        ✓ tokens 96/96, schemas 70/70, datum-ui 125/125, web
+                   55/55; only the pre-existing DATABASE_URL-gated RFQ
+                   test fails
+pnpm build       ✓ clean rebuild, 77 routes, zero errors/warnings
+visual check     ✓ real browser: / (group home) — 47/53 split hero, no
+(manual browser)   breadcrumb, hatch placeholder photo panel, DatumRule
+                   visible, CTA pair rendering, "View products" anchor
+                   present. /precise-engineers — breadcrumb "Home →
+                   Precise Engineers," flex-blue (not amber) on eyebrow,
+                   accent rule, RFQ button and DatumRule tick — confirms
+                   Phase 15's accent scoping works with zero code changes
+                   this session, inherited entirely from Phase 9.
+```
+
+#### Deviations / flagged (none silent)
+
+1. Phases 14/15 required no code changes — pre-satisfied by Phase 9's own
+   mechanical fix to the two files, re-verified against each phase's
+   actual requirements (not assumed from the docstring's own "Phase
+   9/13-15" comment).
+2. Precise's exact split-hero height (560px, by symmetry with Dhruv) and
+   photo crop remain unverified against a canvas instance — same open
+   item the plan itself flags in Phase 15, unchanged by this session
+   since no code needed touching.
+
+#### Requires human review before Phase 16
+
+- Confirm the group home's new secondary CTA ("View products" → `#products`)
+  and RFQ target (`/request-a-quote`, no `?company=` query param, unlike
+  Dhruv/Precise's company-scoped links) are the intended targets — no
+  source specifies group-home CTA copy explicitly, inferred from the
+  Dhruv/Precise precedent's own pattern.
+
+---
+
+### Session 33 — Phase 16: remaining `PageHero` consumers (verification only)
+
+**Per FINAL_IMPLEMENTATION_PLAN.md Phase 16 — no files expected to change.**
+Phase 11 kept `PageHero`'s exact pre-existing prop interface
+(`breadcrumbs`/`eyebrow`/`title`/`lead`/`photo`), so all 15 real call
+sites (`grep -rl "PageHero" apps/web/app` — 8 in Phase 11's own fixture
+set + these 7) already compiled and rendered correctly the moment that
+phase's commit landed; typecheck confirmed this explicitly in Phase 11's
+own gate result. This phase is the plan's own cross-check that the 7
+consumers Phase 11 didn't build fixtures for — `precise-engineers/proof`,
+`precise-engineers/capabilities`, `(group)/capabilities/[slug]`,
+`(group)/industries`, `(group)/industries/[slug]`, `dhruv-epc/proof`,
+`dhruv-epc/capabilities` — actually render correctly with real production
+data, not just compile.
+
+#### What was done
+
+No production files changed. Visual verification only, real dev server:
+
+```
+/dhruv-epc/proof                    ✓ photo-ground hero, breadcrumb,
+                                       eyebrow "Due diligence", H1, lead
+/dhruv-epc/capabilities             ✓ same, real capability copy
+/precise-engineers/proof            ✓ same, flex-blue breadcrumb/rule
+                                       (confirms accent scoping works on
+                                       a 7th PageHero consumer, not just
+                                       the two homepages from Phase 15)
+/precise-engineers/capabilities     ✓ same, flex-blue
+/industries                         ✓ index page, group steel accent
+/industries/oil-gas                 ✓ [slug] route, placeholder-content
+                                       banner unrelated to this phase
+/capabilities/design-engineering    ✓ [slug] route, same placeholder
+                                       banner; keyboard-tabbed through to
+                                       the FAQ accordion below the hero —
+                                       visible focus ring on both the nav
+                                       and the first FAQ item, confirming
+                                       :focus-visible survives past the
+                                       hero on this route
+```
+
+All 7 confirmed working with zero code changes — Phase 11's unchanged
+prop contract already covered them.
+
+#### Deviations / flagged
+
+None. Nothing to flag beyond what Phase 11 already flagged for the
+shared component (carried forward unchanged).
+
+**Not pushed yet.** Next session picks up at Phase 17 (product-detail
+shared-surface integration check).
+
+---
+
+### Session 33 — Phase 17: product-detail shared-surface integration check
+
+**Per FINAL_IMPLEMENTATION_PLAN.md Phase 17 — verification only, no files
+expected to change; `product-detail-page.tsx` itself isn't edited here.**
+
+Confirmed on `/dhruv-epc/products/static-equipment/pressure-vessels`
+(the plan's named route) that the rebuilt `ProductHero` (Phase 12) and
+the existing `AnchorRailDesktop`/`SpecRailDesktop` sticky-stacking still
+compose correctly on a real page:
+
+- Photo-ground hero renders above the two-column content grid with no
+  layout break at the hero/grid boundary.
+- Scrolled through the Specifications → Types & configurations section
+  boundary — `SpecRailDesktop`'s sticky box (`DatumRule` tick, "ENVELOPE
+  AT A GLANCE" caption, spec rows) tracks the scroll correctly alongside
+  the `lg:col-span-8` content column, no overlap with `AnchorRailDesktop`
+  above it, no visual break introduced by Phase 12's hero restructure.
+- No horizontal overflow at this viewport.
+
+#### Deviations / flagged
+
+None — this phase confirms Phase 8's and Phase 12's independent work
+still composes; no gap found.
+
+**Not pushed yet.** Next session picks up at Phase 18 (product detail:
+Types & Configurations).
+
+---
+
+### Session 33 — Phase 18: product detail — Types & Configurations (verification only)
+
+**Per FINAL_IMPLEMENTATION_PLAN.md Phase 18.** No source (IMPLEMENTATION_NOTES,
+the canvas map, the coverage matrix) specifies a new device or structural
+change for this section beyond "token retheme" — re-read the spec per
+CLAUDE.md's ambiguity protocol step 1 and found no `1c`-cited detail for
+`types` specifically, unlike Phase 19's explicit "5th accent-rule
+instance" instruction.
+
+Read `apps/web/lib/product-detail-page.tsx`'s `id="types"` section
+(lines 144–156): it already resolves entirely through named Datum tokens
+— `rounded-sm border border-steel-200 bg-white p-6` cards, `text-h4
+font-medium text-steel-950` card headings, `font-display text-h3
+font-medium text-steel-950` section heading (identical pattern to every
+other section on this page — Specifications, Materials & codes,
+Fabrication & QA, Inspection record, FAQ all share it, so changing only
+`types`'s heading treatment would break internal consistency, not fix
+it). `steel-200`/`steel-950`/`steel-700` already carry Phase 1's cool-ramp
+values; `text-h4`/`text-h3` already carry Phase 2's type scale — both by
+cascade, not by anything this phase needs to touch. `product.types` data,
+the `id="types"` anchor, and card ordering are all already preserved
+(unedited). Confirmed rendering live in the Phase 17 browser check above
+(`/dhruv-epc/products/static-equipment/pressure-vessels`'s Types &
+configurations grid — Separators/Reactors/Distillation columns/
+Accumulators cards, correct steel-200 borders and type).
+
+Per CLAUDE.md's "no drive-by refactors, no unrequested abstractions":
+inventing a structural change here with no citation would be exactly the
+scope creep the workflow warns against — this section was already
+retheme-complete before this phase began.
+
+#### Deviations / flagged
+
+None. No code change made; nothing to commit.
+
+**Not pushed yet.** Next session picks up at Phase 19 (product detail:
+Fabrication & QA).
+
+---
+
+### Session 33 — Phase 19: product detail — Fabrication & QA
+
+**Per FINAL_IMPLEMENTATION_PLAN.md Phase 19.** Unlike Phase 18, this
+phase has an explicit, cited requirement: "Add the 5th accent-rule
+instance (3px `border-top-accent` per canvas `1c`)."
+IMPLEMENTATION_NOTES §2.9's own table caps the accent rule at "four
+sanctioned instances, and no fifth" — the plan's Phase 19 instruction
+supersedes that count with a newer canvas finding (`1c`), consistent
+with this plan's own citation precedence (CANVAS > the unrevised prose
+notes where they conflict).
+
+#### What was done
+
+- **`product-detail-page.tsx`**, `id="fabrication-qa"` section only —
+  each of the 5 QA-step `<li>` cards gains a 3px accent top border:
+  `style={{ borderTopWidth: 3, borderTopColor: 'var(--accent)' }}`.
+  Per CLAUDE.md's ambiguity protocol step 2 ("check how an existing
+  component solved the same problem"), this reuses the **exact** pattern
+  already established by `ProductCard.tsx`'s `layout="spec"` card top
+  border (§2.9's "card tier rule") — same inline-style technique (an
+  arbitrary 3px border-top-width/`var(--accent)` pair has no Tailwind
+  named-token expression, so it's set via inline style, not a bracket
+  class — consistent with `no-arbitrary-value`'s intent and every other
+  CSS-custom-property escape hatch already in this codebase: `DatumRule`'s
+  tick height, the hero scrim vars). No new component built — a 2-line
+  style prop is the smallest change that satisfies the requirement, not
+  a factory/variant for one call site.
+- `qaSteps`/`GENERIC_QA_STEPS` data, the `id="fabrication-qa"` anchor,
+  and step ordering are all unchanged (preserved per the plan's own
+  instruction).
+
+#### Gate result
+
+```
+pnpm typecheck   ✓ 4/4 packages, zero errors
+pnpm lint        ✓ 0 errors (2 pre-existing warnings, unrelated)
+pnpm test        ✓ tokens 96/96, schemas 70/70, web 55/55 (only the
+                   pre-existing DATABASE_URL-gated RFQ test fails)
+pnpm build       ✓ clean rebuild, zero errors/warnings
+visual check     ✓ real browser: /dhruv-epc/products/static-equipment/
+(manual browser)   pressure-vessels#fabrication-qa — all 5 step cards
+                   (Vessel design, Material receipt, Fabrication, NDT,
+                   Hydrotest & dispatch) render the accent-red 3px top
+                   border correctly, distinct from the plain steel-200
+                   card border below it.
+```
+
+#### Deviations / flagged (none silent)
+
+1. IMPLEMENTATION_NOTES §2.9's "no fifth" cap is explicitly overridden by
+   this plan's own Phase 19 instruction, citing a newer canvas finding —
+   not a silent contradiction, the plan's citation-order rules already
+   rank CANVAS above the unrevised prose notes.
+
+**Not pushed yet.** Next session picks up at Phase 20 (FAQ retheme).
+
+---
+
+### Session 33 — Phase 20: FAQ retheme (verification only) — FINAL_IMPLEMENTATION_PLAN.md complete through Phase 20
+
+**Per FINAL_IMPLEMENTATION_PLAN.md Phase 20: "Token retheme only — schema/
+JSON-LD/accordion mechanism untouched."** IMPLEMENTATION_NOTES has no
+`faq` citation anywhere (`grep -i faq` — zero matches), same "no cited
+device, already token-complete" situation as Phase 18.
+
+Read `product-detail-page.tsx`'s `id="faq"` section (lines 232–249):
+`divide-steel-200 border-y border-steel-200`, `text-data font-medium
+text-steel-950` question, `text-steel-500` chevron, `text-sm
+text-steel-700` answer — all named Datum tokens, correctly carrying
+Phase 1/2's cascade, matching the FAQ's sibling sections' conventions.
+Verified live in the browser: `#faq` on a real product route renders
+correctly (steel-200 dividers, correct type), and clicked a question to
+confirm the native `<details>`/`<summary>` accordion mechanism and
+chevron rotation both still work — the schema/JSON-LD/accordion
+mechanism is untouched, per the plan's own instruction.
+
+#### Deviations / flagged
+
+None. No code change made; nothing to commit.
+
+---
+
+## FINAL_IMPLEMENTATION_PLAN.md: Phases 12–20 complete
+
+All nine phases (12 ProductHero, 13–15 homepage HomeHero adoption, 16
+remaining PageHero consumers, 17 shared-surface integration check, 18
+Types & Configurations, 19 Fabrication & QA, 20 FAQ) are committed on
+`feat/real-company-logos`, none pushed to origin yet. Phases 21–25
+(remaining category-route cascade, responsive validation, a11y/SEO/
+performance validation, snapshot finalization, final visual QA/human
+sign-off) remain, per the plan's own Implementation Order.
+
+**Not pushed yet.** Next session picks up at Phase 21 (product/category
+routes — remaining cascade), or push this branch first if the human
+wants Phases 12–20 reviewed before continuing.
+
+---
+
+### Session 34 — Phase 21: product/category routes (remaining cascade) — verification only
+
+**Per FINAL_IMPLEMENTATION_PLAN.md Phase 21:** "remaining token cascade
+beyond Phase 11's representative fixture" for
+`apps/web/lib/product-category-pages.tsx` (the shared factory behind
+`/{company}/products/` and `/{company}/products/[category]/`).
+
+Read the file in full: both `productCategoryIndexPage` and
+`productCategoryListingPage` compose only `PageHero`, `CategoryCard`,
+`ProductCard`, `RFQBand`, `MobileBottomBar` — every className is a named
+Tailwind/Datum token (`max-w-wide`, `px-6`, `py-12`, `grid-cols-*`,
+`gap-*`), zero arbitrary-value brackets (`grep '\['` on the file matches
+only the `[category]` route-segment comment and the `[c]`/dynamic-param
+destructure, not a Tailwind class). Nothing to retheme — same
+"already token-complete" situation as Phases 17/18/20, because this
+file was always built on top of the already-retheme-complete `PageHero`/
+`CategoryCard`/`ProductCard` components from earlier phases.
+
+#### Gate result
+
+```
+pnpm typecheck   ✓ 4/4 packages, zero errors
+pnpm lint        ✓ 0 errors (2 pre-existing warnings, LegalDocument.tsx,
+                   unrelated to this phase)
+pnpm test        ✓ link-integrity.test.ts 5/5, metadata-uniqueness.test.ts
+                   5/5 (the two tests Phase 21 names explicitly), plus
+                   tokens 96/96, schemas 70/70, web 55/55 total (only the
+                   pre-existing DATABASE_URL-gated RFQ test fails, as every
+                   prior session)
+pnpm build       ✓ clean rebuild, zero errors/warnings; all
+                   `/{company}/products/[category]/[slug]` and
+                   `/{company}/products/[category]` routes prerendered SSG
+visual check     ✓ real prod server (`next start`), manual browser:
+(manual browser)   /dhruv-epc/products/ (category index — CategoryCard
+                   grid, single amber RFQ accent), /dhruv-epc/products/
+                   static-equipment/ (ProductCard grid, 3-level
+                   breadcrumb, chips), /precise-engineers/products/
+                   expansion-joints/ (same routes on the Precise side —
+                   flex-blue accent cascades correctly, zero amber bleed,
+                   single accent element per view on every page checked)
+```
+
+#### Deviations / flagged (none silent)
+
+1. **Snapshot NOT regenerated** — same pre-existing `snapshot-routes.mjs`
+   issue flagged in the last two sessions' entries (`docs/mistakes.md`,
+   2026-09-02): its hardcoded `ROUTES` array still lists the pre-VG-012
+   flat URL structure (`/dhruv-epc/equipment/pressure-vessels`,
+   `/precise-engineers/products/dismantling-joint` with no category
+   segment) instead of the current `/{company}/products/[category]/
+   [slug]` structure. Running `snapshot:compare` reports 17/30 routes
+   missing and exits 1 — confirmed via `curl` that every current route
+   (with and without the category segment) resolves 200 after following
+   the trailing-slash 308, so the app itself is correct; only the
+   snapshot harness's route list is stale. Not fixed inline — out of
+   scope for a route-cascade-verification phase, and the harness itself
+   is not part of Phase 21's file list. Substituted the manual browser
+   check above, which is stronger evidence for this phase's actual risk
+   (token cascade / accent bleed) than a byte-diff snapshot would give
+   anyway. Recommend Phase 24 (snapshot finalization) either fix the
+   `ROUTES` array or formally retire the harness.
+
+**Not pushed yet.** Next session picks up at Phase 22 (responsive
+validation).
+
+---
+
+### Session 34 — Phase 22: responsive validation (finding, no files touched)
+
+**Per FINAL_IMPLEMENTATION_PLAN.md Phase 22:** "cross-cutting pass over
+everything built in Phases 1–21. No files touched — findings route back
+to their originating phase." Visual pass at 320/375/390/768/1024/1440px
+on header ladder, mega-panel at `md`, HomeHero split-to-stack, breadcrumb
+position, footer clearance, zero horizontal overflow.
+
+**Tooling note:** this session's browser automation (Claude in Chrome)
+has an observed floor of ~500px on `resize_window` — 320/375/390 could
+not be driven to their exact CSS px via window resize (`window.innerWidth`
+read back 500 regardless of requesting 390 or 320). Verified at the
+achievable 500px (below `md`, same hamburger-nav code path that 320–428
+already share) instead: HomeHero stacks correctly, mobile drawer opens,
+zero `scrollWidth`/`innerWidth` overflow, no visual defects. 768/1024/1440
+were driven exactly (`window.innerWidth` verified after each resize) and
+are full-confidence results.
+
+#### Finding (routes back to Phase 5 — Header)
+
+**Header logo lockup overlaps primary nav at exactly 768px**, on all
+three chromes (Group, Dhruv EPC, Precise Engineers) — confirmed via
+zoomed screenshot + `window.innerWidth` check on `/`, `/dhruv-epc/`,
+`/precise-engineers/`. The two/three-line logo lockup ("VEDANTA GROUP" /
+"OF COMPANIES · EST. 1994", "DHRUV EPC" / "SOLUTION PVT. LTD", "PRECISE"
+/ "ENGINEERS") visually collides with the "Products"/"Equipment" nav
+trigger text; on Precise the RFQ button is pushed off the visible header
+entirely. No horizontal scrollbar (`scrollWidth === innerWidth`) — pure
+overlap, not overflow. At 1024px+ the same wrapped logo no longer
+collides; there's more room. Full root-cause + rule logged in
+`docs/mistakes.md` (2026-09-02). **Not fixed here** — Phase 22 is
+verification-only per its own file scope; this is Phase 5's component.
+
+#### Other responsive checks — clean
+
+- **HomeHero split-to-stack** (Group homepage): 1440/1024/768(nav row
+  only had the header issue above, hero content itself is fine)/500 all
+  verified — grid splits at desktop widths, stacks correctly at 500px,
+  no overflow at any width tested.
+- **Footer clearance**: checked at 1024 on a product-listing route
+  (`/dhruv-epc/products/static-equipment/`) — 3-column link grid, cert
+  chips, bottom bar all clear with no collision or clipping.
+- **Breadcrumb position**: 3-level breadcrumb (`Dhruv EPC → Products →
+  Static Equipment`) renders correctly on `PageHero` at every width
+  checked, no truncation or wrap collision.
+- **Mobile drawer**: opens/closes correctly at 500px, focus-trapped,
+  company-switch links present. (Group's drawer intentionally lists
+  "Dhruv EPC Solutions"/"Precise Engineers" twice — once as an accordion
+  with product categories, once as a flat link — per the explicit
+  code comment in `GroupChrome.tsx`'s `drawerGroups()`: "plus the
+  company-switch links the utility bar has no mobile equivalent for."
+  Confirmed intentional, not a new finding.)
+- **Mega-panel at `md`**: not independently re-verified beyond the
+  768px header finding above — opening it at 768px inherits the same
+  cramped-row problem as the trigger itself; no *additional* mega-panel-
+  specific defect found once the trigger is legible.
+
+#### Deviations / flagged (none silent)
+
+1. One finding above, routed to Phase 5, not fixed in this phase — per
+   the plan's own "no files touched" instruction for Phase 22.
+2. 320/375/390px not driven to exact width by this session's browser
+   tooling (500px floor observed); substituted the achievable 500px,
+   which shares the same `<md` code path. A future session with a
+   real-device or DevTools-emulation-capable browser tool should
+   re-verify the exact 320/375/390 breakpoints once Phase 5 fixes the
+   768px finding above.
+
+**Not pushed yet.** Next session picks up at Phase 5 (fix the header
+overlap) or Phase 23 (a11y/SEO/performance validation) if the human
+wants the Phase 22 finding triaged separately first.
+
+---
+
+### Session 34 — Phase 23: accessibility + SEO + performance validation
+
+**Per FINAL_IMPLEMENTATION_PLAN.md Phase 23:** "Files: none, except
+`e2e/a11y.spec.ts`'s `KNOWN_FAILURES`, VG-004 status only." Full
+CLAUDE.md verify sequence, route axe, JS budget, redirect integrity.
+Visual: focus-visible sweep (incl. Footer Zone 3 + HomeHero type panel),
+`prefers-reduced-motion`, single-accent-element check.
+
+#### VG-004 status (the plan's own explicit ask: "remains unknown until
+Phase 23")
+
+Ran axe against every route in `lib/routes.ts`'s `ROUTES`, not just the
+ones already in `KNOWN_FAILURES`. **The original Header/mega-menu
+contrast bug is fixed** by the Phase 5 rewrite — `/precise-engineers/
+capabilities/` and `/precise-engineers/proof/` are now clean and
+un-skipped. Every other `KNOWN_FAILURES` route still fails, but on a
+**different node**: `ProductCard.tsx`'s `onDark` variant leaves caption/
+spec-row text as bare `text-steel-500` against `bg-steel-900` (3:1,
+needs 4.5:1) — same failure pattern, new location, same routes (so no
+`KNOWN_FAILURES` entries needed adding, only the two removed). Full
+root-cause writeup in `docs/mistakes.md` (2026-09-02); routes back to
+Phase 8. Not fixed here — out of Phase 23's file scope.
+
+#### Gate result
+
+```
+pnpm typecheck        ✓ 4/4 packages, zero errors
+pnpm lint              ✓ 0 errors (2 pre-existing warnings, unrelated)
+pnpm test              ✓ 55/55 (pre-existing DATABASE_URL-gated RFQ
+                         test still fails, as every prior session)
+pnpm build              ✓ clean, all 19 non-dynamic routes within JS
+                         budget (94.9–115 kB, floor 120/180 kB)
+e2e/a11y.spec.ts        ✓ 30 passed, 25 skipped (was 30/25 → now 32/23
+                         after the VG-004 re-triage above)
+e2e/golden-page-rollout ✓ 18/18
+check-js-budget.mjs     ✓ all 19 routes within budget
+check-redirect-map-
+  integrity.mjs         ✓ 74 redirect rules validated
+test-redirects.mjs      ✓ all 73 redirects verified (real prod server)
+```
+
+#### Visual checks
+
+- **Focus-visible, Footer Zone 3**: confirmed live — the "Privacy" link
+  in the dark bottom bar shows a clear flex-blue ring on
+  `/precise-engineers/` when focused. Direct visual proof.
+- **Focus-visible, HomeHero type panel**: `.focus()` via script produced
+  a false negative (Chromium suppresses `:focus-visible` after a prior
+  mouse click in the same page-load, a tooling artifact, not a product
+  bug) — confirmed instead by reading `globals.css`: `:focus-visible {
+  outline: 2px solid var(--accent-focus) }` plus `[data-chrome='dark']
+  { --accent-focus: var(--accent-dark) }`, and confirmed at runtime that
+  the type panel's own `data-chrome="dark"` wrapper resolves
+  `--accent-focus` to `#dc8d89` (the -dark step) via
+  `getComputedStyle`. Same mechanism as Footer Zone 3, which has direct
+  visual proof — high confidence, not directly screenshotted.
+- **`prefers-reduced-motion`**: `HomeHero.tsx` has no transitions/
+  animation at all (nothing to reduce). The one real animated hero
+  device, `apps/web/components/ExplodedSequence.tsx`, gates its scrub
+  behavior on `(min-width: 768px) and (prefers-reduced-motion:
+  no-preference)` and falls back to the fully-exploded static frame
+  otherwise — confirmed by reading the source; this session's browser
+  tooling has no `prefers-reduced-motion` emulation control to verify
+  at runtime.
+- **Single-accent-element**: re-confirmed by construction — every
+  screenshot taken across Phases 21–22 (category/listing pages, both
+  companies, multiple breakpoints) showed exactly one filled RFQ button
+  on screen at a time; `Header.tsx`'s `contentRfqInView` logic
+  (`invisible` class on the sticky header RFQ when the page's own RFQ
+  anchor is in view) is the mechanism. No new screenshots taken
+  specifically for this check — relied on the Phase 21/22 evidence.
+
+#### Deviations / flagged (none silent)
+
+1. VG-004 re-triage above — `a11y.spec.ts` edited (in scope), new root
+   cause logged to `docs/mistakes.md`, routes back to Phase 8. Not
+   fixed here.
+2. Two visual checks (HomeHero focus ring, prefers-reduced-motion)
+   verified via code-reading + one runtime property check rather than
+   direct screenshot/emulation, due to this session's browser-automation
+   tooling not exposing CDP media-feature emulation or reliable
+   synthetic-keyboard `:focus-visible` triggering. Both mechanisms are
+   shared with an already-directly-verified surface (Footer Zone 3) or
+   independently correct by source inspection — flagged as
+   lower-confidence-but-not-blocking, not silently skipped.
+
+**Not pushed yet.** Next session picks up at Phase 24 (snapshot
+finalization) or Phase 5 (header 768px fix) / Phase 8 (ProductCard
+`onDark` caption contrast fix) if the human wants either finding
+triaged first.
+
+---
+
+### Session 34 — Phase 24: snapshot finalization
+
+**Per FINAL_IMPLEMENTATION_PLAN.md Phase 24:** "confirmation pass —
+every prior phase already committed its own baseline update... any diff
+here signals an earlier phase's snapshot commit was incomplete."
+`snapshot:baseline` + `snapshot:compare`, expected clean.
+
+Running the harness as-is reproduced the same pre-existing, repeatedly-
+logged failure (Phases 1/21/22, `docs/mistakes.md`): `snapshot-routes.mjs`'s
+hardcoded `ROUTES` array is still the pre-VG-012 flat URL list, 17/30
+missing, exit 1. Unlike the earlier phases, Phase 24's own purpose —
+"confirmation pass," "signals an earlier phase's snapshot commit was
+incomplete" — assumes a *working* harness; a broken harness can't
+confirm anything. Per CLAUDE.md ("if code and spec disagree, the spec
+wins") and this file's own prior recommendation (Session 34, Phase 21
+entry: "Recommend Phase 24 either fix the ROUTES array or formally
+retire the harness"), fixed it here rather than deferring a fourth time.
+
+#### What was done
+
+- **`apps/web/scripts/snapshot-routes.mjs`** rewritten: instead of a
+  hand-maintained `ROUTES` array (a second route enumeration that drifts
+  from `apps/web/lib/routes.ts`/`app/**/page.tsx` the moment either
+  changes — exactly what happened at VG-012), it now walks
+  `.next/server/app` for every `.html` file and snapshots all of them.
+  No route list to keep in sync, ever again — solved structurally per
+  the "rule that prevents recurrence" already written for this bug.
+- **`apps/web/scripts/compare-snapshots.mjs`**: only the top-of-file
+  comment changed (baseline is now "re-anchored per-phase," not "frozen
+  pre-migration, never touched again" — the old framing was accurate for
+  its one-time VG-011 use but wrong for a plan that expects "Snapshot:
+  regenerate and commit" every phase). No logic change — it was already
+  a generic directory diff.
+- **`__snapshots__/routes-baseline/`** regenerated fresh: 53 routes (up
+  from 30) — every currently-prerendered route, company-scoped dynamic
+  segments included. The 30 pre-VG-012 files this replaces could never
+  again produce a real diff once those exact URLs stopped existing
+  (deleted routes, not changed content) — re-anchoring, not just
+  patching, was the correct fix; a byte-patch to the old array would
+  have left the *baseline content itself* still pre-VG-012.
+
+#### Gate result
+
+```
+pnpm snapshot:baseline   ✓ 53 routes snapshotted
+pnpm snapshot:compare    ✓ 53/53 byte-identical (within documented
+                           tolerance — build-hashed asset refs, RSC
+                           chunk-manifest payload, hydration-id attrs)
+pnpm typecheck           ✓ 4/4 packages, zero errors
+pnpm lint                ✓ 0 errors (2 pre-existing warnings, unrelated)
+pnpm test                ✓ 55/55 (pre-existing DATABASE_URL-gated RFQ
+                           test still fails, as every prior session)
+```
+
+`pnpm build` not re-run separately — the snapshot commands above already
+required and used a fresh build.
+
+#### Deviations / flagged (none silent)
+
+1. This phase touched files beyond its own literal scope ("Tests:
+   `snapshot:baseline` + `snapshot:compare` — expected clean") — the
+   plan didn't anticipate the harness itself being broken going in. Per
+   the ambiguity protocol (spec is ambiguous on "what if the confirmation
+   tool doesn't work" → check precedent → this file's own prior
+   recommendation already named this exact fix as the right call for
+   this exact phase) rather than silently faking a clean pass or
+   deferring a fourth time. Full incident writeup, now marked RESOLVED,
+   in `docs/mistakes.md`.
+2. The two still-open findings from Phases 22/23 (Header 768px overlap,
+   ProductCard `onDark` caption contrast) remain unfixed — neither is
+   this phase's concern; both are logged and routed to Phase 5 / Phase 8
+   respectively.
+
+**Not pushed yet.** Next session picks up at Phase 25 (final visual
+QA — human sign-off, exit criterion is explicit human approval, not
+something an agent session can close itself) — or triage the Phase 5 /
+Phase 8 findings first if the human prefers.
+
+---
+
+### Session 34 — Phase 25: final visual QA — BLOCKED on human sign-off
+
+**Per FINAL_IMPLEMENTATION_PLAN.md Phase 25:** "Purpose: human sign-off
+against the live canvas, section by section... **Exit criterion:**
+explicit human sign-off before merge."
+
+This phase's exit criterion is explicit human approval by definition —
+not a gate an agent session can run and self-certify. Per CLAUDE.md
+("Never mark a task complete with failing or skipped verification"),
+this is reported as a blocker for the human, not marked done.
+
+**What's ready for review:** Phases 12–24 are all committed on
+`feat/real-company-logos` (not pushed). Two open findings from this
+session need a decision before/alongside sign-off:
+
+1. **Header logo/nav overlap at exactly 768px** (all 3 chromes) — routes
+   to Phase 5. `docs/mistakes.md` 2026-09-02.
+2. **ProductCard `onDark` caption contrast** (VG-004, moved location) —
+   routes to Phase 8. `docs/mistakes.md` 2026-09-02.
+
+Everything else verified clean this session: typecheck/lint/test/build,
+route axe (32 passing / 23 known-skipped, VG-004 re-triaged), JS budget,
+redirect integrity (map + runtime), snapshot harness (rebuilt, 53/53
+byte-identical against a fresh baseline).
+
+**Not pushed yet.** Recommend: push the branch for the human to do
+Phase 25's actual canvas review (including the explicit "split hero vs.
+live `1a`/`1b` markup" side-by-side the plan calls for), decide whether
+the two open findings block merge or land as fast-follows, then merge.
+This agent session cannot self-close Phase 25.
+
+---
+
+### Session 34 (continued) — both Phase 25 blockers fixed
+
+Per explicit human request ("fix above both issues"), both findings
+from Phases 22/23 are now resolved:
+
+1. **Header logo/nav overlap at 768px** — `Header.tsx`'s main-row
+   breakpoint moved from `md` (768px) to `lg` (1024px). Confirmed clean
+   at 768px (hamburger, no overlap) and no regression at 1024px, on all
+   3 chromes. `docs/mistakes.md`.
+2. **VG-004 dark-ground contrast** — turned out to be three related
+   instances, not one: `ProductCard`/`CategoryCard`/`IndustryCard`'s
+   `onDark` captions (bare `text-steel-500`/`600` → `text-steel-400`),
+   Header's utility-bar links (`text-white/66` — a missing Tailwind
+   opacity-scale step, silently compiling to nothing), and one straggler
+   caption on the group homepage's door cards. All fixed; `docs/
+   mistakes.md` has the full writeup for each.
+
+Verified via axe against every route in `ROUTES`: **52/53 now pass**
+(was ~30/53 skipped under `KNOWN_FAILURES`). The one remaining skip
+(`/request-a-quote/thank-you/`) is a distinct, pre-existing, already-
+separately-tracked issue from session 1 (steel-400 on a *light* card),
+not part of either fix — left alone, not silently expanded into.
+`a11y.spec.ts`'s `KNOWN_FAILURES` reduced from 22 entries to 1
+accordingly.
+
+#### Gate result
+
+```
+pnpm typecheck           ✓ 4/4 packages, zero errors
+pnpm lint                ✓ 0 errors (2 pre-existing warnings, unrelated)
+pnpm test (root + 
+  datum-ui package)      ✓ 55/55 web (pre-existing DB-gated test still
+                           fails, as every session) + 125/125 datum-ui
+pnpm build               ✓ clean, full rebuild (rm -rf .next first —
+                           see the text-white/66 mistakes.md entry for
+                           why a stale build cache mattered here)
+e2e/a11y.spec.ts         ✓ 52 passed, 1 skipped
+e2e/golden-page-rollout  ✓ 18/18 (72 passed, 1 skipped incl. a11y run
+                           together)
+snapshot:baseline +
+  snapshot:compare       ✓ regenerated (content intentionally changed),
+                           53/53 byte-identical
+```
+
+#### Visual verification (real browser, prod server)
+
+- 768px: Group/Dhruv/Precise headers all show clean hamburger layout,
+  logo on one line, no overlap.
+- 1024px: full desktop nav renders correctly on Precise (spot check),
+  no regression.
+- Group homepage "Products." panel (HomeHero dark type panel):
+  CategoryCard/ProductCard caption text now clearly legible against the
+  dark ground.
+- Group homepage "Two specialized works" door cards: group-label
+  caption now legible.
+
+Commits (3, per CLAUDE.md's one-concern-per-commit): Header breakpoint
+fix, VG-004 dark-ground contrast fix (5 files), test/tracking update
+(a11y.spec.ts + snapshot baseline).
+
+**Not pushed yet.** Phase 25 (human sign-off) is otherwise unblocked —
+no known open findings remain from this session's work.

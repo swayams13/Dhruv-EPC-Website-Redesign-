@@ -26,7 +26,7 @@ export default meta
 type Story = StoryObj<typeof SpecRailDesktop>
 
 export const Desktop: Story = {
-  args: { rows, primaryCta, secondaryCta },
+  args: { rows, primaryCta, secondaryCta, dimensionLabel: 'Ø 3,600 mm' },
   decorators: [withCompany('dhruv')],
 }
 

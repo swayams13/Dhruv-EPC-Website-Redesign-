@@ -55,17 +55,23 @@ export const datumPreset = {
     },
     borderRadius: {
       none: '0',
-      sm: radius.sm,   // 2px — the only corner radius in the system
+      sm: radius.sm,
       DEFAULT: radius.sm,
+      pill: radius.pill,  // buttons only, where a pill is wanted
+      full: radius.full,  // back-to-top, avatar crop, circular controls only
     },
     boxShadow: {
       none: 'none',
       raised: shadow.raised,
+      hover: shadow.hover,
       overlay: shadow.overlay,
     },
     fontFamily: {
-      display: ['var(--font-display)', 'Archivo', 'sans-serif'],
-      sans: ['var(--font-sans)', 'IBM Plex Sans', 'sans-serif'],
+      // v1.3: display and sans share one loader/variable — Plus Jakarta Sans
+      // serves both roles (VEDANTA_DESIGN_DECISIONS.md D-2). See
+      // apps/web/app/layout.tsx for why there's no separate --font-sans.
+      display: ['var(--font-display)', 'Plus Jakarta Sans', 'sans-serif'],
+      sans: ['var(--font-display)', 'Plus Jakarta Sans', 'sans-serif'],
       mono: ['var(--font-mono)', 'IBM Plex Mono', 'monospace'],
     },
     transitionDuration: {
@@ -96,51 +102,93 @@ export const datumPreset = {
     extend: {
       // Component heights (§26 tier 3) — NOT spacing; §6's gapped scale stands.
       // compact 40px (§13 button/icon), row 44px (§15/§26 space.11), dense 36px (§15)
-      // header 72px / header-scrolled 60px (§17 sticky compress)
+      // header 91px / header-scrolled 76px — IMPLEMENTATION_NOTES §2.1 (v1.3,
+      // Phase 5). .exploded-scrub's `top`/`max-height` in globals.css must move
+      // with this value — see the comment there.
       height: {
         compact: '40px',
         row: '44px',
         'row-dense': '36px',
-        header: '72px',
-        'header-scrolled': '60px',
+        header: '91px',
+        'header-scrolled': '76px',
+        // Hero C split-hero panel heights (Decision 2, Phase 9) — group home
+        // 600px, Dhruv/Precise company homepages 560px (Precise's exact
+        // height is inferred by symmetry with Dhruv, per Decision 2).
+        'hero-split-group': '600px',
+        'hero-split-company': '560px',
       },
       width: {
         compact: '40px',
+        row: '44px', // mirrors height.row — a true 44×44 circle (Footer back-to-top, Phase 7)
       },
       minHeight: {
         row: '44px',
         control: '48px',
+        // PageHero/ProductHero full-bleed hero (§3 responsive table,
+        // Phase 11) — 440px <768 / 520px 768-1023 / 620px ≥1024. Flagged
+        // IMPLEMENTATION INFERENCE per Phase 22's governance note (not
+        // directly canvas-verified for these two heroes, though Decision 2
+        // confirms them "unchanged" by the Hero C revision).
+        'page-hero': '440px',
+        'page-hero-md': '520px',
+        'page-hero-lg': '620px',
       },
       // Type steps missing from Tailwind defaults (§5.2): data 15px, helper 13px
       // §5.2 fluid steps (360px floor → 1440px ceiling, linear between):
       // size(vw) = min + (max−min) · (100vw − 360px) / 1080px
+      // v1.3 (2026-09-02): remapped per VEDANTA_DESIGN_DECISIONS.md D-1/
+      // IMPLEMENTATION_NOTES §1.1 — mirrors packages/tokens/src/primitives.ts
+      // `typeScale`. The client's scale jumps hard (64 → 47 → 25); kept, not
+      // smoothed into a flat modular scale.
       fontSize: {
         'logo-sub': ['9px', { lineHeight: '1.4' }],
         data: ['15px', { lineHeight: '1.5' }],
         helper: ['13px', { lineHeight: '1.5' }],
-        'display-xl': ['clamp(40px, 32px + 2.2222vw, 64px)', { lineHeight: '1.05' }],
-        display: ['clamp(34px, 29.3333px + 1.2963vw, 48px)', { lineHeight: '1.1' }],
-        h1: ['clamp(30px, 26.6667px + 0.9259vw, 40px)', { lineHeight: '1.15' }],
-        h2: ['clamp(26px, 24px + 0.5556vw, 32px)', { lineHeight: '1.2' }],
-        h3: ['clamp(21px, 20px + 0.2778vw, 24px)', { lineHeight: '1.3' }],
-        h4: ['clamp(18px, 17.3333px + 0.1852vw, 20px)', { lineHeight: '1.4' }],
-        'body-lg': ['18px', { lineHeight: '1.6' }],
-        body: ['16px', { lineHeight: '1.6' }],
-        small: ['14px', { lineHeight: '1.5' }],
-        caption: ['12px', { lineHeight: '1.4' }],
-        'data-lg': ['clamp(24px, 21.3333px + 0.7407vw, 32px)', { lineHeight: '1.2' }],
+        'display-xl': ['clamp(40px, 32px + 2.2222vw, 64px)', { lineHeight: '1.0' }],
+        display: ['clamp(34px, 26.6667px + 2.037vw, 56px)', { lineHeight: '1.02' }],
+        h1: ['clamp(32px, 27px + 1.3889vw, 47px)', { lineHeight: '1.05' }],
+        h2: ['clamp(26px, 24px + 0.5556vw, 32px)', { lineHeight: '1.15' }],
+        h3: ['clamp(21px, 19.6667px + 0.3704vw, 25px)', { lineHeight: '1.3' }],
+        h4: ['clamp(18px, 17px + 0.2778vw, 21px)', { lineHeight: '1.35' }],
+        'body-lg': ['19px', { lineHeight: '1.55' }],
+        body: ['16px', { lineHeight: '1.5' }],
+        small: ['15px', { lineHeight: '1.55' }],
+        caption: ['12px', { lineHeight: '1.3' }],
+        'data-lg': ['clamp(24px, 21.3333px + 0.7407vw, 32px)', { lineHeight: '1.1' }],
       },
-      // §10 glass scrim: steel-50 at 88% — the one sanctioned translucency
+      // §10 glass scrim: steel-50 at 88% — the one sanctioned translucency.
+      // 60/72/92: Hero C's type-panel breadcrumb + body copy opacities
+      // (Decision 2, Phase 9) — 60 is already in Tailwind's default scale,
+      // listed here only for the comment; 72/92 are not and silently
+      // compile to nothing without this (verified against the build output,
+      // same failure mode as border-accent/50 in Phase 7 — Tailwind's
+      // opacity modifier only recognizes its own preset percentage steps).
+      // 82: PageHero/ProductHero's unchanged body-copy opacity (§2.2,
+      // Phase 11) — same missing-preset-step problem as 72/92 above.
+      // 66: Header's utility-bar company-switcher links (Session 9, VG-051)
+      // — same missing-preset-step failure, found 2026-09-03: `text-white/66`
+      // silently compiled to nothing (no CSS rule emitted at all), so the
+      // link text fell back to its inherited default color (steel-950) on
+      // the dark bg-steel-900 strip — 1.12:1 contrast, effectively
+      // invisible. docs/mistakes.md.
       opacity: {
+        60: '.6',
+        66: '.66',
+        72: '.72',
+        82: '.82',
         88: '.88',
+        92: '.92',
       },
       // §16 card photograph ratio (Tailwind ships only square/video)
       aspectRatio: {
         '4/3': '4 / 3',
       },
-      // Caption voice tracking +0.06em (§5.2) — Tailwind has 0.05/0.1 only
+      // Caption voice tracking +0.09em (§5.2, v1.3) — Tailwind has 0.05/0.1
+      // only. `tight` is new: headlines tighten to -0.02em at h1 and above
+      // (IMPLEMENTATION_NOTES §1.1) — never tracked on prose.
       letterSpacing: {
-        caption: '0.06em',
+        caption: '0.09em',
+        tight: '-0.02em',
       },
     },
   },

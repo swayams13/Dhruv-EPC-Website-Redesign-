@@ -85,12 +85,12 @@ export function MegaPanel({
       id={id}
       ref={panelRef}
       hidden={!open}
-      className="absolute inset-x-0 top-full border-b border-steel-50/10 bg-steel-950 shadow-overlay"
+      className="absolute inset-x-0 top-full border-t border-steel-200 bg-white shadow-overlay"
     >
       <div className="mx-auto grid max-w-wide grid-cols-1 gap-8 px-6 py-8 md:grid-cols-2">
         {columns.map((column) => (
           <div key={column.companyLabel}>
-            <p className="font-mono text-xs font-medium uppercase tracking-caption text-steel-400">
+            <p className="font-mono text-xs font-medium uppercase tracking-caption text-steel-600">
               {column.companyLabel}
             </p>
             <div className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2">
@@ -98,7 +98,7 @@ export function MegaPanel({
                 <div key={category.href}>
                   <a
                     href={category.href}
-                    className="-mx-2 block rounded-sm px-2 py-1 text-data font-medium text-steel-100 transition-colors duration-instant ease-standard hover:bg-steel-800"
+                    className="-mx-2 block rounded-sm px-2 py-1 text-data font-medium text-steel-950 transition-colors duration-instant ease-standard hover:bg-steel-100"
                   >
                     {category.name}
                   </a>
@@ -107,7 +107,7 @@ export function MegaPanel({
                       <li key={product.href}>
                         <a
                           href={product.href}
-                          className="-mx-2 block rounded-sm px-2 py-1.5 text-sm text-steel-400 transition-colors duration-instant ease-standard hover:bg-steel-800 hover:text-steel-100"
+                          className="-mx-2 block rounded-sm px-2 py-1.5 text-sm text-steel-600 transition-colors duration-instant ease-standard hover:bg-steel-100 hover:text-steel-950"
                         >
                           {product.name}
                         </a>
@@ -119,7 +119,7 @@ export function MegaPanel({
             </div>
             <a
               href={column.allProductsHref}
-              className="group mt-6 flex items-center gap-2 text-data font-medium text-accent-dark transition-colors duration-instant ease-standard hover:text-accent"
+              className="group mt-6 flex items-center gap-2 text-data font-medium text-accent-text transition-colors duration-instant ease-standard hover:text-accent-text-hover"
             >
               {column.allProductsLabel}
               <span className="transition-transform duration-instant ease-standard motion-safe:group-hover:translate-x-1">
