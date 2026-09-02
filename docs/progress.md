@@ -1749,3 +1749,65 @@ not run because there is nothing yet for them to check.
   this session's end.
 - The emblem-asset extraction blocker (deviation 1 above) must be closed
   before Phase 2 (Logo/brand primitives) can start.
+
+### Session 27 — Two plan-reconciliation passes: existing-section gaps, then Hero C
+**Status:** Complete ✅ — planning only, zero production code touched. `IMPLEMENT PHASE 1` was received mid-session but not acted on — a further architectural review arrived first and both plan documents needed reconciling again before any code could start.
+**Branch:** `feat/real-company-logos` · **Date:** 2026-09-02
+**Governing specs:** same as Session 26, plus the live Claude Design project re-fetched directly this session (not assumed) — `9b313f0a-5936-49dd-a324-dcfe9a5d4c7f`, `Vedanta Brand Evolution.dc.html`.
+
+#### Scope
+
+Two structured reviews of `FINAL_IMPLEMENTATION_PLAN.md` arrived back to back, each surfacing real gaps that required repository verification, not just documentation edits.
+
+#### Pass 1 — existing-section gaps
+
+- **`ProductHero.tsx` was missing from the plan entirely.** Confirmed by direct inspection: it's a fully independent component from `HomeHero`/`PageHero` (light `bg-steel-50`, breadcrumb → H1 → value statement → chips → RFQ → `DatumRule`/`DimensionLabel`), rendered by 17+ product routes. Given its own dedicated phase; explicitly not folded into `PageHero`.
+- **"Fabrication & QA" and "Types & Configurations" were wrongly deferred in Session 26's plan — corrected.** Direct inspection of `apps/web/lib/product-detail-page.tsx` proved both are live production sections today (`SECTIONS` array, `GENERIC_QA_STEPS` fallback, real `qaSteps`/`types` data in 17 product JSON files, real anchors). This was my own analytical error from the prior session — the evidence was already in a grep I'd run, I just hadn't connected it. Un-deferred, given their own retheme phases.
+- **A new architectural decision (Decision 6) resolves the `ExplodedSequence`/photo-as-ground question.** Investigation found something more specific than the review's premise: `ExplodedSequence` has zero current route consumers (confirmed by repo-wide search) — `dhruv-epc/page.tsx`/`precise-engineers/page.tsx` carry a stale comment and `site-data.ts` still exports real frame data, but no `<HomeHero>` call actually passes a `photo` prop today. The feature is orphaned, not live. The architectural conclusion (keep it structurally separate from any hero's photo-ground layer) held regardless, for the same underlying DOM/CSS incompatibility.
+- **Typography and `tracking-caption` split into their own phases.** Produced a complete, evidence-based 46-site KEEP/CONVERT classification (29/17) by reading the actual surrounding JSX of every occurrence, not pattern-matching class names.
+- **A sourcing-accuracy note:** the review referenced `VEDANTA_DESIGN_IMPLEMENTATION_NOTES.md` §1.5/§1.6/§2.2b — none of these exist in the actual file (re-read in full to confirm; it runs §0–§7 only). The underlying claims were mostly right; cited their real locations (§1.1, §7 warning 4, or the canvas directly) instead of inventing section numbers.
+
+#### Pass 2 — Hero C
+
+- **The live Claude Design project had been updated between sessions** — re-fetched directly rather than trusting the request's description. Confirmed real: the file grew from 98,075 to 99,981 bytes; `1f` ("Hero C — split") is now labeled in the canvas itself as *"chosen, applied to 1a and 1b."* Both `1a` (group) and `1b` (Dhruv) now render a `grid-template-columns: 47fr 53fr` split hero (dark type panel + plain unscrimmed photo grid-cell) in place of the previous full-bleed lower-left hero. `1c`/`1d` re-verified byte-identical — untouched.
+- **`statsOverlay` is retired.** `HomeHero`'s contract moves from `align`/`statsOverlay` to a single `variant="split"`. Every exact value (47/53 ratio, 600px/560px fixed heights, eyebrow color `accent-dark` not white, H1 on the `display` token not `display-xl`, breadcrumb inside the type panel for company homepages only, datum rule pinned to the photo panel's bottom) was read directly from the live canvas markup, not estimated — Decision 2 in `VEDANTA_DESIGN_DECISIONS.md` was rewritten in full with these values.
+- **`ExplodedSequence`'s guard moved off `HomeHero`** (which has no photo-ground slot left under Hero C) **onto `PageHero`/`ProductHero`** — Decision 6 updated accordingly.
+- **Two real contrast findings from Session 26's token swap were fixed at the source this session, not carried as exceptions:** `steel-400` (`text.onDarkSecondary`) was failing at 4.05–4.49:1 against the new dark chrome — fixed by changing the primitive to `#A5A8B2` (verified 6.26:1/7.06:1, hue-checked against the rest of the ramp — 226° vs. the ramp's 228–230°, same family, just lighter). `flex-500`'s focus ring on the new `steel-900` dropped from 3.05:1 (passing) to 2.61:1 (failing) — fixed via the existing `data-chrome="dark"` rebinding mechanism (already used elsewhere in the system) rather than a new tracked exception; the test's own bare-`focus.ring`-on-dark-surface check was corrected to stop asserting a code path that should never render once `data-chrome` is applied correctly, removing 4 existing exceptions and adding 0 new ones.
+- New explicit `data-chrome="dark"` requirement added for Footer Zone 3 and the split hero's type panel (both carry focusable content on dark chrome).
+- `HomeHero`'s responsive behavior (stacking below `md`, mobile photo crop) got its own dedicated phase — the canvas never renders the split hero below 1440px, so this is flagged as the least-sourced part of the entire plan, not silently assumed.
+
+#### Verify
+
+```
+N/A — no production code was modified either pass. All deliverables are
+planning documents (docs/VEDANTA_DESIGN_DECISIONS.md,
+docs/FINAL_IMPLEMENTATION_PLAN.md). The two new contrast fixes (steel-400
+value, data-chrome test-scope correction) are specified but not yet
+applied to packages/tokens/src/primitives.ts or tokens.test.ts — that
+happens in Phase 1 of the now-current plan, not this session.
+```
+
+#### Deviations / flagged (none silent)
+
+1. Precise Engineers' split-hero height/crop is inferred by symmetry with
+   Dhruv (560px, 4:5 portrait) — the canvas never mocks a separate Precise
+   homepage instance. Flagged in Phase 15 of the plan, not presented as
+   directly observed.
+2. The split hero's `white/72` body-copy contrast is opacity-blended, not
+   a solid token — per the standing `docs/mistakes.md` (2026-09-01)
+   opacity-contrast rule, its real blended contrast must be computed in
+   Phase 9, not assumed safe from the nominal ratio. Flagged, not computed
+   this session (no code exists yet to compute it against).
+3. Emblem-asset provenance (Session 26's blocker) remains open — a
+   full-resolution image was supplied in chat but not yet verified against
+   the Claude Design project's own asset file.
+
+#### Requires human review before Phase 1
+
+- Explicit **"IMPLEMENT PHASE 1"** authorization against *this* (Hero C)
+  revision of the plan specifically — the earlier authorization was given
+  against a plan revision superseded by this session's two passes.
+- The emblem-asset extraction/provenance blocker.
+- Precise Engineers' by-symmetry hero values (height, crop) — confirm
+  against real Precise homepage copy before Phase 15, since no canvas
+  instance exists to check against directly.
