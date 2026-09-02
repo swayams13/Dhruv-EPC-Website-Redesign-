@@ -1,17 +1,22 @@
-// Group home — plan §6.1 (two-doors pattern). Neutral steel system; both
-// accents appear ONLY inside each company's door card (data-company scope on
-// the card — the group doesn't pick a favorite child). Zero accent-filled
-// elements on this page: the door CTAs are accent-colored links (§13
-// variant="link"), not fills.
+// Group home — blueprint §14.2 section order (Session 9, VG-050):
+// hero → products by category → industries served → proof → selected
+// projects (omitted — no Project system yet, §8, gated on ⛔C-1) → the
+// two companies (demoted from the old doors-first lead) → RFQ.
+// Zero accent-filled elements outside the RFQ button (§13's amber/blue
+// law) — the door CTAs stay accent-colored links, not fills.
 import type { Metadata } from 'next'
 import {
   Button,
+  CategoryCard,
   CertificationCard,
+  IndustryCard,
   StatBand,
   type StampProps,
 } from '@vedanta/datum-ui'
 import { buildOrganization } from '@vedanta/schemas'
-import { getCertifications, getEntity } from '../../lib/content-loader'
+import { RFQBand } from '../../components/RFQBand'
+import { getCertifications, getEntity, getIndustries, getProductCategoriesByCompany, getProductsByCompany } from '../../lib/content-loader'
+import { categoryHref, industryHref } from '../../lib/product-urls'
 import { groupStats } from '../../lib/site-data'
 
 const dhruvCertifications = getCertifications('dhruv-epc')
@@ -24,8 +29,7 @@ export const metadata: Metadata = {
     'Dhruv EPC Solutions (ASME U/U2, IBR static equipment, Vadodara) and Precise Engineers (EJMA expansion joints 80 – 8,000 mm, Anand). Est. 1994.',
 }
 
-// §6.1.2 — the page's reason to exist. Equal visual weight; scope lines carry
-// numbers (§16 discipline); chips mono. Sourced from the seeded records.
+// §14.2 item 6 — demoted from the old doors-first lead
 const DOORS = [
   {
     company: 'dhruv' as const,
@@ -55,11 +59,21 @@ const STAMP_BY_NAME: Record<string, StampProps['code'] | undefined> = {
   'ISO 9001:2015': 'ISO-9001',
 }
 
+// §14.2 item 2 — products by category, both companies visible
+const PRODUCT_COMPANIES = [
+  { slug: 'dhruv-epc' as const, label: 'Dhruv EPC Solutions' },
+  { slug: 'precise-engineers' as const, label: 'Precise Engineers' },
+]
+
 // Footer is owned by (group)/layout.tsx — pages must not render their own
 // (2026-07-16 audit P0-1: this page previously stacked a second full footer
 // under the layout's).
 
 export default function GroupHome() {
+  // §14.2 item 3 — only industries Session 8 marked contentComplete; may be
+  // none yet (Session 8's own scoping). Omitted, not rendered empty (§2.2).
+  const completeIndustries = getIndustries().filter((i) => i.contentComplete)
+
   return (
     <>
       <main>
@@ -68,11 +82,7 @@ export default function GroupHome() {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganization(groupEntity)) }}
         />
 
-        {/* §6.1.1 — typographic graphite hero, compressed. Doors-first
-            reorder (2026-07-16, docs/ui-ux-review.md §5 / decisions.md): the
-            two-doors section is this page's reason to exist and now sits
-            inside the first scroll; the exploded-view sequence moved below
-            the doors as the shared-capability statement. */}
+        {/* §14.2 item 1 — hero, what the group manufactures, stated with a figure */}
         <section className="bg-steel-900">
           <div className="mx-auto max-w-wide px-6 pb-16 pt-24">
             <p className="text-xs font-medium uppercase tracking-caption text-steel-400">
@@ -88,14 +98,114 @@ export default function GroupHome() {
           </div>
         </section>
 
-        {/* §6.1.2 — two doors, equal visual weight; accents live only inside
-            the cards via data-company scope */}
-        <section aria-labelledby="doors-heading" className="bg-steel-900">
+        {/* §14.2 item 2 — products by category, the primary entry */}
+        <section aria-labelledby="products-heading" className="bg-steel-900">
           <div className="mx-auto max-w-wide px-6 pb-24">
-            <h2 id="doors-heading" className="sr-only">
-              Group companies
+            <h2 id="products-heading" className="font-display text-h1 font-medium text-steel-50">
+              Products.
             </h2>
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            {PRODUCT_COMPANIES.map(({ slug, label }) => {
+              const categories = getProductCategoriesByCompany(slug)
+              const products = getProductsByCompany(slug)
+              return (
+                <div key={slug} data-company={slug === 'dhruv-epc' ? 'dhruv' : 'precise'} className="mt-8">
+                  <h3 className="text-xs font-medium uppercase tracking-caption text-steel-500">{label}</h3>
+                  <div className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    {categories.map((category) => (
+                      <CategoryCard
+                        key={category.slug}
+                        name={category.name}
+                        oneLineScope={category.oneLineScope}
+                        href={categoryHref(slug, category.slug)}
+                        productCount={products.filter((p) => p.categorySlug === category.slug).length}
+                        onDark
+                      />
+                    ))}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </section>
+
+        {/* §14.2 item 3 — industries served, the secondary entry */}
+        {completeIndustries.length > 0 && (
+          <section aria-labelledby="industries-heading" className="border-t border-steel-200 bg-white">
+            <div className="mx-auto max-w-wide px-6 py-16">
+              <h2 id="industries-heading" className="font-display text-h1 font-medium text-steel-950">
+                Industries served.
+              </h2>
+              <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {completeIndustries.map((industry, i) => (
+                  <IndustryCard
+                    key={industry.slug}
+                    name={industry.name}
+                    index={String(i + 1).padStart(2, '0')}
+                    href={industryHref(industry.slug)}
+                    servedBy={industry.companySlugs
+                      .filter((c): c is 'dhruv-epc' | 'precise-engineers' => c !== 'group')
+                      .map((c) => (c === 'dhruv-epc' ? 'dhruv' : 'precise'))}
+                    projectCount={0}
+                  />
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* §14.2 item 4 — proof band: stats + certifications, real figures only */}
+        <section className="border-t border-steel-200 bg-steel-50">
+          <div className="mx-auto max-w-wide px-6 pt-12">
+            <StatBand stats={groupStats} />
+          </div>
+        </section>
+
+        <section id="proof" aria-labelledby="proof-heading" className="bg-steel-50">
+          <div className="mx-auto max-w-wide px-6 py-16">
+            <h2 id="proof-heading" className="font-display text-h1 font-medium text-steel-950">
+              Certifications &amp; approvals
+            </h2>
+            {[
+              { label: 'Dhruv EPC Solutions', certs: dhruvCertifications },
+              { label: 'Precise Engineers', certs: preciseCertifications },
+            ].map((group) => (
+              <div key={group.label} className="mt-8">
+                <h3 className="text-xs font-medium uppercase tracking-caption text-steel-600">
+                  {group.label}
+                </h3>
+                <div className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                  {group.certs.map((cert) => (
+                    <CertificationCard
+                      key={cert.name}
+                      stampCode={STAMP_BY_NAME[cert.name]}
+                      name={cert.name}
+                      scopeStatement={cert.scopeStatement}
+                      issuer={cert.issuer}
+                      validFrom={cert.validFrom}
+                      validTo={cert.validTo}
+                      artifactUrl={cert.artifactUrl}
+                    />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* §14.2 item 5 — selected projects: omitted, not rendered empty.
+            The Project content model and getProjects() loader don't exist
+            yet (blueprint §8, gated on ⛔C-1 — real project records).
+            Writing a conditional against data that doesn't exist would be
+            scaffolding for a future session, not this one; add the section
+            here when that session ships getProjects(). */}
+
+        {/* §14.2 item 6 — the two companies, demoted from the old lead */}
+        <section aria-labelledby="companies-heading" className="border-t border-steel-200 bg-steel-900">
+          <div className="mx-auto max-w-wide px-6 py-24">
+            <h2 id="companies-heading" className="font-display text-h1 font-medium text-steel-50">
+              Two specialized works, one group.
+            </h2>
+            <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
               {DOORS.map((door) => (
                 <article
                   key={door.company}
@@ -128,49 +238,11 @@ export default function GroupHome() {
             </div>
           </div>
         </section>
-
-        {/* §6.1.3 — group stats band, combined figures, each sourced */}
-        <section className="bg-steel-900">
-          <div className="mx-auto max-w-wide px-6 pt-12">
-            <StatBand stats={groupStats} onDark />
-          </div>
-        </section>
-
-        {/* §6.1.4 — shared proof strip: certifications union, entity-tagged
-            via company sub-headings. Client wall omitted — no verified client
-            records yet (Session 7 precedent). */}
-        <section id="proof" aria-labelledby="proof-heading" className="border-t border-steel-200 bg-steel-50">
-          <div className="mx-auto max-w-wide px-6 py-16">
-            <h2 id="proof-heading" className="font-display text-h1 font-medium text-steel-950">
-              Certifications &amp; approvals
-            </h2>
-            {[
-              { label: 'Dhruv EPC Solutions', certs: dhruvCertifications },
-              { label: 'Precise Engineers', certs: preciseCertifications },
-            ].map((group) => (
-              <div key={group.label} className="mt-8">
-                <h3 className="text-xs font-medium uppercase tracking-caption text-steel-600">
-                  {group.label}
-                </h3>
-                <div className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                  {group.certs.map((cert) => (
-                    <CertificationCard
-                      key={cert.name}
-                      stampCode={STAMP_BY_NAME[cert.name]}
-                      name={cert.name}
-                      scopeStatement={cert.scopeStatement}
-                      issuer={cert.issuer}
-                      validFrom={cert.validFrom}
-                      validTo={cert.validTo}
-                      artifactUrl={cert.artifactUrl}
-                    />
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
       </main>
+
+      {/* §14.2 item 7 — RFQ closer */}
+      <RFQBand />
+
       {/* §6.1.5 title-block footer renders from (group)/layout.tsx —
           audit P0-1: this page previously stacked a second full footer. */}
     </>
