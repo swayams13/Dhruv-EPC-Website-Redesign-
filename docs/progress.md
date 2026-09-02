@@ -3740,3 +3740,70 @@ sign-off) remain, per the plan's own Implementation Order.
 **Not pushed yet.** Next session picks up at Phase 21 (product/category
 routes — remaining cascade), or push this branch first if the human
 wants Phases 12–20 reviewed before continuing.
+
+---
+
+### Session 34 — Phase 21: product/category routes (remaining cascade) — verification only
+
+**Per FINAL_IMPLEMENTATION_PLAN.md Phase 21:** "remaining token cascade
+beyond Phase 11's representative fixture" for
+`apps/web/lib/product-category-pages.tsx` (the shared factory behind
+`/{company}/products/` and `/{company}/products/[category]/`).
+
+Read the file in full: both `productCategoryIndexPage` and
+`productCategoryListingPage` compose only `PageHero`, `CategoryCard`,
+`ProductCard`, `RFQBand`, `MobileBottomBar` — every className is a named
+Tailwind/Datum token (`max-w-wide`, `px-6`, `py-12`, `grid-cols-*`,
+`gap-*`), zero arbitrary-value brackets (`grep '\['` on the file matches
+only the `[category]` route-segment comment and the `[c]`/dynamic-param
+destructure, not a Tailwind class). Nothing to retheme — same
+"already token-complete" situation as Phases 17/18/20, because this
+file was always built on top of the already-retheme-complete `PageHero`/
+`CategoryCard`/`ProductCard` components from earlier phases.
+
+#### Gate result
+
+```
+pnpm typecheck   ✓ 4/4 packages, zero errors
+pnpm lint        ✓ 0 errors (2 pre-existing warnings, LegalDocument.tsx,
+                   unrelated to this phase)
+pnpm test        ✓ link-integrity.test.ts 5/5, metadata-uniqueness.test.ts
+                   5/5 (the two tests Phase 21 names explicitly), plus
+                   tokens 96/96, schemas 70/70, web 55/55 total (only the
+                   pre-existing DATABASE_URL-gated RFQ test fails, as every
+                   prior session)
+pnpm build       ✓ clean rebuild, zero errors/warnings; all
+                   `/{company}/products/[category]/[slug]` and
+                   `/{company}/products/[category]` routes prerendered SSG
+visual check     ✓ real prod server (`next start`), manual browser:
+(manual browser)   /dhruv-epc/products/ (category index — CategoryCard
+                   grid, single amber RFQ accent), /dhruv-epc/products/
+                   static-equipment/ (ProductCard grid, 3-level
+                   breadcrumb, chips), /precise-engineers/products/
+                   expansion-joints/ (same routes on the Precise side —
+                   flex-blue accent cascades correctly, zero amber bleed,
+                   single accent element per view on every page checked)
+```
+
+#### Deviations / flagged (none silent)
+
+1. **Snapshot NOT regenerated** — same pre-existing `snapshot-routes.mjs`
+   issue flagged in the last two sessions' entries (`docs/mistakes.md`,
+   2026-09-02): its hardcoded `ROUTES` array still lists the pre-VG-012
+   flat URL structure (`/dhruv-epc/equipment/pressure-vessels`,
+   `/precise-engineers/products/dismantling-joint` with no category
+   segment) instead of the current `/{company}/products/[category]/
+   [slug]` structure. Running `snapshot:compare` reports 17/30 routes
+   missing and exits 1 — confirmed via `curl` that every current route
+   (with and without the category segment) resolves 200 after following
+   the trailing-slash 308, so the app itself is correct; only the
+   snapshot harness's route list is stale. Not fixed inline — out of
+   scope for a route-cascade-verification phase, and the harness itself
+   is not part of Phase 21's file list. Substituted the manual browser
+   check above, which is stronger evidence for this phase's actual risk
+   (token cascade / accent bleed) than a byte-diff snapshot would give
+   anyway. Recommend Phase 24 (snapshot finalization) either fix the
+   `ROUTES` array or formally retire the harness.
+
+**Not pushed yet.** Next session picks up at Phase 22 (responsive
+validation).
