@@ -14,7 +14,7 @@
 // two-row structure in the spacer div below, so the two heights can never
 // drift out of sync — no calc(), no new token.
 
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Button } from './Button'
 import { MegaPanel, type MegaPanelColumn } from './MegaPanel'
 import { useRfqAnchorInView } from './useRfqAnchorInView'
@@ -83,6 +83,7 @@ export function Header({
   const hasUtilityBar = Boolean(utilityBar && utilityBar.length > 0)
   const hasMegaPanel = Boolean(megaPanel && megaPanel.length > 0)
   const rowHeight = scrolled ? 'h-header-scrolled' : 'h-header'
+  const closeMenu = useCallback(() => setMenuOpen(false), [])
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
@@ -216,7 +217,7 @@ export function Header({
           <MegaPanel
             id="datum-mega-menu"
             open={menuOpen}
-            onClose={() => setMenuOpen(false)}
+            onClose={closeMenu}
             triggerRef={triggerRef}
             columns={megaPanel!}
           />

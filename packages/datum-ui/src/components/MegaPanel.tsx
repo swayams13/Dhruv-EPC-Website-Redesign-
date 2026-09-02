@@ -7,10 +7,11 @@
 // step; a single-company subsite has nothing to disambiguate).
 //
 // Not a modal (no aria-modal/role="dialog") — a disclosure panel over
-// in-flow nav content, same APG "disclosure navigation" shape Header.tsx's
-// legacy grid already used. Focus trap mirrors MobileDrawer.tsx's proven
-// pattern: focus the first link on open, Tab cycles within the panel,
-// ESC closes and returns focus to the trigger.
+// in-flow nav content. It does trap Tab while open (unlike a typical APG
+// disclosure), matching this plan's explicit focus-trap requirement — see
+// MegaPanel.test.tsx for the keyboard contract. Focus trap mirrors
+// MobileDrawer.tsx's proven pattern: focus the first link on open, Tab
+// cycles within the panel, ESC closes and returns focus to the trigger.
 
 import { useEffect, useRef } from 'react'
 import { ArrowRight } from './glyphs'
@@ -89,7 +90,7 @@ export function MegaPanel({
       <div className="mx-auto grid max-w-wide grid-cols-1 gap-8 px-6 py-8 md:grid-cols-2">
         {columns.map((column) => (
           <div key={column.companyLabel}>
-            <p className="font-mono text-xs font-medium uppercase tracking-caption text-steel-500">
+            <p className="font-mono text-xs font-medium uppercase tracking-caption text-steel-400">
               {column.companyLabel}
             </p>
             <div className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2">

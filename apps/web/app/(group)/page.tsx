@@ -71,7 +71,8 @@ const PRODUCT_COMPANIES = [
 
 export default function GroupHome() {
   // §14.2 item 3 — only industries Session 8 marked contentComplete; may be
-  // none yet (Session 8's own scoping). Omitted, not rendered empty (§2.2).
+  // none yet (Session 8's own scoping). Omitted, not rendered empty —
+  // CLAUDE.md's omit-not-empty convention.
   const completeIndustries = getIndustries().filter((i) => i.contentComplete)
 
   return (
@@ -109,7 +110,7 @@ export default function GroupHome() {
               const products = getProductsByCompany(slug)
               return (
                 <div key={slug} data-company={slug === 'dhruv-epc' ? 'dhruv' : 'precise'} className="mt-8">
-                  <h3 className="text-xs font-medium uppercase tracking-caption text-steel-500">{label}</h3>
+                  <h3 className="text-xs font-medium uppercase tracking-caption text-steel-400">{label}</h3>
                   <div className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     {categories.map((category) => (
                       <CategoryCard
