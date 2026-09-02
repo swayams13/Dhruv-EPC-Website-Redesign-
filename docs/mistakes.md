@@ -6,6 +6,16 @@ If the rule is general, promote it into CLAUDE.md.
 ---
 <!-- entries go below this line -->
 
+## 2026-09-02 — apps/web/scripts/snapshot-routes.mjs's ROUTES list is stale post-VG-012
+
+**What happened:** FINAL_IMPLEMENTATION_PLAN.md Phase 1 (token foundations, cool-ramp remap) requires "Snapshot: regenerate and commit" after the token change. Running `node apps/web/scripts/snapshot-routes.mjs` against a fresh `pnpm build` reports 17/30 routes missing and exits 1.
+
+**Root cause:** `snapshot-routes.mjs`'s hardcoded `ROUTES` array still lists the pre-VG-012 URLs (`/dhruv-epc/equipment/heat-exchangers`, `/precise-engineers/products/metallic-bellows-expansion-joint`, …). Session 22 (VG-012, dynamic product routing) moved every product page to `/{company}/products/{category}/{slug}/` and deleted the old flat routes, but never updated this script — it was written and last touched in Session 21 (PR #18), one session before the routing change that broke it.
+
+**Decision, this session:** left unfixed. Regenerating the ROUTES list is a mechanical fix but belongs to whichever session next needs a working content/route snapshot — not folded into a token-only Phase 1 diff, per this file's own scope-discipline rule (log unrelated bugs, don't fix inline). Phase 1's snapshot-regeneration requirement was substituted with a manual visual smoke check instead (Header, Hero, Button, Card, form field, Footer, spec surface — desktop + mobile) — see progress.md Session 28.
+
+**Rule that prevents recurrence:** any session that changes route structure (new dynamic segments, moved/renamed paths) must grep `apps/web/scripts/snapshot-routes.mjs`'s `ROUTES` array and `apps/web/lib/routes.ts` in the same commit — both are hand-maintained route enumerations that silently rot when only `app/**/page.tsx` changes.
+
 ## 2026-08-31 — scripts/build-redirects.mjs's main() guard never ran on this machine
 
 **What happened:** VG-012 (dynamic product routing, session 5) needed to regenerate `apps/web/lib/redirects.generated.ts` after adding 17 rows to `content/redirect-map.csv`. `node scripts/build-redirects.mjs` exited 0 with no output and left the file untouched — silently. `LEGACY_REDIRECT_COUNT` stayed at 56 (a stale pre-session value) instead of updating to 73.

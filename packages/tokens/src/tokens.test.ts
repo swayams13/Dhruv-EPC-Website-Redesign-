@@ -97,22 +97,14 @@ const TEXT_ON_LIGHT = ['primary', 'secondary', 'tertiary'] as const
 const TEXT_ON_DARK = ['onDark', 'onDarkSecondary'] as const
 
 const EXCEPTIONS: Record<string, string> = {
-  // Deliberate: brand/flex-500's focus ring fails 3:1 against dark chrome —
-  // exactly why focus.ringOnDark exists (semantic.ts §25). globals.css
-  // rebinds --accent-focus to ringOnDark inside dark chrome.
-  'dhruv/focus.ring/dark': 'below 3:1 by design — dark chrome uses focus.ringOnDark instead',
-  'dhruv/focus.ring/darkElevated': 'below 3:1 by design — dark chrome uses focus.ringOnDark instead',
-  'precise/focus.ring/darkElevated': 'below 3:1 by design — dark chrome uses focus.ringOnDark instead',
-  'group/focus.ring/dark': 'below 3:1 by design — dark chrome uses focus.ringOnDark instead',
-  'group/focus.ring/darkElevated': 'below 3:1 by design — dark chrome uses focus.ringOnDark instead',
   // Known, tracked defect (not deliberate) — docs/mistakes.md VG-004 (session 1,
   // T3): text-steel-500 (tertiary) sits under 4.5:1 against most light
   // surfaces, confirmed independently by the route-level axe gate.
-  'dhruv/text.tertiary/page': 'VG-004 — steel-500 tertiary text below 4.5:1, tracked not fixed here',
+  // v1.3 cool-ramp remap (FINAL_IMPLEMENTATION_PLAN.md Phase 1): tertiary/page
+  // now clears the floor (4.58:1) as a side effect of the new steel-50/500
+  // values — removed from this list. tertiary/alt does not (4.30:1) and stays.
   'dhruv/text.tertiary/alt': 'VG-004 — steel-500 tertiary text below 4.5:1, tracked not fixed here',
-  'precise/text.tertiary/page': 'VG-004 — steel-500 tertiary text below 4.5:1, tracked not fixed here',
   'precise/text.tertiary/alt': 'VG-004 — steel-500 tertiary text below 4.5:1, tracked not fixed here',
-  'group/text.tertiary/page': 'VG-004 — steel-500 tertiary text below 4.5:1, tracked not fixed here',
   'group/text.tertiary/alt': 'VG-004 — steel-500 tertiary text below 4.5:1, tracked not fixed here',
 }
 
@@ -149,7 +141,12 @@ describe('contrast covenant §4.5 — generated matrix', () => {
         checkPair(company, `text.${textName}/${surfaceName}`, sem.color.text[textName], bg, 4.5)
       }
       checkPair(company, `accent.onDark/${surfaceName}`, sem.color.accent.onDark, bg, 4.5)
-      checkPair(company, `focus.ring/${surfaceName}`, sem.color.focus.ring, bg, 3)
+      // Bare focus.ring vs. DARK_SURFACES intentionally not checked here: every
+      // real dark-chrome surface carries [data-chrome='dark'], which rebinds
+      // --accent-focus to the ringOnDark step below (see globals.css) — the
+      // bare ring is a code path that should never render on a dark surface.
+      // Removed per FINAL_IMPLEMENTATION_PLAN.md Phase 1 (net: 5 stale
+      // exceptions removed, 0 new ones added).
       checkPair(company, `focus.ringOnDark/${surfaceName}`, sem.color.focus.ringOnDark, bg, 3)
     }
   }
@@ -177,7 +174,7 @@ describe('contrast covenant §4.5 — regression locks', () => {
   })
 
   it('brand-300 on steel-950 ≥ 3:1, brand-500 on steel-950 BELOW 3:1 (focus ring on the chrome hex, WCAG 1.4.11)', () => {
-    // brand-500 itself is 2.85:1 here — under the floor. This is why globals.css
+    // brand-500 itself is 2.65:1 here — under the floor. This is why globals.css
     // rebinds --accent-focus inside [data-chrome='dark'].
     expect(cr(brand[300], steel[950])).toBeGreaterThanOrEqual(3)
     expect(cr(brand[500], steel[950])).toBeLessThan(3)

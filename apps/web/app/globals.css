@@ -16,7 +16,7 @@
   --accent-focus: #AA3833;
   --accent-hover: #8D2F2A;  /* brand-600 — rfqHover */
   --accent-pressed: #66221F; /* brand-700 — rfqPressed */
-  --accent-fg: #F2F0EA;     /* steel-50 — rfqFg; dark text on brand-500 is 2.85:1, a FAIL */
+  --accent-fg: #F5F6F8;     /* steel-50 — rfqFg; dark text on brand-500 is 2.65:1, a FAIL */
 }
 
 [data-company='precise'] {
@@ -27,7 +27,15 @@
   --accent-focus: #0E6BA8;
   --accent-hover: #0A5589;  /* flex-600 — rfqHover */
   --accent-pressed: #083F6A; /* flex-700 — rfqPressed */
-  --accent-fg: #F2F0EA;     /* steel-50 — rfqFg on flex fill */
+  --accent-fg: #F5F6F8;     /* steel-50 — rfqFg on flex fill */
+}
+
+/* Hero scrim gradients (§10 rule 9) — mirrors packages/tokens/src/primitives.ts
+   `overlay`. PageHero/ProductHero only — HomeHero's Hero-C split hero has no
+   photo-as-ground slot for a scrim. */
+:root {
+  --overlay-hero: linear-gradient(180deg, rgba(0,0,0,0.34) 0%, rgba(0,0,0,0.55) 46%, rgba(0,0,0,0.82) 100%);
+  --overlay-hero-interior: linear-gradient(180deg, rgba(0,0,0,0.40) 0%, rgba(0,0,0,0.58) 48%, rgba(0,0,0,0.82) 100%);
 }
 
 /* Universal focus ring — company accent, 2px, 2px offset (Datum §25) */
@@ -50,12 +58,12 @@
 /* §10 glass scrim degradation: solid steel-50 where blur is unsupported */
 @supports not (backdrop-filter: blur(12px)) {
   [data-glass] {
-    background-color: #F2F0EA; /* steel-50 warm */
+    background-color: #F5F6F8; /* steel-50 */
   }
 }
 @media (prefers-reduced-transparency: reduce) {
   [data-glass] {
-    background-color: #F2F0EA; /* steel-50 warm */
+    background-color: #F5F6F8; /* steel-50 */
     backdrop-filter: none;
   }
 }

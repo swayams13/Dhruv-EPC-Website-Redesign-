@@ -55,12 +55,15 @@ export const datumPreset = {
     },
     borderRadius: {
       none: '0',
-      sm: radius.sm,   // 2px — the only corner radius in the system
+      sm: radius.sm,
       DEFAULT: radius.sm,
+      pill: radius.pill,  // buttons only, where a pill is wanted
+      full: radius.full,  // back-to-top, avatar crop, circular controls only
     },
     boxShadow: {
       none: 'none',
       raised: shadow.raised,
+      hover: shadow.hover,
       overlay: shadow.overlay,
     },
     fontFamily: {

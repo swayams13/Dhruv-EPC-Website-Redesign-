@@ -1811,3 +1811,128 @@ happens in Phase 1 of the now-current plan, not this session.
 - Precise Engineers' by-symmetry hero values (height, crop) — confirm
   against real Precise homepage copy before Phase 15, since no canvas
   instance exists to check against directly.
+
+### Session 28 — Phase 1: Token foundations (cool-ramp remap)
+**Status:** Complete ✅ — committed locally, not pushed
+**Branch:** `feat/real-company-logos` · **Date:** 2026-09-02
+**Governing specs:** `docs/FINAL_IMPLEMENTATION_PLAN.md` Phase 1,
+`VEDANTA_DESIGN_IMPLEMENTATION_NOTES.md` §1.1/§1.2, `docs/VEDANTA_DESIGN_DECISIONS.md` D-1
+
+#### Scope
+
+"IMPLEMENT PHASE 1" authorization received against the Hero-C plan revision
+(Session 27). Executed exactly Phase 1's declared file scope — `primitives.ts`,
+`semantic.ts` (verify-only), `tailwind.ts`, `globals.css`, `tokens.test.ts` —
+and nothing else; confirmed clean by `grep -rl "F2F0EA\|#8A8D99"` finding zero
+occurrences outside the two files touched, before starting.
+
+#### What was done
+
+- **`primitives.ts`** — `steel` ramp warm→cool remap (11 steps, provenance
+  comment retained); `radius.sm` 2px→3px, added `pill`(26px)/`full`(100%);
+  `shadow` recipe replaced (2→3 values, new `hover` step); new `overlay`
+  primitive (`hero`/`heroInterior` scrim gradients). **`steel-400` shipped as
+  `#A5A8B2`, not the spec's literal `#8A8D99`** — the plan's own Class-E
+  correction (spec value measured 4.05–4.49:1 as `text.onDarkSecondary` on
+  the new dark surfaces, below the 4.5:1 floor).
+- **`tailwind.ts`** — `borderRadius` gained `pill`/`full`; `boxShadow` gained
+  `hover`. Colors needed no edit (already reference the primitives by import).
+- **`globals.css`** — `#F2F0EA`→`#F5F6F8` in the two glass-degradation
+  fallback blocks (per spec) **and** in both `--accent-fg` declarations (not
+  in the spec's literal "3 edits" list, but a required mechanical
+  consequence: `css-parity.test.ts` asserts `--accent-fg` matches
+  `semanticByCompany[c].color.action.rfqFg`, which resolves to `steel[50]` —
+  leaving the old literal would have broken that test). Added
+  `--overlay-hero`/`--overlay-hero-interior` custom properties.
+- **`tokens.test.ts`** — contrast-matrix correction. Computed the full new
+  ramp's contrast matrix independently (methodology cross-validated against
+  every existing documented ratio in the codebase — old-ramp figures matched
+  to within rounding on 7 independent pairs) before editing any assertion,
+  per this file's own no-relax rule:
+  - Removed the bare `focus.ring` vs. `DARK_SURFACES` check from the
+    generated matrix (all 3 companies) — dark chrome always uses
+    `focus.ringOnDark` via the `[data-chrome='dark']` rebind in `globals.css`,
+    so the bare check was asserting a code path that should never render.
+    Removed the 5 stale exceptions this check owned.
+  - `text.tertiary/page` (VG-004) now clears the floor at 4.58:1 as a real
+    side effect of the new `steel-50`/`steel-500` values — removed from
+    `EXCEPTIONS` (3 entries). `text.tertiary/alt` stays failing (4.30:1) and
+    stays tracked, untouched, per the plan's explicit note.
+  - Net: **11 → 3 tracked exceptions** (plan predicted "strictly fewer,
+    zero new" — confirmed).
+  - Updated one stale inline comment (`2.85:1` → `2.65:1`, the regression-lock
+    test for `brand-500` on the new `steel-950`) since it's a literal claim
+    about the exact value this phase changes.
+
+#### Real discrepancy found, not silently trusted
+
+`VEDANTA_DESIGN_IMPLEMENTATION_NOTES.md` §1.2 claims `#AA3833` (brand-500) on
+the new `steel-900` (`#23282D`) is "3.6:1, which now passes the 3:1 floor."
+Independent WCAG relative-luminance computation (methodology verified against
+7 other documented figures in this codebase, all matching to 2-3 decimals)
+gives **2.35:1** — still failing, not a new pass. This doesn't change what
+Phase 1 had to do (the fix — dropping the bare `focus.ring`/`DARK_SURFACES`
+check in favor of `ringOnDark` — is correct regardless of the exact number),
+so no code changed differently because of it, but the doc's claim is wrong
+and should not be treated as verified fact in a later phase. Flagged here,
+not corrected in the (out-of-scope) implementation-notes file.
+
+#### Deviations / flagged (none silent)
+
+1. **Snapshot NOT regenerated** — `apps/web/scripts/snapshot-routes.mjs`'s
+   hardcoded `ROUTES` array is stale from Session 21, never updated for
+   Session 22's URL restructure (`/dhruv-epc/equipment/*` →
+   `/dhruv-epc/products/{category}/*`, etc.). Running it reports 17/30 routes
+   missing and exits 1 — a pre-existing, unrelated bug, not something this
+   token-only phase should fix inline. Logged as its own `docs/mistakes.md`
+   entry (2026-09-02). Substituted a manual browser visual smoke check
+   instead (below), which is stronger evidence for *this* phase's actual
+   risk (color regressions) than a byte-diff snapshot would have been anyway.
+2. `semantic.ts` and the pre-existing `[data-chrome='dark']` comment block in
+   `globals.css` both quote now-slightly-stale contrast numbers (e.g.
+   "2.85:1", "6.32:1") tied to primitives this phase changed — left untouched
+   per Phase 1's own file scope (`semantic.ts` is explicitly "verify-only";
+   the `[data-chrome='dark']` rule itself needed no functional edit per
+   IMPLEMENTATION_NOTES §1.2 point 2). Not a functional bug — the tests
+   recompute live from the primitives, only the comments are imprecise.
+
+#### Gate result
+
+```
+pnpm --filter @vedanta/tokens test   ✓ 96/96 (was 102; -6 from removing the
+                                        bare focus.ring/DARK_SURFACES checks,
+                                        3 companies × 2 surfaces)
+pnpm typecheck                       ✓ 4/4 packages, zero errors
+pnpm lint                            ✓ 0 errors (2 pre-existing warnings,
+                                        LegalDocument.tsx, unrelated)
+pnpm test                            ✓ all pass except the pre-existing
+                                        DATABASE_URL-gated RFQ integration
+                                        test (tracked since PR #15/#18/#20,
+                                        unrelated to this session) —
+                                        tokens 96/96, schemas 70/70,
+                                        datum-ui 107/107, web 51/52
+pnpm build                           ✓ 77 routes, zero errors/warnings, all
+                                        routes 94.9–115 kB First Load JS
+                                        (≤120 kB marketing / ≤180 kB RFQ)
+css-parity.test.ts                   ✓ 18/18 — confirms the --accent-fg fix
+                                        above was correct and necessary
+visual smoke check (manual browser,  ✓ group home, Dhruv heat-exchangers
+1440px + 375px viewports)              product page, RFQ form, Precise home,
+                                        Footer, RFQ band: Header/Hero/Button/
+                                        Card/form-field/Footer/SpecTable all
+                                        render the new cool ramp correctly,
+                                        RFQ-red and Precise-blue accents both
+                                        confirmed, focus ring visible on a
+                                        form field, single accent per view
+                                        held on every page checked
+```
+
+#### Requires human review before Phase 2
+
+- The `steel-400` value substitution (`#A5A8B2` vs. spec's `#8A8D99`) —
+  Class E per the plan (mechanical contrast-floor correction), not a new
+  design decision, but it is a departure from the literal spec hex and
+  should be sanity-checked visually against the client's intent before
+  Phase 2 builds on top of it.
+- Nothing else — Phase 1 has no other open blockers. Phase 2 (typography)
+  depends only on Phase 1, per the plan.

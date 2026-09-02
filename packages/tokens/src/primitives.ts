@@ -1,19 +1,30 @@
-// Datum Design System v1.1 — Primitive tokens (§4-§11)
+// Datum Design System v1.3 — Primitive tokens (§4-§11)
 // Never consumed directly by components — use semantic aliases
 // v1.1: palette shift to warm-gray (paper/ink) and industrial amber per approved design direction (2026-07-15)
-
+// v1.3 (2026-09-02): warm-bone ramp retired per VEDANTA_DESIGN_DECISIONS.md D-1 —
+// cool neutral remap sampled from the client's production site
+// (VEDANTA_DESIGN_LANGUAGE.md §1.2). The ink step carries a faint blue-violet
+// cast (#23282D/#1A1E22, not a true gray) — that cast is the sample, not a
+// mistake. 500/600/700 derived on the same hue to hold the §4.5 covenant.
+//
+// steel-400 CORRECTION (FINAL_IMPLEMENTATION_PLAN.md Phase 1, Class E): the
+// spec's literal #8A8D99 measures 4.05–4.49:1 as text.onDarkSecondary on the
+// new dark surfaces — below the 4.5:1 floor. #A5A8B2 (6.26:1 on steel-900,
+// 7.06:1 on steel-950, hue-checked at 226° against the ramp's 228–230°, same
+// family, lightened not re-hued) is used instead. This is a value fix, not a
+// tracked exception.
 export const steel = {
-  50: '#F2F0EA',   // warm paper — page background
-  100: '#E5E2D9',
-  200: '#DCD8CE',  // light dividers, borders on dark
-  300: '#C7C2B7',  // secondary text on dark
-  400: '#B5B0A4',  // muted/tertiary text
-  500: '#7A7269',
-  600: '#5C5850',  // secondary text on light (5.6:1 on steel-50 ✓)
-  700: '#3D3A34',  // emphasized text on light (9.1:1 on steel-50 ✓)
-  800: '#282520',
-  900: '#1C1A18',  // dark elevated surface
-  950: '#14171A',  // ink — near-black page dark bg
+  50:  '#F5F6F8',  // panel / alternating section ground (was #F2F0EA)
+  100: '#EDEFF2',  // table header, chip fill
+  200: '#E0E0E0',  // hairline border — the site's dominant divider
+  300: '#D9D9D9',  // stronger border, stamp outline
+  400: '#A5A8B2',  // muted text on light; on-dark secondary — corrected, see above
+  500: '#707070',  // secondary text (4.94:1 on white ✓ AA)
+  600: '#5C5F6E',  // secondary text, emphasized (6.33:1 on white ✓)
+  700: '#3F4250',  // emphasized body (9.4:1 on white ✓)
+  800: '#2B2F38',
+  900: '#23282D',  // THE dark chrome — footer, RFQ band, split-hero type panel
+  950: '#1A1E22',  // deepest dark, hero photo fallback ground
 } as const
 
 // Vedanta brand red — the group's actual mark colour (§4.3)
@@ -100,10 +111,21 @@ export const easing = {
   standard: 'cubic-bezier(0.4, 0.0, 0.2, 1)',
 } as const
 
-// Shadows — two values, warm-tinted (§9); updated RGB to match steel-950 = #14171A (20,23,26)
+// Shadows (§9) — v1.3: the client's single recipe (VEDANTA_DESIGN_DECISIONS.md
+// D-1 remap). Cards are flat by default; `hover` is the hover state, not a
+// resting elevation.
 export const shadow = {
-  raised: '0 2px 8px rgba(20,23,26,0.08), 0 1px 2px rgba(20,23,26,0.06)',
-  overlay: '0 16px 40px rgba(20,23,26,0.16), 0 2px 8px rgba(20,23,26,0.08)',
+  raised: '0 0 10px rgba(34,35,52,0.05)',   // resting, barely-there
+  hover: '0 0 10px rgba(34,35,52,0.14)',    // card hover only
+  overlay: '0 0 24px rgba(34,35,52,0.18)',  // mega panel, modal
+} as const
+
+// Hero scrim gradients (§10 rule 9) — graduated, never a flat tint. Consumed
+// by PageHero/ProductHero only (HomeHero's Hero-C split has no photo-as-ground
+// slot for a scrim). Mirrored as CSS custom properties in globals.css.
+export const overlay = {
+  hero: 'linear-gradient(180deg, rgba(0,0,0,0.34) 0%, rgba(0,0,0,0.55) 46%, rgba(0,0,0,0.82) 100%)',
+  heroInterior: 'linear-gradient(180deg, rgba(0,0,0,0.40) 0%, rgba(0,0,0,0.58) 48%, rgba(0,0,0,0.82) 100%)',
 } as const
 
 // Typography families (§5.1) — v1.1: Archivo display, IBM Plex Sans body per approved design
@@ -132,9 +154,13 @@ export const typeScale = {
   data: { min: 15, max: 15, lineHeight: 1.5, weight: 400 },
 } as const
 
-// Radius (§13 — "machined edge")
+// Radius (§13) — v1.3: 2px → 3px is the client's measured card/button radius
+// (VEDANTA_DESIGN_DECISIONS.md D-1 remap). `pill`/`full` are new, narrow-use
+// additions — not a default; most surfaces still take `sm`.
 export const radius = {
-  sm: '2px',  // the system's only corner radius — machined, not pill
+  sm: '3px',
+  pill: '26px',  // buttons only, where a pill is wanted
+  full: '100%',  // back-to-top, avatar crop, circular controls only
 } as const
 
 // Elevation levels (§8)
