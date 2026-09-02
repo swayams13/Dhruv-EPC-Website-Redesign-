@@ -82,6 +82,12 @@ export function Header({
   const triggerRef = useRef<HTMLButtonElement>(null)
   const hasUtilityBar = Boolean(utilityBar && utilityBar.length > 0)
   const hasMegaPanel = Boolean(megaPanel && megaPanel.length > 0)
+  // Legacy mega-menu grid must size to what's actually there — DhruvChrome (3 groups
+  // + rail) and PreciseChrome (2 groups + rail) share this component, and a fixed
+  // grid-cols-4 left Precise's dropdown with a dead trailing column.
+  const legacyColumnCount = (menuGroups?.length ?? 0) + (capabilityRail ? 1 : 0)
+  const legacyGridColsClass =
+    legacyColumnCount <= 2 ? 'grid-cols-2' : legacyColumnCount === 3 ? 'grid-cols-3' : 'grid-cols-4'
   const rowHeight = scrolled ? 'h-header-scrolled' : 'h-header'
   const closeMenu = useCallback(() => setMenuOpen(false), [])
 
@@ -227,7 +233,7 @@ export function Header({
             hidden={!menuOpen}
             className="absolute inset-x-0 top-full border-b border-steel-50/10 bg-steel-950 shadow-overlay"
           >
-            <div className="mx-auto grid max-w-wide grid-cols-4 gap-8 px-6 py-8">
+            <div className={`mx-auto grid max-w-wide ${legacyGridColsClass} gap-8 px-6 py-8`}>
               {(menuGroups ?? []).map((group) => (
                 <div key={group.label}>
                   <p className="font-mono text-xs font-medium uppercase tracking-caption text-accent">

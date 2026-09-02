@@ -16,6 +16,7 @@ const GROUPS = [
 const LINKS = [
   { label: 'Capabilities', href: '/dhruv-epc/capabilities' },
   { label: 'Proof', href: '/dhruv-epc/proof' },
+  { label: 'Company', href: '/dhruv-epc/company' },
 ]
 
 export function DhruvChrome({ phoneHref, whatsappHref }: { phoneHref: string; whatsappHref: string }) {
