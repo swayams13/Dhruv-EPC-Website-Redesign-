@@ -111,6 +111,11 @@ export const datumPreset = {
         'row-dense': '36px',
         header: '91px',
         'header-scrolled': '76px',
+        // Hero C split-hero panel heights (Decision 2, Phase 9) — group home
+        // 600px, Dhruv/Precise company homepages 560px (Precise's exact
+        // height is inferred by symmetry with Dhruv, per Decision 2).
+        'hero-split-group': '600px',
+        'hero-split-company': '560px',
       },
       width: {
         compact: '40px',
@@ -143,9 +148,18 @@ export const datumPreset = {
         caption: ['12px', { lineHeight: '1.3' }],
         'data-lg': ['clamp(24px, 21.3333px + 0.7407vw, 32px)', { lineHeight: '1.1' }],
       },
-      // §10 glass scrim: steel-50 at 88% — the one sanctioned translucency
+      // §10 glass scrim: steel-50 at 88% — the one sanctioned translucency.
+      // 60/72/92: Hero C's type-panel breadcrumb + body copy opacities
+      // (Decision 2, Phase 9) — 60 is already in Tailwind's default scale,
+      // listed here only for the comment; 72/92 are not and silently
+      // compile to nothing without this (verified against the build output,
+      // same failure mode as border-accent/50 in Phase 7 — Tailwind's
+      // opacity modifier only recognizes its own preset percentage steps).
       opacity: {
+        60: '.6',
+        72: '.72',
         88: '.88',
+        92: '.92',
       },
       // §16 card photograph ratio (Tailwind ships only square/video)
       aspectRatio: {

@@ -1,17 +1,39 @@
-// HomeHero — Datum §19, graphite variant.
-// One message, no rotation (carousels banned system-wide). Caption eyebrow →
-// display-xl H1 (≤10 words, what we make and to what codes — the real
-// qualifier, not a slogan) → body-lg subhead (materials + sectors) → CTA pair
-// (amber RFQ + one secondary; §13: on graphite RFQ stays accent) → full-bleed
-// graded photograph framed by the datum-line motif carrying a true dimension
-// label (§11 signature: line draws, tick drops, label counts up). Beneath:
-// the stats band — proof in the first viewport.
-// Photograph is real or absent — never stock; absent skips the photo band.
+// HomeHero — Datum §19, Hero C split (Decision 2, rewritten Phase 9).
+// `variant="split"` is the ONLY contract — `align`/`statsOverlay` never
+// existed in code and are retired for good; do not reintroduce either.
+//
+// Anatomy — display:grid, 47fr/53fr, fixed height per homepage (600px group,
+// 560px company — derived from whether `breadcrumb` is passed, since that
+// correlates exactly with the two rungs per Decision 2's own scope table):
+//   left panel  (47%, type, steel-900, data-chrome="dark")
+//     optional breadcrumb (company homepages only) → 64×2px accent rule →
+//     eyebrow (accent-dark, title case — NOT tracking-caption; this rewrite
+//     closes out the eyebrow's held-back tracking-caption CONVERT site from
+//     Phase 3) → H1 (text-display, 56px — NOT text-display-xl) → body copy
+//     (white/72) → CTA pair (rfq + secondary, unchanged Button pattern)
+//   right panel (53%, photo) — a PLAIN grid cell: no scrim, no gradient, no
+//     type over it (the headline difference from every other hero in the
+//     system). Datum-rule + dimension label pinned to its bottom. No photo →
+//     the §4.2 hatch placeholder, never a stock image.
+//
+// What's deliberately NOT here: the stats band. Decision 2: "a separate,
+// standalone light section immediately below the hero... never overlaid on
+// the photo" — every homepage already renders (or, post Phase 13-15, will
+// render) StatBand as its own sibling, light, outside this component. A
+// `stats` prop doesn't belong on this contract at all — see Session 35
+// (group)/page.tsx precedent, already standalone.
+//
+// ExplodedSequence (Decision 6): no guard needed on `photo` — Hero C's photo
+// panel was never a photo-*ground* layer for it to conflict with in the
+// first place, so there's nothing to warn callers off of here.
+//
+// Responsive stacking (<md) is Phase 10's own commit, deliberately not in
+// this one — the grid below renders unconditionally.
 
+import { Breadcrumbs, type BreadcrumbItem } from './Breadcrumbs'
 import { Button } from './Button'
 import { DatumRule } from './DatumRule'
 import { DimensionLabel } from './DimensionLabel'
-import { StatBand, type Stat } from './StatBand'
 
 export interface HeroCta {
   label: string
@@ -19,7 +41,12 @@ export interface HeroCta {
 }
 
 export interface HomeHeroProps {
-  /** Caption eyebrow: "ASME U & U2 · IBR · Est. Vadodara" */
+  variant: 'split'
+  /** Company homepages only (Dhruv, Precise) — the group home has none,
+   *  being the top-level page. Presence also sets the panel height: 560px
+   *  with a breadcrumb, 600px without (Decision 2's scope table). */
+  breadcrumb?: BreadcrumbItem[]
+  /** Title case, NOT tracked/uppercase — e.g. "ASME U & U2 · IBR · Est. Vadodara" */
   eyebrow: string
   /** ≤ 10 words; the page H1 */
   headline: string
@@ -27,16 +54,18 @@ export interface HomeHeroProps {
   subhead: string
   rfq: HeroCta
   secondary: HeroCta
-  /** Real graded works photograph (full-bleed band); absent → no photo band */
+  /** Portrait 4:5 photo filling the photo panel — a plain grid-cell child,
+   *  not a photo-ground layer, so it must bring its own sizing (next/image
+   *  `fill` + `object-cover`, or an `h-full w-full` wrapper). Absent renders
+   *  the §4.2 hatch placeholder — never a stock image. */
   photo?: React.ReactNode
   /** True dimension for the datum frame, e.g. "Ø 3,600 mm" */
   dimensionLabel?: string
-  /** Four figures, each sourced from the approved entity/capability record */
-  stats?: Stat[]
   className?: never
 }
 
 export function HomeHero({
+  breadcrumb,
   eyebrow,
   headline,
   subhead,
@@ -44,18 +73,28 @@ export function HomeHero({
   secondary,
   photo,
   dimensionLabel,
-  stats,
 }: HomeHeroProps): React.ReactElement {
   return (
-    <section className="bg-steel-900">
-      <div className="mx-auto max-w-wide px-6 py-24">
-        <div className="mb-6 h-px w-16 bg-accent" aria-hidden="true" />
-        <p className="text-xs font-medium uppercase tracking-caption text-steel-400">{eyebrow}</p>
-        <h1 className="mt-4 max-w-content font-display text-display-xl font-medium text-steel-50">
+    <section
+      className={`grid ${breadcrumb ? 'h-hero-split-company' : 'h-hero-split-group'}`}
+      style={{ gridTemplateColumns: '47fr 53fr' }}
+    >
+      {/* Type panel — 47%. data-chrome='dark': breadcrumb link + both CTAs
+          need the -dark accent step to clear 3:1 on steel-900 (new
+          requirement this revision, data-chrome coverage table). */}
+      <div data-chrome="dark" className="flex flex-col justify-end bg-steel-900 px-6 py-12">
+        {breadcrumb && (
+          <div className="mb-6">
+            <Breadcrumbs items={breadcrumb} onDark />
+          </div>
+        )}
+        <div className="w-16 bg-accent" style={{ height: 2 }} aria-hidden="true" />
+        <p className="mt-6 text-body font-bold text-accent-dark">{eyebrow}</p>
+        <h1 className="mt-4 font-display text-display font-bold tracking-tight text-white">
           {headline}
         </h1>
-        <p className="mt-6 max-w-content text-body-lg text-steel-400">{subhead}</p>
-        {/* data-rfq-anchor: header RFQ yields while this amber is in view (Datum 13, amber law) */}
+        <p className="mt-6 text-body-lg text-white/72">{subhead}</p>
+        {/* data-rfq-anchor: header RFQ yields while this accent is in view (§13, amber law) */}
         <div data-rfq-anchor className="mt-8 flex flex-wrap items-center gap-4">
           <Button variant="rfq" href={rfq.href}>
             {rfq.label}
@@ -66,36 +105,30 @@ export function HomeHero({
         </div>
       </div>
 
-      {photo && (
-        <>
-          {/* the datum-line motif frames the photograph, carrying a true dimension */}
-          <div className="mx-auto max-w-wide px-6">
-            {dimensionLabel && (
-              <div className="pb-2">
-                <DimensionLabel label={dimensionLabel} animate />
-              </div>
-            )}
-            <DatumRule animate />
-          </div>
-          {/* full-bleed: photography bands alone may exceed the content widths (§7).
-              The band's aspect ratio is owned by the photo child, not this
-              wrapper (2026-07-16, docs/ui-ux-review.md §3.6): a fixed
-              aspect-video + overflow-hidden here clips the exploded-view
-              sequence's scroll track and disables its position:sticky —
-              sticky fails inside overflow-hidden ancestors. Plain photos
-              passed by pages must bring their own aspect class. */}
-          <div className="mt-2 w-full bg-steel-800">
-            {photo}
-          </div>
-        </>
-      )}
-
-      {stats && stats.length > 0 && (
-        <div className="mx-auto max-w-wide px-6 pt-12">
-          <StatBand stats={stats} onDark />
+      {/* Photo panel — 53%, a plain grid cell. No scrim, no gradient, no
+          type over it — the headline difference from every other hero. */}
+      <div className="relative">
+        {photo ?? (
+          <div
+            aria-hidden="true"
+            className="h-full w-full bg-steel-900"
+            style={{
+              backgroundImage:
+                'repeating-linear-gradient(135deg, rgba(255,255,255,.035) 0 1px, transparent 1px 10px)',
+            }}
+          />
+        )}
+        {/* Datum-rule + dimension label pinned to the bottom of the photo
+            panel specifically — not the type panel, not the page (Decision 2). */}
+        <div className="absolute inset-x-0 bottom-0 px-6 pb-6">
+          {dimensionLabel && (
+            <div className="pb-2">
+              <DimensionLabel label={dimensionLabel} animate onDark />
+            </div>
+          )}
+          <DatumRule animate onDark />
         </div>
-      )}
-      <div aria-hidden="true" className="pb-6" />
+      </div>
     </section>
   )
 }

@@ -2858,3 +2858,172 @@ visual check     ✓ real browser (not Storybook, see above) across five
 - Carried over, still open: icon/hamburger colors and company-route
   utility bar content (Phase 5), the two bracket-linework sizing
   inferences (Phase 7 follow-up).
+
+### Session 36 — Phase 9: HomeHero split architecture (Hero C)
+**Status:** Complete ✅ — committed locally, not pushed.
+**Branch:** `feat/real-company-logos` · **Date:** 2026-09-02
+**Governing specs:** `docs/FINAL_IMPLEMENTATION_PLAN.md` Phase 9,
+`docs/VEDANTA_DESIGN_DECISIONS.md` Decision 2 (Hero C, superseding
+`align`/`statsOverlay`) and Decision 6 (ExplodedSequence)
+
+#### What was done
+
+- **`HomeHero.tsx`** — full rewrite to the `variant="split"` contract:
+  `display:grid`, `47fr 53fr` (inline `style`, no Tailwind token expresses
+  a fraction split — same reasoning as every other one-off measurement
+  this session). Type panel (`data-chrome="dark"`, new requirement this
+  revision): optional breadcrumb → 64×2px accent rule (inline `height: 2`,
+  no 2px token exists) → eyebrow (`text-body font-bold text-accent-dark`,
+  title case — closes the eyebrow's held-back `tracking-caption` CONVERT
+  site from Phase 3) → H1 (`text-display`, NOT `text-display-xl`) → body
+  copy (`white/72`) → CTA pair, unchanged `Button` pattern. Photo panel: a
+  plain grid cell, no scrim, `DatumRule`+`DimensionLabel` pinned to its
+  bottom (both reused, not reimplemented — see the onDark fix below). No
+  photo → the §4.2 hatch placeholder (`repeating-linear-gradient`), never
+  a stock image; no production-gating `PhotoSlot` component exists yet
+  (checked — grepped the whole repo), so no label renders, just the
+  texture.
+- **Panel height as real tokens, not inline style:** `height['hero-split-
+  group']` (600px) / `height['hero-split-company']` (560px) added to
+  `tailwind.ts`, derived in the component from whether `breadcrumb` is
+  passed — Decision 2's own scope table shows that presence correlates
+  exactly with the height rung for all three homepages, so a redundant
+  explicit height prop would just be one more way to pass a value that
+  contradicts the breadcrumb prop. Chose tokens over inline style here
+  (unlike the 2px rule/47-53 split) because these are named, reusable,
+  spec-catalogued measurements — matches the Phase 5/7 precedent for
+  `header`/`header-scrolled`/`row` heights, not the Phase 7 bracket-
+  linework's one-off-constant precedent.
+- **`stats` prop removed entirely** — Decision 2: "a separate, standalone
+  light section immediately below the hero... never overlaid on the
+  photo." Confirmed by reading `(group)/page.tsx`, which already renders
+  `<StatBand>` standalone outside its hero markup; `HomeHero` internally
+  rendering `StatBand onDark` was the pre-Hero-C shape and doesn't belong
+  in the new contract at all.
+- **`Breadcrumbs.tsx` gains `onDark`** — needed for both Phase 9 (type
+  panel) and Phase 11 (photo-on-breadcrumb, coming next) since both use
+  the identical "→ separator in accent-dark, white/60 links, white/92
+  current" device per Decision 2 and §10 rule 10. Built once now rather
+  than duplicated markup in two hero components, or rebuilt in Phase 11.
+- **`DatumRule.tsx` and `DimensionLabel.tsx` gain `onDark`** — a real
+  finding, not a preemptive add: Storybook's accessibility addon flagged
+  `DimensionLabel`'s default `text-steel-500` at 2.7:1 against the photo
+  panel (expected 4.5:1). Investigated rather than patching blind:
+  computed that `steel-500` **cannot** reach 4.5:1 against *any*
+  background darker than itself — even pure black only gets to 4.24:1 —
+  so no background-side fix (a backdrop chip, a scrim) could have worked;
+  the text color itself had to change for dark grounds. Root cause:
+  `DimensionLabel`/`DatumRule` were built for `ProductHero`'s light
+  `bg-steel-50` band, where the label sits *above* the photo, not layered
+  on it — Hero C's "pinned to the bottom of the photo panel" is a new
+  usage context those components were never designed for. Added `onDark`
+  to both (default `false`, so `ProductHero`'s and `SpecRail`'s existing
+  calls are byte-for-byte unaffected), wired `onDark` from `HomeHero.tsx`.
+- **`dhruv-epc/page.tsx` / `precise-engineers/page.tsx` — unavoidably
+  touched**, despite Phase 9's file list naming only `HomeHero.tsx`. Both
+  already call `<HomeHero>` live today; rewriting the component's props
+  entirely (no more `stats`, new required `variant`, new optional
+  `breadcrumb`) would otherwise break `pnpm typecheck` for `apps/web`.
+  Fixed minimally: added `variant="split"`, a `breadcrumb` array matching
+  Decision 2's exact copy pattern ("Home → Dhruv EPC Solutions" /
+  "Home → Precise Engineers"), and moved `StatBand` out to a standalone
+  sibling section matching `(group)/page.tsx`'s exact existing wrapper
+  markup. Did **not** attempt real photo sourcing or `ExplodedSequence`
+  revival (both explicitly deferred, Decision 6) — these two homepages'
+  photo panels render the hatch placeholder for now. This means Phase
+  9 — contrary to its own "not wired into a real page until 13–15" note —
+  **does** land on two live routes today, because they already consumed
+  this component before the rewrite; that note's premise didn't hold once
+  the actual `page.tsx` state was checked.
+
+#### A second real finding: a silent Tailwind opacity-modifier gap, root-caused not guessed around
+
+`text-white/72` and `text-white/92` (needed for Decision 2's exact body-
+copy and breadcrumb-current opacities) compiled to **nothing** — same
+silent-drop failure mode as `border-accent/50` in Phase 7, but this time
+on a plain hex color, which should support arbitrary opacity modifiers
+without any config. Investigated rather than reaching for the Phase 7
+`color-mix()` workaround by default: confirmed `/60` (already used by
+`Breadcrumbs`' `onDark` Home-link) compiled fine, while `/72`/`/92`
+didn't — this project's Tailwind build only recognizes a fixed opacity
+step list for the color-modifier syntax, and 72/92 aren't in it. Found
+the exact mechanism by locating the *already-existing* precedent for
+this: `tailwind.ts`'s `theme.extend.opacity` block already had an unused
+`88: '.88'` entry with a comment citing exactly this "glass scrim"
+purpose. Added `60`, `72`, `92` to the same object — the true fix, not a
+per-usage `color-mix()` workaround, since this recurs (Phase 10, 11 will
+both need dark-ground opacities too, per §10 rule 10).
+
+**Caught a second-order trap while verifying the fix:** a normal
+`pnpm build` after the token change still showed `/72`/`/92` missing from
+the compiled CSS — not a wrong fix, a **stale `.next` build cache** that
+didn't detect the `@vedanta/tokens` workspace-package change. A clean
+`rm -rf apps/web/.next && pnpm build` confirmed both classes compile
+correctly. Documented so a future session doesn't misdiagnose the same
+symptom as a fix failure.
+
+#### Gate result
+
+```
+pnpm typecheck   ✓ 4/4 packages, zero errors
+pnpm lint        ✓ 0 errors (2 pre-existing warnings, LegalDocument.tsx,
+                   unrelated)
+pnpm test        ✓ datum-ui 115/115 (up from 113 — HomeHero/Breadcrumbs
+                   coverage picked up cleanly by the axe auto-glob), web
+                   55/55; only the pre-existing DATABASE_URL-gated RFQ
+                   test fails
+pnpm build       ✓ clean rebuild (cache cleared to rule out the staleness
+                   trap above), 77 routes, zero errors/warnings, First
+                   Load JS unchanged (94.9 kB on both live homepages)
+visual check     ✓ real browser (not just Storybook, given this session's
+(manual browser)   now-repeated Storybook-cache lessons): dhruv-epc
+                   homepage renders the full split hero correctly —
+                   breadcrumb, 2px rule, eyebrow, H1, white/72 body copy
+                   (confirmed via computed style: rgba(255,255,255,0.72)),
+                   CTA pair, hatch-placeholder photo panel. Storybook,
+                   AFTER clearing its own separate node_modules/.cache
+                   (a second, different cache layer from the app's .next
+                   one above) confirmed 0 accessibility violations on the
+                   Dhruv/Precise stories with a real dimensionLabel
+                   passed — "Ø 3,600 mm" renders legibly in white at the
+                   photo panel's bottom edge, datum-rule line visible
+                   beneath it. One remaining Storybook axe flag traced to
+                   my own story fixture's placeholder text (steel-500 on
+                   steel-800, not part of any real component) — fixed in
+                   the story file itself, zero production impact either way.
+```
+
+#### Deviations / flagged (none silent)
+
+1. `dhruv-epc/page.tsx`/`precise-engineers/page.tsx` touched earlier than
+   the plan's own phase numbering implies (see "What was done" above) —
+   a mechanical necessity, not scope creep; no photo/copy/content
+   decisions were made beyond what's needed to keep the build green.
+2. Panel horizontal padding uses plain `px-6` (Phase 9, unconditional) —
+   the notes' own prose for the pre-Hero-C hero mentions an 86px 2xl
+   gutter, but that's itself written with arbitrary-bracket syntax in the
+   notes and isn't in Decision 2's locked Hero C anatomy at all. Left
+   unrefined; Phase 10 (responsive) is where breakpoint-specific spacing
+   belongs, not this phase.
+3. Type panel content is bottom-aligned (`justify-end`) — inferred from
+   every other hero in this system using the same anchor (PageHero/
+   ProductHero's `pb-20`-bottomed content, the old pre-Hero-C hero's own
+   `justify-end pb-20`), not stated explicitly for Hero C's type panel
+   specifically.
+4. Carried over, still open: icon/hamburger colors and company-route
+   utility bar content (Phase 5), the two bracket-linework sizing
+   inferences (Phase 7 follow-up), `Seal.tsx`'s 120px issuer-line layout
+   and the `ProductCard` `layout="spec"` variant (Phase 8) — none wired
+   to a live consumer yet.
+
+#### Requires human review before Phase 10
+
+- Confirm the two live homepages rendering Hero C ahead of Phases 13-15's
+  own scheduled slot is acceptable, given it was unavoidable rather than
+  chosen.
+- Confirm the inferred content-alignment (`justify-end`) and `px-6`
+  padding read as intended before Phase 10 builds the responsive stack on
+  top of them.
+- Confirm `onDark` additions to the shared `Breadcrumbs`/`DatumRule`/
+  `DimensionLabel` components are the right call versus, e.g., a Hero-C-
+  specific fork of these components.

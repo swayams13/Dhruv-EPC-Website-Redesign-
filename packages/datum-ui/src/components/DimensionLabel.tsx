@@ -18,9 +18,19 @@ export interface DimensionLabelProps {
   label: string
   /** §11: home + product heroes only */
   animate?: boolean
+  /** Dark/photo grounds — Hero C's photo panel (Phase 9). steel-500 (the
+   *  default, tuned for ProductHero's light bg-steel-50 band) can't reach
+   *  4.5:1 against anything darker than itself (verified: even pure black
+   *  only gets to 4.24:1) — white is the only reliable choice with no
+   *  scrim underneath it. */
+  onDark?: boolean
 }
 
-export function DimensionLabel({ label, animate = false }: DimensionLabelProps): React.ReactElement {
+export function DimensionLabel({
+  label,
+  animate = false,
+  onDark = false,
+}: DimensionLabelProps): React.ReactElement {
   const match = label.match(/\d[\d,]*(?:\.\d+)?/)
   const final = match ? Number(match[0].replace(/,/g, '')) : null
   const [value, setValue] = useState(animate && final !== null ? 0 : final)
@@ -53,7 +63,7 @@ export function DimensionLabel({ label, animate = false }: DimensionLabelProps):
       : label
 
   return (
-    <span className="font-mono text-helper text-steel-500">
+    <span className={`font-mono text-helper ${onDark ? 'text-white' : 'text-steel-500'}`}>
       <span aria-hidden="true">{text}</span>
       <span className="sr-only">{label}</span>
     </span>

@@ -7,6 +7,7 @@ import {
   type DomainIconName,
   HomeHero,
   ProductCard,
+  StatBand,
   type StampProps,
 } from '@vedanta/datum-ui'
 import { buildLocalBusiness } from '@vedanta/schemas'
@@ -54,19 +55,28 @@ export default function DhruvHome() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(buildLocalBusiness(dhruvEntity)) }}
       />
 
-      {/* Exploded-view pressure vessel in the photo slot — docs/design.md,
-          override logged in docs/decisions.md [2026-07-16]. Dimension label:
-          pressure-vessels spec-table max shell diameter (DEMO-PLACEHOLDER,
-          pending engineering data, per the existing site-wide convention). */}
+      {/* Hero C split hero (Decision 2, Phase 9/13-15). No photo/dimensionLabel
+          wired yet — real works photography sourcing and ExplodedSequence
+          revival are both explicitly deferred (Decision 6); the hatch
+          placeholder renders in the meantime, same as the current live site. */}
       <HomeHero
+        variant="split"
+        breadcrumb={[{ label: 'Home', href: '/' }, { label: 'Dhruv EPC Solutions' }]}
         eyebrow="ASME U & U2 · IBR · Manjusar GIDC, Vadodara"
         headline="Static equipment to ASME Sec. VIII, built in Vadodara."
         subhead="Pressure vessels, heat exchangers, columns and skids in CS, LAS, SS, duplex and high-nickel alloys — for oil & gas, refining, fertilizers, power and steel."
         rfq={{ label: 'Request a quote', href: '/request-a-quote?company=dhruv' }}
         secondary={{ label: 'View equipment', href: '#equipment' }}
-        stats={dhruvStats}
-
       />
+
+      {/* Stat band — standalone light section below the hero, never overlaid
+          on the photo (Decision 2). Matches (group)/page.tsx's existing
+          standalone-band wrapper exactly. */}
+      <section className="border-t border-steel-200 bg-steel-50">
+        <div className="mx-auto max-w-wide px-6 pt-12">
+          <StatBand stats={dhruvStats} />
+        </div>
+      </section>
 
       {/* Equipment grid — §16 product cards, no-photo variant until the works shoot (§P-5) */}
       <section id="equipment" aria-labelledby="equipment-heading" className="bg-steel-950">

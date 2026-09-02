@@ -2,11 +2,11 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { HomeHero } from './HomeHero'
 import { withCompany } from '../story-helpers'
 
-// The photo child owns its own aspect ratio (2026-07-16 — HomeHero's band
-// wrapper no longer forces aspect-video; see the component comment).
+// The photo child owns its own aspect ratio/sizing (it's a plain grid-cell
+// child under Hero C, not a photo-ground layer) — portrait 4:5 per Decision 2.
 const photoFrame = (
-  <div className="flex aspect-video w-full items-center justify-center bg-steel-800 font-mono text-helper text-steel-500">
-    graded works photograph · full-bleed
+  <div className="flex h-full w-full items-center justify-center bg-steel-800 font-mono text-helper text-steel-300">
+    graded works photograph · 4:5 portrait
   </div>
 )
 
@@ -18,8 +18,27 @@ const meta: Meta<typeof HomeHero> = {
 export default meta
 type Story = StoryObj<typeof HomeHero>
 
+// Group home — no breadcrumb (top-level page), 600px panel height.
+export const Group: Story = {
+  args: {
+    variant: 'split',
+    eyebrow: 'ASME U & U2 · IBR · Est. 1994',
+    headline: 'Precision fabrication and flow-control engineering since 1994.',
+    subhead:
+      'Two specialized works in Gujarat: static equipment to ASME Sec. VIII at Vadodara, and expansion joints to EJMA at Anand — one group, one quality system.',
+    rfq: { label: 'Request a quote', href: '/request-a-quote' },
+    secondary: { label: 'View products', href: '#products' },
+    photo: photoFrame,
+    dimensionLabel: 'Ø 5,000 mm max shell',
+  },
+  decorators: [withCompany('group')],
+}
+
+// Dhruv EPC home — breadcrumb present, 560px panel height.
 export const Dhruv: Story = {
   args: {
+    variant: 'split',
+    breadcrumb: [{ label: 'Home', href: '/' }, { label: 'Dhruv EPC Solutions' }],
     eyebrow: 'ASME U & U2 · IBR · Est. Vadodara',
     headline: 'Pressure vessels and heat exchangers to ASME code',
     subhead:
@@ -28,18 +47,15 @@ export const Dhruv: Story = {
     secondary: { label: 'View equipment', href: '#equipment' },
     photo: photoFrame,
     dimensionLabel: 'Ø 3,600 mm',
-    stats: [
-      { value: '38 yrs', label: 'In fabrication', source: 'Incorporated 1988' },
-      { value: '250 T', label: 'Max single piece', source: 'Crane capacity record' },
-      { value: 'Ø 4,000 mm', label: 'Max diameter', source: 'Shop envelope' },
-      { value: '6', label: 'Sectors served', source: 'Client register, 2026' },
-    ],
   },
   decorators: [withCompany('dhruv')],
 }
 
+// Precise Engineers home — breadcrumb present, 560px panel height.
 export const Precise: Story = {
   args: {
+    variant: 'split',
+    breadcrumb: [{ label: 'Home', href: '/' }, { label: 'Precise Engineers' }],
     eyebrow: 'EJMA 10th ed. · IBR · Est. Vadodara',
     headline: 'Metallic expansion joints engineered to EJMA',
     subhead:
@@ -48,19 +64,22 @@ export const Precise: Story = {
     secondary: { label: 'View products', href: '#products' },
     photo: photoFrame,
     dimensionLabel: 'DN 2,400',
-    stats: [
-      { value: '25 yrs', label: 'In expansion joints', source: 'Incorporated 2001' },
-      { value: 'DN 6,000', label: 'Max bellows size', source: 'Forming envelope' },
-      { value: '750 °C', label: 'Max design temp', source: 'EJMA 10th ed. designs' },
-      { value: '4', label: 'Sectors served', source: 'Client register, 2026' },
-    ],
   },
   decorators: [withCompany('precise')],
 }
 
-// Photograph is real or absent — never stock (§19)
-const { photo: _p, dimensionLabel: _d, ...dhruvNoPhoto } = Dhruv.args ?? {}
+// Photograph is real or absent — never stock (§4.1); absent renders the
+// §4.2 hatch placeholder, not a broken/empty panel.
 export const NoPhoto: Story = {
-  args: dhruvNoPhoto,
+  args: {
+    ...Dhruv.args,
+    photo: undefined,
+  },
+  decorators: [withCompany('dhruv')],
+}
+
+const { breadcrumb: _b, ...dhruvNoBreadcrumb } = Dhruv.args ?? {}
+export const NoBreadcrumb: Story = {
+  args: dhruvNoBreadcrumb,
   decorators: [withCompany('dhruv')],
 }

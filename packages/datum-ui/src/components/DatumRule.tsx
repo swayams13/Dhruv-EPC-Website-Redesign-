@@ -10,9 +10,13 @@ import { useEffect, useState } from 'react'
 export interface DatumRuleProps {
   /** Signature draw on mount — product/home heroes only (§11) */
   animate?: boolean
+  /** Dark/photo grounds — Hero C's photo panel (Phase 9). The line itself
+   *  (not the tick, already accent) flips from steel-950 to white/60 so it
+   *  stays visible with no scrim underneath it. */
+  onDark?: boolean
 }
 
-export function DatumRule({ animate = false }: DatumRuleProps): React.ReactElement {
+export function DatumRule({ animate = false, onDark = false }: DatumRuleProps): React.ReactElement {
   const [drawn, setDrawn] = useState(!animate)
 
   useEffect(() => {
@@ -29,9 +33,9 @@ export function DatumRule({ animate = false }: DatumRuleProps): React.ReactEleme
       />
       {/* the datum line */}
       <span
-        className={`absolute left-0 top-2 block h-px w-full origin-left bg-steel-950 transition-transform duration-signature ease-enter ${
-          drawn ? 'scale-x-100' : 'scale-x-0'
-        }`}
+        className={`absolute left-0 top-2 block h-px w-full origin-left transition-transform duration-signature ease-enter ${
+          onDark ? 'bg-white/60' : 'bg-steel-950'
+        } ${drawn ? 'scale-x-100' : 'scale-x-0'}`}
       />
     </div>
   )
