@@ -2491,3 +2491,122 @@ visual check     ✓ real browser, group homepage (MegaPanel) + Dhruv
 
 - Nothing new from this phase. The two items flagged after Phase 5 remain
   open (see above).
+
+### Session 34 — Phase 7: Footer Zone 3 dark + back-to-top
+**Status:** Complete ✅ — committed locally, not pushed.
+**Branch:** `feat/real-company-logos` · **Date:** 2026-09-02
+**Governing specs:** `docs/FINAL_IMPLEMENTATION_PLAN.md` Phase 7,
+`docs/VEDANTA_DESIGN_DECISIONS.md` Decision 4 (Footer Zone 3)
+
+#### What was done
+
+- **`Footer.tsx` Zone 3** — `bg-steel-50` → `bg-steel-900 text-steel-50`,
+  i.e. literally Zone 1's own chrome ("reusing Zone 1's already-established
+  dark-chrome treatment — not a new dark color", Decision 4), not a
+  independently-invented dark value. Renamed the file's `zone1Label`/
+  `zone1Link` constants to `darkLabel`/`darkLink` and reused them directly
+  in Zone 3 rather than duplicating the same two strings — both zones now
+  share one definition of what "Zone 1's dark-chrome text treatment" means,
+  which is the point of Decision 4's "reusing" language, not just its
+  visual result.
+  - Column headings: `text-steel-600` → `text-steel-400` (Zone 1's label
+    color) — kept the existing `text-xs font-medium` structure, changed
+    color only (no `uppercase`/`tracking-caption` added — Decision 4 asks
+    for color reuse, not a structural change, and Decision 3's sibling
+    correction pass for MegaPanel this same session set the precedent for
+    reading "retheme" narrowly).
+  - Sitemap links: `text-steel-700 hover:text-steel-950` → `text-steel-50`
+    + `darkLink`'s `hover:text-white` — kept as the more prominent/brighter
+    tier, preserving the original hierarchy (sitemap nav more prominent
+    than the legal bar) by inverting emphasis correctly for a dark surface
+    (brighter = more emphasis, not darker).
+  - Legal bar (Privacy/Terms/LinkedIn/WhatsApp): base `text-steel-600` →
+    `text-steel-400` (the dimmer, label-tier color — preserves its
+    original lower-emphasis position relative to the sitemap nav),
+    `hover:text-steel-950` → `darkLink`'s `hover:text-white`. Its
+    `border-t border-steel-200` divider → `border-steel-800`, the exact
+    divider color Zone 1 already uses for its own internal "Content
+    revised" separator.
+  - `pb-20 md:pb-6` (MobileBottomBar clearance) — untouched, verified
+    unchanged in the diff (Decision 4's "preserve exactly").
+  - Added `data-chrome="dark"` to Zone 3's container — the data-chrome
+    coverage table's one Phase-7 requirement; without it, Privacy/Terms/
+    LinkedIn's focus rings would fall below 3:1 on the new dark bg.
+- **Back-to-top control** — 44px circle (`h-row w-row`, `rounded-full`),
+  bordered (`border-steel-600`, brightens to `border-steel-400` on hover)
+  rather than filled, so it doesn't compete with the RFQ button as a second
+  saturated/filled element (the amber/blue law is about accent fills
+  specifically, but a heavy secondary fill here would still read as a
+  second point of visual weight in the footer). Icon: reused the existing
+  `ArrowRight` glyph rotated `-rotate-90` rather than adding a new glyph —
+  Decision 4's evidence note ("no icon assets currently exist... applies to
+  link/text color only") is about LinkedIn/WhatsApp specifically, not a
+  blanket ban on this new, explicitly-required element. Implemented as a
+  plain `<a href="#">`, not a `button onClick` with `scrollTo()` — Footer.tsx
+  has no `'use client'` boundary today and adding one for a single
+  scroll-to-top control would be a disproportionate blast-radius increase;
+  an empty-fragment anchor is HTML-spec-defined to jump to the top of the
+  document natively, needs no JS, and correctly honors
+  `globals.css`'s existing `prefers-reduced-motion` → `scroll-behavior:
+  auto !important` rule for free. Verified live: click jumps to `window.scrollY
+  === 0`.
+- **`tailwind.ts`** — added `width.row = '44px'` to mirror the already-
+  existing `height.row` (44px, §15/§26 space.11) so the control is a true
+  circle. Not a new pixel value in the system — 44px already exists as a
+  canonical component-size token on the height axis; this only makes it
+  available on the width axis too, exactly mirroring the pre-existing
+  `compact` pair (`height.compact`/`width.compact`, both 40px). Flagged
+  below for a quick human glance since it's technically a new key, even
+  though the value itself carries no new design decision.
+
+#### Gate result
+
+```
+pnpm typecheck   ✓ 4/4 packages, zero errors
+pnpm lint        ✓ 0 errors (2 pre-existing warnings, LegalDocument.tsx,
+                   unrelated)
+pnpm test        ✓ datum-ui 107/107, web css-parity 18/18 (accent-*
+                   variables untouched — this phase only reads existing
+                   steel-*/accent-text-* tokens)
+pnpm build       ✓ 77 routes, zero errors/warnings, First Load JS unchanged
+visual check     ✓ real browser: group homepage footer (no
+(manual browser)   MobileBottomBar route) — Zone 3 renders dark, matching
+                   Zone 1 exactly, back-to-top circle renders correctly at
+                   1440px; a Dhruv product page (has MobileBottomBar) at
+                   375px confirmed pb-20 clearance still holds — the legal
+                   row/back-to-top sit above the fixed bottom bar, same as
+                   before this change. Keyboard focus verified via real
+                   Shift+Tab (not programmatic .focus(), per the Phase-6
+                   false-negative lesson): "Terms" link's ring renders in
+                   the pale accent-dark color, confirming data-chrome="dark"
+                   is live on Zone 3. Click on the back-to-top control
+                   confirmed via `window.scrollY === 0` after the jump.
+```
+
+#### Deviations / flagged (none silent)
+
+1. `width.row` is a new token key in `tailwind.ts` (not just a value
+   correction to an existing one, unlike Phase 5's height change) — see
+   "What was done" above for why it's judged a mechanical mirror of an
+   already-authorized value rather than a fresh design decision. Flagged
+   for a quick human confirmation rather than treated as self-evidently
+   fine.
+2. Back-to-top's icon (reused/rotated `ArrowRight`) and its bordered
+   (not filled) treatment are inferred — Decision 4 says "add a 44px
+   circular back-to-top control" without specifying its glyph or fill
+   style.
+3. Column-heading and legal-bar color assignments (which tier gets
+   `steel-50` vs `steel-400`) are an inference preserving the original
+   light-theme's relative hierarchy, not a literal spec value — Decision 4
+   says "using the existing white/opacity-white values already established
+   in Zone 1" without naming which Zone-1 value maps to which Zone-3 role.
+4. Carried over from Phase 5: icon/hamburger colors and company-route
+   utility bar content — both still open, unaffected by this phase.
+
+#### Requires human review before Phase 8
+
+- Confirm `width.row`'s addition to `tailwind.ts` is acceptable as a
+  mechanical mirror of `height.row`, not a token that needed a full §26
+  design-review pass.
+- Confirm the back-to-top control's bordered-circle treatment and the
+  Zone-3 color-tier assignments read as intended.

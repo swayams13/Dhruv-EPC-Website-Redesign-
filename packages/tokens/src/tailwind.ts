@@ -114,6 +114,7 @@ export const datumPreset = {
       },
       width: {
         compact: '40px',
+        row: '44px', // mirrors height.row — a true 44×44 circle (Footer back-to-top, Phase 7)
       },
       minHeight: {
         row: '44px',

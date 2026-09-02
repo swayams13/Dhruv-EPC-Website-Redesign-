@@ -7,11 +7,17 @@
 // of Stamps in one scribed row, each linking to Certifications. Zone 3:
 // sitemap columns, Privacy, Terms, LinkedIn as a labeled link — no vendor
 // credit, no social-icon confetti.
-// Zones 2–3 render on the page surface (steel-50) with scribed separators —
-// §18 names only Zone 1 as the graphite band (interpretation noted).
+// Zone 3 (Phase 7, Decision 4): dark now too, reusing Zone 1's exact
+// bg-steel-900/text-steel-50 chrome rather than a new dark value — darkLabel/
+// darkLink below are shared by both zones for that reason. Carries
+// data-chrome="dark" (new requirement this revision) so Privacy/Terms/
+// LinkedIn's focus rings clear 3:1 on the dark surface. Zone 2 stays on the
+// page surface (steel-50) — §18 names only Zone 1 as the graphite band, and
+// Decision 4 only calls out Zone 3, so Zone 2 is untouched by this phase.
 
 import type { EntityRecord } from '@vedanta/schemas'
 import { Stamp, type StampProps } from './Stamp'
+import { ArrowRight } from './glyphs'
 
 export interface FooterLink {
   label: string
@@ -60,8 +66,8 @@ function revisionDate(iso: string): string {
     : new Intl.DateTimeFormat('en', { month: 'short', year: 'numeric' }).format(d)
 }
 
-const zone1Label = 'text-xs font-medium uppercase tracking-caption text-steel-400'
-const zone1Link = 'transition-colors duration-instant hover:text-white'
+const darkLabel = 'text-xs font-medium uppercase tracking-caption text-steel-400'
+const darkLink = 'transition-colors duration-instant hover:text-white'
 
 export function Footer({
   entity,
@@ -92,13 +98,13 @@ export function Footer({
               <dl className="mt-6 space-y-2">
                 {entity.cin && (
                   <div>
-                    <dt className={`inline ${zone1Label}`}>CIN </dt>
+                    <dt className={`inline ${darkLabel}`}>CIN </dt>
                     <dd className="inline font-mono text-helper">{entity.cin}</dd>
                   </div>
                 )}
                 {entity.gst && (
                   <div>
-                    <dt className={`inline ${zone1Label}`}>GST </dt>
+                    <dt className={`inline ${darkLabel}`}>GST </dt>
                     <dd className="inline font-mono text-helper">{entity.gst}</dd>
                   </div>
                 )}
@@ -110,12 +116,12 @@ export function Footer({
           <div className="space-y-6">
             {entity.worksAddresses.map((works) => (
               <div key={works.address}>
-                <p className={zone1Label}>{works.label}</p>
+                <p className={darkLabel}>{works.label}</p>
                 <p className="mt-1 font-mono text-helper leading-relaxed">{works.address}</p>
               </div>
             ))}
             <div>
-              <p className={zone1Label}>Registered office</p>
+              <p className={darkLabel}>Registered office</p>
               <p className="mt-1 font-mono text-helper leading-relaxed">
                 {entity.registeredOffice}
               </p>
@@ -124,24 +130,24 @@ export function Footer({
 
           <div className="space-y-6">
             <div>
-              <p className={zone1Label}>Phone</p>
+              <p className={darkLabel}>Phone</p>
               {entity.phones.map((phone) => (
                 <a
                   key={phone}
                   href={`tel:${phone.replace(/[^+\d]/g, '')}`}
-                  className={`mt-1 block py-1 font-mono text-helper ${zone1Link}`}
+                  className={`mt-1 block py-1 font-mono text-helper ${darkLink}`}
                 >
                   {phone}
                 </a>
               ))}
             </div>
             <div>
-              <p className={zone1Label}>Email</p>
+              <p className={darkLabel}>Email</p>
               {entity.emails.map((email) => (
                 <a
                   key={email}
                   href={`mailto:${email}`}
-                  className={`mt-1 block py-1 font-mono text-helper ${zone1Link}`}
+                  className={`mt-1 block py-1 font-mono text-helper ${darkLink}`}
                 >
                   {email}
                 </a>
@@ -168,11 +174,13 @@ export function Footer({
       )}
 
       {/* Zone 3 — navigation & legal, and nothing else */}
-      <div className="bg-steel-50">
+      {/* data-chrome='dark': focus rings on Privacy/Terms/LinkedIn/back-to-top
+          use the -dark accent step, same reason as Zone 1 above */}
+      <div data-chrome="dark" className="bg-steel-900 text-steel-50">
         <div className="mx-auto grid max-w-wide gap-8 px-6 py-12 sm:grid-cols-2 lg:grid-cols-4">
           {columns.map((col) => (
             <div key={col.heading}>
-              <p className="text-xs font-medium text-steel-600">
+              <p className="text-xs font-medium text-steel-400">
                 {col.heading}
               </p>
               <ul className="mt-3 space-y-2">
@@ -180,7 +188,7 @@ export function Footer({
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-sm text-steel-700 transition-colors duration-instant hover:text-steel-950 hover:underline"
+                      className={`text-sm text-steel-50 hover:underline ${darkLink}`}
                     >
                       {link.label}
                     </Link>
@@ -190,23 +198,32 @@ export function Footer({
             </div>
           ))}
         </div>
-        <div className="mx-auto flex max-w-wide flex-wrap items-center gap-6 border-t border-steel-200 px-6 py-6 pb-20 text-sm text-steel-600 md:pb-6">
-          <a href={privacyHref} className="hover:text-steel-950 hover:underline">
+        <div className="mx-auto flex max-w-wide flex-wrap items-center gap-6 border-t border-steel-800 px-6 py-6 pb-20 text-sm text-steel-400 md:pb-6">
+          <a href={privacyHref} className={`hover:underline ${darkLink}`}>
             Privacy
           </a>
-          <a href={termsHref} className="hover:text-steel-950 hover:underline">
+          <a href={termsHref} className={`hover:underline ${darkLink}`}>
             Terms
           </a>
           {linkedinHref && (
-            <a href={linkedinHref} className="hover:text-steel-950 hover:underline">
+            <a href={linkedinHref} className={`hover:underline ${darkLink}`}>
               LinkedIn
             </a>
           )}
           {whatsappHref && (
-            <a href={whatsappHref} className="hover:text-steel-950 hover:underline">
+            <a href={whatsappHref} className={`hover:underline ${darkLink}`}>
               WhatsApp
             </a>
           )}
+          <a
+            href="#"
+            aria-label="Back to top"
+            className={`ml-auto flex h-row w-row shrink-0 items-center justify-center rounded-full border border-steel-600 text-steel-50 hover:border-steel-400 ${darkLink}`}
+          >
+            <span className="-rotate-90">
+              <ArrowRight size={20} />
+            </span>
+          </a>
         </div>
       </div>
     </footer>
