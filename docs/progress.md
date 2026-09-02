@@ -3146,3 +3146,175 @@ other verification claim this session.
 - Confirm `photoMobile`'s API shape (separate prop vs. a `<picture>`-style
   art-direction convention within a single `photo` slot) before any page
   wires in real mobile-cropped assets.
+
+### Session 38 — Phase 11: PageHero full rebuild + fixtures
+**Status:** Complete ✅ — committed locally, not pushed.
+**Branch:** `feat/real-company-logos` · **Date:** 2026-09-02
+**Governing specs:** `docs/FINAL_IMPLEMENTATION_PLAN.md` Phase 11,
+`docs/VEDANTA_DESIGN_DECISIONS.md` Decision 2 (PageHero "unchanged by this
+decision") and Decision 6 (ExplodedSequence guard)
+
+#### Scoping: why this phase, unlike Phase 9, could genuinely touch zero live routes
+
+Phase 9 was forced to edit two live `page.tsx` files because Hero C changed
+`HomeHero`'s prop *shape* (new required `variant`, `stats` removed).
+Checked whether the same trap applied here before writing any code: read
+all 16 real `PageHero` consumers (`grep -rln "<PageHero"` across
+`apps/web` — one more than the plan's own "~16" estimate, since
+`lib/product-category-pages.tsx` calls it twice from one shared template,
+covering both companies' category routes). None pass `photo` today; all
+use the same four props (`breadcrumbs`, `eyebrow`, `title`, `lead`).
+Since Decision 2 changes PageHero's *rendering*, not its *contract*, kept
+the exact same prop interface — every consumer keeps compiling untouched,
+`pnpm typecheck` for `apps/web` stayed green with zero edits to any of
+the 16 files, and "No production route touched" (the plan's own
+constraint) held literally, not just in spirit.
+
+**Deliberately did not add a CTA pair**, despite `IMPLEMENTATION_NOTES`
+§2.2's older shared-hero-anatomy prose listing one. That prose predates
+`PageHero` existing as its own split-out component; the *current* file's
+own header comment already states "H1 carries the real qualifier; proof
+belongs in the page body (§20 components), not here" — a clearer, more
+specific, more current signal than the older shared-component prose.
+Zero of the 16 real consumers need one. Adding unused, speculative API
+surface based on a stale doc section is exactly the scaffolding CLAUDE.md
+warns against.
+
+#### What was done
+
+- **`PageHero.tsx`** — full rebuild: light/no-photo-ground → photo-as-
+  ground (`absolute inset-0`, object-cover) + scrim (`var(--overlay-hero-
+  interior)`, applied via inline `style` — a CSS custom property, not a
+  Tailwind color, same technique as Footer's bracket-linework `color-mix`
+  fix) + centered/bottom-anchored content + breadcrumb-on-photo (reusing
+  `Breadcrumbs`' `onDark` variant built in Phase 9 — the exact same "→
+  separator in accent-dark" device §10 rule 10 calls for here). Eyebrow
+  converts from `uppercase tracking-caption` to `text-body font-bold
+  text-white` title case, closing PageHero's held-back CONVERT site from
+  Phase 3. `--overlay-hero-interior` chosen over the plain `--overlay-
+  hero` var based on the naming match to "interior/utility hero" (PageHero's
+  own domain per Decision 2's scope table) — `ProductHero` (Phase 12,
+  untouched) is the other var's presumed consumer.
+- **`ExplodedSequence` guard** added to the `photo` JSDoc (Decision 6) —
+  this is the component where that guard structurally matters: PageHero's
+  full-bleed, fixed-min-height photo-ground pattern is exactly what
+  `ExplodedSequence`'s in-flow, unconstrained-height scroll track can't
+  coexist with, unlike Hero C's `HomeHero`, which has no photo-ground
+  slot for the guard to protect in the first place.
+- **`data-chrome="dark"` added to the content layer** — not in the plan's
+  own data-chrome coverage table (which only lists Header utility strip,
+  Footer Zone 3, HomeHero type panel), but the same underlying mechanism
+  applies: the breadcrumb link sits on a ground at least as dark as
+  steel-950 (the scrim's own bottom stop is `rgba(0,0,0,.82)`), where
+  plain `--accent` already fails 3:1 — the exact finding this whole
+  redesign fixed everywhere else. Treated as a mechanical necessity
+  consistent with every other dark-surface fix this session, not left as
+  a gap just because the table happened not to name it.
+- **No-photo fallback is the primary state, not an edge case** — same
+  §4.2 hatch-placeholder pattern as `HomeHero`'s (locally duplicated, not
+  extracted to a shared helper — a five-line snippet across two files
+  doesn't clear the bar for an abstraction). All 16 real consumers hit
+  this path today; verified two of them live (`/dhruv-epc/company` — has
+  a photo fixture in Storybook but the live route passes none, so it also
+  shows the hatch state; `/privacy`, a genuinely no-photo, short-
+  breadcrumb page) rather than assuming the fallback looks acceptable.
+- **`tailwind.ts`** — `minHeight` gains `page-hero`/`page-hero-md`/
+  `page-hero-lg` (440/520/620px, §3's responsive table, flagged
+  IMPLEMENTATION INFERENCE per Phase 22's own governance note — not
+  directly canvas-verified for this hero, though Decision 2 confirms it's
+  "unchanged"). `opacity` gains `82` (PageHero's unchanged lead-paragraph
+  opacity) — same missing-preset-step problem as Phase 9's `72`/`92`,
+  same fix.
+- **`PageHero.stories.tsx`** — full fixture set per the plan's explicit
+  list: group `/about`, `/contact`, `/capabilities` index, `/projects`,
+  `/privacy`, `/terms`, `dhruv-epc/company`, `precise-engineers/company`,
+  one product-category page (mapped to the real
+  `lib/product-category-pages.tsx` consumer, not a hypothetical one).
+  Every fixture's copy is the real, live prop values from its actual
+  consumer (checked by reading each file), not paraphrased or invented.
+  Coverage: photo hero, no-photo fallback, short breadcrumb (legal pages,
+  2 items), long breadcrumb + long eyebrow/title (a new fixture built for
+  this phase, since no existing consumer has a 3-level breadcrumb with a
+  long title — grepped for the longest real breadcrumbs/titles/eyebrows
+  in the codebase and used those as the basis rather than inventing
+  arbitrary long strings).
+
+#### Gate result
+
+```
+pnpm typecheck   ✓ 4/4 packages, zero errors — confirms all 16 real
+                   PageHero consumers compile untouched
+pnpm lint        ✓ 0 errors (2 pre-existing warnings, LegalDocument.tsx,
+                   unrelated)
+pnpm test        ✓ datum-ui 125/125 (up from 115 — PageHero's 9 new
+                   fixtures picked up cleanly by the axe auto-glob), web
+                   55/55; only the pre-existing DATABASE_URL-gated RFQ
+                   test fails
+pnpm build       ✓ clean rebuild, 77 routes, zero errors/warnings, First
+                   Load JS unchanged
+visual check     ✓ real browser: /dhruv-epc/company (a live, untouched
+(manual browser)   route) now renders the full photo-as-ground + scrim
+                   hero automatically — hatch placeholder, breadcrumb
+                   "Dhruv EPC → Company" in the correct accent-dark/white-
+                   60/white-92 treatment, accent rule, white eyebrow/H1,
+                   white/82 lead. Keyboard focus verified via real Tab
+                   navigation (counted from a body click, corrected mid-
+                   check when the count landed in the Footer instead of
+                   the hero — activeElement inspection, not guessing):
+                   the breadcrumb link's ring renders in accent-dark
+                   (#DC8D89), confirming data-chrome="dark" works.
+                   /privacy confirmed the no-photo, short-breadcrumb
+                   state looks intentional, not broken. Storybook (after
+                   clearing its node_modules/.cache again — the same
+                   staleness this session hit twice now for newly-added
+                   opacity steps, see below) showed 0 accessibility
+                   violations on the long-breadcrumb/title fixture with a
+                   real photo, breadcrumb wrapping to one line and the
+                   title wrapping to two, no overflow.
+```
+
+#### A recurring pattern, now the third time this session: Storybook cache staleness after a token change
+
+Same root cause as Phase 9's `.next` cache trap, different cache: adding
+`opacity: { 82: '.82' }` to `tailwind.ts` and immediately checking
+Storybook (even after a full process restart) still showed the pre-change
+`text-white/82` compiling to nothing — traced to
+`packages/datum-ui/node_modules/.cache` (Vite's dep-optimization cache),
+not `.next`. `rm -rf` on that directory before restarting fixed it, same
+as Phase 9. Recording explicitly as a pattern now (two independent
+occurrences: Phase 9's `.next`, Phase 11's Storybook cache) so a future
+session recognizes "Storybook/Next still shows the old value after a
+`tailwind.ts` change" as a caching symptom to clear, not a sign the fix
+itself is wrong.
+
+#### Deviations / flagged (none silent)
+
+1. `--overlay-hero-interior` vs. `--overlay-hero` — the mapping to
+   PageHero (vs. ProductHero) is inferred from variable naming
+   ("interior" ↔ "Interior/utility pages," PageHero's own Decision-2
+   category), not an explicit citation naming which var belongs to which
+   component.
+2. No CTA pair — a deliberate omission, not an oversight; see "Scoping"
+   above.
+3. `min-h-page-hero` 440/520/620px values are the pre-Hero-C shared-
+   anatomy numbers, explicitly flagged IMPLEMENTATION INFERENCE by the
+   plan's own governance note (Phase 22) — not independently re-verified
+   against the canvas this phase (`1d` wasn't re-fetched).
+4. `data-chrome="dark"` added despite not being in the plan's own
+   coverage table — see "What was done" above.
+5. Carried over, still open: everything from Phase 9/10's entries above
+   (icon/hamburger colors, utility bar content, bracket-linework sizing,
+   `Seal.tsx`'s 120px rung, `ProductCard`'s spec layout, `photoMobile`'s
+   API shape, 320/375/390px validation).
+
+#### Requires human review before Phase 12
+
+- Confirm `--overlay-hero-interior` (not `--overlay-hero`) is correct for
+  PageHero — the mapping is inferred, not explicitly sourced.
+- Confirm the deliberate no-CTA-pair choice reads as intended, not as a
+  missed requirement.
+- Confirm `min-h-page-hero-*`'s inferred pixel values before Phase 22's
+  cross-cutting responsive re-check treats them as final.
+- Note for whoever picks up Phase 12 (`ProductHero`): expect the same
+  `.next`/Storybook-cache staleness after touching `tailwind.ts` — clear
+  both proactively rather than debugging from scratch a third time.

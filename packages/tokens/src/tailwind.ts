@@ -124,6 +124,14 @@ export const datumPreset = {
       minHeight: {
         row: '44px',
         control: '48px',
+        // PageHero/ProductHero full-bleed hero (§3 responsive table,
+        // Phase 11) — 440px <768 / 520px 768-1023 / 620px ≥1024. Flagged
+        // IMPLEMENTATION INFERENCE per Phase 22's governance note (not
+        // directly canvas-verified for these two heroes, though Decision 2
+        // confirms them "unchanged" by the Hero C revision).
+        'page-hero': '440px',
+        'page-hero-md': '520px',
+        'page-hero-lg': '620px',
       },
       // Type steps missing from Tailwind defaults (§5.2): data 15px, helper 13px
       // §5.2 fluid steps (360px floor → 1440px ceiling, linear between):
@@ -155,9 +163,12 @@ export const datumPreset = {
       // compile to nothing without this (verified against the build output,
       // same failure mode as border-accent/50 in Phase 7 — Tailwind's
       // opacity modifier only recognizes its own preset percentage steps).
+      // 82: PageHero/ProductHero's unchanged body-copy opacity (§2.2,
+      // Phase 11) — same missing-preset-step problem as 72/92 above.
       opacity: {
         60: '.6',
         72: '.72',
+        82: '.82',
         88: '.88',
         92: '.92',
       },
