@@ -2,11 +2,42 @@
 // data-company="group" scopes CSS variables to neutral steel values
 
 import Link from 'next/link'
-import { Footer } from '@vedanta/datum-ui'
+import { Footer, type MegaPanelColumn } from '@vedanta/datum-ui'
+import type { CompanySlug } from '@vedanta/schemas'
 import { GroupChrome } from '../../components/group/GroupChrome'
-import { getEntity } from '../../lib/content-loader'
+import { getEntity, getProductCategoriesByCompany, getProductsByCompany } from '../../lib/content-loader'
+import { categoryHref, productHref, productsIndexHref } from '../../lib/product-urls'
 
 const groupEntity = getEntity('group')
+
+// Session 9 (VG-051): the Products mega-panel's two columns, built from
+// real ProductCategory + Product content (Session 5) — not a hardcoded
+// list. Capped at 4 products per category ("top products", not the full
+// catalog) so the panel stays a scan-able entry point, not a full index.
+const MEGA_PANEL_PRODUCTS_PER_CATEGORY = 4
+
+function buildMegaPanelColumn(companySlug: CompanySlug, companyLabel: string): MegaPanelColumn {
+  const categories = getProductCategoriesByCompany(companySlug)
+  const products = getProductsByCompany(companySlug)
+  return {
+    companyLabel,
+    categories: categories.map((category) => ({
+      name: category.name,
+      href: categoryHref(companySlug, category.slug),
+      products: products
+        .filter((p) => p.categorySlug === category.slug)
+        .slice(0, MEGA_PANEL_PRODUCTS_PER_CATEGORY)
+        .map((p) => ({ name: p.name, href: productHref(companySlug, category.slug, p.slug) })),
+    })),
+    allProductsHref: productsIndexHref(companySlug),
+    allProductsLabel: `All ${companyLabel} products →`,
+  }
+}
+
+const megaPanelColumns: MegaPanelColumn[] = [
+  buildMegaPanelColumn('dhruv-epc', 'Dhruv EPC Solutions'),
+  buildMegaPanelColumn('precise-engineers', 'Precise Engineers'),
+]
 
 const FOOTER_COLUMNS = [
   {
@@ -39,7 +70,7 @@ const FOOTER_COLUMNS = [
 export default function GroupLayout({ children }: { children: React.ReactNode }) {
   return (
     <div data-company="group">
-      <GroupChrome />
+      <GroupChrome megaPanelColumns={megaPanelColumns} />
       {children}
       {/* certificationsHref: stamps link to the group home proof strip —
           carried over from the removed per-page Footers (audit P0-1). */}

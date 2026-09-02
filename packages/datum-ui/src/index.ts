@@ -43,6 +43,13 @@ export {
   type MegaMenuItem,
 } from './components/Header'
 export {
+  MegaPanel,
+  type MegaPanelProps,
+  type MegaPanelColumn,
+  type MegaPanelCategory,
+  type MegaPanelProduct,
+} from './components/MegaPanel'
+export {
   MobileDrawer,
   type MobileDrawerProps,
   type DrawerGroup,

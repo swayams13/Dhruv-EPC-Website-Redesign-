@@ -409,3 +409,29 @@ compute the actual blended contrast first (or just don't use opacity on
 text at all) and pick a token that's compliant on its own. An opacity
 wrapper can make an already-compliant token non-compliant even when the
 token itself would pass at full strength.
+
+## 2026-09-02 — Session 9: /projects stub route CI-blocked on already-tracked VG-004
+
+**What happened:** PR #23 (VG-050/051, group nav restructure + home
+rebuild) opened with CI green on every local check (`pnpm typecheck` /
+`lint` / `test` / `build`) but failed the GitHub Actions "Accessibility
+gate (axe-core CI)" job — the real-browser Playwright + axe-core sweep
+`packages/datum-ui/src/a11y.test.tsx`'s jsdom-based axe pass structurally
+cannot run (no paint layer, `color-contrast` explicitly excluded there).
+The new `/projects` stub route (Session 9 N2) renders `GroupChrome`'s
+header, which carries the same already-tracked VG-004 contrast defect
+(`text-steel-500` "Group of Companies" sub-label, 3.8:1 on the dark
+header) every other group route already has — but `/projects` wasn't yet
+added to `apps/web/e2e/a11y.spec.ts`'s `KNOWN_FAILURES` skip-list, so it
+was the one route in the sweep actually asserting on a bug the other 15+
+group routes are deliberately exempted from. Fixed by adding `/projects/`
+to `KNOWN_FAILURES` with the `VG-004` tag, following the exact precedent
+Session 8 set when it added its own 15 new `(group)/` routes the same way.
+
+**Rule:** any new route under `(group)/` inherits `GroupChrome`'s
+already-tracked VG-004 header contrast bug by construction — add it to
+`e2e/a11y.spec.ts`'s `KNOWN_FAILURES` in the same PR that adds the route,
+not as a follow-up. `pnpm test` alone will not catch this: the real
+browser-painted axe gate only runs in CI (`playwright test`), so a new
+group route's PR can show fully green local checks and still fail CI on
+this exact, entirely predictable gap.
