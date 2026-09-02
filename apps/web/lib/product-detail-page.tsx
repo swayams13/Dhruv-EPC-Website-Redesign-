@@ -159,7 +159,7 @@ export function productDetailPage(companySlug: CompanySlug) {
               <h2 id="moc-heading" className="font-display text-h3 font-medium text-steel-950">
                 Materials &amp; codes
               </h2>
-              <h3 className="mt-6 text-xs font-medium uppercase tracking-caption text-steel-600">
+              <h3 className="mt-6 text-xs font-medium text-steel-600">
                 {page?.materialsHeading ?? 'Materials of construction'}
               </h3>
               <ul className="mt-3 flex flex-wrap gap-2">
@@ -172,7 +172,7 @@ export function productDetailPage(companySlug: CompanySlug) {
                   </li>
                 ))}
               </ul>
-              <h3 className="mt-6 text-xs font-medium uppercase tracking-caption text-steel-600">
+              <h3 className="mt-6 text-xs font-medium text-steel-600">
                 Design codes
               </h3>
               <ul className="mt-3 flex flex-wrap gap-2">

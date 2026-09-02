@@ -84,7 +84,7 @@ export function Footer({
           <div>
             <p className="font-display text-h4 font-semibold">{entity.legalName}</p>
             {entity.companySlug !== 'group' && (
-              <p className="mt-1 text-xs font-medium uppercase tracking-caption text-steel-400">
+              <p className="mt-1 text-xs font-medium text-steel-400">
                 A Vedanta Group company
               </p>
             )}
@@ -172,7 +172,7 @@ export function Footer({
         <div className="mx-auto grid max-w-wide gap-8 px-6 py-12 sm:grid-cols-2 lg:grid-cols-4">
           {columns.map((col) => (
             <div key={col.heading}>
-              <p className="text-xs font-medium uppercase tracking-caption text-steel-600">
+              <p className="text-xs font-medium text-steel-600">
                 {col.heading}
               </p>
               <ul className="mt-3 space-y-2">

@@ -39,7 +39,7 @@ export function ProjectCard({
     >
       {photo && <div className="aspect-4/3 w-full overflow-hidden bg-steel-100">{photo}</div>}
       <div className="p-6">
-        <p className="text-xs font-medium uppercase tracking-caption text-steel-600">{sector}</p>
+        <p className="text-xs font-medium text-steel-600">{sector}</p>
         <h3 className="mt-2 font-display text-h3 font-semibold text-steel-950">{title}</h3>
         <dl className="mt-4 flex flex-wrap gap-x-6 gap-y-3 border-t border-steel-200 pt-4">
           {metrics.slice(0, 3).map((m) => (

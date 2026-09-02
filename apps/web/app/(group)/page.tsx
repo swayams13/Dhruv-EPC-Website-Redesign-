@@ -86,7 +86,7 @@ export default function GroupHome() {
         {/* §14.2 item 1 — hero, what the group manufactures, stated with a figure */}
         <section className="bg-steel-900">
           <div className="mx-auto max-w-wide px-6 pb-16 pt-24">
-            <p className="text-xs font-medium uppercase tracking-caption text-steel-400">
+            <p className="text-xs font-medium text-steel-400">
               ASME U &amp; U2 · IBR · EIL Approved · ISO 9001:2015
             </p>
             <h1 className="mt-4 max-w-content font-display text-display-xl font-medium text-steel-50">
@@ -110,7 +110,7 @@ export default function GroupHome() {
               const products = getProductsByCompany(slug)
               return (
                 <div key={slug} data-company={slug === 'dhruv-epc' ? 'dhruv' : 'precise'} className="mt-8">
-                  <h3 className="text-xs font-medium uppercase tracking-caption text-steel-400">{label}</h3>
+                  <h3 className="text-xs font-medium text-steel-400">{label}</h3>
                   <div className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     {categories.map((category) => (
                       <CategoryCard
@@ -171,7 +171,7 @@ export default function GroupHome() {
               { label: 'Precise Engineers', certs: preciseCertifications },
             ].map((group) => (
               <div key={group.label} className="mt-8">
-                <h3 className="text-xs font-medium uppercase tracking-caption text-steel-600">
+                <h3 className="text-xs font-medium text-steel-600">
                   {group.label}
                 </h3>
                 <div className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -226,7 +226,7 @@ export default function GroupHome() {
                       </li>
                     ))}
                   </ul>
-                  <p className="mt-4 text-xs font-medium uppercase tracking-caption text-steel-600">
+                  <p className="mt-4 text-xs font-medium text-steel-600">
                     {door.groups.join(' · ')}
                   </p>
                   <div className="mt-auto pt-8">

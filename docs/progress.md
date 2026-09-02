@@ -2040,3 +2040,100 @@ visual + computed-style check         ✓ live h1 on a product page: Plus
 
 - Nothing new. Phase 3 (`tracking-caption` audit) depends on Phase 2, per
   the plan, and can proceed.
+
+### Session 30 — Phase 3: `tracking-caption` audit & migration
+**Status:** Complete ✅ — committed locally, not pushed
+**Branch:** `feat/real-company-logos` · **Date:** 2026-09-02
+**Governing specs:** `docs/FINAL_IMPLEMENTATION_PLAN.md` Phase 3 (KEEP/CONVERT
+tables), `VEDANTA_DESIGN_IMPLEMENTATION_NOTES.md` D-6, §2.8
+
+#### What was done
+
+Converted the plan's 15 CONVERT sites across 9 files — every one dropped
+`uppercase tracking-caption` (and `font-mono`, for the one site that also
+carried it) from a prose eyebrow/section-label/nav site that D-6 says must
+go title case, not mono-tracked data voice. Left every KEEP site (SpecTable,
+SpecRail, StatBand, CertificationCard, ApprovalsMatrix, Testimonial, Header,
+MegaPanel, entity-record labels, metric `dt`s — genuine data voice) and both
+held-back sites (HomeHero/PageHero eyebrows, converting naturally when those
+components are structurally rewritten in Phases 9/11) untouched:
+
+- `AnchorRail.tsx` — "On this page" rail label
+- `dhruv-epc/capabilities/page.tsx` — equipment-group heading
+- `precise-engineers/capabilities/page.tsx` — 2 product-group headings
+  ("Expansion Joints", "Flow Control")
+- `ClientWall.tsx` — client sector label
+- `ProjectCard.tsx` — sector eyebrow only (the metric `dt` at the same
+  component is a separate KEEP site, untouched)
+- `(group)/page.tsx` — 4 sites: hero credential line, 2 company-group
+  headings, door-card group-tags line
+- `(group)/legal/LegalDocument.tsx` — the "Contents" TOC label only (the
+  file's other 5 sites — `ClauseBlocker`, Entity/Registered-office/Email
+  `dt`s, the revision-date line — are all entity/legal-record data voice,
+  KEEP)
+- `lib/product-detail-page.tsx` — "Materials of construction" and "Design
+  codes" section headings
+- `Footer.tsx` — the "A Vedanta Group company" tagline and the Zone-3
+  sitemap column headings (2 sites); the `zone1Label` constant (CIN, GST,
+  works-address labels, Phone, Email — entity-record data voice) stays,
+  counted as the file's 1 KEEP site
+
+No JSX text content needed re-casing — every site's text was already
+authored in natural sentence/title case in source (the CSS `uppercase`
+transform was doing the shouting, not the string literal), confirmed by
+reading each site's actual text before editing. Kept every other class
+(color, weight, size) unchanged — this is the "narrow mechanical" migration
+the plan itself calls for, not a restyle; the plan's own §2.8 hero-eyebrow
+recipe (`text-body font-bold text-accent`) is reserved for the actual hero
+rebuilds in Phases 9/11/13, not retrofitted here onto footer/capability/card
+labels that have no dedicated redesign phase of their own.
+
+`grep -ro "tracking-caption" apps/web packages/datum-ui --include="*.tsx" | wc -l`
+before: 46. After: **31** — exactly the plan's predicted 29 KEEP + 2
+held-back, verified by an itemized per-file recount matching the plan's
+own KEEP table exactly.
+
+#### Deviations / flagged (none silent)
+
+1. **Snapshot NOT regenerated** — same pre-existing `snapshot-routes.mjs`
+   stale-route-list bug logged under Phase 1 (`docs/mistakes.md`,
+   2026-09-02), still unfixed (out of this phase's scope too). Substituted
+   a manual browser check across Footer (both converted sites) and a
+   capabilities page, confirming converted labels render in natural case
+   while adjacent KEEP entity-data labels correctly stay mono/uppercase —
+   the exact distinction this phase exists to enforce, visible side by side
+   in the same screenshot.
+
+#### Gate result
+
+```
+pnpm typecheck                       ✓ 4/4 packages, zero errors
+pnpm lint                            ✓ 0 errors (2 pre-existing warnings,
+                                        LegalDocument.tsx — a different
+                                        section of the file than this
+                                        phase's edit, unrelated)
+pnpm --filter @vedanta/datum-ui test ✓ 107/107 (axe auto-glob included —
+                                        Footer/ClientWall/ProjectCard's a11y
+                                        stories all still pass)
+pnpm --filter @vedanta/web test      ✓ 51/52 (only the pre-existing
+                                        DATABASE_URL-gated RFQ integration
+                                        test fails, as in every prior
+                                        session)
+pnpm build                           ✓ 77 routes, zero errors/warnings,
+                                        same First Load JS as Phase 2
+                                        (≤120/≤180 kB budgets)
+visual check (manual browser,        ✓ Footer's converted tagline + column
+1440px)                                 headings render natural-case;
+                                        adjacent zone1Label entity-data
+                                        (WORKS/REGISTERED OFFICE/PHONE/
+                                        EMAIL) correctly stays mono
+                                        uppercase-tracked, confirming the
+                                        prose-vs-data-voice split holds
+```
+
+#### Requires human review before Phase 4
+
+- Nothing new. Phase 4 (Logo/brand primitives) depends on Phase 1 only, per
+  the plan, and can proceed — but note its own stated blocker: the
+  full-resolution emblem asset's provenance against the Claude Design
+  project's own asset file is still unverified (carried since Session 26).
