@@ -128,30 +128,39 @@ export const overlay = {
   heroInterior: 'linear-gradient(180deg, rgba(0,0,0,0.40) 0%, rgba(0,0,0,0.58) 48%, rgba(0,0,0,0.82) 100%)',
 } as const
 
-// Typography families (§5.1) — v1.1: Archivo display, IBM Plex Sans body per approved design
+// Typography families (§5.1) — v1.3: Plus Jakarta Sans display + body, per
+// VEDANTA_DESIGN_DECISIONS.md D-2. Archivo and IBM Plex Sans retired — one
+// fewer font family over the wire (net reduction, not a swap-for-swap).
+// IBM Plex Mono unchanged: figures, specs, provenance, codes, labels only.
 export const fontFamily = {
-  display: 'Archivo, sans-serif',
-  body: 'IBM Plex Sans, sans-serif',
+  display: 'Plus Jakarta Sans, sans-serif',
+  body: 'Plus Jakarta Sans, sans-serif',
   data: 'IBM Plex Mono, monospace',
 } as const
 
-// Type scale (§5.2) — documented as [min, max] for fluid implementation
+// Type scale (§5.2) — v1.3 remap per IMPLEMENTATION_NOTES §1.1: the client's
+// scale jumps hard (64 → 47 → 25); kept, not smoothed into a flat modular
+// scale. Weights go up — the client's H1 is 700, not 500. Documented as
+// [min, max] for fluid implementation; the fluid clamp() strings this
+// generates live in tailwind.ts (hand-duplicated there, same as before).
 export const typeScale = {
-  'display-xl': { min: 40, max: 64, lineHeight: 1.05, weight: 500 },
-  display: { min: 34, max: 48, lineHeight: 1.1, weight: 500 },
-  h1: { min: 30, max: 40, lineHeight: 1.15, weight: 600 },
-  h2: { min: 26, max: 32, lineHeight: 1.2, weight: 600 },
-  h3: { min: 21, max: 24, lineHeight: 1.3, weight: 600 },
-  h4: { min: 18, max: 20, lineHeight: 1.4, weight: 600 },
-  'body-lg': { min: 18, max: 18, lineHeight: 1.6, weight: 400 },
-  body: { min: 16, max: 16, lineHeight: 1.6, weight: 400 },
-  small: { min: 14, max: 14, lineHeight: 1.5, weight: 400 },
+  'display-xl': { min: 40, max: 64, lineHeight: 1.0, weight: 700 },  // hero H1 only
+  display: { min: 34, max: 56, lineHeight: 1.02, weight: 700 },      // product-page H1
+  h1: { min: 32, max: 47, lineHeight: 1.05, weight: 600 },           // section headline
+  h2: { min: 26, max: 32, lineHeight: 1.15, weight: 600 },
+  h3: { min: 21, max: 25, lineHeight: 1.3, weight: 600 },            // card title
+  h4: { min: 18, max: 21, lineHeight: 1.35, weight: 600 },           // footer heading
+  'body-lg': { min: 19, max: 19, lineHeight: 1.55, weight: 400 },    // hero subhead, value statement
+  body: { min: 16, max: 16, lineHeight: 1.5, weight: 400 },
+  small: { min: 15, max: 15, lineHeight: 1.55, weight: 400 },        // card scope
   // §14 helper text + §15 units/notes cite 13px; absent from §5.2's table.
   // Design-review: approved by Swayam 2026-07-10 (treat §14/§15 as authoritative).
-  helper: { min: 13, max: 13, lineHeight: 1.5, weight: 400 },
-  caption: { min: 12, max: 12, lineHeight: 1.4, weight: 500, tracking: '0.06em', transform: 'uppercase' as const },
-  'data-lg': { min: 24, max: 32, lineHeight: 1.2, weight: 500 },
-  data: { min: 15, max: 15, lineHeight: 1.5, weight: 400 },
+  helper: { min: 13, max: 13, lineHeight: 1.5, weight: 400 },        // mono notes, provenance
+  // v1.3: mono only (D-6) — prose eyebrows/section labels/nav go title case
+  // instead. Migrating existing usage sites is Phase 3's job, not this token's.
+  caption: { min: 12, max: 12, lineHeight: 1.3, weight: 600, tracking: '0.09em', transform: 'uppercase' as const },
+  'data-lg': { min: 24, max: 32, lineHeight: 1.1, weight: 500 },     // stat figures
+  data: { min: 15, max: 15, lineHeight: 1.5, weight: 400 },          // mono values
 } as const
 
 // Radius (§13) — v1.3: 2px → 3px is the client's measured card/button radius

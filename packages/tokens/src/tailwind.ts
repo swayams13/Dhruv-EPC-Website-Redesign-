@@ -67,8 +67,11 @@ export const datumPreset = {
       overlay: shadow.overlay,
     },
     fontFamily: {
-      display: ['var(--font-display)', 'Archivo', 'sans-serif'],
-      sans: ['var(--font-sans)', 'IBM Plex Sans', 'sans-serif'],
+      // v1.3: display and sans share one loader/variable — Plus Jakarta Sans
+      // serves both roles (VEDANTA_DESIGN_DECISIONS.md D-2). See
+      // apps/web/app/layout.tsx for why there's no separate --font-sans.
+      display: ['var(--font-display)', 'Plus Jakarta Sans', 'sans-serif'],
+      sans: ['var(--font-display)', 'Plus Jakarta Sans', 'sans-serif'],
       mono: ['var(--font-mono)', 'IBM Plex Mono', 'monospace'],
     },
     transitionDuration: {
@@ -117,21 +120,25 @@ export const datumPreset = {
       // Type steps missing from Tailwind defaults (§5.2): data 15px, helper 13px
       // §5.2 fluid steps (360px floor → 1440px ceiling, linear between):
       // size(vw) = min + (max−min) · (100vw − 360px) / 1080px
+      // v1.3 (2026-09-02): remapped per VEDANTA_DESIGN_DECISIONS.md D-1/
+      // IMPLEMENTATION_NOTES §1.1 — mirrors packages/tokens/src/primitives.ts
+      // `typeScale`. The client's scale jumps hard (64 → 47 → 25); kept, not
+      // smoothed into a flat modular scale.
       fontSize: {
         'logo-sub': ['9px', { lineHeight: '1.4' }],
         data: ['15px', { lineHeight: '1.5' }],
         helper: ['13px', { lineHeight: '1.5' }],
-        'display-xl': ['clamp(40px, 32px + 2.2222vw, 64px)', { lineHeight: '1.05' }],
-        display: ['clamp(34px, 29.3333px + 1.2963vw, 48px)', { lineHeight: '1.1' }],
-        h1: ['clamp(30px, 26.6667px + 0.9259vw, 40px)', { lineHeight: '1.15' }],
-        h2: ['clamp(26px, 24px + 0.5556vw, 32px)', { lineHeight: '1.2' }],
-        h3: ['clamp(21px, 20px + 0.2778vw, 24px)', { lineHeight: '1.3' }],
-        h4: ['clamp(18px, 17.3333px + 0.1852vw, 20px)', { lineHeight: '1.4' }],
-        'body-lg': ['18px', { lineHeight: '1.6' }],
-        body: ['16px', { lineHeight: '1.6' }],
-        small: ['14px', { lineHeight: '1.5' }],
-        caption: ['12px', { lineHeight: '1.4' }],
-        'data-lg': ['clamp(24px, 21.3333px + 0.7407vw, 32px)', { lineHeight: '1.2' }],
+        'display-xl': ['clamp(40px, 32px + 2.2222vw, 64px)', { lineHeight: '1.0' }],
+        display: ['clamp(34px, 26.6667px + 2.037vw, 56px)', { lineHeight: '1.02' }],
+        h1: ['clamp(32px, 27px + 1.3889vw, 47px)', { lineHeight: '1.05' }],
+        h2: ['clamp(26px, 24px + 0.5556vw, 32px)', { lineHeight: '1.15' }],
+        h3: ['clamp(21px, 19.6667px + 0.3704vw, 25px)', { lineHeight: '1.3' }],
+        h4: ['clamp(18px, 17px + 0.2778vw, 21px)', { lineHeight: '1.35' }],
+        'body-lg': ['19px', { lineHeight: '1.55' }],
+        body: ['16px', { lineHeight: '1.5' }],
+        small: ['15px', { lineHeight: '1.55' }],
+        caption: ['12px', { lineHeight: '1.3' }],
+        'data-lg': ['clamp(24px, 21.3333px + 0.7407vw, 32px)', { lineHeight: '1.1' }],
       },
       // §10 glass scrim: steel-50 at 88% — the one sanctioned translucency
       opacity: {
@@ -141,9 +148,12 @@ export const datumPreset = {
       aspectRatio: {
         '4/3': '4 / 3',
       },
-      // Caption voice tracking +0.06em (§5.2) — Tailwind has 0.05/0.1 only
+      // Caption voice tracking +0.09em (§5.2, v1.3) — Tailwind has 0.05/0.1
+      // only. `tight` is new: headlines tighten to -0.02em at h1 and above
+      // (IMPLEMENTATION_NOTES §1.1) — never tracked on prose.
       letterSpacing: {
-        caption: '0.06em',
+        caption: '0.09em',
+        tight: '-0.02em',
       },
     },
   },

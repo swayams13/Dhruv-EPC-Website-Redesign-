@@ -1936,3 +1936,107 @@ visual smoke check (manual browser,  ✓ group home, Dhruv heat-exchangers
   Phase 2 builds on top of it.
 - Nothing else — Phase 1 has no other open blockers. Phase 2 (typography)
   depends only on Phase 1, per the plan.
+
+### Session 29 — Phase 2: Typography / type scale
+**Status:** Complete ✅ — committed locally, not pushed
+**Branch:** `feat/real-company-logos` · **Date:** 2026-09-02
+**Governing specs:** `docs/FINAL_IMPLEMENTATION_PLAN.md` Phase 2,
+`VEDANTA_DESIGN_IMPLEMENTATION_NOTES.md` §1.1/§1.3, `docs/VEDANTA_DESIGN_DECISIONS.md` D-2
+
+#### What was done
+
+- **`primitives.ts`** — `fontFamily.display`/`fontFamily.body` → `Plus Jakarta
+  Sans` (Archivo + IBM Plex Sans retired); `fontFamily.data` unchanged.
+  `typeScale` remapped to the client's table: `display-xl` LH 1.05→1.0/weight
+  500→700 (range unchanged, 40→64); `display` 34→48 → 34→56, LH 1.1→1.02,
+  weight→700; `h1` 30→40 → 32→47, LH 1.15→1.05; `h2` LH 1.2→1.15 (range
+  unchanged); `h3` 21→24 → 21→25; `h4` 18→20 → 18→21, LH 1.4→1.35; `body-lg`
+  18→19 (fixed), LH 1.6→1.55; `body` LH 1.6→1.5; `small` 14→15 (fixed);
+  `caption` LH 1.4→1.3, weight 500→600, tracking 0.06em→0.09em, now
+  documented mono-only (D-6 — migrating the 46 existing usage sites is
+  Phase 3's job, not this token's); `data-lg` LH 1.2→1.1. `data`/`helper`
+  unchanged (both already matched the client's table).
+- **`tailwind.ts`** — `fontSize` clamp() strings regenerated for every
+  changed range (computed via the same fluid-scale formula the existing
+  clamps already used — verified by reproducing 3 untouched entries'
+  existing values bit-for-bit before trusting the formula for new ones) plus
+  matching `lineHeight` updates. `letterSpacing.caption` 0.06em→0.09em; new
+  `letterSpacing.tight: -0.02em` (h1+ headline tracking — applying it to
+  actual heading components is later-phase work, this just defines the
+  utility). `fontFamily` fallback strings updated ('Archivo'/'IBM Plex Sans'
+  → 'Plus Jakarta Sans') — not in the plan's literal "(fontSize,
+  letterSpacing)" parenthetical, but a direct, low-risk consequence of the
+  font retirement happening in this same phase (see deviation 1).
+- **`app/layout.tsx`** — single `Plus_Jakarta_Sans` loader (weights
+  400/500/600/700/800) bound to `--font-display`; `IBM_Plex_Mono` unchanged.
+  **Caught before shipping:** the plan's "one loader now serves both
+  `--font-display` and `--font-sans`" doesn't work as a literal instruction —
+  `next/font`'s `variable` option takes one CSS-variable name per call, so
+  two separate `Plus_Jakarta_Sans({...variable: '--font-sans'})` /
+  `({...variable: '--font-display'})` calls would silently double-embed the
+  identical font (two `@font-face` blocks, same underlying files) —
+  the opposite of the plan's own stated "one fewer font family over the
+  wire" goal. Fixed by keeping one loader/one variable and pointing
+  `tailwind.ts`'s `fontFamily.sans` at `var(--font-display)` too (grepped
+  first to confirm nothing else in the codebase reads `--font-sans`
+  directly — it had exactly one consumer, tailwind.ts itself).
+
+#### Verification, not just visual inspection
+
+Beyond a browser screenshot (Plus Jakarta Sans's rounded terminals visibly
+distinct from Archivo), ran `getComputedStyle` on a live product-page `<h1>`
+at 1440px: `font-family` resolves to the generated `Plus Jakarta Sans`
+class, `font-size` 47px (exactly the new `h1` clamp's ceiling at this
+viewport), `font-weight` 600, `line-height` 49.35px (= 1.05× — the new
+`h1` line-height) — confirms the token chain wired through to real pixels,
+not just that the build didn't error. Mono spec-table text confirmed still
+`IBM Plex Mono`. Inspected the built CSS/font-manifest directly: exactly one
+`Plus_Jakarta_Sans` hash + `IBM_Plex_Mono` embedded — no leftover
+Archivo/IBM Plex Sans, no duplicate Plus Jakarta Sans embed.
+
+#### Deviations / flagged (none silent)
+
+1. `tailwind.ts`'s `fontFamily` fallback-name edit (see above) — outside the
+   plan's literal Phase 2 file-scope parenthetical for `tailwind.ts`
+   `(fontSize, letterSpacing)`, but within the same declared file and a
+   direct mechanical consequence of the font swap this phase performs
+   (same reasoning as Phase 1's `--accent-fg` fix).
+2. **Snapshot NOT regenerated** — same pre-existing `snapshot-routes.mjs`
+   stale-route-list bug logged under Phase 1 (`docs/mistakes.md`,
+   2026-09-02). Not re-logged; substituted the `getComputedStyle` +
+   built-CSS inspection above as stronger, more targeted evidence for a
+   typography-only phase than a byte-diff snapshot would give anyway.
+3. `letterSpacing.tight` (-0.02em) is defined but not yet applied to any
+   heading component — per the plan, that happens when each hero/heading
+   component is rebuilt in its own later phase (9, 11, 12, …), not here.
+
+#### Gate result
+
+```
+pnpm typecheck                       ✓ 4/4 packages, zero errors (confirms
+                                        next/font/google exports
+                                        Plus_Jakarta_Sans)
+pnpm lint                            ✓ 0 errors (2 pre-existing warnings,
+                                        LegalDocument.tsx, unrelated)
+pnpm test                            ✓ tokens 96/96 (unchanged — typography
+                                        doesn't touch contrast), schemas
+                                        70/70, datum-ui 107/107, web 51/52
+                                        (only the pre-existing DATABASE_URL
+                                        RFQ integration test fails, as in
+                                        every prior session)
+pnpm build                           ✓ 77 routes, zero errors/warnings, all
+                                        routes 94.8–115 kB First Load JS
+                                        (≤120/≤180 kB budgets); built font
+                                        manifest confirms 2 font families
+                                        embedded (was 3)
+visual + computed-style check         ✓ live h1 on a product page: Plus
+(manual browser, 1440px)                Jakarta Sans, 47px, weight 600,
+                                        line-height 1.05× — matches the new
+                                        typeScale.h1 exactly; mono text
+                                        unaffected
+```
+
+#### Requires human review before Phase 3
+
+- Nothing new. Phase 3 (`tracking-caption` audit) depends on Phase 2, per
+  the plan, and can proceed.
