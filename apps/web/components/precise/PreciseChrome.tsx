@@ -3,6 +3,7 @@
 // Menu content comes from the seeded product list; entity contact from the
 // EntityRecord (never hard-coded — CLAUDE.md). Mirrors DhruvChrome.
 import { useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { Header, MobileDrawer } from '@vedanta/datum-ui'
 import { preciseProducts } from '../../lib/site-data'
@@ -24,7 +25,16 @@ export function PreciseChrome({ phoneHref, whatsappHref }: { phoneHref: string; 
   return (
     <>
       <Header
-        logo={<span className="font-display text-h4 font-bold">Precise Engineers</span>}
+        logo={
+          <Image
+            src="/logos/precise-engineers.png"
+            alt="Precise Engineers"
+            width={481}
+            height={160}
+            className="h-8 w-auto"
+            priority
+          />
+        }
         homeHref="/precise-engineers"
         menuLabel="Products"
         menuGroups={GROUPS.map((g) => ({

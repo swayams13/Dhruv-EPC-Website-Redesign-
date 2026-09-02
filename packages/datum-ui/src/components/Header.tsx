@@ -152,8 +152,15 @@ export function Header({
         )}
 
         <div className={`mx-auto flex ${rowHeight} max-w-wide items-center justify-between gap-6 px-6`}>
-          <a href={homeHref} className="flex items-center text-steel-50">
-            {logo}
+          <a href={homeHref} className="flex items-center">
+            {/* logo assets are raster marks on an opaque light background (real
+                lockup files, not vector) — a light chip keeps them legible on
+                the always-dark header instead of compositing onto steel-950
+                directly. Same "raster logo needs a light surface" rule
+                ClientWall.tsx already applies to client logos. */}
+            <span className="flex items-center rounded-sm bg-steel-50 px-3 py-2">
+              {logo}
+            </span>
           </a>
 
           <nav aria-label="Primary" className="hidden h-full items-center gap-8 md:flex">
