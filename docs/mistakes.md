@@ -6,7 +6,44 @@ If the rule is general, promote it into CLAUDE.md.
 ---
 <!-- entries go below this line -->
 
-## 2026-09-02 — apps/web/scripts/snapshot-routes.mjs's ROUTES list is stale post-VG-012
+## 2026-09-02 — Header.tsx: logo lockup overlaps primary nav at the exact 768px (`md`) breakpoint
+
+**What happened:** FINAL_IMPLEMENTATION_PLAN.md Phase 22 (responsive
+validation) requires a visual pass at 320/375/390/768/1024/1440px. At
+exactly 768px viewport width, on all three chromes (Group, Dhruv EPC,
+Precise Engineers), the multi-line logo lockup (company name + tagline,
+e.g. "VEDANTA GROUP" / "OF COMPANIES · EST. 1994", or "DHRUV EPC" /
+"SOLUTION PVT. LTD") visually overlaps the primary nav trigger
+("Products"/"Equipment") — the nav text renders on top of / behind the
+logo's second line. On Precise Engineers the RFQ button is pushed
+entirely out of the visible header row. Confirmed via
+`window.innerWidth` + zoomed screenshot on all three routes (`/`,
+`/dhruv-epc/`, `/precise-engineers/`) at 768×900. At 1024px and above
+the same logos still wrap to 2 lines but no longer collide with nav —
+there's enough horizontal room. `document.documentElement.scrollWidth`
+stays equal to `innerWidth` throughout (no horizontal scrollbar), so
+this is a pure z-index/overlap collision, not a layout-overflow bug —
+easy to miss without an exact-768px visual check.
+
+**Root cause:** `packages/datum-ui/src/components/Header.tsx`'s desktop
+nav row (`md:flex`, active from 768px up) assumes the logo lockup and
+nav links + icons + RFQ button all fit on one row starting at exactly
+768px. The logo lockup's font size doesn't shrink at the `md` breakpoint
+specifically (it's the same size from 768px to 1024px+), so the
+narrowest width in the desktop-nav range is also the tightest fit —
+and it doesn't fit.
+
+**Decision, this session:** not fixed. Per FINAL_IMPLEMENTATION_PLAN.md
+Phase 22's own scope ("No files touched — findings route back to their
+originating phase"), this is logged here and in progress.md Session 34
+rather than edited inline. Routes back to Phase 5 (Header + utility
+strip).
+
+**Rule that prevents recurrence:** any component with a `md:`-gated
+layout switch (mobile → desktop nav) must be visually checked at
+exactly the breakpoint's minimum width (768px for `md`, not just
+"768 and up" sampled at 1024/1440) — the tightest fit is always at the
+boundary, not in the middle of the range.
 
 **What happened:** FINAL_IMPLEMENTATION_PLAN.md Phase 1 (token foundations, cool-ramp remap) requires "Snapshot: regenerate and commit" after the token change. Running `node apps/web/scripts/snapshot-routes.mjs` against a fresh `pnpm build` reports 17/30 routes missing and exits 1.
 

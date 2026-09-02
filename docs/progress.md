@@ -3807,3 +3807,77 @@ visual check     ✓ real prod server (`next start`), manual browser:
 
 **Not pushed yet.** Next session picks up at Phase 22 (responsive
 validation).
+
+---
+
+### Session 34 — Phase 22: responsive validation (finding, no files touched)
+
+**Per FINAL_IMPLEMENTATION_PLAN.md Phase 22:** "cross-cutting pass over
+everything built in Phases 1–21. No files touched — findings route back
+to their originating phase." Visual pass at 320/375/390/768/1024/1440px
+on header ladder, mega-panel at `md`, HomeHero split-to-stack, breadcrumb
+position, footer clearance, zero horizontal overflow.
+
+**Tooling note:** this session's browser automation (Claude in Chrome)
+has an observed floor of ~500px on `resize_window` — 320/375/390 could
+not be driven to their exact CSS px via window resize (`window.innerWidth`
+read back 500 regardless of requesting 390 or 320). Verified at the
+achievable 500px (below `md`, same hamburger-nav code path that 320–428
+already share) instead: HomeHero stacks correctly, mobile drawer opens,
+zero `scrollWidth`/`innerWidth` overflow, no visual defects. 768/1024/1440
+were driven exactly (`window.innerWidth` verified after each resize) and
+are full-confidence results.
+
+#### Finding (routes back to Phase 5 — Header)
+
+**Header logo lockup overlaps primary nav at exactly 768px**, on all
+three chromes (Group, Dhruv EPC, Precise Engineers) — confirmed via
+zoomed screenshot + `window.innerWidth` check on `/`, `/dhruv-epc/`,
+`/precise-engineers/`. The two/three-line logo lockup ("VEDANTA GROUP" /
+"OF COMPANIES · EST. 1994", "DHRUV EPC" / "SOLUTION PVT. LTD", "PRECISE"
+/ "ENGINEERS") visually collides with the "Products"/"Equipment" nav
+trigger text; on Precise the RFQ button is pushed off the visible header
+entirely. No horizontal scrollbar (`scrollWidth === innerWidth`) — pure
+overlap, not overflow. At 1024px+ the same wrapped logo no longer
+collides; there's more room. Full root-cause + rule logged in
+`docs/mistakes.md` (2026-09-02). **Not fixed here** — Phase 22 is
+verification-only per its own file scope; this is Phase 5's component.
+
+#### Other responsive checks — clean
+
+- **HomeHero split-to-stack** (Group homepage): 1440/1024/768(nav row
+  only had the header issue above, hero content itself is fine)/500 all
+  verified — grid splits at desktop widths, stacks correctly at 500px,
+  no overflow at any width tested.
+- **Footer clearance**: checked at 1024 on a product-listing route
+  (`/dhruv-epc/products/static-equipment/`) — 3-column link grid, cert
+  chips, bottom bar all clear with no collision or clipping.
+- **Breadcrumb position**: 3-level breadcrumb (`Dhruv EPC → Products →
+  Static Equipment`) renders correctly on `PageHero` at every width
+  checked, no truncation or wrap collision.
+- **Mobile drawer**: opens/closes correctly at 500px, focus-trapped,
+  company-switch links present. (Group's drawer intentionally lists
+  "Dhruv EPC Solutions"/"Precise Engineers" twice — once as an accordion
+  with product categories, once as a flat link — per the explicit
+  code comment in `GroupChrome.tsx`'s `drawerGroups()`: "plus the
+  company-switch links the utility bar has no mobile equivalent for."
+  Confirmed intentional, not a new finding.)
+- **Mega-panel at `md`**: not independently re-verified beyond the
+  768px header finding above — opening it at 768px inherits the same
+  cramped-row problem as the trigger itself; no *additional* mega-panel-
+  specific defect found once the trigger is legible.
+
+#### Deviations / flagged (none silent)
+
+1. One finding above, routed to Phase 5, not fixed in this phase — per
+   the plan's own "no files touched" instruction for Phase 22.
+2. 320/375/390px not driven to exact width by this session's browser
+   tooling (500px floor observed); substituted the achievable 500px,
+   which shares the same `<md` code path. A future session with a
+   real-device or DevTools-emulation-capable browser tool should
+   re-verify the exact 320/375/390 breakpoints once Phase 5 fixes the
+   768px finding above.
+
+**Not pushed yet.** Next session picks up at Phase 5 (fix the header
+overlap) or Phase 23 (a11y/SEO/performance validation) if the human
+wants the Phase 22 finding triaged separately first.
