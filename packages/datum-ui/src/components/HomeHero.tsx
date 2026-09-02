@@ -1,4 +1,5 @@
-// HomeHero — Datum §19, Hero C split (Decision 2, rewritten Phase 9).
+// HomeHero — Datum §19, Hero C split (Decision 2, rewritten Phase 9,
+// responsive stacking added Phase 10).
 // `variant="split"` is the ONLY contract — `align`/`statsOverlay` never
 // existed in code and are retired for good; do not reintroduce either.
 //
@@ -27,8 +28,26 @@
 // panel was never a photo-*ground* layer for it to conflict with in the
 // first place, so there's nothing to warn callers off of here.
 //
-// Responsive stacking (<md) is Phase 10's own commit, deliberately not in
-// this one — the grid below renders unconditionally.
+// Responsive stacking (<md, Phase 10 — its own commit per explicit
+// instruction, no source specifies the exact stacked treatment, every
+// value below is IMPLEMENTATION INFERENCE requiring visual validation):
+//   - <md: type panel first (content before image — reading order + LCP
+//     priority), photo panel second, natural/auto height (no fixed
+//     600/560px — that only applies md+, where it also switches display
+//     from flex to grid so the 47fr/53fr inline style below takes effect;
+//     grid-template-columns is simply inert while display isn't grid).
+//   - Mobile photo crop is 4:3 (not the desktop 4:5 portrait) — over-crops
+//     the subject otherwise. A real per-photo mobile crop needs an actual
+//     asset, not a CSS reflow of the same image, hence `photoMobile` as
+//     its own slot (falls back to `photo` if only one asset exists, which
+//     is all that exists anywhere in this codebase today).
+//   - Datum-rule + dimension label: already a child of the photo panel's
+//     own wrapper (absolutely positioned relative to IT, not the page), so
+//     stacking the photo panel below the type panel carries them along for
+//     free — no separate repositioning logic needed.
+//   - Breadcrumb wrap, CTA wrap, long eyebrow/title wrap: already handled
+//     by Phase 9's flex-wrap on both rows and the absence of any
+//     white-space:nowrap — carried over unchanged, re-verified at 320px.
 
 import { Breadcrumbs, type BreadcrumbItem } from './Breadcrumbs'
 import { Button } from './Button'
@@ -38,6 +57,19 @@ import { DimensionLabel } from './DimensionLabel'
 export interface HeroCta {
   label: string
   href: string
+}
+
+function HatchPlaceholder(): React.ReactElement {
+  return (
+    <div
+      aria-hidden="true"
+      className="h-full w-full bg-steel-900"
+      style={{
+        backgroundImage:
+          'repeating-linear-gradient(135deg, rgba(255,255,255,.035) 0 1px, transparent 1px 10px)',
+      }}
+    />
+  )
 }
 
 export interface HomeHeroProps {
@@ -54,11 +86,15 @@ export interface HomeHeroProps {
   subhead: string
   rfq: HeroCta
   secondary: HeroCta
-  /** Portrait 4:5 photo filling the photo panel — a plain grid-cell child,
-   *  not a photo-ground layer, so it must bring its own sizing (next/image
-   *  `fill` + `object-cover`, or an `h-full w-full` wrapper). Absent renders
-   *  the §4.2 hatch placeholder — never a stock image. */
+  /** Portrait 4:5 photo filling the photo panel at md+ — a plain grid-cell
+   *  child, not a photo-ground layer, so it must bring its own sizing
+   *  (next/image `fill` + `object-cover`, or an `h-full w-full` wrapper).
+   *  Absent renders the §4.2 hatch placeholder — never a stock image. */
   photo?: React.ReactNode
+  /** 4:3 crop for <md (Phase 10) — a real, separately-cropped asset, not
+   *  the same image reflowed. Falls back to `photo` if omitted. Must bring
+   *  its own `h-full w-full object-cover` sizing, same as `photo`. */
+  photoMobile?: React.ReactNode
   /** True dimension for the datum frame, e.g. "Ø 3,600 mm" */
   dimensionLabel?: string
   className?: never
@@ -72,16 +108,20 @@ export function HomeHero({
   rfq,
   secondary,
   photo,
+  photoMobile,
   dimensionLabel,
 }: HomeHeroProps): React.ReactElement {
   return (
     <section
-      className={`grid ${breadcrumb ? 'h-hero-split-company' : 'h-hero-split-group'}`}
+      className={`flex flex-col md:grid ${
+        breadcrumb ? 'md:h-hero-split-company' : 'md:h-hero-split-group'
+      }`}
       style={{ gridTemplateColumns: '47fr 53fr' }}
     >
-      {/* Type panel — 47%. data-chrome='dark': breadcrumb link + both CTAs
-          need the -dark accent step to clear 3:1 on steel-900 (new
-          requirement this revision, data-chrome coverage table). */}
+      {/* Type panel — 47% at md+, natural height stacked first below it.
+          data-chrome='dark': breadcrumb link + both CTAs need the -dark
+          accent step to clear 3:1 on steel-900 (new requirement this
+          revision, data-chrome coverage table). */}
       <div data-chrome="dark" className="flex flex-col justify-end bg-steel-900 px-6 py-12">
         {breadcrumb && (
           <div className="mb-6">
@@ -105,21 +145,18 @@ export function HomeHero({
         </div>
       </div>
 
-      {/* Photo panel — 53%, a plain grid cell. No scrim, no gradient, no
-          type over it — the headline difference from every other hero. */}
+      {/* Photo panel — 53% at md+, stacked second below md. No scrim, no
+          gradient, no type over it — the headline difference from every
+          other hero. Two crops: 4:3 <md, 4:5 portrait md+ (Decision 2). */}
       <div className="relative">
-        {photo ?? (
-          <div
-            aria-hidden="true"
-            className="h-full w-full bg-steel-900"
-            style={{
-              backgroundImage:
-                'repeating-linear-gradient(135deg, rgba(255,255,255,.035) 0 1px, transparent 1px 10px)',
-            }}
-          />
-        )}
+        <div className="aspect-4/3 w-full md:hidden">
+          {photoMobile ?? photo ?? <HatchPlaceholder />}
+        </div>
+        <div className="hidden h-full w-full md:block">{photo ?? <HatchPlaceholder />}</div>
         {/* Datum-rule + dimension label pinned to the bottom of the photo
-            panel specifically — not the type panel, not the page (Decision 2). */}
+            panel specifically — not the type panel, not the page (Decision
+            2). Already a child of this wrapper, so it stacks with the
+            photo panel for free below md, no separate repositioning. */}
         <div className="absolute inset-x-0 bottom-0 px-6 pb-6">
           {dimensionLabel && (
             <div className="pb-2">

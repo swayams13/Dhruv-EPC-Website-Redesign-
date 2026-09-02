@@ -3027,3 +3027,122 @@ visual check     ✓ real browser (not just Storybook, given this session's
 - Confirm `onDark` additions to the shared `Breadcrumbs`/`DatumRule`/
   `DimensionLabel` components are the right call versus, e.g., a Hero-C-
   specific fork of these components.
+
+### Session 37 — Phase 10: HomeHero responsive implementation
+**Status:** Complete ✅ — committed locally, not pushed.
+**Branch:** `feat/real-company-logos` · **Date:** 2026-09-02
+**Governing spec:** `docs/FINAL_IMPLEMENTATION_PLAN.md` Phase 10 — its own
+sub-phase per explicit instruction; the plan itself flags every value here
+as **IMPLEMENTATION INFERENCE — REQUIRES VISUAL VALIDATION**, no canvas or
+notes source specifies the stacked-mobile treatment.
+
+#### What was done (one property at a time, per the plan's own checklist)
+
+- **Breakpoint:** stack `<md` (768px), matching the system's existing
+  scale — confirmed no awkward in-between state right at the boundary
+  (screenshotted at exactly 768px: the split has already engaged cleanly,
+  no half-collapsed row).
+- **Mechanism, not just breakpoint:** `flex flex-col md:grid` on the
+  section, with `gridTemplateColumns: '47fr 53fr'` staying as an
+  *unconditional* inline style from Phase 9. This works because
+  `grid-template-columns` has zero effect while `display` isn't
+  `grid`/`inline-grid` — at `<md` the browser ignores it entirely (flex
+  column layout applies instead); at `md:grid` it takes effect
+  immediately. No JS breakpoint detection, no hydration-mismatch risk, no
+  arbitrary Tailwind value.
+- **Stack order:** type panel first (already first in DOM — no reordering
+  needed, source order already matches reading order + LCP priority),
+  photo panel second.
+- **Panel height:** `md:h-hero-split-company`/`md:h-hero-split-group`
+  (was unconditional in Phase 9) — natural/auto height below `md`, so
+  stacked content never gets clipped by a fixed 600/560px box sized for
+  the *desktop* two-column layout.
+- **Mobile photo crop (4:3, not the desktop 4:5):** added a `photoMobile`
+  prop, falls back to `photo` if only one asset exists (true for every
+  current consumer — no real photography sourced yet, Decision 6 defers
+  it). Two sibling wrapper divs (`aspect-4/3 w-full md:hidden` /
+  `hidden h-full w-full md:block`) swap via Tailwind visibility classes —
+  `aspect-4/3` is an already-existing token (`tailwind.ts`'s
+  `extend.aspectRatio`, added for ProductCard's 4:3 card crop), not a new
+  one.
+- **Datum-rule + dimension label repositioning:** turned out to need
+  **zero code change** — they're already a child of the photo panel's own
+  `.relative` wrapper (`absolute inset-x-0 bottom-0` relative to *that*
+  div, not the page), so when the photo panel stacks below the type panel
+  at `<md`, the rule+label ride along and stay pinned to the photo panel's
+  bottom automatically. Verified this by re-reading Phase 9's own
+  structure before writing new code, rather than assuming a fix was
+  needed — the "moves with the photo panel" requirement was already
+  satisfied by how Phase 9 nested things.
+- **Breadcrumb/CTA/long-title wrapping:** also needed no code change —
+  Phase 9 already used `flex-wrap` on both the breadcrumb row and the CTA
+  row, and no `whitespace-nowrap` exists anywhere in the type panel.
+  Re-verified rather than assumed: screenshotted the real (long) Dhruv
+  headline ("Static equipment to ASME Sec. VIII, built in Vadodara.") at
+  ~500px CSS width — wraps to three lines cleanly, no overflow.
+
+#### Gate result
+
+```
+pnpm typecheck   ✓ 4/4 packages, zero errors
+pnpm lint        ✓ 0 errors (2 pre-existing warnings, LegalDocument.tsx,
+                   unrelated)
+pnpm test        ✓ datum-ui 115/115, web 55/55 (only the pre-existing
+                   DATABASE_URL-gated RFQ test fails)
+pnpm build       ✓ clean rebuild (cache cleared), 77 routes, zero errors/
+                   warnings, First Load JS unchanged
+visual check     ✓ real dev server, dhruv-epc + precise-engineers
+(manual browser)   homepages. Confirmed zero horizontal overflow
+                   (`document.documentElement.scrollWidth -
+                   clientWidth === 0`) at 500px (the narrowest width this
+                   session's browser-automation tooling could actually
+                   reach — see limitation below), 768px (the `md`
+                   boundary — split engaged cleanly, no in-between state),
+                   and 1024px. Stacked layout at 500px shows the correct
+                   order (type panel, then photo panel with the 4:3 hatch
+                   placeholder and datum-rule at its bottom), CTAs and the
+                   long real Dhruv headline all wrap correctly with no
+                   overflow. Precise Engineers homepage confirmed the
+                   identical structure renders correctly in flex-500 blue,
+                   not just Dhruv's red — the per-company theming survived
+                   the full Phase 9+10 rewrite.
+```
+
+#### A tooling limitation, disclosed rather than glossed over
+
+The plan's explicit visual-validation list is **320/375/390/768/1024/
+1440px**. This session's browser-automation `resize_window` tool would
+not reliably shrink the Chrome window below **500px** — confirmed by
+requesting 320px, then 100px, and getting 500px reported back both times
+(a real floor, not a fluke); it also proved unreliable across tabs
+sharing one window (a second tab's resize call sometimes silently kept
+the first tab's already-set dimensions). **320/375/390px were not
+independently verified this session** — 500px (below the 768px `md`
+breakpoint, so the identical `<md` CSS path applies — there is no
+additional breakpoint between 320 and 500 in this design) stood in as the
+closest achievable check and showed zero overflow and correct wrapping.
+Flagged here rather than silently claimed as "checked at all six
+breakpoints" — an honest gap beats a false green, same standard as every
+other verification claim this session.
+
+#### Deviations / flagged (none silent)
+
+1. `photoMobile` is new, additive API surface with no real consumer or
+   asset yet (same status as `photo` itself on the two live homepages —
+   both still show the hatch placeholder). Structural support only.
+2. 320/375/390px visual validation not completed — see the tooling
+   limitation above. Recommend a follow-up check with working viewport
+   control (real device, browser devtools responsive mode, or a fixed
+   `resize_window` tool) before this phase is considered fully signed off
+   per the plan's own explicit checklist.
+3. Carried over, still open: everything listed at the end of the Phase 9
+   entry above (icon/hamburger colors, utility bar content, bracket-
+   linework sizing, `Seal.tsx`'s 120px rung, `ProductCard`'s spec layout).
+
+#### Requires human review before Phase 11
+
+- Independently verify 320/375/390px once a reliable narrow-viewport tool
+  is available — this session could not.
+- Confirm `photoMobile`'s API shape (separate prop vs. a `<picture>`-style
+  art-direction convention within a single `photo` slot) before any page
+  wires in real mobile-cropped assets.
