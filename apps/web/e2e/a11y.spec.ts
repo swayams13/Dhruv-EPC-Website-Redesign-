@@ -17,8 +17,9 @@ const KNOWN_FAILURES: Record<string, string> = {
   '/request-a-quote/thank-you/': 'VG-004',
   '/dhruv-epc/': 'VG-004',
   '/precise-engineers/': 'VG-004',
-  '/precise-engineers/capabilities/': 'VG-004',
-  '/precise-engineers/proof/': 'VG-004',
+  // '/precise-engineers/capabilities/' and '/precise-engineers/proof/' were
+  // here — Phase 23 (2026-09-02) re-ran axe against every route and found
+  // both now clean (0 violations). Un-skipped. See docs/mistakes.md.
   // Session 8 (VG-020/021): new (group)/ routes inherit the same GroupChrome
   // header VG-004 already tracks — not a new bug, see docs/mistakes.md.
   '/industries/': 'VG-004',

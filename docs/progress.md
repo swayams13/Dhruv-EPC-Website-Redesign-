@@ -3881,3 +3881,96 @@ verification-only per its own file scope; this is Phase 5's component.
 **Not pushed yet.** Next session picks up at Phase 5 (fix the header
 overlap) or Phase 23 (a11y/SEO/performance validation) if the human
 wants the Phase 22 finding triaged separately first.
+
+---
+
+### Session 34 — Phase 23: accessibility + SEO + performance validation
+
+**Per FINAL_IMPLEMENTATION_PLAN.md Phase 23:** "Files: none, except
+`e2e/a11y.spec.ts`'s `KNOWN_FAILURES`, VG-004 status only." Full
+CLAUDE.md verify sequence, route axe, JS budget, redirect integrity.
+Visual: focus-visible sweep (incl. Footer Zone 3 + HomeHero type panel),
+`prefers-reduced-motion`, single-accent-element check.
+
+#### VG-004 status (the plan's own explicit ask: "remains unknown until
+Phase 23")
+
+Ran axe against every route in `lib/routes.ts`'s `ROUTES`, not just the
+ones already in `KNOWN_FAILURES`. **The original Header/mega-menu
+contrast bug is fixed** by the Phase 5 rewrite — `/precise-engineers/
+capabilities/` and `/precise-engineers/proof/` are now clean and
+un-skipped. Every other `KNOWN_FAILURES` route still fails, but on a
+**different node**: `ProductCard.tsx`'s `onDark` variant leaves caption/
+spec-row text as bare `text-steel-500` against `bg-steel-900` (3:1,
+needs 4.5:1) — same failure pattern, new location, same routes (so no
+`KNOWN_FAILURES` entries needed adding, only the two removed). Full
+root-cause writeup in `docs/mistakes.md` (2026-09-02); routes back to
+Phase 8. Not fixed here — out of Phase 23's file scope.
+
+#### Gate result
+
+```
+pnpm typecheck        ✓ 4/4 packages, zero errors
+pnpm lint              ✓ 0 errors (2 pre-existing warnings, unrelated)
+pnpm test              ✓ 55/55 (pre-existing DATABASE_URL-gated RFQ
+                         test still fails, as every prior session)
+pnpm build              ✓ clean, all 19 non-dynamic routes within JS
+                         budget (94.9–115 kB, floor 120/180 kB)
+e2e/a11y.spec.ts        ✓ 30 passed, 25 skipped (was 30/25 → now 32/23
+                         after the VG-004 re-triage above)
+e2e/golden-page-rollout ✓ 18/18
+check-js-budget.mjs     ✓ all 19 routes within budget
+check-redirect-map-
+  integrity.mjs         ✓ 74 redirect rules validated
+test-redirects.mjs      ✓ all 73 redirects verified (real prod server)
+```
+
+#### Visual checks
+
+- **Focus-visible, Footer Zone 3**: confirmed live — the "Privacy" link
+  in the dark bottom bar shows a clear flex-blue ring on
+  `/precise-engineers/` when focused. Direct visual proof.
+- **Focus-visible, HomeHero type panel**: `.focus()` via script produced
+  a false negative (Chromium suppresses `:focus-visible` after a prior
+  mouse click in the same page-load, a tooling artifact, not a product
+  bug) — confirmed instead by reading `globals.css`: `:focus-visible {
+  outline: 2px solid var(--accent-focus) }` plus `[data-chrome='dark']
+  { --accent-focus: var(--accent-dark) }`, and confirmed at runtime that
+  the type panel's own `data-chrome="dark"` wrapper resolves
+  `--accent-focus` to `#dc8d89` (the -dark step) via
+  `getComputedStyle`. Same mechanism as Footer Zone 3, which has direct
+  visual proof — high confidence, not directly screenshotted.
+- **`prefers-reduced-motion`**: `HomeHero.tsx` has no transitions/
+  animation at all (nothing to reduce). The one real animated hero
+  device, `apps/web/components/ExplodedSequence.tsx`, gates its scrub
+  behavior on `(min-width: 768px) and (prefers-reduced-motion:
+  no-preference)` and falls back to the fully-exploded static frame
+  otherwise — confirmed by reading the source; this session's browser
+  tooling has no `prefers-reduced-motion` emulation control to verify
+  at runtime.
+- **Single-accent-element**: re-confirmed by construction — every
+  screenshot taken across Phases 21–22 (category/listing pages, both
+  companies, multiple breakpoints) showed exactly one filled RFQ button
+  on screen at a time; `Header.tsx`'s `contentRfqInView` logic
+  (`invisible` class on the sticky header RFQ when the page's own RFQ
+  anchor is in view) is the mechanism. No new screenshots taken
+  specifically for this check — relied on the Phase 21/22 evidence.
+
+#### Deviations / flagged (none silent)
+
+1. VG-004 re-triage above — `a11y.spec.ts` edited (in scope), new root
+   cause logged to `docs/mistakes.md`, routes back to Phase 8. Not
+   fixed here.
+2. Two visual checks (HomeHero focus ring, prefers-reduced-motion)
+   verified via code-reading + one runtime property check rather than
+   direct screenshot/emulation, due to this session's browser-automation
+   tooling not exposing CDP media-feature emulation or reliable
+   synthetic-keyboard `:focus-visible` triggering. Both mechanisms are
+   shared with an already-directly-verified surface (Footer Zone 3) or
+   independently correct by source inspection — flagged as
+   lower-confidence-but-not-blocking, not silently skipped.
+
+**Not pushed yet.** Next session picks up at Phase 24 (snapshot
+finalization) or Phase 5 (header 768px fix) / Phase 8 (ProductCard
+`onDark` caption contrast fix) if the human wants either finding
+triaged first.

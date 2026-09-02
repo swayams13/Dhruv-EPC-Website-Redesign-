@@ -6,6 +6,51 @@ If the rule is general, promote it into CLAUDE.md.
 ---
 <!-- entries go below this line -->
 
+## 2026-09-02 — VG-004 has moved: Header's contrast bug is fixed, ProductCard's `onDark` captions are the new instance
+
+**What happened:** FINAL_IMPLEMENTATION_PLAN.md Phase 23 requires
+re-checking VG-004's status after the Header rewrite (Phase 5) — its
+exact wording: "VG-004's status after the Header rewrite remains
+unknown until Phase 23." Ran axe against every route in
+`apps/web/lib/routes.ts`'s `ROUTES` (not just the ones already skipped
+in `a11y.spec.ts`'s `KNOWN_FAILURES`). Result: the *original* VG-004
+root cause — `text-steel-500` menu/caption text on the Header's dark
+utility bar and mega-menu — is gone; every route that used to fail on
+header/mega-menu contrast (`/precise-engineers/capabilities/`,
+`/precise-engineers/proof/`) is now clean and has been un-skipped in
+`a11y.spec.ts`. But every route still in `KNOWN_FAILURES` still fails —
+axe now reports a *different* node: `ProductCard.tsx`'s `onDark`
+variant renders `oneLineScope`/spec-row/index captions with a bare
+`text-steel-500` (#707070) against the card's `bg-steel-900` (#23282d)
+— 3:1, needs 4.5:1. Confirmed via zoomed axe output on `/dhruv-epc/`
+(fgColor #707070, bgColor #23282d, contrastRatio 3, expected 4.5).
+
+**Root cause:** `packages/datum-ui/src/components/ProductCard.tsx` has
+an `onDark` prop that correctly swaps some text (line 60:
+`onDark ? 'text-accent-dark' : 'text-accent'`) but the caption/spec-row/
+index text at lines 93, 98, 104, 145, 150 is unconditionally
+`text-steel-500` regardless of `onDark` — the component author branched
+the accent color but forgot to branch the caption color, so the "dark
+ground, premium industrial grid" variant (§T-2 comment) inherited the
+light-ground caption token, which fails contrast on `steel-900`.
+
+**Decision, this session:** not fixed — Phase 23's own file scope is
+"none, except `a11y.spec.ts`'s `KNOWN_FAILURES`". `KNOWN_FAILURES`
+already covers every route where this now surfaces (same route list,
+different underlying node), so no test-file change was needed for the
+still-failing routes; only the two newly-clean routes were un-skipped.
+Routes back to Phase 8 (shared cards/buttons/forms/certification
+components), which is where `ProductCard.tsx`'s `onDark` variant was
+built.
+
+**Rule that prevents recurrence:** when a component adds an `onDark`/
+inverse-ground variant, grep every `text-steel-500` (or any token whose
+contrast covenant is scoped to a light background) in that file — each
+one needs an explicit dark-ground counterpart, not just the accent
+color. A prop that changes the ground should be treated as changing
+*every* text token's contrast requirement, not just the ones the author
+happened to think of.
+
 ## 2026-09-02 — Header.tsx: logo lockup overlaps primary nav at the exact 768px (`md`) breakpoint
 
 **What happened:** FINAL_IMPLEMENTATION_PLAN.md Phase 22 (responsive
