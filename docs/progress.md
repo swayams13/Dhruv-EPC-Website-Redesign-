@@ -3642,3 +3642,61 @@ None. No code change made; nothing to commit.
 
 **Not pushed yet.** Next session picks up at Phase 19 (product detail:
 Fabrication & QA).
+
+---
+
+### Session 33 — Phase 19: product detail — Fabrication & QA
+
+**Per FINAL_IMPLEMENTATION_PLAN.md Phase 19.** Unlike Phase 18, this
+phase has an explicit, cited requirement: "Add the 5th accent-rule
+instance (3px `border-top-accent` per canvas `1c`)."
+IMPLEMENTATION_NOTES §2.9's own table caps the accent rule at "four
+sanctioned instances, and no fifth" — the plan's Phase 19 instruction
+supersedes that count with a newer canvas finding (`1c`), consistent
+with this plan's own citation precedence (CANVAS > the unrevised prose
+notes where they conflict).
+
+#### What was done
+
+- **`product-detail-page.tsx`**, `id="fabrication-qa"` section only —
+  each of the 5 QA-step `<li>` cards gains a 3px accent top border:
+  `style={{ borderTopWidth: 3, borderTopColor: 'var(--accent)' }}`.
+  Per CLAUDE.md's ambiguity protocol step 2 ("check how an existing
+  component solved the same problem"), this reuses the **exact** pattern
+  already established by `ProductCard.tsx`'s `layout="spec"` card top
+  border (§2.9's "card tier rule") — same inline-style technique (an
+  arbitrary 3px border-top-width/`var(--accent)` pair has no Tailwind
+  named-token expression, so it's set via inline style, not a bracket
+  class — consistent with `no-arbitrary-value`'s intent and every other
+  CSS-custom-property escape hatch already in this codebase: `DatumRule`'s
+  tick height, the hero scrim vars). No new component built — a 2-line
+  style prop is the smallest change that satisfies the requirement, not
+  a factory/variant for one call site.
+- `qaSteps`/`GENERIC_QA_STEPS` data, the `id="fabrication-qa"` anchor,
+  and step ordering are all unchanged (preserved per the plan's own
+  instruction).
+
+#### Gate result
+
+```
+pnpm typecheck   ✓ 4/4 packages, zero errors
+pnpm lint        ✓ 0 errors (2 pre-existing warnings, unrelated)
+pnpm test        ✓ tokens 96/96, schemas 70/70, web 55/55 (only the
+                   pre-existing DATABASE_URL-gated RFQ test fails)
+pnpm build       ✓ clean rebuild, zero errors/warnings
+visual check     ✓ real browser: /dhruv-epc/products/static-equipment/
+(manual browser)   pressure-vessels#fabrication-qa — all 5 step cards
+                   (Vessel design, Material receipt, Fabrication, NDT,
+                   Hydrotest & dispatch) render the accent-red 3px top
+                   border correctly, distinct from the plain steel-200
+                   card border below it.
+```
+
+#### Deviations / flagged (none silent)
+
+1. IMPLEMENTATION_NOTES §2.9's "no fifth" cap is explicitly overridden by
+   this plan's own Phase 19 instruction, citing a newer canvas finding —
+   not a silent contradiction, the plan's citation-order rules already
+   rank CANVAS above the unrevised prose notes.
+
+**Not pushed yet.** Next session picks up at Phase 20 (FAQ retheme).

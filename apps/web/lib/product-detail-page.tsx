@@ -193,7 +193,11 @@ export function productDetailPage(companySlug: CompanySlug) {
               </h2>
               <ol className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
                 {qaSteps.map((s, i) => (
-                  <li key={s.step} className="rounded-sm border border-steel-200 bg-white p-4">
+                  <li
+                    key={s.step}
+                    className="rounded-sm border border-steel-200 bg-white p-4"
+                    style={{ borderTopWidth: 3, borderTopColor: 'var(--accent)' }}
+                  >
                     <span className="font-mono text-h3 font-light leading-none text-steel-300">{i + 1}</span>
                     <h3 className="mt-1 text-sm font-medium text-steel-950">{s.step}</h3>
                     <p className="mt-1 text-helper text-steel-600">{s.caption}</p>
