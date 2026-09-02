@@ -1639,3 +1639,113 @@ manual           ✓  confirmed via .next output: noindex meta renders on
 - `docs/content-needed-industries-capabilities.md` — hand this to whoever
   at Vedanta has the sourced sector narrative and envelope figures before
   any of these 13 records can flip `contentComplete` to `true`.
+
+### Session 26 — Vedanta Brand Evolution: readiness audit, Claude Design mapping, Decision Resolution, implementation plan
+**Status:** Complete ✅ — planning only, zero production code touched. Awaiting explicit "IMPLEMENT PHASE 1" authorization.
+**Branch:** `feat/real-company-logos` · **Date:** 2026-09-02
+**Governing specs:** `VEDANTA_DESIGN_LANGUAGE.md` (client-site forensics, root), `VEDANTA_DESIGN_IMPLEMENTATION_NOTES.md` (token/component spec derived from the artifact, root), Claude Design project `9b313f0a-5936-49dd-a324-dcfe9a5d4c7f` file `Vedanta Brand Evolution.dc.html` (the approved visual artifact, sections `1a`–`1l`/`2a`–`2b`)
+
+#### Scope
+
+A client-approved Claude Design artifact ("Vedanta Brand Evolution") proposes a
+token-and-chrome evolution of the existing Datum system — cool neutral ramp,
+Plus Jakarta Sans, white 91/76px header, photo-as-ground heroes, dark footer.
+This session's job was entirely pre-implementation: audit the current
+codebase for readiness, inspect the actual approved artifact (not just the
+prose notes describing it), resolve every point the artifact itself left
+ambiguous, and produce a locked, file-level implementation plan — before
+touching a single line of production code.
+
+#### What was done
+
+- **Implementation Readiness Audit** (read-only) — full repo structure,
+  design-system tiers (`packages/tokens` primitives→semantic→tailwind),
+  component inventory (`packages/datum-ui`, 30 components), CI/build config,
+  and existing tech debt (VG-004 dark-header contrast, `CategoryCard`
+  `thin`-state opacity bug, stale `launch-checklist.md`). Produced a 10-point
+  A–J report (architecture / design system / reuse / modify / create / don't
+  touch / conflicts / risks / order) — no files modified.
+- **Claude Design MCP authorized** (`/design-login`) and the actual artifact
+  pulled and read in full — not just `VEDANTA_DESIGN_IMPLEMENTATION_NOTES.md`'s
+  prose description of it. Full `.dc.html` canvas (98 KB), `support.js`
+  (confirmed as the design-tool's own rendering runtime, not app code), and
+  `assets/vedanta-emblem.png` (1161×995px confirmed, matching the spec's
+  claimed 1.167:1 ratio — full-fidelity extraction incomplete, see below)
+  all inspected directly. Produced an explicit 29-row mapping: artifact
+  element → existing component → required change → new component if
+  needed → relevant file.
+- **Decision Resolution phase** — the mapping surfaced five items the
+  artifact itself left ambiguous (two competing brand reds; two candidate
+  hero treatments with the artifact's own text flagging it unresolved; a
+  mega-panel restyle with zero open-state evidence in the artifact; a
+  footer Zone 3 background change bigger than the prose notes implied; FAQ
+  status unverified against the actual codebase). Each was investigated
+  independently (contrast ratios recomputed by hand, not trusted from the
+  doc; full codebase grep for existing FAQ/accordion/mega-panel
+  implementations) and resolved with cited evidence and a confidence
+  rating, prioritizing brand continuity and existing site identity over
+  design-system cleanliness per the human's explicit instruction.
+- **`docs/VEDANTA_DESIGN_DECISIONS.md`** (new) — the five locked decisions,
+  each with its exact rule, evidence, and confidence rating. Two correction
+  passes tightened wording with zero value changes: (1) explicit
+  confirmation all three homepages route through `HomeHero`, group home's
+  `statsOverlay={false}` restated as absolute; (2) explicit confirmation
+  MegaPanel's "typography" allowance means token-value substitution only,
+  never a new hierarchy element; (3) a duplicated/overloaded Status line
+  cleaned to one canonical line.
+- **`docs/FINAL_IMPLEMENTATION_PLAN.md`** (new) — every planned
+  production-code change classified A (locked decision) through F
+  (verification only) or explicitly DEFERRED/REJECTED with a cited source,
+  an 18-phase implementation order (Phase 0 governance check through Phase
+  17 final visual QA against the artifact), a full change-budget/blast-radius
+  table, and a list of remaining blockers. Three correction passes: (1)
+  added phase ordering + full A–F sourcing + blast-radius analysis to what
+  had initially been a chat-only plan; (2) fixed the `logoRed` enforcement
+  test to validate the consumer boundary (defined in `primitives.ts`,
+  imported only by `Logo.tsx`) rather than a literal `#CD0101` string
+  search, resolved a real contradiction in the `PageHero` validation phase
+  (claimed zero route files touched while proposing to validate real
+  routes — now resolved via isolated Storybook fixtures built from real
+  route content, never opening a production route file), added a Phase 1
+  token-swap smoke-test requirement, and tightened Phase 15 to a single
+  named file exception (`a11y.spec.ts` `KNOWN_FAILURES` only).
+
+**Two items were explicitly DEFERRED, not built and not silently folded
+in:** a "Fabrication & QA" 5-step process section and a "Types &
+configurations" grid, both present only in the raw canvas mockup and
+absent from `VEDANTA_DESIGN_IMPLEMENTATION_NOTES.md`'s actual component
+scope — building either without a new explicit decision would have been
+inventing a component the approved spec never authorized.
+
+#### Verify
+
+```
+N/A — no production code was modified this session. Every deliverable is
+a planning document (docs/VEDANTA_DESIGN_DECISIONS.md,
+docs/FINAL_IMPLEMENTATION_PLAN.md). pnpm typecheck/lint/test/build were
+not run because there is nothing yet for them to check.
+```
+
+#### Deviations / flagged (none silent)
+
+1. Emblem asset (`assets/vedanta-emblem.png`) extraction from the Claude
+   Design project hit the `DesignSync.get_file` tool's 256 KiB read cap —
+   PNG header and 1161×995px dimensions confirmed, full pixel data not
+   verified end-to-end. Flagged as a Phase 2 blocker: must be resolved
+   with a genuine full extraction, or Phase 2 stops and reports rather
+   than approximating/regenerating the mark, per explicit instruction.
+2. `docs/decisions.md` was deliberately **not** appended this session —
+   `VEDANTA_DESIGN_DECISIONS.md` itself notes that a summary entry belongs
+   there only once the decisions are actually implemented, not at the
+   planning stage.
+3. `VEDANTA_DESIGN_LANGUAGE.md` and `VEDANTA_DESIGN_IMPLEMENTATION_NOTES.md`
+   remain untracked in git as of this session's end (confirmed via `git
+   log --all`) — they exist only in the working tree. Not committed this
+   session; no instruction to do so was given.
+
+#### Requires human review before Phase 1
+
+- Explicit **"IMPLEMENT PHASE 1"** authorization — not yet given as of
+  this session's end.
+- The emblem-asset extraction blocker (deviation 1 above) must be closed
+  before Phase 2 (Logo/brand primitives) can start.
