@@ -16,8 +16,7 @@
 // doing double duty as a CSS-math constraint, not just a content rule.
 // `--marquee-visible` (7 lg+ / 5 md / 3 below, spec §4's responsive table)
 // is a CSS custom property set in globals.css per breakpoint and read here
-// via calc() — the same var()-in-calc() pattern globals.css's
-// `.exploded-track` already uses for its own responsive height.
+// via calc().
 //
 // Logo cap rounds the spec's 56px to h-16 (64px) — no exact token exists,
 // and 64px keeps one consistent logo-cap size with ClientLogoWall's

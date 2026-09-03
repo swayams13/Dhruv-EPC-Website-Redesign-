@@ -68,44 +68,13 @@
   }
 }
 
-/* Exploded-view hero sequence (Datum §11 addendum, docs/decisions.md
-   2026-07-16; revised per docs/ui-ux-review.md). CSS-first branching so the
-   server-rendered height is final on every device class — no hydration
-   reflow (CLS), no wrong-frame flash. Baseline (narrow viewports, reduced
-   motion, no-JS): static fully-exploded frame, normal hero-photo footprint.
-   md+ with motion permitted: the scrubbed stack pins inside a tall track.
-   The 76px sticky offset mirrors h-header-scrolled in the Tailwind preset —
-   the header is fixed and always compressed by the time the band pins; if
-   the header heights ever change, this value must move with them. */
-.exploded-track {
-  position: relative;
-}
-.exploded-scrub {
-  display: none;
-}
-@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
-  .exploded-track {
-    height: var(--exploded-track, 220vh);
-  }
-  .exploded-static {
-    display: none;
-  }
-  .exploded-scrub {
-    display: block;
-    position: sticky;
-    top: 76px; /* h-header-scrolled — fixed header clearance */
-    max-height: calc(100vh - 76px); /* short laptop viewports: keep the band fully visible */
-  }
-}
-
 /* ClientMarquee (Clients & Projects spec §4).
    Hover-pause: Tailwind has no animation-play-state core plugin, so this
    one rule lives in plain CSS rather than a bracketed arbitrary-property
    utility.
    --marquee-visible: responsive cell count (7 lg+ / 5 md / 3 below —
    spec §4's own responsive table). The component reads this custom
-   property via calc() to size the track/cells, the same var()-in-calc()
-   pattern .exploded-track already uses above for --exploded-track. */
+   property via calc() to size the track/cells. */
 .client-marquee-row:hover .client-marquee-track {
   animation-play-state: paused;
 }

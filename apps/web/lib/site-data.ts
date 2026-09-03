@@ -1,13 +1,12 @@
-// Non-CMS page-decoration data (stats bands, exploded-hero frame paths,
-// mega-menu lists) — no Zod schema exists for these (VG-011 scopes the JSON
-// migration to Product/EntityRecord/Certification/Approval/ProductCategory
-// only). Split out of content-loader.ts because that module does `node:fs`
-// reads at load time — importing it from a 'use client' component (Chrome
-// nav components) would try to bundle 'fs' into the browser build. This
-// file has no fs dependency, so it's safe for both server and client
-// imports. Relocated unchanged from the old
-// lib/content/{dhruv-epc,precise-engineers,group}.ts files.
-import type { ExplodedFrame } from '../components/ExplodedSequence'
+// Non-CMS page-decoration data (stats bands, mega-menu lists) — no Zod
+// schema exists for these (VG-011 scopes the JSON migration to
+// Product/EntityRecord/Certification/Approval/ProductCategory only). Split
+// out of content-loader.ts because that module does `node:fs` reads at load
+// time — importing it from a 'use client' component (Chrome nav components)
+// would try to bundle 'fs' into the browser build. This file has no fs
+// dependency, so it's safe for both server and client imports. Relocated
+// unchanged from the old lib/content/{dhruv-epc,precise-engineers,group}.ts
+// files.
 
 export const dhruvStats = [
   { value: '30+ yrs', label: 'Group experience', source: 'Est. 1994, Anand' },
@@ -28,24 +27,6 @@ export const groupStats = [
   { value: '2 works', label: 'Vadodara · Anand', source: 'Manjusar GIDC · V.U.Nagar GIDC' },
   { value: 'U · U2 · IBR', label: 'Stamps held' },
   { value: '12 sectors', label: 'Oil & gas to atomic energy' },
-]
-
-export const dhruvExplodedFrames: ExplodedFrame[] = [
-  { avif: '/exploded/pressure-vessel/frame-01.avif', webp: '/exploded/pressure-vessel/frame-01.webp' },
-  { avif: '/exploded/pressure-vessel/frame-02.avif', webp: '/exploded/pressure-vessel/frame-02.webp' },
-  { avif: '/exploded/pressure-vessel/frame-03.avif', webp: '/exploded/pressure-vessel/frame-03.webp' },
-]
-
-export const preciseExplodedFrames: ExplodedFrame[] = [
-  { avif: '/exploded/expansion-joint/frame-01.avif', webp: '/exploded/expansion-joint/frame-01.webp' },
-  { avif: '/exploded/expansion-joint/frame-02.avif', webp: '/exploded/expansion-joint/frame-02.webp' },
-]
-
-export const groupExplodedFrames: ExplodedFrame[] = [
-  { avif: '/exploded/heat-exchanger/frame-01.avif', webp: '/exploded/heat-exchanger/frame-01.webp' },
-  { avif: '/exploded/heat-exchanger/frame-02.avif', webp: '/exploded/heat-exchanger/frame-02.webp' },
-  { avif: '/exploded/heat-exchanger/frame-03.avif', webp: '/exploded/heat-exchanger/frame-03.webp' },
-  { avif: '/exploded/heat-exchanger/frame-04.avif', webp: '/exploded/heat-exchanger/frame-04.webp' },
 ]
 
 export const dhruvEquipment = {

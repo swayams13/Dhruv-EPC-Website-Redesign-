@@ -31,11 +31,6 @@
 //     body-lg text-white/82 — unchanged, NOT Hero C's /72; only HomeHero's
 //     eyebrow/body opacities changed).
 //
-// ExplodedSequence (Decision 6): the JSDoc guard lives on `photo` below —
-// this hero's full-bleed, unconstrained-photo-ground pattern is structurally
-// where that guard actually applies (unlike Hero C's HomeHero, which has no
-// photo-ground slot at all).
-//
 // No-photo fallback is not a theoretical case: every one of this
 // component's ~16 current consumers passes no `photo` today (verified by
 // reading them) — the hatch placeholder is what most of the site will
@@ -52,11 +47,8 @@ export interface PageHeroProps {
   /** Lead paragraph (body-lg) */
   lead?: string
   /** Real photograph, absolute inset-0 object-cover ground layer — must
-   *  bring its own sizing (next/image `fill` + `object-cover`). Ordinary
-   *  photography only: `<ExplodedSequence>` needs its own in-flow,
-   *  unconstrained-height section and must never be passed here (Decision
-   *  6) — this hero's fixed min-height clips/breaks its sticky scroll
-   *  track. Absent renders the §4.2 hatch placeholder, never a stock image. */
+   *  bring its own sizing (next/image `fill` + `object-cover`). Absent
+   *  renders the §4.2 hatch placeholder, never a stock image. */
   photo?: React.ReactNode
   className?: never
 }

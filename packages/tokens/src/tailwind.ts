@@ -103,8 +103,7 @@ export const datumPreset = {
       // Component heights (§26 tier 3) — NOT spacing; §6's gapped scale stands.
       // compact 40px (§13 button/icon), row 44px (§15/§26 space.11), dense 36px (§15)
       // header 91px / header-scrolled 76px — IMPLEMENTATION_NOTES §2.1 (v1.3,
-      // Phase 5). .exploded-scrub's `top`/`max-height` in globals.css must move
-      // with this value — see the comment there.
+      // Phase 5).
       height: {
         compact: '40px',
         row: '44px',
