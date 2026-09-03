@@ -2,6 +2,7 @@
   "slug": "gujarat-gas",
   "name": "Gujarat Gas",
   "sectors": [],
-  "consent": "requested",
-  "featuredOnHome": false
+  "consent": "granted",
+  "featuredOnHome": false,
+  "logo": "/clients-review/clients/c38.png"
 }

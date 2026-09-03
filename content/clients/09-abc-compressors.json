@@ -2,6 +2,7 @@
   "slug": "abc-compressors",
   "name": "ABC Compressors",
   "sectors": [],
-  "consent": "requested",
-  "featuredOnHome": false
+  "consent": "granted",
+  "featuredOnHome": false,
+  "logo": "/clients-review/clients/c09.png"
 }

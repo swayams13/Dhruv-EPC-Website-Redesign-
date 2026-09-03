@@ -2,7 +2,9 @@
 // §20 trust, §21.9 RFQ band. Content from lib/content-loader (JSON-backed, Zod-parsed).
 import type { Metadata } from 'next'
 import {
+  Button,
   CertificationCard,
+  ClientMarquee,
   DomainIcon,
   type DomainIconName,
   HomeHero,
@@ -12,12 +14,17 @@ import {
 } from '@vedanta/datum-ui'
 import { buildLocalBusiness } from '@vedanta/schemas'
 import { RFQBand } from '../../components/RFQBand'
-import { getCertifications, getEntity, whatsappHref } from '../../lib/content-loader'
+import { getCertifications, getClients, getEntity, whatsappHref } from '../../lib/content-loader'
 import { dhruvEquipment, dhruvStats } from '../../lib/site-data'
 
 const dhruvEntity = getEntity('dhruv-epc')
 const dhruvCertifications = getCertifications('dhruv-epc')
 const dhruvWhatsappHref = whatsappHref(dhruvEntity)
+// Clients & Projects spec §4: even indices row A, odd row B — 44 granted
+// clients today (not the spec's "42", see docs/mistakes.md 2026-09-03).
+const dhruvClients = getClients()
+const dhruvClientMarqueeRowA = dhruvClients.filter((_, i) => i % 2 === 0)
+const dhruvClientMarqueeRowB = dhruvClients.filter((_, i) => i % 2 === 1)
 
 export const metadata: Metadata = {
   title: 'Dhruv EPC Solutions — ASME U/U2 Fabricator, Vadodara',
@@ -122,6 +129,27 @@ export default function DhruvHome() {
               />
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Clients & Projects spec §2/§4 — homepage clientele band (ref 4a) */}
+      <section aria-labelledby="clientele-band-heading" className="border-t border-steel-200 bg-steel-50">
+        <div className="mx-auto max-w-wide px-6 py-16">
+          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="text-body font-bold text-steel-950">Who we supply</p>
+              <h2 id="clientele-band-heading" className="mt-2 font-display text-h1 font-medium text-steel-950">
+                Forty-four named clients
+              </h2>
+            </div>
+            <Button variant="link" href="/clients-projects">
+              See all clients &amp; projects ↗
+            </Button>
+          </div>
+          <div className="mt-8 bg-white">
+            <ClientMarquee rowA={dhruvClientMarqueeRowA} rowB={dhruvClientMarqueeRowB} />
+          </div>
+          <p className="mt-4 font-mono text-helper text-steel-500">Vedanta Group Brochure, 2026</p>
         </div>
       </section>
 

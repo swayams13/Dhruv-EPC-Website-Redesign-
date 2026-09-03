@@ -2,6 +2,7 @@
   "slug": "thyssenkrupp",
   "name": "thyssenkrupp",
   "sectors": [],
-  "consent": "requested",
-  "featuredOnHome": false
+  "consent": "granted",
+  "featuredOnHome": false,
+  "logo": "/clients-review/clients/c11.png"
 }

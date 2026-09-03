@@ -9,6 +9,7 @@ import {
   Button,
   CategoryCard,
   CertificationCard,
+  ClientMarquee,
   HomeHero,
   IndustryCard,
   StatBand,
@@ -16,13 +17,18 @@ import {
 } from '@vedanta/datum-ui'
 import { buildOrganization } from '@vedanta/schemas'
 import { RFQBand } from '../../components/RFQBand'
-import { getCertifications, getEntity, getIndustries, getProductCategoriesByCompany, getProductsByCompany } from '../../lib/content-loader'
+import { getCertifications, getClients, getEntity, getIndustries, getProductCategoriesByCompany, getProductsByCompany } from '../../lib/content-loader'
 import { categoryHref, industryHref } from '../../lib/product-urls'
 import { groupStats } from '../../lib/site-data'
 
 const dhruvCertifications = getCertifications('dhruv-epc')
 const groupEntity = getEntity('group')
 const preciseCertifications = getCertifications('precise-engineers')
+// Clients & Projects spec §4: even indices row A, odd row B — 44 granted
+// clients today (not the spec's "42", see docs/mistakes.md 2026-09-03).
+const allClients = getClients()
+const clientMarqueeRowA = allClients.filter((_, i) => i % 2 === 0)
+const clientMarqueeRowB = allClients.filter((_, i) => i % 2 === 1)
 
 export const metadata: Metadata = {
   title: 'Vedanta Group — Fabrication & Flow-Control Engineering',
@@ -199,6 +205,29 @@ export default function GroupHome() {
             Writing a conditional against data that doesn't exist would be
             scaffolding for a future session, not this one; add the section
             here when that session ships getProjects(). */}
+
+        {/* Clients & Projects spec §2/§4 — homepage clientele band (ref 4a).
+            80px padding rounds to py-16 (64px, nearest token) per the
+            2026-09-03 token-gap policy. */}
+        <section aria-labelledby="clientele-band-heading" className="border-t border-steel-200 bg-steel-50">
+          <div className="mx-auto max-w-wide px-6 py-16">
+            <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+              <div>
+                <p className="text-body font-bold text-steel-950">Who we supply</p>
+                <h2 id="clientele-band-heading" className="mt-2 font-display text-h1 font-medium text-steel-950">
+                  Forty-four named clients
+                </h2>
+              </div>
+              <Button variant="link" href="/clients-projects">
+                See all clients &amp; projects ↗
+              </Button>
+            </div>
+            <div className="mt-8 bg-white">
+              <ClientMarquee rowA={clientMarqueeRowA} rowB={clientMarqueeRowB} />
+            </div>
+            <p className="mt-4 font-mono text-helper text-steel-500">Vedanta Group Brochure, 2026</p>
+          </div>
+        </section>
 
         {/* §14.2 item 6 — the two companies, demoted from the old lead */}
         <section aria-labelledby="companies-heading" className="border-t border-steel-200 bg-steel-900">

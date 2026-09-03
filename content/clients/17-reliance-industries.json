@@ -2,6 +2,7 @@
   "slug": "reliance-industries",
   "name": "Reliance Industries",
   "sectors": [],
-  "consent": "requested",
-  "featuredOnHome": false
+  "consent": "granted",
+  "featuredOnHome": false,
+  "logo": "/clients-review/clients/c17.png"
 }

@@ -2,6 +2,7 @@
   "slug": "voith",
   "name": "Voith",
   "sectors": [],
-  "consent": "requested",
-  "featuredOnHome": false
+  "consent": "granted",
+  "featuredOnHome": false,
+  "logo": "/clients-review/clients/c04.png"
 }

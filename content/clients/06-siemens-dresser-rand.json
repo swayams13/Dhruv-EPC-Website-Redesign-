@@ -2,6 +2,7 @@
   "slug": "siemens-dresser-rand",
   "name": "Siemens Dresser-Rand",
   "sectors": [],
-  "consent": "requested",
-  "featuredOnHome": false
+  "consent": "granted",
+  "featuredOnHome": false,
+  "logo": "/clients-review/clients/c06.png"
 }

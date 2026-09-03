@@ -2,6 +2,7 @@
   "slug": "aditya-birla-grasim",
   "name": "Aditya Birla Grasim",
   "sectors": [],
-  "consent": "requested",
-  "featuredOnHome": false
+  "consent": "granted",
+  "featuredOnHome": false,
+  "logo": "/clients-review/clients/c30.png"
 }

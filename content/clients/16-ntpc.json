@@ -2,6 +2,7 @@
   "slug": "ntpc",
   "name": "NTPC",
   "sectors": [],
-  "consent": "requested",
-  "featuredOnHome": false
+  "consent": "granted",
+  "featuredOnHome": false,
+  "logo": "/clients-review/clients/c16.png"
 }

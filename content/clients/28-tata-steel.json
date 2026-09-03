@@ -2,6 +2,7 @@
   "slug": "tata-steel",
   "name": "Tata Steel",
   "sectors": [],
-  "consent": "requested",
-  "featuredOnHome": false
+  "consent": "granted",
+  "featuredOnHome": false,
+  "logo": "/clients-review/clients/c27.png"
 }
