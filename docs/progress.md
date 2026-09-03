@@ -4495,3 +4495,63 @@ in the prior session but not yet on `main`.
 classification (still deferred, not blocking); real (non-review-grade)
 artwork per client/agency to replace every crop in `clients-review/`;
 the dropped `?works=` query-filter feature still needs a decision.
+
+---
+
+### Session 37 — remove unused `ExplodedSequence` feature — PR #31 merged
+
+Human asked to remove the `ExplodedSequence` scroll-scrubbed exploded-
+view sequence outright: it was flagged in this session's earlier
+progress review as a shelved feature with zero current consumers (see
+Session 34's Hero C rebuild note and `FINAL_IMPLEMENTATION_PLAN.md`'s
+"Reviving/wiring `ExplodedSequence` anywhere — DEFERRED" line), and the
+human decided not to keep it in the tree while unused rather than carry
+it as dead code. Branch `chore/remove-exploded-sequence`, off `main`
+(not off this branch's own pending Session 36 log commit, to keep the
+two concerns — code removal vs. docs-only log entries — on separate
+branches per CLAUDE.md's one-concern-per-commit rule), PR #31, merged
+(`97d8376`).
+
+**Removed:** `apps/web/components/ExplodedSequence.tsx`; the
+`.exploded-track`/`.exploded-scrub` rules in `globals.css`; the
+`dhruvExplodedFrames`/`preciseExplodedFrames`/`groupExplodedFrames`
+exports and `ExplodedFrame` import in `site-data.ts`; all 11 review-
+grade WebP frames under `apps/web/public/exploded/` (pressure-vessel ×3,
+expansion-joint ×4, heat-exchanger ×4 — despite `ExplodedFrame` typing
+an `avif` field, only `.webp` files were ever present on disk, `avif`
+paths were dead references). Confirmed zero live consumers before
+deleting: nothing imported or rendered the component on any route.
+
+**Comments/JSDoc updated, not just deleted-and-left-broken:** the
+`ExplodedSequence` guard JSDoc on `PageHero`/`ProductHero`'s `photo`
+prop (Decision 6 — kept callers from passing an in-flow scroll sequence
+into a fixed-min-height photo-ground slot) is now moot since the
+component doesn't exist to pass; removed rather than left dangling.
+Same treatment for the explanatory comments in `HomeHero.tsx`,
+`Logo.tsx` (used it as a "why this lives in `apps/web` not `datum-ui`"
+precedent), `ClientMarquee.tsx` and `tailwind.ts` (both referenced
+`.exploded-track`'s var()-in-calc() pattern or its sticky-offset
+coupling to header height), and the three homepage files' hero-comment
+blocks (`(group)/page.tsx`, `dhruv-epc/page.tsx`,
+`precise-engineers/page.tsx`) that listed "ExplodedSequence revival" as
+one of two deferred prerequisites for wiring a real hero photo — trimmed
+to just the real-photography-sourcing item that's still actually
+deferred.
+
+**Verify:** typecheck/lint clean (2 pre-existing `LegalDocument.tsx`
+warnings, unrelated). `pnpm test` — same single pre-existing
+`DATABASE_URL`-gated RFQ integration failure as every session, 55/55
+other tests pass. `pnpm build` clean, all route bundle sizes unchanged
+(homepages still 94.9 KB gz — the component was never in any page's
+render tree, so its removal has no bundle-size effect to verify beyond
+"nothing changed"). CI green on first push (Lint · Typecheck · Test ·
+Accessibility · Performance, Vercel deploy, Vercel Preview Comments).
+Merged via `gh pr merge 31 --merge --delete-branch` on explicit human
+instruction after confirming all checks passed.
+
+**Recoverable, not gone:** the feature is fully recorded in git history
+(component, CSS, frame exports, and the 11 source frames) if a future
+session revives it — no functionality was rewritten or reinterpreted,
+only deleted. If revived, the `PageHero`/`ProductHero` guard reasoning
+this session removed (don't pass `ExplodedSequence` into a fixed-
+min-height photo-ground slot) should be restored alongside it.
