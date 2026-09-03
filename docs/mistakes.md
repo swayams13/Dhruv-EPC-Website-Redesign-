@@ -701,3 +701,15 @@ that ground — `RFQBand.tsx` needs it added (one line: `data-chrome="dark"`
 alongside its existing `data-rfq-anchor`). A future session touching
 `RFQBand.tsx`, or doing a focus-ring audit, should fix this everywhere at
 once rather than per-page.
+
+**Resolution (2026-09-03):** user asked for it to be fixed directly.
+Added `data-chrome="dark"` to `RFQBand.tsx`'s `<section>` alongside its
+existing `data-rfq-anchor`, matching the exact precedent in Header's
+utility bar and PageHero's photo-scrim layer. Fixes the focus ring on
+every route that renders the band (group homepage, dhruv-epc, precise-
+engineers, clients-projects) in one change, as the rule above
+recommended. Verified in a real browser: the closer band's "Request a
+quote" link now reads `#DC8D89` (accent-dark, 7.04:1) instead of `#AA3833`
+(2.85:1) when focused. Regenerated `__snapshots__/routes-baseline/` for
+all 54 routes (every one carries the band somewhere) —
+`compare-snapshots.mjs` reports byte-identical against the fresh build.
