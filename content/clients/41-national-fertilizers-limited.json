@@ -2,6 +2,7 @@
   "slug": "national-fertilizers-limited",
   "name": "National Fertilizers Limited",
   "sectors": [],
-  "consent": "requested",
-  "featuredOnHome": false
+  "consent": "granted",
+  "featuredOnHome": false,
+  "logo": "/clients-review/clients/c39.png"
 }

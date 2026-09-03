@@ -2,6 +2,7 @@
   "slug": "andritz",
   "name": "ANDRITZ",
   "sectors": [],
-  "consent": "requested",
-  "featuredOnHome": false
+  "consent": "granted",
+  "featuredOnHome": false,
+  "logo": "/clients-review/clients/c01.png"
 }

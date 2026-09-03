@@ -2,6 +2,7 @@
   "slug": "ultratech-cement",
   "name": "UltraTech Cement",
   "sectors": [],
-  "consent": "requested",
-  "featuredOnHome": false
+  "consent": "granted",
+  "featuredOnHome": false,
+  "logo": "/clients-review/clients/c32.png"
 }

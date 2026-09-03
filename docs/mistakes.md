@@ -713,3 +713,33 @@ quote" link now reads `#DC8D89` (accent-dark, 7.04:1) instead of `#AA3833`
 (2.85:1) when focused. Regenerated `__snapshots__/routes-baseline/` for
 all 54 routes (every one carries the band somewhere) —
 `compare-snapshots.mjs` reports byte-identical against the fresh build.
+
+## 2026-09-03 — Client logo consent granted; artwork is still review-grade, not final
+
+**What happened:** human confirmed (a) 44 is the authoritative named-
+client count (not the spec's "42" — see Session 35 progress.md), and
+(b) written permission is in hand to display all 44 clients' marks, so
+every `content/clients/*.json` record was flipped from
+`consent: 'requested'` to `'granted'`, with `logo` wired to the matching
+crop under `apps/web/public/clients-review/clients/` (two records,
+`mrpl.json`/`ongc.json` and `swcogen.json`/`cem-engineering.json`, point
+at the same shared crop — see the c24/c37 finding in Session 35). The
+12 group-level `content/approvals/*.json` records got `logo` wired the
+same way.
+
+**This is a deliberate middle ground, not a resolution of the §5
+blocker:** the crops under `clients-review/` are still the exact
+review-grade raster the spec's own §5 warns against shipping as final —
+JPEG ringing, a baked white ground, no optical-height normalization
+across marks. Consent to *display the company* is not the same thing as
+having *final artwork* for it; this session has the former, not the
+latter, for all 44/12 records. `apps/web/public/clients-review/README.md`
+already carries the full rights/format/normalization checklist — nothing
+there changed, it just now actually renders in production instead of
+sitting unwired.
+
+**Rule:** don't read "logo consent granted" as "the asset pipeline is
+done." A future session should re-crop/re-request real SVG or 4× PNG
+per client from their own brand pages and swap the `logo` paths once
+available — the content records and components don't need to change,
+only the asset files and paths.

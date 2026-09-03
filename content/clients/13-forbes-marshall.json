@@ -2,6 +2,7 @@
   "slug": "forbes-marshall",
   "name": "Forbes Marshall",
   "sectors": [],
-  "consent": "requested",
-  "featuredOnHome": false
+  "consent": "granted",
+  "featuredOnHome": false,
+  "logo": "/clients-review/clients/c13.png"
 }

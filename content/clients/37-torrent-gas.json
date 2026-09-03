@@ -2,6 +2,7 @@
   "slug": "torrent-gas",
   "name": "Torrent Gas",
   "sectors": [],
-  "consent": "requested",
-  "featuredOnHome": false
+  "consent": "granted",
+  "featuredOnHome": false,
+  "logo": "/clients-review/clients/c36.png"
 }

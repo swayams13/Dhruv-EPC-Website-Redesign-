@@ -2,6 +2,7 @@
   "slug": "engineers-india-limited",
   "name": "Engineers India Limited",
   "sectors": [],
-  "consent": "requested",
-  "featuredOnHome": false
+  "consent": "granted",
+  "featuredOnHome": false,
+  "logo": "/clients-review/clients/c20.png"
 }

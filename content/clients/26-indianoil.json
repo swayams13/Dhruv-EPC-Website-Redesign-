@@ -2,6 +2,7 @@
   "slug": "indianoil",
   "name": "IndianOil",
   "sectors": [],
-  "consent": "requested",
-  "featuredOnHome": false
+  "consent": "granted",
+  "featuredOnHome": false,
+  "logo": "/clients-review/clients/c25.png"
 }

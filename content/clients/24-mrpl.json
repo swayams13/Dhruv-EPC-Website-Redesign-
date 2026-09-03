@@ -2,6 +2,7 @@
   "slug": "mrpl",
   "name": "MRPL",
   "sectors": [],
-  "consent": "requested",
-  "featuredOnHome": false
+  "consent": "granted",
+  "featuredOnHome": false,
+  "logo": "/clients-review/clients/c24.png"
 }

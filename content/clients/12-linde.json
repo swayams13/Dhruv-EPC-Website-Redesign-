@@ -2,6 +2,7 @@
   "slug": "linde",
   "name": "Linde",
   "sectors": [],
-  "consent": "requested",
-  "featuredOnHome": false
+  "consent": "granted",
+  "featuredOnHome": false,
+  "logo": "/clients-review/clients/c12.png"
 }

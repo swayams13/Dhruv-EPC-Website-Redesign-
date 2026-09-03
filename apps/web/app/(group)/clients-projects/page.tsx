@@ -65,9 +65,9 @@ export default function ClientsProjectsPage() {
   // "Named clients" is computed from content/clients/ too (44 real records
   // — see docs/mistakes.md 2026-09-03: the verbatim §6 list actually names
   // 44 companies against the brochure's 42 logo marks, because two crops
-  // each bundle two companies' marks into one image; the spec's own "42"
-  // stat undercounts the real list by 2. Flagged for client confirmation
-  // rather than silently kept at "42" or silently changed in the spec docs).
+  // each bundle two companies' marks into one image. Human confirmed 44 is
+  // the authoritative count, 2026-09-03 — the spec's own "42" undercounts
+  // the real list by 2 and is now the stale figure, not this page.
   // "Export destinations" (7) isn't derivable from the 15 highlighted jobs
   // (only 5 distinct countries appear in their statements) — kept as a
   // sourced brochure figure, not computed.
@@ -103,8 +103,7 @@ export default function ClientsProjectsPage() {
                 Our clientele
               </h2>
               <p className="mx-auto mt-4 max-w-content text-body-lg text-steel-700">
-                Real, named buyers across oil &amp; gas, power, fertilizer and heavy industry — shown as written
-                permission comes in, not before.
+                Real, named buyers across oil &amp; gas, power, fertilizer and heavy industry.
               </p>
               <div className="mt-12 text-left">
                 <ClientLogoWall clients={clients} />
