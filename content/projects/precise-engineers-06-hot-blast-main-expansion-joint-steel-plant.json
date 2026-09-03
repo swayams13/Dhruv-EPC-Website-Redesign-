@@ -1,0 +1,11 @@
+{
+  "slug": "precise-hot-blast-main-expansion-joint-steel-plant",
+  "company": "precise-engineers",
+  "order": 6,
+  "statement": "1250 mm ID Hot Blast Main Expansion Joint with Refractory to Steel plant in operation since 12 years.",
+  "tags": [],
+  "figures": [
+    { "label": "ID", "value": "1250", "unit": "mm" },
+    { "label": "In operation", "value": "12", "unit": "years" }
+  ]
+}

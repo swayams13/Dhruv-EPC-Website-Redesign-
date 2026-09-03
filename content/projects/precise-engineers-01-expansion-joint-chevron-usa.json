@@ -1,0 +1,10 @@
+{
+  "slug": "precise-expansion-joint-chevron-usa",
+  "company": "precise-engineers",
+  "order": 1,
+  "statement": "Expansion Joint Designed and manufactured for CHEVRON USA with Design Pressure of 3700 PSI.",
+  "tags": ["CHEVRON USA"],
+  "figures": [
+    { "label": "Design pressure", "value": "3700", "unit": "PSI" }
+  ]
+}

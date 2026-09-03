@@ -1,0 +1,10 @@
+{
+  "slug": "dhruv-epc-hp-air-receivers-psp",
+  "company": "dhruv-epc",
+  "order": 4,
+  "statement": "High Pressure Air Receivers with test pressure of 150 Bar for Hydropower (PSP) with repeat orders.",
+  "tags": ["Hydropower (PSP)"],
+  "figures": [
+    { "label": "Test pressure", "value": "150", "unit": "Bar" }
+  ]
+}

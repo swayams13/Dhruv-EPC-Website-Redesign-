@@ -43,3 +43,9 @@ _to_delete-*/
 # compare output is not
 apps/web/__snapshots__/routes/
 apps/web/__snapshots__/.compare-tmp/
+
+# Clients & Projects design handoff — reference HTML, its support.js runtime
+# and the review-grade logo crops are not production code/assets. The three
+# .md docs (spec + design law) are the exception and stay tracked.
+design_handoff_clients_projects/*
+!design_handoff_clients_projects/*.md

@@ -1,0 +1,11 @@
+{
+  "slug": "dhruv-epc-toyo-ngc-skid",
+  "company": "dhruv-epc",
+  "order": 1,
+  "statement": "Natural Gas Conditioning Skid with E&I and FAT for TOYO Project. 21 Mtr Long with weight of 45 MT.",
+  "tags": ["TOYO Project"],
+  "figures": [
+    { "label": "Length", "value": "21", "unit": "Mtr" },
+    { "label": "Weight", "value": "45", "unit": "MT" }
+  ]
+}
