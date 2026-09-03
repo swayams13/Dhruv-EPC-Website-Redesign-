@@ -26,7 +26,11 @@ export function ProjectRecordList({ projects }: ProjectRecordListProps): React.R
     <ol className="border-t border-steel-200">
       {sorted.map((project) => (
         <li key={project.slug} className="flex gap-x-3 border-b border-steel-200 py-6 transition-colors duration-instant hover:bg-steel-50">
-          <span className="w-12 shrink-0 font-mono text-helper text-steel-400">
+          {/* steel-500, not the spec's literal steel-400: primitives.ts
+              documents steel-400 as on-dark-only (#A5A8B2, 2.37:1 on white —
+              confirmed failing axe-core's CI gate at 4.5:1). steel-500 passes
+              (~4.95:1) and matches the tag line directly below it. */}
+          <span className="w-12 shrink-0 font-mono text-helper text-steel-500">
             {String(project.order).padStart(2, '0')}
           </span>
           <div>
