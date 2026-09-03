@@ -98,6 +98,31 @@
   }
 }
 
+/* ClientMarquee (Clients & Projects spec §4).
+   Hover-pause: Tailwind has no animation-play-state core plugin, so this
+   one rule lives in plain CSS rather than a bracketed arbitrary-property
+   utility.
+   --marquee-visible: responsive cell count (7 lg+ / 5 md / 3 below —
+   spec §4's own responsive table). The component reads this custom
+   property via calc() to size the track/cells, the same var()-in-calc()
+   pattern .exploded-track already uses above for --exploded-track. */
+.client-marquee-row:hover .client-marquee-track {
+  animation-play-state: paused;
+}
+.client-marquee-row {
+  --marquee-visible: 3;
+}
+@media (min-width: 768px) {
+  .client-marquee-row {
+    --marquee-visible: 5;
+  }
+}
+@media (min-width: 1024px) {
+  .client-marquee-row {
+    --marquee-visible: 7;
+  }
+}
+
 /* prefers-reduced-motion — first-class mode (Datum §11) */
 @media (prefers-reduced-motion: reduce) {
   *,

@@ -4308,5 +4308,33 @@ Commits (3, per CLAUDE.md's one-concern-per-commit): Header breakpoint
 fix, VG-004 dark-ground contrast fix (5 files), test/tracking update
 (a11y.spec.ts + snapshot baseline).
 
-**Not pushed yet.** Phase 25 (human sign-off) is otherwise unblocked —
-no known open findings remain from this session's work.
+Pushed to origin, PR #25 updated to describe the full Phase 5–25 scope
+(the PR predated this branch's growth and only described the original
+logo-replacement work). Human confirmed Phase 25 sign-off explicitly;
+merged into `main` via PR #25 (merge commit `ea18fd3`).
+
+---
+
+### Session 34 (continued) — merge to `main`
+
+**Merge conflict:** `main` had advanced by one commit (`a686ae2`,
+docs-only) since this branch's base — a parallel session (PR #23, group
+nav restructure) had appended its own "Session 26" entry to
+`docs/progress.md` at the same insertion point this branch's own
+"Session 26" (planning) entry used. Append-only-log collision, not an
+overlapping edit — resolved by extracting both sides' full text (`git
+show :2:`/`:3:`) and concatenating them as two distinct, complete
+entries (origin's nav-restructure Session 26 first, then this branch's
+Session 26–34 run, unchanged) rather than picking one side or manually
+patching interleaved hunks. No other files conflicted.
+
+Re-ran the full verify sequence after the merge commit (typecheck/lint/
+test/build) — clean, same known DATABASE_URL-gated test failure as
+every session. Pushed, waited for CI (Lint · Typecheck · Test ·
+Accessibility · Performance) to go green, merged PR #25 into `main`,
+synced local `main` to `ea18fd3`.
+
+**Branch `feat/real-company-logos` is now fully merged.** `main` carries
+Phases 5–25 of `FINAL_IMPLEMENTATION_PLAN.md` plus this session's two
+fixes (Header 768px overlap, VG-004 dark-ground contrast). No open
+findings from this branch remain.

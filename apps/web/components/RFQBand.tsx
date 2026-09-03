@@ -22,7 +22,11 @@ export function RFQBand({
   const rfqHref = query ? `/request-a-quote?${query}` : '/request-a-quote'
 
   return (
-    <section data-rfq-anchor className="bg-steel-900">
+    // data-chrome='dark': brand-500 on steel-900 is 2.85:1, under the 3:1
+    // WCAG 1.4.11 floor for the focus ring's non-text contrast — same
+    // rebind Header's utility bar and PageHero's photo-scrim layer already
+    // use (globals.css). docs/mistakes.md 2026-09-03.
+    <section data-rfq-anchor data-chrome="dark" className="bg-steel-900">
       <div className="mx-auto flex max-w-wide flex-col items-start gap-6 px-6 py-16 md:flex-row md:items-center md:justify-between">
         <div>
           <h2 className="font-display text-h1 font-medium text-steel-50">Send us your drawing.</h2>

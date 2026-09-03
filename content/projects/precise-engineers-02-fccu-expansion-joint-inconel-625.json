@@ -1,0 +1,10 @@
+{
+  "slug": "precise-fccu-expansion-joint-inconel-625",
+  "company": "precise-engineers",
+  "order": 2,
+  "statement": "2192 mm ID Inconel 625 FCCU Expansion Joint with RESCO Refractory as per UOP Standard under EIL. Cyclic life test of Inconel 625 Bellows done under TPI.",
+  "tags": ["UOP Standard", "EIL", "TPI"],
+  "figures": [
+    { "label": "ID", "value": "2192", "unit": "mm" }
+  ]
+}

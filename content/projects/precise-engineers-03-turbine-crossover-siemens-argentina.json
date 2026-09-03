@@ -1,0 +1,10 @@
+{
+  "slug": "precise-turbine-crossover-siemens-argentina",
+  "company": "precise-engineers",
+  "order": 3,
+  "statement": "1400 mm ID Turbine Crossover Pressure Balance Expansion Joint for Siemens project in Argentina.",
+  "tags": ["Siemens", "Argentina"],
+  "figures": [
+    { "label": "ID", "value": "1400", "unit": "mm" }
+  ]
+}

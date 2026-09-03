@@ -127,14 +127,72 @@ export const Certification = z.object({
 })
 export type Certification = z.infer<typeof Certification>
 
+const slugField = z.string().regex(/^[a-z0-9-]+$/, 'Slug must be lowercase hyphenated')
+
 export const Approval = z.object({
   companySlug: CompanySlug,
   approvingOrg: z.string().min(1),
-  entityClass: z.enum(['PSU', 'EPC', 'TPIA']),
+  // Per-company product-page approvals carry entityClass + year (existing
+  // records). The group-level "Approved & inspected by" wall (Clients &
+  // Projects spec §6) lists brochure agencies with neither — both become
+  // optional so one schema serves both use cases without inventing data.
+  entityClass: z.enum(['PSU', 'EPC', 'TPIA']).optional(),
   category: z.string().optional(),
-  year: z.number().int().min(1990),
+  year: z.number().int().min(1990).optional(),
+  // Clients & Projects spec §2 extension — logo asset path and the
+  // inspected-vs-listed distinction (brochure conflates them; `kind` is
+  // left unset until the client classifies each of the 12 agencies).
+  logo: z.string().optional(),
+  kind: z.enum(['tpi', 'statutory', 'approved-vendor']).optional(),
 })
 export type Approval = z.infer<typeof Approval>
+
+// Sectors served (Clients & Projects spec §2/§6) — group-level, order is
+// display sequence in the brochure's own listing.
+export const Sector = z.object({
+  slug: slugField,
+  name: z.string().min(1),
+  order: z.number().int().min(1),
+})
+export type Sector = z.infer<typeof Sector>
+
+// A brochure clientele-wall entry. Named ClientRecord (not `Client`) to
+// avoid colliding with the existing, unrelated Client schema above, which
+// models a different, not-yet-built full client-directory feature with its
+// own shape (companySlugs/logoUrl/permission) and is consumed nowhere yet.
+export const ClientRecord = z.object({
+  slug: slugField,
+  name: z.string().min(1),
+  logo: z.string().optional(),
+  sectors: z.array(z.string()),
+  // Publish gate (Clients & Projects spec §2/§5) — a record renders only
+  // when 'granted'. Omit-not-empty: everything else is left off the wall.
+  consent: z.enum(['granted', 'requested', 'none']),
+  featuredOnHome: z.boolean(),
+})
+export type ClientRecord = z.infer<typeof ClientRecord>
+
+export const ProjectFigure = z.object({
+  label: z.string().min(1),
+  value: z.string().min(1),
+  unit: z.string().optional(),
+})
+export type ProjectFigure = z.infer<typeof ProjectFigure>
+
+// A brochure executed-job record (Clients & Projects spec §2/§6) — the
+// project track record's 15 one-line jobs. Named ProjectHighlight (not
+// `Project`) to avoid colliding with the existing, unrelated Project
+// schema above, which models a different, not-yet-built full case-study
+// page and is consumed by jsonld.ts's buildArticle().
+export const ProjectHighlight = z.object({
+  slug: slugField,
+  company: z.enum(['dhruv-epc', 'precise-engineers']),
+  order: z.number().int().min(1),
+  statement: z.string().min(1),
+  tags: z.array(z.string()),
+  figures: z.array(ProjectFigure),
+})
+export type ProjectHighlight = z.infer<typeof ProjectHighlight>
 
 export const Client = z.object({
   companySlugs: z.array(CompanySlug).min(1),
@@ -209,8 +267,6 @@ export function validateProjectClientPermission(
   }
   return { success: true }
 }
-
-const slugField = z.string().regex(/^[a-z0-9-]+$/, 'Slug must be lowercase hyphenated')
 
 export const ProductCategory = z.object({
   slug: slugField,

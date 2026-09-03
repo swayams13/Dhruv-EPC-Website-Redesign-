@@ -1,0 +1,11 @@
+{
+  "slug": "dhruv-epc-surge-vessel-irrigation",
+  "company": "dhruv-epc",
+  "order": 8,
+  "statement": "300 M3 Surge Vessel System (75 M3 x 4 No's) executed including E&I for Irrigation Project.",
+  "tags": ["Irrigation Project"],
+  "figures": [
+    { "label": "System capacity", "value": "300", "unit": "M3" },
+    { "label": "Unit capacity", "value": "75 M3 x 4 No's" }
+  ]
+}

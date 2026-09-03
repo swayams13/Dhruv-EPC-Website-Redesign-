@@ -11,6 +11,10 @@ import {
   Resource,
   SpecTableRow,
   validateProjectClientPermission,
+  Approval,
+  Sector,
+  ClientRecord,
+  ProjectHighlight,
 } from './cms'
 
 const minProduct = {
@@ -325,6 +329,86 @@ describe('validateProjectClientPermission (cross-entity gate)', () => {
     const project = { ...minProject, clientSlug: 'bpcl' }
     const unapproved = { slug: 'bpcl', ...client, permission: 'unapproved' as unknown as Client['permission'] }
     const result = validateProjectClientPermission(project, [unapproved])
+    expect(result.success).toBe(false)
+  })
+})
+
+describe('Approval — group-level extension (Clients & Projects §2)', () => {
+  it('accepts an existing per-company record unchanged (entityClass + year, no logo/kind)', () => {
+    const result = Approval.safeParse({
+      companySlug: 'dhruv-epc',
+      approvingOrg: "Lloyd's Register (LRS)",
+      entityClass: 'TPIA',
+      category: 'Third-party inspection',
+      year: 2020,
+    })
+    expect(result.success).toBe(true)
+  })
+  it('accepts a group-level agency record with neither entityClass nor year', () => {
+    const result = Approval.safeParse({
+      companySlug: 'group',
+      approvingOrg: "Lloyd's Register",
+    })
+    expect(result.success).toBe(true)
+  })
+  it('accepts logo and kind once the client classifies the agency', () => {
+    const result = Approval.safeParse({
+      companySlug: 'group',
+      approvingOrg: 'SGS',
+      logo: '/clients-review/approvals/a5.png',
+      kind: 'tpi',
+    })
+    expect(result.success).toBe(true)
+  })
+})
+
+describe('Sector (Clients & Projects §2)', () => {
+  it('accepts a sector with slug, name, order', () => {
+    const result = Sector.safeParse({ slug: 'city-gas-distribution', name: 'City Gas Distribution', order: 2 })
+    expect(result.success).toBe(true)
+  })
+  it('rejects a sector with an uppercase or spaced slug', () => {
+    const result = Sector.safeParse({ slug: 'City Gas', name: 'City Gas Distribution', order: 2 })
+    expect(result.success).toBe(false)
+  })
+})
+
+describe('ClientRecord — consent publish gate (Clients & Projects §2/§5)', () => {
+  const base = { slug: 'ongc', name: 'ONGC', sectors: ['oil-gas-refinery'], featuredOnHome: true }
+  it('accepts a granted client record', () => {
+    expect(ClientRecord.safeParse({ ...base, consent: 'granted' }).success).toBe(true)
+  })
+  it('accepts a requested/none client record — the loader, not the schema, omits it from render', () => {
+    expect(ClientRecord.safeParse({ ...base, consent: 'requested' }).success).toBe(true)
+    expect(ClientRecord.safeParse({ ...base, consent: 'none' }).success).toBe(true)
+  })
+  it('rejects an unrecognized consent value', () => {
+    const result = ClientRecord.safeParse({ ...base, consent: 'pending' })
+    expect(result.success).toBe(false)
+  })
+})
+
+describe('ProjectHighlight — brochure track record (Clients & Projects §2/§6)', () => {
+  const base = {
+    slug: 'precise-expansion-joint-chevron-usa',
+    company: 'precise-engineers' as const,
+    order: 1,
+    statement: 'Expansion Joint Designed and manufactured for CHEVRON USA with Design Pressure of 3700 PSI.',
+    tags: ['CHEVRON USA'],
+  }
+  it('accepts a record with an explicit figure', () => {
+    const result = ProjectHighlight.safeParse({
+      ...base,
+      figures: [{ label: 'Design pressure', value: '3700', unit: 'PSI' }],
+    })
+    expect(result.success).toBe(true)
+  })
+  it('accepts a record with zero figures — not every job states a number', () => {
+    const result = ProjectHighlight.safeParse({ ...base, figures: [] })
+    expect(result.success).toBe(true)
+  })
+  it('rejects a company outside the two-company enum', () => {
+    const result = ProjectHighlight.safeParse({ ...base, company: 'group', figures: [] })
     expect(result.success).toBe(false)
   })
 })
