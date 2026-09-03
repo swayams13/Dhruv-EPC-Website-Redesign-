@@ -27,10 +27,6 @@
 // hero onto `SpecRail` (Phase 8 added `DatumRule`; this phase adds
 // `DimensionLabel` alongside it) — it now labels real spec-rail data
 // instead of decorating the hero, per IMPLEMENTATION_NOTES §2.2/§2.7.
-//
-// ExplodedSequence (Decision 6): the JSDoc guard lives on `photo` below —
-// this hero's full-bleed, fixed-min-height photo-ground pattern is exactly
-// where the guard applies, same reasoning as PageHero.
 
 import { Breadcrumbs, type BreadcrumbItem } from './Breadcrumbs'
 import { Button } from './Button'
@@ -50,11 +46,8 @@ export interface ProductHeroProps {
   certChips?: string[]
   rfq: { label: string; href: string }
   /** Real photograph, absolute inset-0 object-cover ground layer — must
-   *  bring its own sizing (next/image `fill` + `object-cover`). Ordinary
-   *  photography only: `<ExplodedSequence>` needs its own in-flow,
-   *  unconstrained-height section and must never be passed here (Decision
-   *  6) — this hero's fixed min-height clips/breaks its sticky scroll
-   *  track. Absent renders the §4.2 hatch placeholder, never a stock image. */
+   *  bring its own sizing (next/image `fill` + `object-cover`). Absent
+   *  renders the §4.2 hatch placeholder, never a stock image. */
   photo?: React.ReactNode
   className?: never
 }

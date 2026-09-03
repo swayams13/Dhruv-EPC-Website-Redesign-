@@ -1,6 +1,6 @@
 // Logo — the Vedanta lockup (D-10, VEDANTA_DESIGN_IMPLEMENTATION_NOTES.md
 // §2.0, ref `2a`). Lives in apps/web, not @vedanta/datum-ui, for the same
-// reason ExplodedSequence does: it needs next/image directly, and datum-ui
+// reason: it needs next/image directly, and datum-ui
 // takes no `next` dependency. Header.tsx (datum-ui) already accepts an
 // arbitrary `logo: React.ReactNode` slot — this is what gets passed into it,
 // wired up in Phase 5, not here.
@@ -15,8 +15,8 @@
 // height and both wordmark lines (§2.0's size ladder), not a formula to
 // compute at render time — SIZES below is a transcription of that table,
 // not a derivation. These are logo-lockup proportions, not prose type scale,
-// so — same reasoning as ExplodedSequence's track height — they're applied
-// via inline style rather than a new Tailwind token: a one-off brand-asset
+// so they're applied via inline style rather than a new Tailwind token: a
+// one-off brand-asset
 // constant doesn't clear the bar for a §26 design-review token addition.
 //
 // Below 32px the globe wireframe fills in and stops reading (a property of

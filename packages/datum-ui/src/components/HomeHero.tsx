@@ -24,10 +24,6 @@
 // `stats` prop doesn't belong on this contract at all — see Session 35
 // (group)/page.tsx precedent, already standalone.
 //
-// ExplodedSequence (Decision 6): no guard needed on `photo` — Hero C's photo
-// panel was never a photo-*ground* layer for it to conflict with in the
-// first place, so there's nothing to warn callers off of here.
-//
 // Responsive stacking (<md, Phase 10 — its own commit per explicit
 // instruction, no source specifies the exact stacked treatment, every
 // value below is IMPLEMENTATION INFERENCE requiring visual validation):

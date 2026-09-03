@@ -95,7 +95,7 @@ export default function GroupHome() {
             home is the top-level page, so it carries no breadcrumb (600px
             panel height, per Decision 2's own derivation from breadcrumb
             presence). No photo/dimensionLabel wired yet — same deferred
-            works-photography/ExplodedSequence state as Dhruv/Precise. */}
+            works-photography state as Dhruv/Precise. */}
         <HomeHero
           variant="split"
           eyebrow="ASME U & U2 · IBR · EIL Approved · ISO 9001:2015"

@@ -65,9 +65,9 @@ export default function PreciseHome() {
       />
 
       {/* Hero C split hero (Decision 2, Phase 9/13-15). No photo/dimensionLabel
-          wired yet — real works photography sourcing and ExplodedSequence
-          revival are both explicitly deferred (Decision 6); the hatch
-          placeholder renders in the meantime, same as the current live site. */}
+          wired yet — real works photography sourcing is explicitly deferred
+          (Decision 6); the hatch placeholder renders in the meantime, same
+          as the current live site. */}
       <HomeHero
         variant="split"
         breadcrumb={[{ label: 'Home', href: '/' }, { label: 'Precise Engineers' }]}
