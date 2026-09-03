@@ -4434,3 +4434,64 @@ the three homepages once enough clients have real granted consent
 (spec §7 step 5's own gate); the dropped `?works=dhruv`/`?works=precise`
 query-filter feature needs a decision (client-side filter, or drop it
 for good).
+
+---
+
+### Session 36 — client consent granted, real logos wired, `ClientMarquee` mounted — PRs #29, #30 merged
+
+Three of Session 35's four open items resolved this session, per
+explicit human authorization (client count confirmed, logo consent
+confirmed for all named clients).
+
+**Count resolved:** 44 is authoritative, not the spec's "42" — human
+confirmed. Stale "flagged for client confirmation" comments in
+`(group)/clients-projects/page.tsx` and the standfirst copy referencing
+pending permission both updated/removed.
+
+**Consent + logos wired** (`feat/client-consent-and-marquee`, PR #29,
+merge commit `26bad32`): every `content/clients/*.json` record flipped
+`consent: 'requested'` → `'granted'`, `logo` wired to the matching crop
+under `apps/web/public/clients-review/clients/` using the c24 (MRPL +
+ONGC)/c37 (SWCOGEN + CEM Engineering) shared-crop mapping worked out in
+Session 35. All 12 group-level `content/approvals/*.json` records got
+`logo` wired the same way; `kind` classification stayed unset — human
+explicitly deferred it, and `ApprovalWall` doesn't render it, so nothing
+is blocked. Documented in both `docs/mistakes.md` and
+`apps/web/public/clients-review/README.md` that this resolves the
+*rights* gate only — the crops are still the exact review-grade raster
+spec §5 warns against as final artwork (JPEG ringing, baked white
+ground, no optical-height normalization); a future session needs to
+re-request real SVG/4× artwork per client and swap `logo` paths, no
+schema/component changes required.
+
+**`ClientMarquee` mounted** on all three homepages (group, dhruv-epc,
+precise-engineers) between the certifications band and the next
+section, split rowA/rowB by even/odd index across the 44 granted
+clients (not a clean 21/21 split — the real count isn't a multiple of
+7, but the component's sizing math is generic, not tied to that exact
+ratio).
+
+**Verify:** typecheck/lint clean. `npx playwright test e2e/a11y.spec.ts`
+— 55/55 non-skipped routes pass, including all three homepages and
+`/clients-projects` with real logos now rendered (this is exactly the
+gate that caught a real bug last session — re-ran it deliberately
+before pushing, not just typecheck/lint/vitest). Full test suite
+passes (same one pre-existing `DATABASE_URL`-gated failure). Build:
+all four affected routes hold at 94.9 KB gz First Load JS — logos are
+plain `<img>`, no JS cost. Manual browser verification: marquee scrolls
+with real logos on all three homepages; confirmed the
+`prefers-reduced-motion` and hover-pause CSS rules actually compiled
+into the shipped stylesheet (not silently dropped — the known failure
+class this codebase has hit before with custom values, e.g. the
+`text-white/66` incident). Regenerated `__snapshots__/routes-baseline/`
+for all 54 routes. CI green on the first push (all 9 checks, including
+the Accessibility gate).
+
+Also pushed and merged `docs/session-35-clients-projects-progress` (PR
+#30, merge commit `ac274b7`) — the Session 35 log entry itself, written
+in the prior session but not yet on `main`.
+
+**Remaining open items:** the 12 approval agencies' `kind`
+classification (still deferred, not blocking); real (non-review-grade)
+artwork per client/agency to replace every crop in `clients-review/`;
+the dropped `?works=` query-filter feature still needs a decision.
