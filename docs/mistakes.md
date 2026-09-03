@@ -660,3 +660,44 @@ infra" or "Phase X: design-system tooling" in scope, resync
 `preview.css`'s three `[data-company]` blocks against `globals.css`
 line-for-line rather than patching the accent value alone — the `group`
 company's whole accent formula needs it, not just amber→red.
+
+## 2026-09-03 — RFQBand's focus ring fails the 3:1 non-text contrast floor on its own steel-900 ground
+
+**What happened:** while doing manual browser QA on the new `/clients-
+projects` route (Clients & Projects feature, manual verify pass per
+CLAUDE.md's Verify checklist item 2), tabbing to the RFQ closer band's
+"Request a quote" button showed a focus ring at `#AA3833` (brand-500) on
+the band's own `bg-steel-900` ground — 2.85:1, under the WCAG 1.4.11
+3:1 floor for non-text indicators. This is the exact failure
+`globals.css`'s own `[data-chrome='dark']` comment names ("brand-500 on
+steel-950 is 2.85:1... Any steel-950 surface carrying focusable elements
+marks itself `[data-chrome='dark']`"), but `apps/web/components/
+RFQBand.tsx`'s `<section data-rfq-anchor className="bg-steel-900">` never
+carries `data-chrome="dark"`, so `--accent-focus` never rebinds to the
+dark-safe `--accent-dark` step there.
+
+Confirmed this isn't new: `RFQBand` is a single shared, unmodified
+component, and the same missing attribute is on every route that renders
+it — the group homepage, `dhruv-epc`, and `precise-engineers` all have the
+identical gap, not just the new page. (Verifying this via the group
+homepage first gave a false negative — a `.focus()` call there didn't
+trigger `:focus-visible` at all due to the browser's input-modality
+heuristic, so its outline read as the browser default, not the site's
+rule. Re-testing directly on `/clients-projects`, where `:focus-visible`
+did engage, reproduced the real `#AA3833`-on-`steel-900` value. Don't
+trust a single `:focus-visible` reading without confirming
+`el.matches(':focus-visible')` first — a quiet `false` there means the
+test measured nothing.)
+
+**Why not fixed here:** out of this task's scope (`design_handoff_
+clients_projects/PROMPT.md`'s explicit hard constraint: don't touch
+`RFQBand`/header/footer beyond mounting the marquee and pointing one nav
+item at the new route) and it's a pre-existing, site-wide gap, not
+something the new route introduced.
+
+**Rule:** any component whose default ground is `steel-900`/`steel-950`
+and that renders focusable elements must carry `data-chrome="dark"` on
+that ground — `RFQBand.tsx` needs it added (one line: `data-chrome="dark"`
+alongside its existing `data-rfq-anchor`). A future session touching
+`RFQBand.tsx`, or doing a focus-ring audit, should fix this everywhere at
+once rather than per-page.
