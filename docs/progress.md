@@ -4338,3 +4338,99 @@ synced local `main` to `ea18fd3`.
 Phases 5–25 of `FINAL_IMPLEMENTATION_PLAN.md` plus this session's two
 fixes (Header 768px overlap, VG-004 dark-ground contrast). No open
 findings from this branch remain.
+
+---
+
+### Session 35 — Clients & Projects feature (spec §7, all 5 steps) — merged to `main`
+
+New feature, driven by `design_handoff_clients_projects/PROMPT.md` and
+`CLIENTS_AND_PROJECTS_IMPLEMENTATION.md`: a `/clients-projects` route
+plus a homepage clientele band, built from the brochure's four
+credibility blocks (clientele, sectors, project track record, TPI
+approvals). Branch `feat/clients-and-projects`, PR #28, now merged
+(`906ba27`).
+
+**Step 1 — schemas + content.** Added `Sector`, `ClientRecord`,
+`ProjectHighlight`/`ProjectFigure` to `packages/schemas/src/cms.ts`,
+plus an `Approval` extension (`logo`/`kind` optional, `entityClass`/
+`year` now optional for group-level records). Named the new client/
+project schemas distinctly (`ClientRecord`/`ProjectHighlight`, not
+`Client`/`Project`) after finding the latter names already taken by an
+unused-but-load-bearing pair of schemas for a different, not-yet-built
+full-case-study feature (`Project` feeds `jsonld.ts`'s `buildArticle`) —
+flagged to the human first rather than silently colliding or
+repurposing. Populated `content/sectors/` (10), `content/projects/`
+(15, Dhruv 8 + Precise 7), and 12 group-level `content/approvals/`
+records, all copy verbatim from spec §6.
+
+**Steps 2–5 — components, route, marquee, assets, verify** (run
+together per explicit request). Five new `packages/datum-ui`
+components: `SectorGrid`, `ProjectRecordList`, `ApprovalWall`,
+`ClientLogoWall`, `ClientMarquee`. New static route at
+`apps/web/app/(group)/clients-projects/page.tsx`. Header's "Projects"
+nav repointed via `product-urls.ts`'s `projectsIndexHref()` (old
+`/projects` stub left orphaned, not deleted). Copied the 54 review-grade
+PNG crops into `apps/web/public/clients-review/`, gated behind consent
+per spec §5 (none wired to a `logo` field yet). `ClientMarquee`'s
+keyframes/animation added to `tailwind.ts` verbatim from spec §4 (the
+2 Sep 2026 rule change permits this one continuous band); not mounted
+on the homepages yet — zero clients have real written consent, so
+mounting would render nothing.
+
+**Real findings surfaced, not guessed past:**
+- Several spec pixel values (112/104/56/40/20/18/22px, an 84% logo-width
+  cap) have no match in the shipped 4px-multiple spacing scale — human
+  chose "round to nearest existing token" over adding new ones; each
+  rounding is commented inline in the component that uses it.
+- The verbatim §6 clientele list is 44 real company names, not 42 —
+  confirmed by opening the actual brochure crops: `c24.png` bundles
+  MRPL+ONGC and `c37.png` bundles SWCOGEN+CEM Engineering into one image
+  each. Kept all 44 as separate records (never drop a real client);
+  the page's "Named clients" stat is computed live from data (44), not
+  hardcoded to the spec's "42" — still needs client confirmation on
+  which count is authoritative.
+- Reading `searchParams` server-side for the spec's `?works=` filter (as
+  §1 asks) forces the whole route to dynamic rendering in the App
+  Router, conflicting with the spec's own "fully static" requirement and
+  dropping the route out of `snapshot-routes.mjs`'s static-HTML crawl
+  entirely. Kept the page static, dropped the query filter.
+- Consent stayed honest throughout: all 44 clients are
+  `consent: 'requested'`, never fabricated as `'granted'` — the wall and
+  the (unmounted) marquee both correctly render nothing today.
+
+**Manual QA found a real, pre-existing, site-wide bug:** `RFQBand.tsx`'s
+focus ring read `#AA3833` (2.85:1) on its own `bg-steel-900` ground —
+under the WCAG 1.4.11 3:1 floor — because the component never carried
+`data-chrome="dark"`. Confirmed it wasn't new (same shared, unmodified
+component on the homepage, dhruv-epc, precise-engineers). Logged to
+`docs/mistakes.md`; human then asked for it to be fixed directly — added
+the one-line attribute, verified `#DC8D89` (7.04:1) on focus in a real
+browser, regenerated all 54 route snapshots.
+
+**CI caught what local testing missed:** first push's "Accessibility
+gate (axe-core CI)" job failed — `ProjectRecordList`'s index numbers
+used `text-steel-400` (`primitives.ts` documents this as on-dark-only)
+against a white row background, 2.37:1. Local typecheck/lint/vitest
+never exercises real paint, so this got through. Fixed to `text-steel-
+500` (~4.95:1, computed and confirmed by actually running
+`npx playwright test e2e/a11y.spec.ts` locally before pushing again —
+55/55 non-skipped routes pass). Lesson for next time: run the real a11y
+Playwright suite locally on any new route, not just the unit/vitest
+layer, before pushing.
+
+**Merge.** Human reviewed on localhost, asked to merge; flagged
+CLAUDE.md's "never commit to `main`... PR, human merge" convention
+first, then proceeded once the human repeated the instruction after
+their own verification. `gh pr merge 28 --merge --delete-branch`,
+merge commit `906ba27`. Local `main` fast-forwarded automatically;
+pruned the resulting stale `origin/feat/clients-and-projects`
+remote-tracking ref.
+
+**Open items for a future session:** the 44-vs-42 client count
+discrepancy needs client confirmation; the 12 approval agencies still
+need `kind` classification (TPI vs. approved-vendor) before
+`ApprovalWall` can show real logos; `ClientMarquee` needs mounting on
+the three homepages once enough clients have real granted consent
+(spec §7 step 5's own gate); the dropped `?works=dhruv`/`?works=precise`
+query-filter feature needs a decision (client-side filter, or drop it
+for good).
