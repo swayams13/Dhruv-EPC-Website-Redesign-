@@ -190,6 +190,29 @@ export const datumPreset = {
         caption: '0.09em',
         tight: '-0.02em',
       },
+      // ClientMarquee (Clients & Projects spec §4) — "the one animated
+      // device". Rule change 2 Sep 2026: the blanket loop-animation ban is
+      // retired for a continuous, non-interactive band that shows all its
+      // content in one lap; auto-advancing carousels remain banned. Values
+      // copied verbatim from spec §4's copy-ready CSS — not independently
+      // chosen. `motion-reduce:animate-none` on the consuming component
+      // handles the prefers-reduced-motion state; the hover-pause behaviour
+      // (animation-play-state has no Tailwind core plugin) lives in
+      // globals.css next to these.
+      keyframes: {
+        'client-marq-l': {
+          from: { transform: 'translate3d(0,0,0)' },
+          to: { transform: 'translate3d(-50%,0,0)' },
+        },
+        'client-marq-r': {
+          from: { transform: 'translate3d(-50%,0,0)' },
+          to: { transform: 'translate3d(0,0,0)' },
+        },
+      },
+      animation: {
+        'client-marq-l': 'client-marq-l 64s linear infinite',
+        'client-marq-r': 'client-marq-r 76s linear infinite',
+      },
     },
   },
 } satisfies Partial<Config>

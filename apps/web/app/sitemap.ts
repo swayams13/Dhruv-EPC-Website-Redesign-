@@ -28,6 +28,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     m('/', now, 1),
     m('/about/', now),
     m('/contact/', now),
+    m('/clients-projects/', now, 0.8),
     m('/request-a-quote/', now, 0.8),
     // /privacy/, /terms/, /request-a-quote/thank-you/ excluded — noindex
   ]

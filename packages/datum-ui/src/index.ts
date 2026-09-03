@@ -86,3 +86,9 @@ export {
   type SpecRailProps,
   type SpecRailCta,
 } from './components/SpecRail'
+// Clients & Projects spec — the four new content components (§3)
+export { SectorGrid, type SectorGridProps } from './components/SectorGrid'
+export { ProjectRecordList, type ProjectRecordListProps } from './components/ProjectRecordList'
+export { ApprovalWall, type ApprovalWallProps } from './components/ApprovalWall'
+export { ClientLogoWall, type ClientLogoWallProps } from './components/ClientLogoWall'
+export { ClientMarquee, type ClientMarqueeProps } from './components/ClientMarquee'

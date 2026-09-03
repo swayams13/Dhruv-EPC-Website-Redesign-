@@ -12,6 +12,9 @@ import {
   ProductCategory,
   Industry,
   Capability,
+  Sector,
+  ProjectHighlight,
+  ClientRecord,
   type CompanySlug,
 } from '@vedanta/schemas'
 // Non-CMS page-decoration data has no fs dependency of its own — kept in a
@@ -56,6 +59,9 @@ const certifications = loadDir('certifications', Certification)
 const approvals = loadDir('approvals', Approval)
 const industries = loadDir('industries', Industry)
 const capabilities = loadDir('capabilities', Capability)
+const sectors = loadDir('sectors', Sector)
+const projectHighlights = loadDir('projects', ProjectHighlight)
+const clients = loadDir('clients', ClientRecord)
 
 export function getEntity(companySlug: CompanySlug): EntityRecord {
   const found = entities.find((e) => e.companySlug === companySlug)
@@ -109,6 +115,26 @@ export function getCapabilities(): Capability[] {
 
 export function getCapability(slug: string): Capability | undefined {
   return capabilities.find((c) => c.slug === slug)
+}
+
+// Sectors served (Clients & Projects §2) — display order per record's own
+// `order` field, matching the brochure's own listing sequence.
+export function getSectors(): Sector[] {
+  return [...sectors].sort((a, b) => a.order - b.order)
+}
+
+// Project track record (Clients & Projects §2), grouped by company on the
+// page. `company` narrows the result; omit it for the full 15-record list.
+export function getProjectHighlights(company?: ProjectHighlight['company']): ProjectHighlight[] {
+  const filtered = company ? projectHighlights.filter((p) => p.company === company) : projectHighlights
+  return [...filtered].sort((a, b) => a.order - b.order)
+}
+
+// Clientele wall records (Clients & Projects §2) — the consent publish gate
+// itself lives in ClientLogoWall, not here; this returns every record on
+// file (granted, requested, or none) so the component can apply it.
+export function getClients(): ClientRecord[] {
+  return clients
 }
 
 // Zod guarantees phones.min(1) — same derivation as the old per-company

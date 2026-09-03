@@ -45,6 +45,9 @@ export function capabilityHref(slug: string): string {
   return `/capabilities/${slug}`
 }
 
+// Repointed 2026-09-03 (Clients & Projects spec §1) from the old '/projects'
+// stub (noindex, no real Project content model ever landed there — left
+// orphaned, not deleted, per house rule against drive-by cleanup).
 export function projectsIndexHref(): string {
-  return '/projects'
+  return '/clients-projects'
 }
