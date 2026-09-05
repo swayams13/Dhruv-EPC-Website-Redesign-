@@ -7,8 +7,24 @@ import type { RFQSubmission } from '@vedanta/schemas'
 const RATE_WINDOW_MINUTES = 10
 const RATE_MAX = 5
 
+// ponytail: DATABASE_URL unset → demo mode, in-memory only, lost on
+// redeploy/restart. Lets the RFQ button be demoed end-to-end (rate limit,
+// idempotency, a real-shaped VG-###### reference) without provisioning
+// Postgres. Upgrade path: set DATABASE_URL in Railway — this module then
+// always takes the query() branch below, unchanged.
+const DEMO_MODE = !process.env.DATABASE_URL
+if (DEMO_MODE) {
+  console.warn('[leads] DATABASE_URL not set — RFQ leads are held in memory only, not persisted. Demo mode.')
+}
+let demoRefSeq = 1000
+const demoLeads: Array<{ reference: string; idempotencyKey: string; ip: string; createdAt: number }> = []
+
 /** True once this IP has RATE_MAX+ leads recorded in the last RATE_WINDOW_MINUTES. */
 export async function isRateLimited(ip: string): Promise<boolean> {
+  if (DEMO_MODE) {
+    const windowStart = Date.now() - RATE_WINDOW_MINUTES * 60_000
+    return demoLeads.filter((lead) => lead.ip === ip && lead.createdAt > windowStart).length >= RATE_MAX
+  }
   const rows = await query<{ count: string }>(
     `SELECT count(*) FROM leads WHERE ip = $1 AND created_at > now() - interval '${RATE_WINDOW_MINUTES} minutes'`,
     [ip],
@@ -21,6 +37,9 @@ export async function isRateLimited(ip: string): Promise<boolean> {
  *  strictly stronger guarantee than the in-memory version's 24h expiry (that
  *  expiry existed only to bound Map growth, not as a business rule). */
 export async function findByIdempotencyKey(idempotencyKey: string): Promise<{ reference: string } | null> {
+  if (DEMO_MODE) {
+    return demoLeads.find((lead) => lead.idempotencyKey === idempotencyKey) ?? null
+  }
   const rows = await query<{ reference: string }>('SELECT reference FROM leads WHERE idempotency_key = $1', [
     idempotencyKey,
   ])
@@ -36,6 +55,14 @@ export async function insertLead(
   ip: string,
   sourcePage: string | null,
 ): Promise<{ reference: string; duplicate: boolean }> {
+  if (DEMO_MODE) {
+    const existing = await findByIdempotencyKey(data.idempotencyKey)
+    if (existing) return { reference: existing.reference, duplicate: true }
+    const reference = `VG-${String(demoRefSeq++).padStart(6, '0')}`
+    demoLeads.push({ reference, idempotencyKey: data.idempotencyKey, ip, createdAt: Date.now() })
+    return { reference, duplicate: false }
+  }
+
   const rows = await query<{ reference: string }>(
     `INSERT INTO leads (
        company, product_slug, name, contact_company, email, phone, message,
@@ -69,6 +96,7 @@ export async function insertLead(
  *  best-effort side effect that must never affect the HTTP response the
  *  caller already returned. */
 export async function updateNotificationStatus(reference: string, patch: Record<string, string>): Promise<void> {
+  if (DEMO_MODE) return
   await query('UPDATE leads SET notification_status = notification_status || $2::jsonb WHERE reference = $1', [
     reference,
     JSON.stringify(patch),
